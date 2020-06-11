@@ -1,0 +1,32 @@
+--
+--	from src/crnd.c
+--
+--	void init_rnd(unsigned long)		to	crnd; :init
+--	unsigned long irnd(void)		to	crnd; :irnd
+--	double rnd(void)			to	crnd; :rnd
+--
+
+local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1
+
+local function crnd(x)
+	local T = { seed = x ~= nil and x or 1 }
+
+	function T:init(x)
+		T.seed = x
+	end
+
+	function T:irnd()
+		T.seed = T.seed * 1566083941ULL + 1
+		return T.seed
+	end
+
+	function T:rnd()
+		return (1 / N) * tonumber(T:irnd())
+	end
+
+	return T
+end
+
+return {
+	crnd = crnd
+}

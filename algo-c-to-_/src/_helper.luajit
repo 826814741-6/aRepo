@@ -1,0 +1,26 @@
+local function abs(n) return n<0 and -n or n end
+
+local function atLeastOne(n) return n>1 and n or 1 end
+
+local sethook = debug.sethook
+
+local function count(f, ...)
+	local c = 0
+	sethook(function() c = c + 1 end, "c")
+	f(...)
+	sethook()
+	return c
+end
+
+local ffi = require 'ffi'
+local C = ffi.C
+ffi.cdef 'int printf(const char *, ...);'
+
+local function printf(...) C.printf(...) end
+
+return {
+	abs = abs,
+	atLeastOne = atLeastOne,
+	count = count,
+	printf = printf
+}

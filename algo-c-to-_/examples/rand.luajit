@@ -1,0 +1,29 @@
+--
+--	from src/rand.c
+--
+--	int rand(void)		to	rand
+--	void srand(unsigned)	to	srand
+--	rand, srand		to	RAND
+--
+
+local M = require 'rand'
+local H = require '_helper'
+
+local rand, RAND, printf = M.rand, M.RAND, H.printf
+
+print("-------- rand()")
+for i=1,20 do
+	for j=1,8 do
+		printf("%8lu", rand())
+	end
+	print()
+end
+
+print("-------- r:rand()")
+local r = RAND()
+for i=1,20 do
+	for j=1,8 do
+		printf("%8lu", r:rand())
+	end
+	print()
+end

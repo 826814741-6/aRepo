@@ -1,0 +1,88 @@
+--
+--	from src/sqrt.c
+--
+--	double mysqrt(double)		to	fSqrt
+--
+--	from src/isqrt.c
+--
+--	unsigned isqrt(unsigned)	to	iSqrt
+--
+--	from src/cuberoot.c
+--
+--	double cuberoot(double)		to	fCbrt
+--	double cuberoot2(double)	to	fCbrt2
+--
+--	from src/icubrt.c
+--
+--	unsigned icubrt(unsigned)	to	iCbrt
+--
+
+local H = require '_helper'
+
+local abs, atLeastOne = H.abs, H.atLeastOne
+
+local function loopF(x, step)
+	local prev, t = atLeastOne(x), step(x, atLeastOne(x))
+	while t < prev do
+		prev, t = t, step(x, t)
+	end
+	return prev
+end
+
+local function fSqrt(x)
+	if x <= 0 then return 0 end
+	return loopF(x, function (x,t) return (x/t + t) / 2 end)
+end
+
+local lshift, rshift, floor = bit.lshift, bit.rshift, math.floor
+
+local function iSqrt(x)
+	if x <= 0 then return 0 end
+
+	local r, t = x, 1
+	while t < r do
+		r, t = rshift(r, 1), lshift(t, 1)
+	end
+	repeat
+		r, t = t, rshift((floor(x / t) + t), 1)
+	until t >= r
+
+	return r
+end
+
+local function _f(step)
+	return function (x)
+		if x == 0 then
+			return 0
+		elseif x > 0 then
+			return loopF(x, step)
+		else
+			return -loopF(abs(x), step)
+		end
+	end
+end
+
+local fCbrt = _f(function (x,t) return (x / (t*t) + 2*t) / 3 end)
+local fCbrt2 = _f(function (x,t) return t + (x - t*t*t) / (2*t*t + x/t) end)
+
+local function iCbrt(x)
+	if x <= 0 then return 0 end
+
+	local r, t = x, 1
+	while t < r do
+		r, t = rshift(r, 2), lshift(t, 1)
+	end
+	repeat
+		r, t = t, floor((floor(x / (t * t)) + 2 * t) / 3)
+	until t >= r
+
+	return r
+end
+
+return {
+	fSqrt = fSqrt,
+	iSqrt = iSqrt,
+	fCbrt = fCbrt,
+	fCbrt2 = fCbrt2,
+	iCbrt = iCbrt
+}
