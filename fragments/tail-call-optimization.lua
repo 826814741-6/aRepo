@@ -7,7 +7,7 @@
 --	> lua[jit] tail-call-optimization.lua
 --	... running forever ...
 --
---	> luac -l [-o nul| or -o /dev/null] -- src
+--	> luac -l [-o nul or -o /dev/null] -- src
 --	> luajit -bl src
 --	> luajit -jdump src
 --
