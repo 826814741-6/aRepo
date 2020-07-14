@@ -1,7 +1,7 @@
 --
 --	tail-call-optimization.lua
 --
---	porting from
+--	porting from:
 --	https://github.com/justinethier/cyclone/blob/master/examples/tail-call-optimization.scm
 --
 --	> lua[jit] tail-call-optimization.lua

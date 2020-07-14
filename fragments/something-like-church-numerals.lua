@@ -77,7 +77,7 @@ function toChurch(n)
 	return Zero
 
 	-- or (not proper tail call version)
-	-- return n~=0 and Succ(toChurch(n-1)) or Zero end
+	-- return n~=0 and Succ(toChurch(n-1)) or Zero
 end
 
 function toNumber(c)
