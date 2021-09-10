@@ -27,7 +27,7 @@ local function fib2(n)
 end
 
 local function fib3(n)
-	a, b, c = 1, 0, 1
+	local a, b, c = 1, 0, 1
 	while c < n do
 		a, b, c = a + b, a, c + 1
 	end
