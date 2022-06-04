@@ -4,12 +4,11 @@
 
 のサンプルコードを他言語で書く試みです。大まかなルールとして
 
-- ライセンスは[CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/legalcode) (オリジナルと同様)
 - １サンプルファイルに対し(又は複数をまとめて)、１ファイルにおさめて src/ 下に配置
 - mainブロック下にある動作確認のコードは、別ファイルに分けて examples/ 下に配置
 - 動作確認により生成される画像ファイルなどは results/ 下に配置
 
-に従い作成します。
+に従い作成します。なお、各成果物は、(オリジナルと同様に)[CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/legalcode)とします。
 
 ## 進捗
 
