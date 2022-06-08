@@ -8,8 +8,6 @@
 #	$ pforth_standalone -q examples/A.fth
 #	$ LUA_PATH=src/?.lua lua examples/A.lua
 #	$ LUA_PATH=src/?.luajit luajit examples/A.luajit
-#	$ MICROPYPATH=src micropython examples/A_.py
-#	($ PYTHONPATH=src python3 examples/A_.py)
 #	$ scheme --libdirs src --script examples/A.ss
 #
 
@@ -38,12 +36,6 @@ _cmd () {
 	elif [ "${2}" = "lua" -o "${2}" = "luajit" ]; then
 		isExist "examples/${1}.${2}" || return
 		LUA_PATH="src/?.${2}" ${2} "examples/${1}.${2}"
-	elif [ "${2}" = "micropython" ]; then
-		isExist "examples/${1}_.py" || return
-		MICROPYPATH="src" ${2} "examples/${1}_.py"
-	elif [ "${2}" = "python3" ]; then
-		isExist "examples/${1}_.py" || return
-		PYTHONPATH="src" ${2} "examples/${1}_.py"
 	elif [ "${2}" = "scheme" ]; then
 		isExist "examples/${1}.ss" || return
 		${2} --libdirs "src" --script "examples/${1}.ss"
@@ -72,82 +64,77 @@ BASH=$(checkDependency bash)
 FTH=$(checkDependency pforth_standalone)
 LUA=$(checkDependency lua)
 LUAJIT=$(checkDependency luajit)
-PY=$(checkDependency micropython)
-[ "${PY}" = "" ] && PY=$(checkDependency python3)
 CHEZ=$(checkDependency scheme)
 
 #
 
 if [ "$#" -eq "1" -a "${1}" = "graphics" ]; then
-	run 3dgraph		$LUA $PY
+	run 3dgraph		$LUA
 	run bifur		$LUA
 	run binormalG		$LUA
-	run ccurve		$LUA $PY
+	run ccurve		$LUA
 	run circle		$LUA
-	run dragoncurve		$LUA $PY
-	run dragoncurveR	$LUA $PY
+	run dragoncurve		$LUA
+	run dragoncurveR	$LUA
 	run ellipse		$LUA
-	run epsplot		$LUA $PY
+	run epsplot		$LUA
 	run gasket		$LUA
 	run grBMP		$LUA
-	run hilbert		$LUA $PY
+	run hilbert		$LUA
 	run julia		$LUA
-	run koch		$LUA $PY
+	run koch		$LUA
 	run line		$LUA
-	run lissajouscurve	$LUA $PY
-	run lorenz		$LUA $PY
-	run sierpinski		$LUA $PY
-	run svgplot		$LUA $PY
-	run treecurve		$LUA $PY
+	run lissajouscurve	$LUA
+	run lorenz		$LUA
+	run sierpinski		$LUA
+	run svgplot		$LUA
+	run treecurve		$LUA
 elif [ "$#" -eq "1" -a "${1}" = "interactive" ]; then
-	run 105			$AWK $BASH $LUA $PY
-	run egyptianfraction	$PY
-	run josephus		$LUA $PY
-	run water		$AWK $BASH $LUA $PY
+	run 105			$AWK $BASH $LUA
+	run josephus		$LUA
+	run water		$AWK $BASH $LUA
 else
-	run acker		$AWK $BASH $FTH $LUA $PY $CHEZ
+	run acker		$AWK $BASH $FTH $LUA $CHEZ
 	run atan		$LUA
 	run binormal		$LUA
-	run change		$AWK $LUA $PY
+	run change		$AWK $LUA
 	run chisqdist		$AWK $LUA
 	run ci			$LUA
 	run combination		$AWK $LUA
 	run crnd		$LUA $LUAJIT
-	run cuberoot		$AWK $GAWK $FTH $LUA $LUAJIT $PY $CHEZ
-	run dayweek		$AWK $LUA $PY
-	run e			$AWK $BASH $FTH $LUA $PY $CHEZ
-	run eulerian		$AWK $BASH $FTH $LUA $PY
-	run factorize		$PY
+	run cuberoot		$AWK $GAWK $FTH $LUA $LUAJIT $CHEZ
+	run dayweek		$AWK $LUA
+	run e			$AWK $BASH $FTH $LUA $CHEZ
+	run eulerian		$AWK $BASH $FTH $LUA
 	run fdist		$LUA
 	run fft			$LUA
-	run fib			$AWK $FTH $LUA $PY $CHEZ
+	run fib			$AWK $FTH $LUA $CHEZ
 	run gamma		$AWK $LUA
-	run gcd			$AWK $BASH $LUA $PY
-	run horner		$AWK $LUA $PY
-	run hypot		$AWK $FTH $LUA $PY $CHEZ
-	run isbn		$LUA $PY
-	run isbn13		$LUA $PY
+	run gcd			$AWK $BASH $LUA
+	run horner		$AWK $LUA
+	run hypot		$AWK $FTH $LUA $CHEZ
+	run isbn		$LUA
+	run isbn13		$LUA
 	run komachi		$LUA
-	run luhn		$LUA $PY
+	run luhn		$LUA
 	run machineepsilon	$LUA
-	run mccarthy		$AWK $BASH $FTH $LUA $PY $CHEZ
+	run mccarthy		$AWK $BASH $FTH $LUA $CHEZ
 	run montecarlo		$LUA
-	run moveblock		$AWK $LUA $PY
-	run multiply		$AWK $GAWK $BASH $FTH $LUA $LUAJIT $PY
+	run moveblock		$AWK $LUA
+	run multiply		$AWK $GAWK $BASH $FTH $LUA $LUAJIT
 	run normal		$AWK $LUA
-	run pi			$AWK $FTH $LUA $PY $CHEZ
-	run power		$AWK $GAWK $BASH $LUA $LUAJIT $PY
-	run primes		$PY
-	run rand		$FTH $LUA $LUAJIT $PY
+	run pi			$AWK $FTH $LUA $CHEZ
+	run power		$AWK $GAWK $BASH $LUA $LUAJIT
+	run rand		$FTH $LUA $LUAJIT
 	run randperm		$LUA
 	run si			$LUA
-	run sqrt		$AWK $GAWK $FTH $LUA $LUAJIT $PY $CHEZ
-	run stirling		$AWK $BASH $FTH $LUA $PY
-	run sum			$AWK $LUA $PY
-	run swap		$AWK $GAWK $LUA $PY
-	run tarai		$AWK $FTH $LUA $PY $CHEZ
+	run sqrt		$AWK $GAWK $FTH $LUA $LUAJIT $CHEZ
+	run stirling		$AWK $BASH $FTH $LUA
+	run sum			$AWK $LUA
+	run swap		$AWK $GAWK $LUA
+	run tarai		$AWK $FTH $LUA $CHEZ
 	run tdist		$LUA
-	run totient		$AWK $BASH $FTH $LUA $PY
-	run whrnd		$LUA $PY
-	run zeta		$LUA $PY
+	run totient		$AWK $BASH $FTH $LUA
+	run whrnd		$LUA
+	run zeta		$LUA
 fi
