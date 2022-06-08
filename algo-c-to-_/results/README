@@ -1,0 +1,13 @@
+#
+#	$ LUA_PATH=src/?.lua [path/to]lua examples/grBMP.lua
+#	$ ls examples/grBMP.bmp
+#	examples/grBMP.bmp
+#
+#	or
+#
+#	> busybox.exe sh -c "LUA_PATH=src/?.lua [path/to]lua.exe examples/grBMP.lua"
+#	> dir examples\grBMP.bmp
+#	...
+#	04/05/16  01:00         1,024,054 grBMP.bmp
+#	...
+#
