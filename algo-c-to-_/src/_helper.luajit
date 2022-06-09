@@ -12,15 +12,8 @@ local function count(f, ...)
 	return c
 end
 
-local ffi = require 'ffi'
-local C = ffi.C
-ffi.cdef 'int printf(const char *, ...);'
-
-local function printf(...) C.printf(...) end
-
 return {
 	abs = abs,
 	atLeastOne = atLeastOne,
-	count = count,
-	printf = printf
+	count = count
 }

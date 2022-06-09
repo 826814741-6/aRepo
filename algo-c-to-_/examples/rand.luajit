@@ -7,14 +7,18 @@
 --
 
 local M = require 'rand'
-local H = require '_helper'
 
-local rand, RAND, printf = M.rand, M.RAND, H.printf
+local rand, RAND = M.rand, M.RAND
+
+-- see: https://www.freelists.org/post/luajit/cannot-resolve-symbol-printf-with-ffi-msvc-140,4
+function workarounds(cdata)
+	return tostring(cdata):gsub("ULL",""):gsub("LL","")
+end
 
 print("-------- rand()")
 for i=1,20 do
 	for j=1,8 do
-		printf("%8lu", rand())
+		io.write(("%8s"):format(workarounds(rand())))
 	end
 	print()
 end
@@ -23,7 +27,7 @@ print("-------- r:rand()")
 local r = RAND()
 for i=1,20 do
 	for j=1,8 do
-		printf("%8lu", r:rand())
+		io.write(("%8s"):format(workarounds(r:rand())))
 	end
 	print()
 end

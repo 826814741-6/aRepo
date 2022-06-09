@@ -279,17 +279,16 @@
 
 動作の確認には
 
-    GNU/Linux X86_64
+    Windows 11 (21H2)
 
-    *.awk       nawk(*1)(20200113), mawk-1.3.4-20200106
-    *.bash      bash-4.3
-    *.fth       pForth(*2)-V28
-    *.lua       lua-5.4-beta
-    *.luajit    luajit-2.0.5
-    *.ss        ChezScheme-9.5.3
+    *.awk       busybox.exe v1.28.0
+    *.bash      busybox.exe v1.28.0
+    *.fth       PForth V28-LE/64 (*1)
+    *.lua       Lua 5.4.4
+    *.luajit    LuaJIT 2.1.0-beta3
+    *.ss        ChezScheme-9.5.8
 
-    *1) https://github.com/onetrueawk/awk
-    *2) https://github.com/philburk/pforth
+    *1) https://github.com/philburk/pforth
 
 を使用しています。
 
