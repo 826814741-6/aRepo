@@ -44,7 +44,7 @@ BEGIN {
 	# 2147483647*6700417 (14389035935580799) > 1<<53
 	t0 += _t_gcd("2147483647 14389035935580799 2147483647") # nawk 2147483647, mawk/gawk 1
 
-	printf "gcdL and gcdR seem to be fine (in %d samples).\n", t0
+	printf "gcdL and gcdR seem to be fine (in %d/%d samples).\n", t0, 6
 
 	t1 = 0
 	t1 += _t_ngcd("1", 1)
@@ -65,5 +65,5 @@ BEGIN {
 	# 2147483647*6700417 (14389035935580799) > 1<<53
 	t1 += _t_ngcd("2147483647 2147483647 14389035935580799", 2147483647 ) # nawk 2147483647, mawk/gawk 1
 
-	printf "ngcdL and ngcdR seem to be fine (in %d samples).\n", t1
+	printf "ngcdL and ngcdR seem to be fine (in %d/%d samples).\n", t1, 7
 }

@@ -46,7 +46,7 @@ t0=$(($t0 + $(_t_gcd 2147483647 $((2147483647 * 6700417)) 2147483647)))
 t0=$(($t0 + $(_t_gcd 67280421310721 2305843009213693951 1)))
 t0=$(($t0 + $(_t_gcd 2305843009213693951 2305843009213693951 2305843009213693951)))
 
-printf "gcdL and gcdR seem to be fine (in %d samples).\n" $t0
+printf "gcdL and gcdR seem to be fine (in %d/%d samples).\n" $t0 8
 
 t1=0
 t1=$(($t1 + $(_t_ngcd 1 1)))
@@ -58,4 +58,4 @@ t1=$(($t1 + $(_t_ngcd 2147483647 2147483647 2147483647 $((2147483647 * 6700417))
 t1=$(($t1 + $(_t_ngcd 1 1 2147483647 $((2147483647 * 6700417)) 6700417)))
 t1=$(($t1 + $(_t_ngcd 1 6700417 2147483647 2305843009213693951)))
 
-printf "ngcd seems to be fine (in %d samples).\n" $t1
+printf "ngcd seems to be fine (in %d/%d samples).\n" $t1 8
