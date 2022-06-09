@@ -19,6 +19,15 @@
 #	a[y]=_xor(a[y],a[x]); a[x]=_xor(a[x],a[y]); a[y]=_xor(a[y],a[x])
 #}
 
+# in GAWK
+#
+# 9.1.6 Bit-Manipulation Functions
+# https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
+#
+#function swap1(a, x, y) {
+#	a[y]=xor(a[y],a[x]); a[x]=xor(a[x],a[y]); a[y]=xor(a[y],a[x])
+#}
+
 function swap2(a, x, y) {
 	a[y]=a[x]-a[y]; a[x]-=a[y]; a[y]+=a[x]
 }

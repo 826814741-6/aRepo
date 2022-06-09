@@ -46,7 +46,13 @@ function iCbrt(x,	r, t) {
 
 	r = x; t = 1
 	while (t < r) {
-		r = int(r / 4); t *= 2
+		r = int(r / 4); t *= 2 # <-
+		#
+		# r = rshift(r, 2); t = lshift(t, 1) # <- plan B in GAWK
+		#
+		# 9.1.6 Bit-Manipulation Functions
+		# https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
+		#
 	}
 
 	do {

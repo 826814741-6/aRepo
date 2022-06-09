@@ -56,7 +56,7 @@
 | crc32t.c     |  |
 | crnd.c       | crnd.{lua,luajit} |
 | crypt.c      |  |
-| cuberoot.c   | cuberoot.{awk,gawk},nthroot.{fth,lua,luajit,ss} |
+| cuberoot.c   | cuberoot.awk,nthroot.{fth,lua,luajit,ss} |
 | dayweek.c    | dayweek.{awk,lua} |
 | delta2.c     |  |
 | dfs.c        |  |
@@ -117,7 +117,7 @@
 | hyperb.c     |  |
 | hypot.c      | hypot.{awk,fth,lua,ss} |
 | ibeta.c      |  |
-| icubrt.c     | cuberoot.{awk,gawk},nthroot.{fth,lua,luajit,ss} |
+| icubrt.c     | cuberoot.awk,nthroot.{fth,lua,luajit,ss} |
 | ifs.c        |  |
 | igamma.c     |  |
 | imandel.c    |  |
@@ -132,7 +132,7 @@
 | ishi1.c      |  |
 | ishi2.c      |  |
 | isomer.c     |  |
-| isqrt.c      | sqrt.{awk,gawk},nthroot.{fth,lua,luajit,ss} |
+| isqrt.c      | sqrt.awk,nthroot.{fth,lua,luajit,ss} |
 | jacobi.c     |  |
 | jos1.c       | josephus.lua |
 | jos2.c       | josephus.lua |
@@ -175,7 +175,7 @@
 | monte.c      | montecarlo.lua |
 | movebloc.c   | moveblock.{awk,lua} |
 | mrnd.c       |  |
-| multiply.c   | multiply.{awk,gawk,bash,fth,lua,luajit} |
+| multiply.c   | multiply.{awk,bash,fth,lua,luajit} |
 | multprec.c   |  |
 | neville.c    |  |
 | newt1.c      |  |
@@ -200,7 +200,7 @@
 | polytope.c   |  |
 | postfix.c    |  |
 | poweigen.c   |  |
-| power.c      | power.{awk,gawk,bash,lua,luajit} |
+| power.c      | power.{awk,bash,lua,luajit} |
 | primes.c     |  |
 | primroot.c   |  |
 | princo.c     |  |
@@ -242,7 +242,7 @@
 | sosrch.c     |  |
 | spline2.c    |  |
 | spline.c     |  |
-| sqrt.c       | sqrt.{awk,gawk},nthroot.{fth,lua,luajit,ss} |
+| sqrt.c       | sqrt.awk,nthroot.{fth,lua,luajit,ss} |
 | squeeze.c    |  |
 | srchmat.c    |  |
 | statutil.c   |  |
@@ -251,7 +251,7 @@
 | strmatch.c   |  |
 | sum.c        | sum.{awk,lua} |
 | svgplot.c    | svgplot.lua |
-| swap.c       | swap.{awk,gawk,lua} |
+| swap.c       | swap.{awk,lua} |
 | sweep.c      |  |
 | tarai.c      | tarai.{awk,fth,lua,ss} |
 | tbintree.c   |  |
@@ -282,7 +282,6 @@
     GNU/Linux X86_64
 
     *.awk       nawk(*1)(20200113), mawk-1.3.4-20200106
-    *.gawk      gawk-5.0.1
     *.bash      bash-4.3
     *.fth       pForth(*2)-V28
     *.lua       lua-5.4-beta

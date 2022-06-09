@@ -23,6 +23,20 @@ function fSqrt(x,	r, t) {
 	return r
 }
 
+function iSqrt(x,	r, t) {
+	if (x <= 0) return 0
+
+	r = x; t = 1
+	while (t < r) {
+		r = int(r / 2); t = t * 2
+	}
+	do {
+		r = t; t = int((int(x / t) + t) / 2)
+	} while (t < r)
+
+	return r
+}
+
 # see http://www.intex.tokyo/unix/awk-02.html
 #function _lshift(x, y,	...) {
 #	...
@@ -45,16 +59,21 @@ function fSqrt(x,	r, t) {
 #	return r
 #}
 
-function iSqrt(x,	r, t) {
-	if (x <= 0) return 0
-
-	r = x; t = 1
-	while (t < r) {
-		r = int(r / 2); t = t * 2
-	}
-	do {
-		r = t; t = int((int(x / t) + t) / 2)
-	} while (t < r)
-
-	return r
-}
+# in GAWK
+#
+# 9.1.6 Bit-Manipulation Functions
+# https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
+#
+#function iSqrt(x,	r, t) {
+#	if (x <= 0) return 0
+#
+#	r = x; t = 1
+#	while (t < r) {
+#		r = rshift(r, 1); t = lshift(t, 1)
+#	}
+#	do {
+#		r = t; t = rshift(int(x / t) + t, 1)
+#	} while (t < r)
+#
+#	return r
+#}

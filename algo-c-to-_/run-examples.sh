@@ -3,7 +3,7 @@
 #
 #		or
 #
-#	$ {,g}awk -f src/_helper.awk -f src/A.{,g}awk -f examples/A.{,g}awk
+#	$ {,g}awk -f src/_helper.awk -f src/A.awk -f examples/A.awk
 #	$ bash examples/A.bash
 #	$ pforth_standalone -q examples/A.fth
 #	$ LUA_PATH=src/?.lua lua examples/A.lua
@@ -24,7 +24,7 @@ isExist () {
 }
 
 _cmd () {
-	if [ "${2}" = "awk" -o "${2}" = "gawk" ]; then
+	if [ "${2}" = "awk" ]; then
 		isExist "src/${1}.${2}" "examples/${1}.${2}" || return
 		${2} -f "src/_helper.awk" -f "src/${1}.${2}" -f "examples/${1}.${2}"
 	elif [ "${2}" = "bash" ]; then
@@ -59,7 +59,6 @@ run () {
 [ -d "results" ] || mkdir results
 
 AWK=$(checkDependency awk)
-GAWK=$(checkDependency gawk)
 BASH=$(checkDependency bash)
 FTH=$(checkDependency pforth_standalone)
 LUA=$(checkDependency lua)
@@ -102,7 +101,7 @@ else
 	run ci			$LUA
 	run combination		$AWK $LUA
 	run crnd		$LUA $LUAJIT
-	run cuberoot		$AWK $GAWK $FTH $LUA $LUAJIT $CHEZ
+	run cuberoot		$AWK $FTH $LUA $LUAJIT $CHEZ
 	run dayweek		$AWK $LUA
 	run e			$AWK $BASH $FTH $LUA $CHEZ
 	run eulerian		$AWK $BASH $FTH $LUA
@@ -121,17 +120,17 @@ else
 	run mccarthy		$AWK $BASH $FTH $LUA $CHEZ
 	run montecarlo		$LUA
 	run moveblock		$AWK $LUA
-	run multiply		$AWK $GAWK $BASH $FTH $LUA $LUAJIT
+	run multiply		$AWK $BASH $FTH $LUA $LUAJIT
 	run normal		$AWK $LUA
 	run pi			$AWK $FTH $LUA $CHEZ
-	run power		$AWK $GAWK $BASH $LUA $LUAJIT
+	run power		$AWK $BASH $LUA $LUAJIT
 	run rand		$FTH $LUA $LUAJIT
 	run randperm		$LUA
 	run si			$LUA
-	run sqrt		$AWK $GAWK $FTH $LUA $LUAJIT $CHEZ
+	run sqrt		$AWK $FTH $LUA $LUAJIT $CHEZ
 	run stirling		$AWK $BASH $FTH $LUA
 	run sum			$AWK $LUA
-	run swap		$AWK $GAWK $LUA
+	run swap		$AWK $LUA
 	run tarai		$AWK $FTH $LUA $CHEZ
 	run tdist		$LUA
 	run totient		$AWK $BASH $FTH $LUA
