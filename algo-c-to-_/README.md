@@ -1,4 +1,4 @@
-# algo-c-to-___
+# algo-c-to-_
 
 [『［改訂新版］C言語による標準アルゴリズム事典』](https://gihyo.jp/book/2018/978-4-7741-9690-9)([サポートページ](https://github.com/okumuralab/algo-c))
 
@@ -9,7 +9,7 @@
 
 に従い作成します。なお、各成果物は、(オリジナルと同様に)[CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/legalcode)とします。
 
-## 進捗
+## 対応するコード
 
 | src          | dest|
 |:------------:|:---:|
