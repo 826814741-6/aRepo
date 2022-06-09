@@ -20,7 +20,8 @@ _t_mccarthy91 () {
 	printf "mccarthy91 seems to be 91 in %d to %d\n" ${1} ${2}
 }
 
-_t_mccarthy91 -100 100
+# _t_mccarthy91 -100 100
+_t_mccarthy91 80 100
 
 printf "... and in 101 to 110 are:\n"
 
@@ -30,3 +31,7 @@ while [ "$i" -le "110" ]; do
 	i=$(($i + 1))
 done
 printf "\n"
+
+printf "\n(Note:\n"
+printf " A smaller value (than the other langs) is set here to run casually.\n"
+printf " If you have a powerful machine or enough time, please try same or more.)\n"
