@@ -16,6 +16,10 @@ set LUA=
 
 rem
 
+if "%LUA%"=="" (echo Please set %%LUA%% in this script. & exit /b 1)
+
+rem
+
 set LUA_PATH=src\?.lua
 
 %LUA% examples\3dgraph.lua

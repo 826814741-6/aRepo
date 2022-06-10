@@ -21,6 +21,15 @@ set LUAJIT=
 
 rem
 
+if "%AWK%"=="" (echo Please set %%AWK%% in this script. & exit /b 1)
+if "%BASH%"=="" (echo Please set %%BASH%% in this script. & exit /b 1)
+if "%CHEZ%"=="" (echo Please set %%CHEZ%% in this script. & exit /b 1)
+if "%FTH%"=="" (echo Please set %%FTH%% in this script. & exit /b 1)
+if "%LUA%"=="" (echo Please set %%LUA%% in this script. & exit /b 1)
+if "%LUAJIT%"=="" (echo Please set %%LUAJIT%% in this script. & exit /b 1)
+
+rem
+
 set AWK=%AWK% -f src\_helper.awk
 set CHEZ=%CHEZ% --libdirs src --script
 set FTH=%FTH% -q
