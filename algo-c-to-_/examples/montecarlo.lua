@@ -10,15 +10,16 @@ local M0 = require 'crnd'
 local M1 = require 'montecarlo'
 
 local crnd = M0.crnd
-local piA, piB, piC = M1.piA, M1.piB, M1.piC
+local piA, piB = M1.piA, M1.piB
+local piC = M1.piC
 
-function samples(target, formatter, tbl)
+function printSamples(target, fmt, tbl)
 	for _,n in ipairs(tbl) do
-		print(("%8d : %s"):format(n, formatter(target(n))))
+		print(("%8d : %s"):format(n, fmt(target(n))))
 	end
 end
 
-function targetR(f, seed)
+function makeTarget(f, seed)
 	local rand = crnd()
 	return function (n)
 		rand:init(seed)
@@ -26,12 +27,12 @@ function targetR(f, seed)
 	end
 end
 
-function formatter1(n)
-	return ("%6.4f (delta: %q)"):format(n, math.abs(math.pi - n))
+function fmtAB(m, n)
+	return ("%6.4f +- %6.4f"):format(m, n)
 end
 
-function formatter2(m, n)
-	return ("%6.4f +- %6.4f"):format(m, n)
+function fmtC(n)
+	return ("%6.4f (delta: %q)"):format(n, math.abs(math.pi - n))
 end
 
 do
@@ -39,11 +40,11 @@ do
 	local tbl = {10000, 100000, 1000000}
 
 	print("-------- piA n")
-	samples(targetR(piA, seed), formatter2, tbl)
+	printSamples(makeTarget(piA, seed), fmtAB, tbl)
 
 	print("-------- piB n")
-	samples(targetR(piB, seed), formatter2, tbl)
+	printSamples(makeTarget(piB, seed), fmtAB, tbl)
 
 	print("-------- piC n")
-	samples(piC, formatter1, tbl)
+	printSamples(piC, fmtC, tbl)
 end
