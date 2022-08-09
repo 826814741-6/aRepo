@@ -279,6 +279,15 @@
 
 動作の確認には
 
+    ChromeOS Flex
+
+    *.awk       mawk v1.3.4
+    *.bash      bash v4.4.23
+    *.fth       PForth V28-LE/64 (*1)
+    *.lua       Lua 5.4.4
+    *.luajit    LuaJIT 2.1.0-beta3
+    *.ss        ChezScheme-9.5.8
+
     Windows 11 (21H2)
 
     *.awk       busybox.exe v1.28.0
