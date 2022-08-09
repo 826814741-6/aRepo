@@ -4,7 +4,7 @@ setlocal
 rem
 rem	run-examples-graphics.cmd
 rem
-rem	Please set the path of excutables, before you run this script.
+rem	Please set the path of excutable, before you run this script.
 rem
 rem	e.g.
 rem	set LUA=C:\path\to\lua.exe
