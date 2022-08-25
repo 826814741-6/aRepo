@@ -7,6 +7,10 @@
 --	in other langs:
 --	https://www.rosettacode.org/wiki/Church_Numerals
 --
+--	> luac -l [-o nul or -o /dev/null] -- src
+--	> luajit -bl src
+--	> luajit -jdump src
+--
 
 function Zero(f)
 	return function (x) return x end

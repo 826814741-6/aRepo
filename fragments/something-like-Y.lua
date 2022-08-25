@@ -6,6 +6,10 @@
 --	and license is MPL-2.0:
 --	https://www.mozilla.org/en-US/MPL/2.0/
 --
+--	> luac -l [-o nul or -o /dev/null] -- src
+--	> luajit -bl src
+--	> luajit -jdump src
+--
 
 function Y(f)
 	return (function (x) return f(function(v) return x(x)(v) end) end)(function (x) return f(function(v) return x(x)(v) end) end)
