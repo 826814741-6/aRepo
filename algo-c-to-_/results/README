@@ -1,13 +1,22 @@
 #
-#	$ LUA_PATH=src/?.lua [path/to]lua examples/grBMP.lua
-#	$ ls examples/grBMP.bmp
-#	examples/grBMP.bmp
+#	A. all at once
+#
+#	$ cd /path/to/algo-c-to-_
+#	$ sh run-examples-graphics.sh
+#
+#		or
+#
+#	> cd \path\to\algo-c-to-_
+#	> run-examples-graphics.cmd
+#
+#
+#	B. one by one
+#
+#	$ cd /path/to/algo-c-to-_
+#	$ LUA_PATH=src/?.lua [/path/to]lua examples/grBMP.lua
 #
 #	or
 #
-#	> busybox.exe sh -c "LUA_PATH=src/?.lua [path/to]lua.exe examples/grBMP.lua"
-#	> dir examples\grBMP.bmp
-#	...
-#	04/05/16  01:00         1,024,054 grBMP.bmp
-#	...
+#	> cd \path\to\algo-c-to-_
+#	> busybox.exe sh -c "LUA_PATH=src/?.lua [/path/to]lua.exe examples/grBMP.lua"
 #
