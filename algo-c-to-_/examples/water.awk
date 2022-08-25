@@ -5,9 +5,9 @@
 #
 
 BEGIN {
-	printf "Please specify the capacity of the A container > "
+	printf "Please specify the capacity of the A container. > "
 	getline a
-	printf "Please specify the capacity of the B container > "
+	printf "Please specify the capacity of the B container. > "
 	getline b
 	printf "How much water do you need? > "
 	getline v
@@ -29,7 +29,7 @@ BEGIN {
 				printf "(A:%d, B:%d)... B is FULL (A -> B)\n", x, y
 			}
 		} while (x != v && y != v)
-		printf "Thank you for waiting. Here you are...(%s)\n", x==v ? "A" : "B"
+		printf "Thank you for waiting. Here you are...(%s).\n", x==v ? "A" : "B"
 	} else {
 		print "I'm afraid I can't measure it with A,B."
 	}

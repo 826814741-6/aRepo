@@ -18,7 +18,7 @@ do
 
 	io.write("How many people are there? (N)> ")
 	local n = io.read("*n")
-	io.write("Which one do you choose (per step)? (N (th))> ")
+	io.write("How many people do you want to skip at first? (N)> ")
 	local p = io.read("*n")
 
 	assert(josephusProblem1(n, p) == josephusProblem2(n, p))

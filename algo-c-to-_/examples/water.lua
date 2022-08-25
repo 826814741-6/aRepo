@@ -11,9 +11,9 @@ local isMeasurable = M.isMeasurable
 local read, write = io.read, io.write
 
 do
-	write("Please specify the capacity of the A container > ")
+	write("Please specify the capacity of the A container. > ")
 	local a = read("*n")
-	write("Please specify the capacity of the B container > ")
+	write("Please specify the capacity of the B container. > ")
 	local b = read("*n")
 	write("How much water do you need? > ")
 	local v = read("*n")
@@ -35,7 +35,7 @@ do
 				write(("(A:%d, B:%d)... B is FULL (A -> B)\n"):format(x, y))
 			end
 		until x == v or y == v
-		write(("Thank you for waiting. Here you are...(%s)\n"):format(x==v and "A" or "B"))
+		write(("Thank you for waiting. Here you are...(%s).\n"):format(x==v and "A" or "B"))
 	else
 		write("I'm afraid I can't measure it with A,B.\n")
 	end

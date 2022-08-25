@@ -6,9 +6,9 @@
 
 . "src/water.bash" || exit
 
-printf "Please specify the capacity of the A container > "
+printf "Please specify the capacity of the A container. > "
 read a
-printf "Please specify the capacity of the B container > "
+printf "Please specify the capacity of the B container. > "
 read b
 printf "How much water do you need? > "
 read v
@@ -33,7 +33,7 @@ if [ "$(isMeasurable $a $b $v)" ]; then
 	done
 
 	[ "$x" -eq "$v" ] && r="A" || r="B"
-	printf "Thank you for waiting. Here you are...(%s)\n" $r
+	printf "Thank you for waiting. Here you are...(%s).\n" $r
 else
 	printf "I'm afraid I can't measure it with A,B.\n"
 fi
