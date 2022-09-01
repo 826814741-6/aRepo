@@ -1,13 +1,11 @@
 # algo-c-to-_
 
-[『［改訂新版］C言語による標準アルゴリズム事典』](https://gihyo.jp/book/2018/978-4-7741-9690-9)([サポートページ](https://github.com/okumuralab/algo-c))
-
-のサンプルコードを他言語で書く試みです。大まかなルールとして
+[こちら](https://gihyo.jp/book/2018/978-4-7741-9690-9)の[サンプルコード](https://github.com/okumuralab/algo-c)を他言語で書く試みです。大まかなルールとして
 
 - １サンプルファイルに対し(又は複数をまとめて)、１ファイルにおさめて src/ 下に配置
 - mainブロック下にある動作確認のコードは、別ファイルに分けて examples/ 下に配置
 
-に従い作成します。なお、各成果物は、(オリジナルと同様に)[CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/legalcode)とします。
+に従い作成します。なお、各成果物は(オリジナルと同様に)[CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/legalcode)とします。
 
 ## 対応するコード
 

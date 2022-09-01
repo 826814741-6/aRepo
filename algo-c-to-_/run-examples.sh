@@ -4,7 +4,7 @@
 #	Please set the path of excutable, before you run this script.
 #
 #	e.g.
-#	LUA=/path/to/lua or lua
+#	LUA=/path/to/lua or LUA=lua
 #
 
 AWK=
