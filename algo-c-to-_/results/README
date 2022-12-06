@@ -9,13 +9,14 @@
 #	> cd \path\to\algo-c-to-_
 #	> run-examples-graphics.cmd
 #
+
 #
 #	B. one by one
 #
 #	$ cd /path/to/algo-c-to-_
 #	$ LUA_PATH=src/?.lua [/path/to]lua examples/grBMP.lua
 #
-#	or
+#		or
 #
 #	> cd \path\to\algo-c-to-_
 #	> busybox.exe sh -c "LUA_PATH=src/?.lua [/path/to]lua.exe examples/grBMP.lua"
