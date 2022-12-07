@@ -38,3 +38,10 @@ dc -e "
 	72 101 108 108 111 44 32 87 111 114 108 100 33 10
 	zsF 0sR 0lxx lR d n10P P
 "
+
+# using ? command
+printf '72 101 108 108 111 44 32 87 111 114 108 100 33 10' | dc -e "
+	[z0!=y]sl [256li^*lR+sRli1+lxx]sy [sillx]sx
+	? 0sR 0lxx lR n10P
+"
+printf 1468369091346906859060166438166794 | dc -e "?P"
