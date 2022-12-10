@@ -3,6 +3,8 @@
 --
 --	porting from:
 --	https://github.com/justinethier/cyclone/blob/master/examples/tail-call-optimization.scm
+--	and its license is MIT:
+--	https://github.com/justinethier/cyclone#license
 --
 --	> lua[jit] tail-call-optimization.lua
 --	... running forever ...

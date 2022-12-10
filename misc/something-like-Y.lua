@@ -3,7 +3,7 @@
 --
 --	porting from:
 --	https://hg.mozilla.org/mozilla-central/file/tip/js/src/Y.js
---	and license is MPL-2.0:
+--	and its license is MPL-2.0:
 --	https://www.mozilla.org/en-US/MPL/2.0/
 --
 --	> luac -l [-o nul or -o /dev/null] -- src
