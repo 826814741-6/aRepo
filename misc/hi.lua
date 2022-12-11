@@ -5,7 +5,7 @@
 --	$ dc -e "1468369091346906859060166438166794P"
 --	(see https://github.com/nobi56/aRepo/blob/master/misc/hi.sh)
 --
---	depends lbc-101; https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc
+--	depends on lbc-101; https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc
 --
 
 local M = require 'bc'
@@ -49,7 +49,8 @@ function hi(src)
 	return T
 end
 
--- another approach
+-- and some utils
+
 function tbl2src(t)
 	local r, j, step = M_new(0), 0, M_new(256)
 
