@@ -49,7 +49,7 @@ function hi(src)
 	return T
 end
 
--- another approarch
+-- another approach
 function tbl2src(t)
 	local r, j, step = M_new(0), 0, M_new(256)
 
