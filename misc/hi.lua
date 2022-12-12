@@ -77,12 +77,21 @@ end
 
 --
 
-hi("1468369091346906859060166438166794"):P()
-hi("1468369091346906859060166438166794"):n10P()
+function demo(s)
+	local obj = hi(s)
+	obj:P()
+	obj:n10P()
+end
 
-hi(tbl2src({72; 101; 108; 108; 111; 44; 32; 87; 111; 114; 108; 100; 33; 10})):P()
-hi(tbl2src({72; 101; 108; 108; 111; 44; 32; 87; 111; 114; 108; 100; 33; 10})):n10P()
-hi(tbl2src(split("72 101 108 108 111 44 32 87 111 114 108 100 33 10", "%d+", tonumber))):P()
-hi(tbl2src(split("72 101 108 108 111 44 32 87 111 114 108 100 33 10", "%d+", tonumber))):n10P()
-hi(str2src("Hello, World!\n")):P()
-hi(str2src("Hello, World!\n")):n10P()
+do
+	local samples = {
+		"1468369091346906859060166438166794";
+		tbl2src({72; 101; 108; 108; 111; 44; 32; 87; 111; 114; 108; 100; 33; 10});
+		tbl2src(split("72 101 108 108 111 44 32 87 111 114 108 100 33 10", "%d+", tonumber));
+		str2src("Hello, World!\n")
+	}
+
+	for _,v in ipairs(samples) do
+		demo(v)
+	end
+end
