@@ -15,7 +15,7 @@
 //
 //	in HashLink/C:
 //	$ haxe -lib littleBigInt --hl out/main.c --main Hi
-//	$ gcc -Iout out/main.c -lhl -o hi [-O3 ...]
+//	$ gcc -Iout out/main.c -lhl -o hi [...some options...]
 //	$ ./hi
 //
 
