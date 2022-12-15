@@ -29,19 +29,20 @@ dc -e "1468369091346906859060166438166794P"
 dc -e "
 	[z0!=y]sl [256li^*lR+sRli1+lxx]sy [sillx]sx
 	72 101 108 108 111 44 32 87 111 114 108 100 33 10
-	0sR 0lxx lR d n10P P
+	0sR 0lxx lR n10P
 "
 
 # another approach
 dc -e "
 	[lilF!=y]sl [256li^*lR+sRli1+lxx]sy [sillx]sx
 	72 101 108 108 111 44 32 87 111 114 108 100 33 10
-	zsF 0sR 0lxx lR d n10P P
+	zsF 0sR 0lxx lR d P n10P
 "
 
 # using ? command
+printf 1468369091346906859060166438166794 | dc -e "?P"
+
 printf '72 101 108 108 111 44 32 87 111 114 108 100 33 10' | dc -e "
 	[z0!=y]sl [256li^*lR+sRli1+lxx]sy [sillx]sx
 	? 0sR 0lxx lR n10P
 "
-printf 1468369091346906859060166438166794 | dc -e "?P"
