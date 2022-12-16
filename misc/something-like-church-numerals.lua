@@ -57,7 +57,7 @@ function Pred(n)
 		return function (x)
 			return n(function (g) return function (h) return h(g(f)) end end)(function (y) return x end)(function (x) return x end)
 
-			-- following code (above + newline) raise error in LuaJIT-2.0.5 (not raise in Lua-5.4.0)
+			-- following code (above + newline) probably raise error in LuaJIT (not in Lua)
 			-- return n(function (g) return function (h) return h(g(f)) end end)
 			--         (function (y) return x end)
 			--         (function (x) return x end)
@@ -88,7 +88,7 @@ function toNumber(c)
 	return c(function (x) return x+1 end)(0)
 end
 
---------------------------------------------------------------------------------
+--
 
 do
 	local four, three = toChurch(4), toChurch(3)

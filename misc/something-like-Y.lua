@@ -14,7 +14,7 @@
 function Y(f)
 	return (function (x) return f(function(v) return x(x)(v) end) end)(function (x) return f(function(v) return x(x)(v) end) end)
 
-	-- following code (above + newline) raise error in LuaJIT-2.0.5 (not raise in Lua-5.4.0)
+	-- following code (above + newline) probably raise error in LuaJIT (not in Lua)
 	-- return (function (x) return f(function(v) return x(x)(v) end) end)
 	--        (function (x) return f(function(v) return x(x)(v) end) end)
 	-- > luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
@@ -27,12 +27,14 @@ function YM(f, h)
 	end
 end
 
---------------------------------------------------------------------------------
+--
 
 function fac(f) return function (n) return n>0 and n*f(n-1) or 1 end end
 function fib(f) return function (n) return n>1 and f(n-1)+f(n-2) or n end end
 
-assert(120 == Y(fac)(5))
-assert(55 == Y(fib)(10))
-assert(120 == YM(fac,{})(5))
-assert(55 == YM(fib,{})(10))
+do
+	assert(120 == Y(fac)(5))
+	assert(55 == Y(fib)(10))
+	assert(120 == YM(fac,{})(5))
+	assert(55 == YM(fib,{})(10))
+end
