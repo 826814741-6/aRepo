@@ -27,3 +27,7 @@ for i=1,20 do
 	end
 	print()
 end
+
+assert(9899 == r:rand())
+r:srand(1)
+assert(16838 == r:rand())

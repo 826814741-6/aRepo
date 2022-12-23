@@ -25,7 +25,7 @@ local function RAND(seed)
 		return (T.next / 65536LL) % 32768ULL
 	end
 
-	function srand(seed)
+	function T:srand(seed)
 		T.next = seed
 	end
 
