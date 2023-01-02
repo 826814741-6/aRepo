@@ -1,7 +1,7 @@
 #
 #	Hello, World! in GNU dc
 #
-#	(salvage from https://pastebin.com/3Q3mqW1A)
+#	(salvage from my old paste)
 #
 
 dc -e "1468369091346906859060166438166794P"
