@@ -7,7 +7,6 @@
 local H = require '_helper'
 
 local readOnlyTable = H.readOnlyTable
-local pow = math.pow
 
 local coef = readOnlyTable({
 	[0] = 8.333333333333333333333333333e-2,
@@ -38,11 +37,11 @@ local function riemannZeta(n)
 		local r = 1
 		for i=2,n-1 do
 			local prev = r
-			r = r + pow(i, -x)
+			r = r + i ^ (-x)
 			if r == prev then return r end
 		end
 
-		local powNX = pow(n, x)
+		local powNX = n ^ x
 		local w = x / (n * powNX)
 		r = r + (0.5 / powNX + n / ((x - 1) * powNX) + coef[0] * w)
 

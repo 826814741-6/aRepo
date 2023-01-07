@@ -7,10 +7,10 @@
 --	fib3			to	fib4
 --
 
-local floor, pow, sqrt = math.floor, math.pow, math.sqrt
+local floor, sqrt = math.floor, math.sqrt
 
 local function fib1(n)
-	return floor(pow((1 + sqrt(5)) / 2, n) / sqrt(5) + 0.5)
+	return floor((((1 + sqrt(5)) / 2) ^ n) / sqrt(5) + 0.5)
 end
 
 local function fib2(n)

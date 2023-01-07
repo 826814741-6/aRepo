@@ -22,7 +22,6 @@ local PI = math.pi
 
 local atan = math.atan
 local exp = math.exp
-local pow = math.pow
 local sqrt = math.sqrt
 
 local function pNormal(z, n)
@@ -79,7 +78,7 @@ local function qF(df1, df2, f)
 	local sin2 = 1 - cos2
 
 	if df1 % 2 == 0 then
-		local p = pow(cos2, df2 / 2)
+		local p = cos2 ^ (df2 / 2)
 		local t = p
 		for i=2,df1-1,2 do
 			t = t * ((df2 + i - 2) * sin2 / i)
