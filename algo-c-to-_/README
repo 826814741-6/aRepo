@@ -13,7 +13,7 @@
 | 105.c        | 105.{awk,bash,lua}                       |
 | 3dgraph.c    | 3dgraph.lua                              |
 | 5num.c       |                                          |
-| acker.c      | acker.{awk,bash,fth,lua,ss}              |
+| acker.c      | acker.{awk,bash,fth,lua}                 |
 | area.c       |                                          |
 | arith.c      |                                          |
 | atan.c       | atan.lua                                 |
@@ -53,7 +53,7 @@
 | crc32t.c     |                                          |
 | crnd.c       | crnd.{lua,luajit}                        |
 | crypt.c      |                                          |
-| cuberoot.c   | cuberoot.awk,nthroot.{fth,lua,luajit,ss} |
+| cuberoot.c   | cuberoot.awk,nthroot.{fth,lua,luajit}    |
 | dayweek.c    | dayweek.{awk,lua}                        |
 | delta2.c     |                                          |
 | dfs.c        |                                          |
@@ -61,7 +61,7 @@
 | distsort.c   |                                          |
 | dragon2.c    | dragoncurve.lua                          |
 | dragon.c     | dragoncurve.lua                          |
-| e.c          | e.{awk,bash,fth,lua,ss}                  |
+| e.c          | e.{awk,bash,fth,lua}                     |
 | egypfrac.c   |                                          |
 | eigen.c      |                                          |
 | ellipse.c    | grBMP.lua                                |
@@ -77,7 +77,7 @@
 | factrep.c    |                                          |
 | fdist.c      | distribution.lua                         |
 | fft.c        | fft.lua                                  |
-| fib.c        | fib.{awk,fth,lua,ss}                     |
+| fib.c        | fib.{awk,fth,lua}                        |
 | fibonacc.c   |                                          |
 | float.c      |                                          |
 | fmerge.c     |                                          |
@@ -112,9 +112,9 @@
 | house.c      |                                          |
 | huffman.c    |                                          |
 | hyperb.c     |                                          |
-| hypot.c      | hypot.{awk,fth,lua,ss}                   |
+| hypot.c      | hypot.{awk,fth,lua}                      |
 | ibeta.c      |                                          |
-| icubrt.c     | cuberoot.awk,nthroot.{fth,lua,luajit,ss} |
+| icubrt.c     | cuberoot.awk,nthroot.{fth,lua,luajit}    |
 | ifs.c        |                                          |
 | igamma.c     |                                          |
 | imandel.c    |                                          |
@@ -129,7 +129,7 @@
 | ishi1.c      |                                          |
 | ishi2.c      |                                          |
 | isomer.c     |                                          |
-| isqrt.c      | sqrt.awk,nthroot.{fth,lua,luajit,ss}     |
+| isqrt.c      | sqrt.awk,nthroot.{fth,lua,luajit}        |
 | jacobi.c     |                                          |
 | jos1.c       | josephus.lua                             |
 | jos2.c       | josephus.lua                             |
@@ -163,7 +163,7 @@
 | matutil.c    |                                          |
 | maxmin.c     |                                          |
 | maze.c       |                                          |
-| mccarthy.c   | mccarthy.{awk,bash,fth,lua,ss}           |
+| mccarthy.c   | mccarthy.{awk,bash,fth,lua}              |
 | meansd1.c    |                                          |
 | meansd2.c    |                                          |
 | meansd3.c    |                                          |
@@ -189,8 +189,8 @@
 | permfac.c    |                                          |
 | permnum.c    |                                          |
 | permsign.c   |                                          |
-| pi1.c        | pi.{awk,fth,lua,ss}                      |
-| pi2.c        | pi.{awk,fth,lua,ss}                      |
+| pi1.c        | pi.{awk,fth,lua}                         |
+| pi2.c        | pi.{awk,fth,lua}                         |
 | plotter.c    |                                          |
 | poly.c       |                                          |
 | polygam.c    |                                          |
@@ -239,7 +239,7 @@
 | sosrch.c     |                                          |
 | spline2.c    |                                          |
 | spline.c     |                                          |
-| sqrt.c       | sqrt.awk,nthroot.{fth,lua,luajit,ss}     |
+| sqrt.c       | sqrt.awk,nthroot.{fth,lua,luajit}        |
 | squeeze.c    |                                          |
 | srchmat.c    |                                          |
 | statutil.c   |                                          |
@@ -250,7 +250,7 @@
 | svgplot.c    | svgplot.lua                              |
 | swap.c       | swap.{awk,lua}                           |
 | sweep.c      |                                          |
-| tarai.c      | tarai.{awk,fth,lua,ss}                   |
+| tarai.c      | tarai.{awk,fth,lua}                      |
 | tbintree.c   |                                          |
 | tdist.c      | distribution.lua                         |
 | tetromin.c   |                                          |
@@ -278,7 +278,6 @@
 #	PForth(*1): *.fth
 #	Lua(*2):    *.lua
 #	LuaJIT:     *.luajit
-#	ChezScheme: *.ss
 #
 #	*1) https://github.com/philburk/pforth
 #	*2) 5.3-

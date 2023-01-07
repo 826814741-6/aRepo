@@ -14,7 +14,6 @@ rem
 
 set AWK=
 set BASH=
-set CHEZ=
 set FTH=
 set LUA=
 set LUAJIT=
@@ -23,7 +22,6 @@ rem
 
 if "%AWK%"=="" (echo Please set %%AWK%% in this script. & exit /b 1)
 if "%BASH%"=="" (echo Please set %%BASH%% in this script. & exit /b 1)
-if "%CHEZ%"=="" (echo Please set %%CHEZ%% in this script. & exit /b 1)
 if "%FTH%"=="" (echo Please set %%FTH%% in this script. & exit /b 1)
 if "%LUA%"=="" (echo Please set %%LUA%% in this script. & exit /b 1)
 if "%LUAJIT%"=="" (echo Please set %%LUAJIT%% in this script. & exit /b 1)
@@ -31,7 +29,6 @@ if "%LUAJIT%"=="" (echo Please set %%LUAJIT%% in this script. & exit /b 1)
 rem
 
 set AWK=%AWK% -f src\_helper.awk
-set CHEZ=%CHEZ% --libdirs src --script
 set FTH=%FTH% -q
 set LUA_PATH=src\?.lua
 
@@ -39,8 +36,6 @@ echo ======== acker (awk)
 %AWK% -f src\acker.awk -f examples\acker.awk
 echo ======== acker (bash)
 %BASH% examples\acker.bash
-echo ======== acker (chez)
-%CHEZ% examples\acker.ss
 echo ======== acker (pforth)
 %FTH% examples\acker.fth
 echo ======== acker (lua)
@@ -87,8 +82,6 @@ echo.
 
 echo ======== cuberoot (awk)
 %AWK% -f src\cuberoot.awk -f examples\cuberoot.awk
-echo ======== cuberoot (chez)
-%CHEZ% examples\cuberoot.ss
 echo ======== cuberoot (pforth)
 %FTH% examples\cuberoot.fth
 echo ======== cuberoot (lua)
@@ -109,8 +102,6 @@ echo ======== e (awk)
 %AWK% -f src\e.awk -f examples\e.awk
 echo ======== e (bash)
 %BASH% examples\e.bash
-echo ======== e (chez)
-%CHEZ% examples\e.ss
 echo ======== e (pforth)
 %FTH% examples\e.fth
 echo ======== e (lua)
@@ -137,8 +128,6 @@ echo.
 
 echo ======== fib (awk)
 %AWK% -f src\fib.awk -f examples\fib.awk
-echo ======== fib (chez)
-%CHEZ% examples\fib.ss
 echo ======== fib (pforth)
 %FTH% examples\fib.fth
 echo ======== fib (lua)
@@ -167,8 +156,6 @@ echo.
 
 echo ======== hypot (awk)
 %AWK% -f src\hypot.awk -f examples\hypot.awk
-echo ======== hypot (chez)
-%CHEZ% examples\hypot.ss
 echo ======== hypot (pforth)
 %FTH% examples\hypot.fth
 echo ======== hypot (lua)
@@ -199,8 +186,6 @@ echo ======== mccarthy (awk)
 %AWK% -f src\mccarthy.awk -f examples\mccarthy.awk
 echo ======== mccarthy (bash)
 %BASH% examples\mccarthy.bash
-echo ======== mccarthy (chez)
-%CHEZ% examples\mccarthy.ss
 echo ======== mccarthy (pforth)
 %FTH% examples\mccarthy.fth
 echo ======== mccarthy (lua)
@@ -239,8 +224,6 @@ echo.
 
 echo ======== pi (awk)
 %AWK% -f src\pi.awk -f examples\pi.awk
-echo ======== pi (chez)
-%CHEZ% examples\pi.ss
 echo ======== pi (pforth)
 %FTH% examples\pi.fth
 echo ======== pi (lua)
@@ -279,8 +262,6 @@ echo.
 
 echo ======== sqrt (awk)
 %AWK% -f src\sqrt.awk -f examples\sqrt.awk
-echo ======== sqrt (chez)
-%CHEZ% examples\sqrt.ss
 echo ======== sqrt (pforth)
 %FTH% examples\sqrt.fth
 echo ======== sqrt (lua)
@@ -315,8 +296,6 @@ echo.
 
 echo ======== tarai (awk)
 %AWK% -f src\tarai.awk -f examples\tarai.awk
-echo ======== tarai (chez)
-%CHEZ% examples\tarai.ss
 echo ======== tarai (pforth)
 %FTH% examples\tarai.fth
 echo ======== tarai (lua)
