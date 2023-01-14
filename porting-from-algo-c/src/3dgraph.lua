@@ -22,11 +22,12 @@ local function checkParameters(parameters)
 	assert(type(parameters.maxX) == "number")
 	assert(type(parameters.maxY) == "number")
 	assert(type(parameters.maxZ) == "number")
+
+	return readOnlyTable(parameters)
 end
 
 local function tdGraph(plotter, aFunction, parameters)
-	checkParameters(parameters)
-	local P = readOnlyTable(parameters)
+	local P = checkParameters(parameters)
 
 	local lowerHorizon, upperHorizon = {}, {}
 
