@@ -5,20 +5,20 @@
 #	iPow				to	iPowR
 #
 
-_abs () {
+_abs() {
 	local r=${1}
 	[ "${r}" -lt "0" ] && r=$((-1 * $r))
 	printf $r
 }
 
-_helperFormat () {
+_helperFormat() {
 	local FMT=$(printf "0.%%0%dd" ${3})
 	local r=${1}
 	[ "${2}" -lt "0" ] && r=$(printf $FMT $(($((10 ** ${3})) / $r)))
 	printf $r
 }
 
-#iPowA () {
+#iPowA() {
 #	local x r t
 #	x=${1}; r=1; t=$(_abs ${2})
 #	while [ "${t}" -ne "0" ]; do
@@ -28,7 +28,7 @@ _helperFormat () {
 #	printf $(_helperFormat $r ${2} 16)
 #}
 
-iPow () {
+iPow() {
 	local x r t
 	x=${1}; r=1; t=$(_abs ${2})
 	while [ "${t}" -ne "0" ]; do
@@ -38,13 +38,13 @@ iPow () {
 	printf $(_helperFormat $r ${2} 16)
 }
 
-_helperAssign () {
+_helperAssign() {
 	local r=${1}
 	[ "$((${2} & 1))" -eq 1 ] && r=$((${r} * ${3}))
 	printf $r
 }
 
-_iter () {
+_iter() {
 	if [ "${4}" -ne "0" ]; then
 		_iter $((${1} * ${1})) ${2} $(_helperAssign ${3} ${4} ${1}) $((${4} >> 1))
 	else
@@ -52,6 +52,6 @@ _iter () {
 	fi
 }
 
-iPowR () {
+iPowR() {
 	printf $(_iter ${1} ${2} 1 $(_abs ${2}))
 }

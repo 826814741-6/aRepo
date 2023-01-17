@@ -8,15 +8,15 @@
 . "src/stirling.bash" || exit
 . "src/_helper.bash" || exit
 
-f0 () {
+f0() {
 	printf ${1}
 }
 
-f1 () {
+f1() {
 	printf $(stirling1 ${2} ${1})
 }
 
-f2 () {
+f2() {
 	printf $(stirling2 ${2} ${1})
 }
 

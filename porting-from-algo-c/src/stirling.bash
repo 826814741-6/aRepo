@@ -5,7 +5,7 @@
 #	int Stirling2(int, int)		to	stirling2
 #
 
-stirling1 () {
+stirling1() {
 	if [ "${2}" -lt "1" -o "${2}" -gt "${1}" ]; then
 		printf 0
 		exit
@@ -18,7 +18,7 @@ stirling1 () {
 		+ $(stirling1 $((${1} - 1)) $((${2} - 1)))))
 }
 
-stirling2 () {
+stirling2() {
 	if [ "${2}" -lt "1" -o "${2}" -gt "${1}" ]; then
 		printf 0
 		exit

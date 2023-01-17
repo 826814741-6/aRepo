@@ -4,7 +4,7 @@
 #	unsigned multiply(unsigned, unsigned)	to	mulA, mulB, mulC
 #
 
-mulA () {
+mulA() {
 	local a b r
 	a=${1}; b=${2}; r=0
 	while [ "${a}" -ne "0" ]; do
@@ -14,7 +14,7 @@ mulA () {
 	printf $r
 }
 
-mulB () {
+mulB() {
 	local a b r
 	a=${1}; b=${2}; r=0
 	while [ "${a}" -ne "0" ]; do
@@ -24,7 +24,7 @@ mulB () {
 	printf $r
 }
 
-_iter () {
+_iter() {
 	local t
 	if [ "${1}" -ne "0" ]; then
 		[ "$((${1} & 1))" -eq "1" ] && t=$((${3} + ${2})) || t=${3}
@@ -34,6 +34,6 @@ _iter () {
 	fi
 }
 
-mulC () {
+mulC() {
 	printf $(_iter ${1} ${2} 0)
 }

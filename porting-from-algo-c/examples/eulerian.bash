@@ -7,11 +7,11 @@
 . "src/eulerian.bash" || exit
 . "src/_helper.bash" || exit
 
-f0 () {
+f0() {
 	printf ${1}
 }
 
-f1 () {
+f1() {
 	printf $(eulerianNumber ${2} ${1})
 }
 

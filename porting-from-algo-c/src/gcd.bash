@@ -6,7 +6,7 @@
 #	int ngcd(int, int[])		to	ngcd
 #
 
-_iter () {
+_iter() {
 	if [ "${2}" -eq "0" ]; then
 		printf "${1}"
 		exit
@@ -15,12 +15,12 @@ _iter () {
 	fi
 }
 
-gcdR () {
+gcdR() {
 	[ "$#" -eq "2" ] || exit
 	printf $(_iter $@)
 }
 
-gcdL () {
+gcdL() {
 	[ "$#" -eq "2" ] || exit
 
 	local t x y
@@ -33,7 +33,7 @@ gcdL () {
 	printf $x
 }
 
-ngcd () {
+ngcd() {
 	[ "$#" -eq "0" ] && exit
 
 	local d=${1}

@@ -6,7 +6,7 @@
 
 . "src/mccarthy.bash" || exit
 
-_t_mccarthy91 () {
+_t_mccarthy91() {
 	local i t
 	i=${1}
 	while [ "$i" -le "${2}" ]; do

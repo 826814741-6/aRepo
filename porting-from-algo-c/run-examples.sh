@@ -15,7 +15,7 @@ LUAJIT=
 
 #
 
-error () {
+error() {
 	printf "Please set \$%s in this script.\n" "$1"
 	exit 1
 }
@@ -28,29 +28,29 @@ error () {
 
 #
 
-runAWK () {
+runAWK() {
 	$AWK -f src/_helper.awk -f src/${1}.awk -f examples/${1}.awk
 }
 
-runBASH () {
+runBASH() {
 	$BASH examples/${1}.bash
 }
 
-runFTH () {
+runFTH() {
 	$FTH -q examples/${1}.fth
 }
 
-runLUA () {
+runLUA() {
 	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
 }
 
-runLUAJIT () {
+runLUAJIT() {
 	LUA_PATH='src/?.luajit' $LUAJIT examples/${1}.luajit
 }
 
 #
 
-run () {
+run() {
 	local t=$1
 	shift
 	for cmd in "$@"; do

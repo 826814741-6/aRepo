@@ -4,7 +4,7 @@
 #	unsigned phi(unsigned)		to	phi
 #
 
-phi () {
+phi() {
 	local x t d
 
 	x=${1}; t=${1}

@@ -11,7 +11,7 @@ LUA=
 
 #
 
-error () {
+error() {
 	printf "Please set \$%s in this script.\n" "$1"
 	exit 1
 }
@@ -20,7 +20,7 @@ error () {
 
 #
 
-run () {
+run() {
 	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
 }
 

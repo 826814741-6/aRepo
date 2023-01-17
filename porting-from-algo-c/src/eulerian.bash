@@ -4,7 +4,7 @@
 #	Eulerian	to	eulerianNumber
 #
 
-eulerianNumber () {
+eulerianNumber() {
 	if [ "${2}" -eq "0" ]; then
 		printf 1
 		exit

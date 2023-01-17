@@ -7,7 +7,7 @@
 
 . "src/power.bash" || exit
 
-_p () {
+_p() {
 	local r="T"
 	[ "${1}" -eq "${2}" ] || r="F"
 	printf $r

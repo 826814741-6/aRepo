@@ -8,7 +8,7 @@
 
 . "src/gcd.bash" || exit
 
-_t_gcd () {
+_t_gcd() {
 	if [ "$(gcdL ${1} ${2})" -ne "${3}" ]; then printf 0; exit; fi
 	if [ "$(gcdR ${1} ${2})" -ne "${3}" ]; then printf 0; exit; fi
 	if [ "$(gcdL ${1} ${2})" -ne "$(gcdR ${1} ${2})" ]; then printf 0; exit; fi
@@ -23,7 +23,7 @@ _t_gcd () {
 	printf 1
 }
 
-_t_ngcd () {
+_t_ngcd() {
 	local d=${1}
 	shift
 	if [ "$(ngcd $@)" -ne "$d" ]; then

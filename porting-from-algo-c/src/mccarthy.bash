@@ -4,7 +4,7 @@
 #	int McCarthy(int)	to	mccarthy91
 #
 
-mccarthy91 () {
+mccarthy91() {
 	if [ "${1}" -gt 100 ]; then
 		printf $((${1} - 10))
 		exit

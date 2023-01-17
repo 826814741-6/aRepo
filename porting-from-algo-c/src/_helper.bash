@@ -1,4 +1,4 @@
-border () {
+border() {
 	local n=${1}
 	while [ "$n" -gt "0" ]; do
 		printf "-"
@@ -7,11 +7,11 @@ border () {
 	printf "\n"
 }
 
-padding () {
+padding() {
 	printf "%${1}s" " "
 }
 
-printH () {
+printH() {
 	local i j
 	j=${1}; i=${2}
 	while [ "$i" -le "${3}" ]; do
@@ -21,7 +21,7 @@ printH () {
 	printf "\n"
 }
 
-printT () {
+printT() {
 	local j t
 
 	padding $((${5} + 2))

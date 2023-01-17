@@ -13,7 +13,7 @@ LUA=
 
 #
 
-error () {
+error() {
 	printf "Please set \$%s in this script.\n" "$1"
 	exit 1
 }
@@ -24,21 +24,21 @@ error () {
 
 #
 
-runAWK () {
+runAWK() {
 	$AWK -f src/_helper.awk -f src/${1}.awk -f examples/${1}.awk
 }
 
-runBASH () {
+runBASH() {
 	$BASH examples/${1}.bash
 }
 
-runLUA () {
+runLUA() {
 	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
 }
 
 #
 
-run () {
+run() {
 	local t=$1
 	shift
 	for cmd in "$@"; do

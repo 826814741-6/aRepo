@@ -4,7 +4,7 @@
 #	int A(int, int)		to	ack
 #
 
-ack () {
+ack() {
 	if [ "${1}" -eq "0" ]; then
 		printf $((${2} + 1))
 		exit
