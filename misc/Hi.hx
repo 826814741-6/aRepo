@@ -18,6 +18,13 @@
 //	$ gcc -Iout out/main.c -lhl -o hi [...some options...]
 //	$ ./hi
 //
+//	(in JVM:(*))
+//	$ haxe -lib littleBigInt --jvm hi.jar --main Hi
+//	$ java -jar hi.jar
+//
+//	*) As of 18th Jan 2023,
+//	   littleBigInt doesn't announce the support for JVM target.
+//
 
 function f(n:BigInt, a:Array<String>):Array<String> {
 	if (n > 255) {

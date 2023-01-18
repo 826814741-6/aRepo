@@ -12,9 +12,10 @@
 ;	$ larceny -r5rs hi.ss
 ;	...
 ;
-;	Probably, in other implementations/envs/situations/...,
-;	you need to import some libraries to run this fun-script.
-;	e.g. (import (scheme base) (scheme write))
+;	Probably, in some(most?) cases,
+;	you need to import some libraries explicitly to run this fun-script.
+;
+;(import (scheme base) (scheme write))
 ;
 ;	$ larceny -r7rs hi-imported.ss
 ;	...
