@@ -1,7 +1,7 @@
 --
 --	from src/grBMP.c
 --
---	void putbytes(FILE *, int, unsigned long)		to	NBWriter
+--	void putbytes(FILE *, int, unsigned long)		to	(string.pack)
 --	void gr_dot(int, int, long)				to	BMP; :dot
 --	void gr_clear(long)					to	BMP; :clear
 --	void gr_BMP(char *)					to	BMP; :write
@@ -32,17 +32,6 @@ local unpack = table.unpack
 local abs = math.abs
 local floor = math.floor
 
-local function NBWriter(n)
-	local fmt, t = ("B"):rep(n), {}
-	return function (fh, x)
-		for i=1,n do t[i], x = x & 255, x >> 8 end
-		fh:write(fmt:pack(unpack(t)))
-	end
-end
-
-local write2B = NBWriter(2)
-local write4B = NBWriter(4)
-
 local function BMP(X, Y)
 	local T = {
 		data = {},
@@ -54,28 +43,32 @@ local function BMP(X, Y)
 	}
 
 	function header(fh)
-		fh:write("BM")
-		write4B(fh, X * Y * 4 + 54)
-		write4B(fh, 0)
-		write4B(fh, 54)
-		write4B(fh, 40)
-		write4B(fh, X)
-		write4B(fh, Y)
-		write2B(fh, 1)
-		write2B(fh, 32)
-		write4B(fh, 0)
-		write4B(fh, X * Y * 4)
-		write4B(fh, 3780)
-		write4B(fh, 3780)
-		write4B(fh, 0)
-		write4B(fh, 0)
+		fh:write(("<BBIIIIIIHHIIIIII"):pack(
+			66, -- "B"
+			77, -- "M"
+			X * Y * 4 + 54,
+			0,
+			54,
+			40,
+			X,
+			Y,
+			1,
+			32,
+			0,
+			X * Y * 4,
+			3780,
+			3780,
+			0,
+			0
+		))
 	end
 
 	function body(fh)
+		local fmt = "<I"
 		for y=1,Y do
 			for x=1,X do
 				-- assert(T.data[y][x] ~= nil, ("data[%d][%d] is nil"):format(y, x))
-				write4B(fh, T.data[y][x])
+				fh:write(fmt:pack(T.data[y][x]))
 			end
 		end
 	end
