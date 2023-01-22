@@ -15,12 +15,12 @@ do
 	local x, y, a1, a2, a3, a4 = 400, 460, 0.01, 10, 200, 40
 
 	local plotter = svgPlot(x, y)
-	local fh = io.open("results/lorenz.svg", "w")
 
-	plotter:plotStart(fh)
-	local ret = pcall(lorenzAttractor, plotter, sigma, rho, beta, n, a1, a2, a3, a4)
+	plotter:plotStart()
+	lorenzAttractor(plotter, sigma, rho, beta, n, a1, a2, a3, a4)
 	plotter:plotEnd()
 
+	local fh = io.open("results/lorenz.svg", "w")
+	plotter:write(fh)
 	fh:close()
-	assert(ret == true)
 end

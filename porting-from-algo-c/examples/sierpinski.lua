@@ -16,22 +16,25 @@ local sierpinski = M1.sierpinski
 function sampleWriter(pathPrefix, n, offset)
 	local plotter = svgPlot(n + offset, n + offset)
 
-	function sample(fh, order)
-		plotter:plotStart(fh)
+	function sample(order)
+		plotter:reset()
+
+		plotter:plotStart()
 		sierpinski(plotter, order, n)
 		plotter:plotEnd(true)
 	end
 
-	return function (order)
-		local fh = io.open(("%s%d.svg"):format(pathPrefix, order), "w")
-		local ret = pcall(sample, fh, order)
+	return function (n)
+		sample(n)
+
+		local fh = io.open(("%s%d.svg"):format(pathPrefix, n), "w")
+		plotter:write(fh)
 		fh:close()
-		assert(ret == true)
 	end
 end
 
 do
 	local writer = sampleWriter("results/sierpinski", 600, 2)
 
-	for order=1,6 do writer(order) end
+	for n=1,6 do writer(n) end
 end

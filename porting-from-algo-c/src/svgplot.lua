@@ -11,11 +11,13 @@
 
 local function header(x, y)
 	return ([[
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="%d" height="%d">]]):format(x, y)
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="%d" height="%d">
+]]):format(x, y)
 end
 
 local function footer()
-	return "</svg>"
+	return [[</svg>
+]]
 end
 
 local function pathStart()
@@ -23,38 +25,49 @@ local function pathStart()
 end
 
 local function pathEnd(isClosePath)
-	return ([[%s" fill="none" stroke="black" />]]):format(isClosePath and "Z" or "")
+	return ([[%s" fill="none" stroke="black" />
+]]):format(isClosePath and "Z" or "")
 end
 
-local function svgPlot(X, Y)
-	local T = { fh = nil }
+local T_concat = table.concat
+local T_insert = table.insert
 
-	function T:plotStart(fileHandler)
-		T.fh = fileHandler ~= nil and fileHandler or io.stdout
-		T.fh:write(header(X, Y), "\n")
-		T.fh:write(pathStart())
+local function svgPlot(X, Y)
+	local T = { buffer = {} }
+
+	function T:plotStart()
+		T_insert(T.buffer, function () return header(X, Y), pathStart() end)
 	end
 
 	function T:plotEnd(isClosePath)
-		T.fh:write(pathEnd(isClosePath), "\n")
-		T.fh:write(footer(), "\n")
-		T.fh = nil
+		T_insert(T.buffer, function () return pathEnd(isClosePath), footer() end)
 	end
 
 	function T:move(x, y)
-		T.fh:write(("M %g %g "):format(x, Y - y))
+		T_insert(T.buffer, function () return ("M %g %g "):format(x, Y - y) end)
 	end
 
 	function T:moveRel(x, y)
-		T.fh:write(("m %g %g "):format(x, -y))
+		T_insert(T.buffer, function () return ("m %g %g "):format(x, -y) end)
 	end
 
 	function T:draw(x, y)
-		T.fh:write(("L %g %g "):format(x, Y - y))
+		T_insert(T.buffer, function () return ("L %g %g "):format(x, Y - y) end)
 	end
 
 	function T:drawRel(x, y)
-		T.fh:write(("l %g %g "):format(x, -y))
+		T_insert(T.buffer, function () return ("l %g %g "):format(x, -y) end)
+	end
+
+	function T:reset()
+		T.buffer = {}
+	end
+
+	function T:write(fh)
+		fh = fh ~= nil and fh or io.stdout
+		for _,v in ipairs(T.buffer) do
+			fh:write(v())
+		end
 	end
 
 	return T

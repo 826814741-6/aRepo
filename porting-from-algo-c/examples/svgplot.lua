@@ -14,8 +14,8 @@ local M = require 'svgplot'
 local svgPlot = M.svgPlot
 local pi, cos, sin = math.pi, math.cos, math.sin
 
-function sample(plotter, fh)
-	plotter:plotStart(fh) -- :plotStart() write to io.stdout
+function sample(plotter)
+	plotter:plotStart()
 	for i=0,4 do
 		local theta = 2 * pi * i / 5
 		local x, y = 150 + 140 * cos(theta), 150 + 140 * sin(theta)
@@ -31,9 +31,9 @@ end
 do
 	local plotter = svgPlot(300, 300)
 
-	local fh = io.open("results/svgplot.svg", "w")
-	local ret = pcall(sample, plotter, fh)
-	fh:close()
+	sample(plotter)
 
-	assert(ret == true)
+	local fh = io.open("results/svgplot.svg", "w")
+	plotter:write(fh)
+	fh:close()
 end

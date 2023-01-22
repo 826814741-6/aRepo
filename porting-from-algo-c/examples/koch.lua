@@ -12,23 +12,16 @@ local svgPlot, koch = M0.svgPlot, M1.koch
 function sampleWriter(path)
 	local plotter = svgPlot(1200, 360)
 
-	function sample(fh)
-		plotter:plotStart(fh)
-		plotter:move(0, 0)
-		koch(plotter, 1200, 0, 3)
-		plotter:plotEnd()
-	end
+	plotter:plotStart()
+	plotter:move(0, 0)
+	koch(plotter, 1200, 0, 3)
+	plotter:plotEnd()
 
-	return function ()
-		local fh = io.open(path, "w")
-		local ret = pcall(sample, fh)
-		fh:close()
-		assert(ret == true)
-	end
+	local fh = io.open(path, "w")
+	plotter:write(fh)
+	fh:close()
 end
 
 do
-	local writer = sampleWriter("results/koch.svg")
-
-	writer()
+	sampleWriter("results/koch.svg")
 end
