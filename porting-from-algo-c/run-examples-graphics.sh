@@ -32,7 +32,6 @@ run circle
 run dragoncurve
 run dragoncurveR
 run ellipse
-run epsplot
 run gasket
 run grBMP
 run hilbert
