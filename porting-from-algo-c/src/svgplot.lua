@@ -29,7 +29,6 @@ local function pathEnd(isClosePath)
 ]]):format(isClosePath and "Z" or "")
 end
 
-local T_concat = table.concat
 local T_insert = table.insert
 
 local function svgPlot(X, Y)
