@@ -35,27 +35,29 @@ local function svgPlot(X, Y)
 	local T = { buffer = {} }
 
 	function T:plotStart()
-		T_insert(T.buffer, function () return header(X, Y), pathStart() end)
+		T_insert(T.buffer, header(X, Y))
+		T_insert(T.buffer, pathStart())
 	end
 
 	function T:plotEnd(isClosePath)
-		T_insert(T.buffer, function () return pathEnd(isClosePath), footer() end)
+		T_insert(T.buffer, pathEnd(isClosePath))
+		T_insert(T.buffer, footer())
 	end
 
 	function T:move(x, y)
-		T_insert(T.buffer, function () return ("M %g %g "):format(x, Y - y) end)
+		T_insert(T.buffer, ("M %g %g "):format(x, Y - y))
 	end
 
 	function T:moveRel(x, y)
-		T_insert(T.buffer, function () return ("m %g %g "):format(x, -y) end)
+		T_insert(T.buffer, ("m %g %g "):format(x, -y))
 	end
 
 	function T:draw(x, y)
-		T_insert(T.buffer, function () return ("L %g %g "):format(x, Y - y) end)
+		T_insert(T.buffer, ("L %g %g "):format(x, Y - y))
 	end
 
 	function T:drawRel(x, y)
-		T_insert(T.buffer, function () return ("l %g %g "):format(x, -y) end)
+		T_insert(T.buffer, ("l %g %g "):format(x, -y))
 	end
 
 	function T:reset()
@@ -65,7 +67,7 @@ local function svgPlot(X, Y)
 	function T:write(fh)
 		fh = fh ~= nil and fh or io.stdout
 		for _,v in ipairs(T.buffer) do
-			fh:write(v())
+			fh:write(v)
 		end
 	end
 
