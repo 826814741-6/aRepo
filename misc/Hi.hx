@@ -3,7 +3,7 @@
 //
 //	with something like GNU dc's P command:
 //	$ dc -e "1468369091346906859060166438166794P"
-//	(see https://github.com/nobi56/aRepo/blob/master/misc/hi.sh)
+//	(see https://github.com/nobi56/aRepo/blob/main/misc/hi.sh)
 //
 //	depends on littleBigInt; https://github.com/maitag/littleBigInt
 //
