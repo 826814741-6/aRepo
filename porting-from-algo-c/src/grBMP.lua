@@ -68,12 +68,8 @@ local function BMP(X, Y)
 	end
 
 	function body(fh)
-		local fmt = "<I"
 		for y=1,Y do
-			for x=1,X do
-				-- assert(T.data[y][x] ~= nil, ("data[%d][%d] is nil"):format(y, x))
-				fh:write(fmt:pack(T.data[y][x]))
-			end
+			fh:write(unpack(T.data[y]))
 		end
 	end
 
@@ -213,15 +209,20 @@ local function BMP(X, Y)
 	return T
 end
 
+local function makeColor(rgb)
+	return ("<I"):pack(rgb)
+end
+
 local PRESETCOLORS = readOnlyTable({
-	BLACK = 0x000000,
-	WHITE = 0xffffff,
-	RED   = 0xff0000,
-	GREEN = 0x00ff00,
-	BLUE  = 0x0000ff
+	BLACK = ("<I"):pack(0x000000),
+	WHITE = ("<I"):pack(0xffffff),
+	RED   = ("<I"):pack(0xff0000),
+	GREEN = ("<I"):pack(0x00ff00),
+	BLUE  = ("<I"):pack(0x0000ff)
 })
 
 return {
 	BMP = BMP,
-	PRESETCOLORS = PRESETCOLORS
+	PRESETCOLORS = PRESETCOLORS,
+	makeColor = makeColor
 }

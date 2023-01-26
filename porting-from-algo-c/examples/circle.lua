@@ -7,7 +7,7 @@
 local M = require 'grBMP'
 local H = require 'rand'
 
-local BMP, PRESETCOLORS = M.BMP, M.PRESETCOLORS
+local BMP, PRESETCOLORS, makeColor = M.BMP, M.PRESETCOLORS, M.makeColor
 local RAND = H.RAND
 
 do
@@ -22,7 +22,7 @@ do
 			r:rand() % x,
 			r:rand() % y,
 			r:rand() % 100,
-			r:randRaw() % (PRESETCOLORS.WHITE + 1)
+			makeColor(r:randRaw() % (0xffffff + 1))
 		)
 	end
 
