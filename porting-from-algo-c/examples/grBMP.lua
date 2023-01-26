@@ -15,10 +15,10 @@ do
 	local x, y = 640, 400
 	local bmp = BMP(x, y)
 
-	bmp:rect(1, x//2, 1, y//2, PRESETCOLORS.GREEN)
-	bmp:rect(x//2, x, 1, y//2, PRESETCOLORS.BLUE)
-	bmp:rect(1, x//2, y//2, y, PRESETCOLORS.RED)
-	bmp:rect(x//2, x, y//2, y, PRESETCOLORS.WHITE)
+	bmp:rect(1, x//2 + 1, 1, y//2 + 1, PRESETCOLORS.GREEN)
+	bmp:rect(x//2 + 1, x, 1, y//2 + 1, PRESETCOLORS.BLUE)
+	bmp:rect(1, x//2 + 1, y//2 + 1, y, PRESETCOLORS.RED)
+	bmp:rect(x//2 + 1, x, y//2 + 1, y, PRESETCOLORS.WHITE)
 
 	local fh = io.open("results/grBMP.bmp", "w")
 	bmp:write(fh)
