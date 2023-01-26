@@ -4,10 +4,15 @@
 #	Please set the path of excutable, before you run this script.
 #
 #	e.g.
-#	LUA=/path/to/lua or LUA=lua
+#	LUA=/path/to/lua or LUA=lua or
+#	PY='micropython -X heapsize=2wM -X emit=native' (*)
+#
+#	*) Quick reference for the UNIX and Windows ports
+#	https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
 #
 
 LUA=
+PY=
 
 #
 
@@ -17,29 +22,45 @@ error() {
 }
 
 [ "$(command -v $LUA)" = "" ] && error "LUA"
+[ "$(command -v $PY)" = "" ] && error "PY"
+
+#
+
+runLUA() {
+	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
+}
+
+runPY() {
+	MICROPYPATH='src' PYTHONPATH='src' $PY src/${1}.py
+}
 
 #
 
 run() {
-	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
+	local t=$1
+	shift
+	for cmd in "$@"; do
+		printf "======== $t ($cmd)\n"
+		run${cmd} $t
+	done
 }
 
-run 3dgraph
-run bifur
-run binormalG
-run ccurve
-run circle
-run dragoncurve
-run dragoncurveR
-run ellipse
-run gasket
-run grBMP
-run hilbert
-run julia
-run koch
-run line
-run lissajouscurve
-run lorenz
-run sierpinski
-run svgplot
-run treecurve
+run 3dgraph LUA
+run bifur LUA
+run binormalG LUA
+run ccurve LUA
+run circle LUA
+run dragoncurve LUA
+run dragoncurveR LUA
+run ellipse LUA
+run gasket LUA
+run grBMP LUA PY
+run hilbert LUA
+run julia LUA
+run koch LUA
+run line LUA
+run lissajouscurve LUA
+run lorenz LUA
+run sierpinski LUA
+run svgplot LUA PY
+run treecurve LUA

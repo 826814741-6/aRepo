@@ -98,7 +98,7 @@
 | gr98.c       | -                                        |
 | gray1.c      |                                          |
 | gray2.c      |                                          |
-| grBMP.c      | grBMP.lua                                |
+| grBMP.c      | grBMP.{lua,py}                           |
 | grega.c      | -                                        |
 | grj3.c       | -                                        |
 | grj3f.c      | -                                        |
@@ -247,7 +247,7 @@
 | stirling.c   | stirling.{awk,bash,fth,lua}              |
 | strmatch.c   |                                          |
 | sum.c        | sum.{awk,lua}                            |
-| svgplot.c    | svgplot.lua                              |
+| svgplot.c    | svgplot.{lua,py}                         |
 | swap.c       | swap.{awk,lua}                           |
 | sweep.c      |                                          |
 | tarai.c      | tarai.{awk,fth,lua}                      |
