@@ -8,14 +8,19 @@
 --	void draw(double, double)		to	svgPlot; :draw
 --	void draw_rel(double, double)		to	svgPlot; :drawRel
 --
+--						to	svgPlotWithBuffering
+--
 
 local M = require 'svgplot'
+local H = require '_helper'
 
 local svgPlot = M.svgPlot
+local svgPlotWithBuffering = M.svgPlotWithBuffering
+local fileWriter = H.fileWriter
+
 local pi, cos, sin = math.pi, math.cos, math.sin
 
 function sample(plotter)
-	plotter:plotStart()
 	for i=0,4 do
 		local theta = 2 * pi * i / 5
 		local x, y = 150 + 140 * cos(theta), 150 + 140 * sin(theta)
@@ -25,15 +30,23 @@ function sample(plotter)
 			plotter:draw(x, y)
 		end
 	end
-	plotter:plotEnd(true)
 end
 
 do
-	local plotter = svgPlot(300, 300)
+	fileWriter("results/svgplot.svg", "w", function (fh)
+		local plotter = svgPlot(300, 300)
+		plotter:plotStart(fh)
+		sample(plotter)
+		plotter:plotEnd(true)
+	end)
+end
 
+do
+	local plotter = svgPlotWithBuffering(300, 300)
 	sample(plotter)
+	plotter:plotEnd(true)
 
-	local fh = io.open("results/svgplot.svg", "w")
-	plotter:write(fh)
-	fh:close()
+	fileWriter("results/svgplot-WB.svg", "w", function (fh)
+		plotter:write(fh)
+	end)
 end

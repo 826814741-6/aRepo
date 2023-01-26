@@ -6,23 +6,28 @@
 
 local M0 = require 'svgplot'
 local M1 = require 'lissajouscurve'
+local H = require '_helper'
 
 local svgPlot = M0.svgPlot
+local svgPlotWithBuffering = M0.svgPlotWithBuffering
 local lissajousCurve = M1.lissajousCurve
+local fileWriter = H.fileWriter
 
-function sampleWriter(path, n, offset)
-	local plotter = svgPlot((n + offset) * 2, (n + offset) * 2)
+local n, offset = 300, 10
 
-	plotter:plotStart()
-	lissajousCurve(plotter, n, offset)
-	plotter:plotEnd()
-
-	local fh = io.open(path, "w")
-	plotter:write(fh)
-	fh:close()
+do
+	fileWriter("results/lissajouscurve.svg", "w", function (fh)
+		local plotter = svgPlot((n + offset) * 2, (n + offset) * 2)
+		plotter:plotStart(fh)
+		lissajousCurve(plotter, n, offset)
+		plotter:plotEnd()
+	end)
 end
 
 do
-	local n, offset = 300, 10
-	sampleWriter("results/lissajouscurve.svg", n, offset)
+	local plotter = svgPlotWithBuffering((n + offset) * 2, (n + offset) * 2)
+	lissajousCurve(plotter, n, offset)
+	fileWriter("results/lissajouscurve-WB.svg", "w", function (fh)
+		plotter:write(fh)
+	end)
 end

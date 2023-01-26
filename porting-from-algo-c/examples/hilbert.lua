@@ -9,31 +9,28 @@
 
 local M0 = require 'svgplot'
 local M1 = require 'hilbert'
+local H = require '_helper'
 
-local svgPlot, hilbert = M0.svgPlot, M1.hilbert
+local svgPlot = M0.svgPlot
+local hilbert = M1.hilbert
+local fileWriter = H.fileWriter
 
-function sampleWriter(pathPrefix, n, offset)
-	local plotter = svgPlot(n + offset, n + offset)
-
-	function sample(order)
-		plotter:reset()
-
-		plotter:plotStart()
-		hilbert(plotter, order, n, offset)
-		plotter:plotEnd()
-	end
+function sampleWriter(pathPrefix, size, offset)
+	local plotter = svgPlot(size + offset, size + offset)
 
 	return function (n)
-		sample(n)
-
-		local fh = io.open(("%s%d.svg"):format(pathPrefix, n), "w")
-		plotter:write(fh)
-		fh:close()
+		fileWriter(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+			plotter:plotStart(fh)
+			hilbert(plotter, n, size, offset)
+			plotter:plotEnd()
+		end)
 	end
 end
 
 do
 	local writer = sampleWriter("results/hilbert", 600, 3)
 
-	for n=1,8 do writer(n) end
+	for n=1,8 do
+		writer(n)
+	end
 end

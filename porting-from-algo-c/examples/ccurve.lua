@@ -6,32 +6,29 @@
 
 local M0 = require 'svgplot'
 local M1 = require 'ccurve'
+local H = require '_helper'
 
-local svgPlot, ccurve = M0.svgPlot, M1.ccurve
+local svgPlot = M0.svgPlot
+local ccurve = M1.ccurve
+local fileWriter = H.fileWriter
 
 function sampleWriter(pathPrefix)
 	local plotter = svgPlot(400, 250)
 
-	function sample(order)
-		plotter:reset()
-
-		plotter:plotStart()
-		plotter:move(100, 200)
-		ccurve(plotter, order, 200, 0)
-		plotter:plotEnd()
-	end
-
 	return function (n)
-		sample(n)
-
-		local fh = io.open(("%s%d.svg"):format(pathPrefix, n), "w")
-		plotter:write(fh)
-		fh:close()
+		fileWriter(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+			plotter:plotStart(fh)
+			plotter:move(100, 200)
+			ccurve(plotter, n, 200, 0)
+			plotter:plotEnd()
+		end)
 	end
 end
 
 do
 	local writer = sampleWriter("results/ccurve")
 
-	for n=1,10 do writer(n) end
+	for n=1,10 do
+		writer(n)
+	end
 end

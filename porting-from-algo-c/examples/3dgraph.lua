@@ -6,28 +6,28 @@
 
 local M0 = require 'svgplot'
 local M1 = require '3dgraph'
+local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local tdGraph = M1.tdGraph
+local fileWriter = H.fileWriter
 
-function sampleWriter(path, plotter, parameters)
-	function sampleFunction(x, z)
-		local t = x * x + z * z
-		return math.exp(-t) * math.cos(10 * math.sqrt(t))
-	end
+function sampleFunction(x, z)
+	local t = x * x + z * z
+	return math.exp(-t) * math.cos(10 * math.sqrt(t))
+end
 
-	plotter:plotStart()
-	tdGraph(plotter, sampleFunction, parameters)
-	plotter:plotEnd()
-
-	local fh = io.open(path, "w")
-	plotter:write(fh)
-	fh:close()
+function sampleWriter(path, x, y, parameters)
+	fileWriter(path, "w", function (fh)
+		local plotter = svgPlot(x, y)
+		plotter:plotStart(fh)
+		tdGraph(plotter, sampleFunction, parameters)
+		plotter:plotEnd()
+	end)
 end
 
 do
 	local m, n, t, u = 200, 20, 30, 5
-	local plotter = svgPlot(m * 2 + n * 4, m + n * 3)
 	local parameters = {
 		m = m,
 		n = n,
@@ -40,11 +40,9 @@ do
 		maxY = 1,
 		maxZ = 1
 	}
-
-	sampleWriter("results/3dgraphA.svg", plotter, parameters)
+	sampleWriter("results/3dgraphA.svg", m*2 + n*4, m + n*3, parameters)
 
 	m, n, t, u = 300, 50, 30, 5
-	plotter = svgPlot(m * 2 + n * 4, m + n * 5)
 	parameters = {
 		m = m,
 		n = n,
@@ -57,11 +55,9 @@ do
 		maxY = 1.8,
 		maxZ = 1.8
 	}
-
-	sampleWriter("results/3dgraphB.svg", plotter, parameters)
+	sampleWriter("results/3dgraphB.svg", m*2 + n*4, m + n*5, parameters)
 
 	m, n, t, u = 300, 50, 30, 2
-	plotter = svgPlot(m * 2 + n * 4, m - n * 1)
 	parameters = {
 		m = m,
 		n = n,
@@ -74,6 +70,5 @@ do
 		maxY = 1.0,
 		maxZ = 1.8
 	}
-
-	sampleWriter("results/3dgraphC.svg", plotter, parameters)
+	sampleWriter("results/3dgraphC.svg", m*2 + n*4, m - n, parameters)
 end
