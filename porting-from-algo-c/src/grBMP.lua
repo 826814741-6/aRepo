@@ -42,6 +42,10 @@ local function BMP(X, Y)
 		yconst = 0
 	}
 
+	for i=1,Y do
+		T.data[i] = {}
+	end
+
 	function header(fh)
 		fh:write(("<BBIIIIIIHHIIIIII"):pack(
 			66, -- "B"
@@ -79,7 +83,6 @@ local function BMP(X, Y)
 
 	function T:dot(x, y, color)
 		if inRange(x, y) then
-			if T.data[y] == nil then T.data[y] = {} end
 			T.data[y][x] = color
 		end
 	end
