@@ -10,10 +10,10 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local koch = M1.koch
-local fileWriter = H.fileWriter
+local with = H.with
 
 do
-	fileWriter("results/koch.svg", "w", function (fh)
+	with("results/koch.svg", "w", function (fh)
 		local plotter = svgPlot(1200, 360)
 		plotter:plotStart(fh)
 		plotter:move(0, 0)

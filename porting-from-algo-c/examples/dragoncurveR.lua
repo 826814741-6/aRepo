@@ -10,13 +10,13 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local dragonCurveR = M1.dragonCurveR
-local fileWriter = H.fileWriter
+local with = H.with
 
 function sampleWriter(pathPrefix, x, y, dx, dy, sign, x0, y0)
 	local plotter = svgPlot(x, y)
 
 	return function (n)
-		fileWriter(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+		with(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
 			dragonCurveR(plotter, n, dx, dy, sign, x0, y0)
 			plotter:plotEnd()

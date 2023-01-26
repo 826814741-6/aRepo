@@ -10,7 +10,7 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local tdGraph = M1.tdGraph
-local fileWriter = H.fileWriter
+local with = H.with
 
 function sampleFunction(x, z)
 	local t = x * x + z * z
@@ -18,7 +18,7 @@ function sampleFunction(x, z)
 end
 
 function sampleWriter(path, x, y, parameters)
-	fileWriter(path, "w", function (fh)
+	with(path, "w", function (fh)
 		local plotter = svgPlot(x, y)
 		plotter:plotStart(fh)
 		tdGraph(plotter, sampleFunction, parameters)

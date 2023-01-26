@@ -10,13 +10,13 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local treecurve = M1.treecurve
-local fileWriter = H.fileWriter
+local with = H.with
 
 function sampleWriter(pathPrefix)
 	local plotter = svgPlot(400, 350)
 
 	return function (n)
-		fileWriter(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+		with(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
 			plotter:move(200, 0)
 			treecurve(plotter, n, 100, 0, 0.7, 0.5)

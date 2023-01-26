@@ -13,13 +13,13 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local hilbert = M1.hilbert
-local fileWriter = H.fileWriter
+local with = H.with
 
 function sampleWriter(pathPrefix, size, offset)
 	local plotter = svgPlot(size + offset, size + offset)
 
 	return function (n)
-		fileWriter(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+		with(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
 			hilbert(plotter, n, size, offset)
 			plotter:plotEnd()

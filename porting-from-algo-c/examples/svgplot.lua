@@ -16,7 +16,7 @@ local H = require '_helper'
 
 local svgPlot = M.svgPlot
 local svgPlotWithBuffering = M.svgPlotWithBuffering
-local fileWriter = H.fileWriter
+local with = H.with
 
 local pi, cos, sin = math.pi, math.cos, math.sin
 
@@ -33,7 +33,7 @@ function sample(plotter)
 end
 
 do
-	fileWriter("results/svgplot.svg", "w", function (fh)
+	with("results/svgplot.svg", "w", function (fh)
 		local plotter = svgPlot(300, 300)
 		plotter:plotStart(fh)
 		sample(plotter)
@@ -46,7 +46,7 @@ do
 	sample(plotter)
 	plotter:plotEnd(true)
 
-	fileWriter("results/svgplot-WB.svg", "w", function (fh)
+	with("results/svgplot-WB.svg", "w", function (fh)
 		plotter:write(fh)
 	end)
 end

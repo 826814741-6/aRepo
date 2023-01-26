@@ -29,13 +29,6 @@ local function readOnlyTable(t)
 	})
 end
 
-local function fileWriter(path, mode, f)
-	local fh = io.open(path, mode)
-	local ret = pcall(f, fh)
-	fh:close()
-	assert(ret == true)
-end
-
 --
 --	tableWriter(x, y, w, f, vFmt)
 --
@@ -79,6 +72,13 @@ local function tableWriter(x, y, w, f, vFmt)
 	end
 end
 
+local function with(path, mode, f)
+	local fh = io.open(path, mode)
+	local ret = pcall(f, fh)
+	fh:close()
+	assert(ret == true)
+end
+
 return {
 	abs = abs,
 	atLeastOne = atLeastOne,
@@ -87,6 +87,6 @@ return {
 	id = id,
 	increment = increment,
 	readOnlyTable = readOnlyTable,
-	fileWriter = fileWriter,
-	tableWriter = tableWriter
+	tableWriter = tableWriter,
+	with = with
 }
