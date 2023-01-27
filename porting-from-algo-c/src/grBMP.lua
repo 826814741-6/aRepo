@@ -213,7 +213,7 @@ local function makeColor(rgb)
 	return ("<I"):pack(rgb)
 end
 
-local PRESETCOLORS = readOnlyTable({
+local PRESET_COLORS = readOnlyTable({
 	BLACK = ("<I"):pack(0x000000),
 	WHITE = ("<I"):pack(0xffffff),
 	RED   = ("<I"):pack(0xff0000),
@@ -223,6 +223,6 @@ local PRESETCOLORS = readOnlyTable({
 
 return {
 	BMP = BMP,
-	PRESETCOLORS = PRESETCOLORS,
+	PRESET_COLORS = PRESET_COLORS,
 	makeColor = makeColor
 }

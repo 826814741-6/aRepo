@@ -7,7 +7,7 @@
 local M0 = require 'grBMP'
 local M1 = require 'julia'
 
-local BMP, PRESETCOLORS = M0.BMP, M0.PRESETCOLORS
+local BMP, PRESET_COLORS = M0.BMP, M0.PRESET_COLORS
 local julia = M1.julia
 
 do
@@ -18,10 +18,10 @@ do
 		bmp,
 		x,
 		y,
-		PRESETCOLORS.RED,
-		PRESETCOLORS.GREEN,
-		PRESETCOLORS.BLUE,
-		PRESETCOLORS.WHITE
+		PRESET_COLORS.RED,
+		PRESET_COLORS.GREEN,
+		PRESET_COLORS.BLUE,
+		PRESET_COLORS.WHITE
 	)
 
 	local fh = io.open("results/julia.bmp", "w")

@@ -33,7 +33,7 @@ class svgPlot:
         self.Y = y
 
     def plotStart(self, fileHandler=None):
-        self.fh = fileHandler != None and fileHandler or sys.stdout
+        self.fh = fileHandler if fileHandler != None else sys.stdout
 
         self.fh.write(_header(self.X, self.Y))
         self.fh.write(_pathStart())

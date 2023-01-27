@@ -10,11 +10,11 @@ local M2 = require 'grBMP'
 
 local crnd = M0.crnd
 local samplePlotter = M1.samplePlotter
-local BMP, PRESETCOLORS = M2.BMP, M2.PRESETCOLORS
+local BMP, PRESET_COLORS = M2.BMP, M2.PRESET_COLORS
 
 do
 	local x, y = 600, 600
-	local plotter = samplePlotter(x, y, 100, PRESETCOLORS.BLACK, PRESETCOLORS.WHITE)
+	local plotter = samplePlotter(x, y, 100, PRESET_COLORS.BLACK, PRESET_COLORS.WHITE)
 	local bmp, c = BMP(x, y), crnd(12345)
 
 	plotter(bmp, c, 100000, 0.5)

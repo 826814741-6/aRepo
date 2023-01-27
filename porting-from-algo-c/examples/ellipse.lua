@@ -7,14 +7,14 @@
 local M = require 'grBMP'
 local H = require 'rand'
 
-local BMP, PRESETCOLORS, makeColor = M.BMP, M.PRESETCOLORS, M.makeColor
+local BMP, PRESET_COLORS, makeColor = M.BMP, M.PRESET_COLORS, M.makeColor
 local RAND = H.RAND
 
 do
 	local x, y = 640, 400
 	local bmp = BMP(x, y)
 
-	bmp:clear(PRESETCOLORS.BLACK)
+	bmp:clear(PRESET_COLORS.BLACK)
 
 	local r = RAND()
 	for _=1,100 do

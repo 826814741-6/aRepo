@@ -276,6 +276,7 @@
 #	AWK:        *.awk
 #	Bash:       *.bash
 #	PForth(*1): *.fth
+#	Python:     *.py
 #	Lua(*2):    *.lua
 #	LuaJIT:     *.luajit
 #
