@@ -31,3 +31,16 @@ function gaussLegendre(n,	a, b, t, u, prev, i) {
 	}
 	return (a + b) * (a + b) / t
 }
+
+#
+
+function _p1(n) { printf "%.14f %.20f\n", n, n }
+function _p2(m, n) { printf "%.14f %.20f (%d)\n", n, n, m }
+
+BEGIN {
+	print "-------- machinLike:"
+	_p1(machinLike())
+
+	print "-------- gaussLegendre n:"
+	for (i = 1; i <= 3; i++) _p2(i, gaussLegendre(i))
+}

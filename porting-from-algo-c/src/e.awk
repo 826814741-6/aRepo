@@ -11,3 +11,10 @@ function e(	r, a, n, prev) {
 	} while (r != prev)
 	return r
 }
+
+#
+
+BEGIN {
+	t = e()
+	printf "%.14f\n%.20f\n", t, t
+}

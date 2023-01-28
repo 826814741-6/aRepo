@@ -45,3 +45,16 @@ function _iter(n, a, b, c) {
 function fib4(n) {
 	return _iter(n, 1, 0, 1)
 }
+
+#
+
+BEGIN {
+	for (i=1; i<=11; i++) printf " %d", fib1(i)
+	print
+	for (i=1; i<=11; i++) printf " %d", fib2(i)
+	print
+	for (i=1; i<=11; i++) printf " %d", fib3(i)
+	print
+	for (i=1; i<=11; i++) printf " %d", fib4(i)
+	print
+}

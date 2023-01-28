@@ -24,3 +24,13 @@ function pNormal(z,	p, prev, t, i) {
 function qNormal(z) {
 	return 1 - pNormal(z)
 }
+
+#
+
+BEGIN {
+	printf "%-3s %-16s\n", "z", "pNormal(z)"
+	for (i = 0; i <= 20; i++) {
+		z = 0.2 * i
+		printf "%3.1f %16.14f\n", z, pNormal(z)
+	}
+}

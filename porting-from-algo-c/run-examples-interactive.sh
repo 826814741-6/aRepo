@@ -25,7 +25,7 @@ error() {
 #
 
 runAWK() {
-	$AWK -f src/_helper.awk -f src/${1}.awk -f examples/${1}.awk
+	$AWK -f src/_helper.awk -f src/${1}.awk
 }
 
 runBASH() {

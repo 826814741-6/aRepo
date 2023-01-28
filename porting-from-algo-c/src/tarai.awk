@@ -16,3 +16,10 @@ function tak(x, y, z) {
 	if (x <= y) return z
 	return tak(tak(x-1,y,z), tak(y-1,z,x), tak(z-1,x,y))
 }
+
+#
+
+BEGIN {
+	printf "%s = %d, %s = %d\n",
+		"tarai(10,5,0)", tarai(10,5,0), "tak(10,5,0)", tak(10,5,0)
+}
