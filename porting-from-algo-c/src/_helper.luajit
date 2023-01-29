@@ -12,8 +12,20 @@ local function count(f, ...)
 	return c
 end
 
+-- from http://lua-users.org/wiki/ReadOnlyTables
+local function readOnlyTable(t)
+	return setmetatable({}, {
+		__index = t,
+		__newindex = function (t, k, v)
+			error("ERROR: This is a read-only table. You can't assign.")
+		end,
+		__metatable = false
+	})
+end
+
 return {
 	abs = abs,
 	atLeastOne = atLeastOne,
-	count = count
+	count = count,
+	readOnlyTable = readOnlyTable
 }

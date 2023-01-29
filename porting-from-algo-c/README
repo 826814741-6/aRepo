@@ -98,7 +98,7 @@
 | gr98.c       | -                                        |
 | gray1.c      |                                          |
 | gray2.c      |                                          |
-| grBMP.c      | grBMP.{lua,py}                           |
+| grBMP.c      | grBMP.{lua,luajit,py}                    |
 | grega.c      | -                                        |
 | grj3.c       | -                                        |
 | grj3f.c      | -                                        |

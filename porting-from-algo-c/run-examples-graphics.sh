@@ -12,6 +12,7 @@
 #
 
 LUA=
+LUAJIT=
 PY=
 
 #
@@ -22,12 +23,17 @@ error() {
 }
 
 [ "$(command -v $LUA)" = "" ] && error "LUA"
+[ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
 [ "$(command -v $PY)" = "" ] && error "PY"
 
 #
 
 runLUA() {
 	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
+}
+
+runLUAJIT() {
+	LUA_PATH='src/?.luajit' $LUAJIT examples/${1}.luajit
 }
 
 runPY() {
@@ -54,7 +60,7 @@ run dragoncurve LUA
 run dragoncurveR LUA
 run ellipse LUA
 run gasket LUA
-run grBMP LUA PY
+run grBMP LUA LUAJIT PY
 run hilbert LUA
 run julia LUA
 run koch LUA
