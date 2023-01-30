@@ -5,7 +5,7 @@
 \
 \	from src/pi2.c
 \
-\	a part of main		to	gaussLegendre (TODO)
+\	a part of main		to	gaussLegendre
 \
 
 : machinLike  ( -- f )
@@ -62,34 +62,31 @@ fvariable prev
 
 }private
 
-\ TODO
 : gaussLegendre  ( n -- f )
    4
-   \ n u |
+   \ n t |
    1. 1. 2. fsqrt f/ 1.
-   \ n u | t b a
-
+   \ n t | s b a
    begin
-      \ n u | t b a
+      \ n t | s b a
       fdup prev f! fover f+ 2. f/
-      \ n u | a | t b (a+b)/2.
+      \ n t | a! | s b (a+b)/2.
       fswap prev f@ f* fsqrt
-      \ n u | a | t a' (b*a fsqrt)
+      \ n t | a@ | s a' (b*a fsqrt)
       fswap frot fover prev f@ f- fdup f*
-      \ n u | a | b' a' t (a'-a)*(a'-a)
+      \ n t | b' a' s (a'-a)*(a'-a)
       dup s>d d>f f* f-
-      \ n u | a | b' a' t-(a'-a)*(a'-a)*u
+      \ n t | b' a' s-(a'-a)*(a'-a)*t
       frot frot
-      \ n u | a | t' b' a'
-      2 + swap 1- swap over 0=
-      \ n-1 u+2 (n-1)==0 | a | t' b' a'
+      \ n t | s' b' a'
+      2 * swap 1- swap over 0=
+      \ n-1 t*2 (n-1)==0 | a | s' b' a'
    until
-
-   \ n u | a | t b a
+   \ n t | s b a
    2drop
-   \ a | t b a
+   \ | s b a
    f+ fdup f* fswap f/
-   \ a | (b+a)*(b+a)/t
+   \ | (b+a)*(b+a)/s
 ;
 
 \
@@ -108,15 +105,15 @@ fvariable prev
 \        |
 \        V
 \
-\    a = 1.; b = 1. / sqrt(2.); t = 1.; u = 4
+\    a = 1.; b = 1. / sqrt(2.); s = 1.; t = 4
 \
 \        prev = a
 \        a = (a + b) / 2.
 \        b = sqrt(prev * b)
-\        t = t - (u * (a - prev) * (a - prev))
-\        u = u * 2
+\        s = s - (t * (a - prev) * (a - prev))
+\        t = t * 2
 \
-\    (a + b) * (a + b) / t
+\    (a + b) * (a + b) / s
 \
 
 privatize
