@@ -74,13 +74,13 @@ fvariable prev
       fswap prev f@ f* fsqrt
       \ n t | a@ | s a' (b*a fsqrt)
       fswap frot fover prev f@ f- fdup f*
-      \ n t | b' a' s (a'-a)*(a'-a)
+      \ n t | a@ | b' a' s (a'-a)*(a'-a)
       dup s>d d>f f* f-
-      \ n t | b' a' s-(a'-a)*(a'-a)*t
+      \ n t | b' a' s-(a'-a)*(a'-a)*t.
       frot frot
       \ n t | s' b' a'
       2 * swap 1- swap over 0=
-      \ n-1 t*2 (n-1)==0 | a | s' b' a'
+      \ n-1 t*2 (n-1)==0 | s' b' a'
    until
    \ n t | s b a
    2drop
