@@ -95,17 +95,21 @@ local function BMP(X, Y)
 		T:rect(1, X, 1, Y, color)
 	end
 
+	function stepC(cX, cY, color, a, b, c, d)
+		T:dot(cX + a, cY + b, color)
+		T:dot(cX + a, cY - b, color)
+		T:dot(cX - a, cY + b, color)
+		T:dot(cX - a, cY - b, color)
+		T:dot(cX + c, cY + d, color)
+		T:dot(cX + c, cY - d, color)
+		T:dot(cX - c, cY + d, color)
+		T:dot(cX - c, cY - d, color)
+	end
+
 	function T:circle(cX, cY, r, color)
 		local x, y = r, 0
 		while x >= y do
-			T:dot(cX + x, cY + y, color)
-			T:dot(cX + x, cY - y, color)
-			T:dot(cX - x, cY + y, color)
-			T:dot(cX - x, cY - y, color)
-			T:dot(cX + y, cY + x, color)
-			T:dot(cX + y, cY - x, color)
-			T:dot(cX - y, cY + x, color)
-			T:dot(cX - y, cY - x, color)
+			stepC(cX, cY, color, x, y, y, x)
 			r, y = r - ((y << 1) + 1), y + 1
 			if r <= 0 then
 				x = x - 1
@@ -114,26 +118,22 @@ local function BMP(X, Y)
 		end
 	end
 
-	function T:ellipse(cX, cY, rX, rY, color)
-		local step = (function ()
-			function _step(a, b, c, d)
-				T:dot(cX + a, cY + b, color)
-				T:dot(cX + a, cY - b, color)
-				T:dot(cX - a, cY + b, color)
-				T:dot(cX - a, cY - b, color)
-				T:dot(cX + c, cY + d, color)
-				T:dot(cX + c, cY - d, color)
-				T:dot(cX - c, cY + d, color)
-				T:dot(cX - c, cY - d, color)
+	function initE(cX, cY, rX, rY, color)
+		if rX > rY then
+			return rX, function (x, y)
+				stepC(cX, cY, color,
+				      x, y * rY // rX, y, x * rY // rX)
 			end
-			return rX > rY and function (x, y)
-				_step(x, y * rY // rX, y, x * rY // rX)
-			end or function (x, y)
-				_step(x * rX // rY, y, y * rX // rY, x)
+		else
+			return rY, function (x, y)
+				stepC(cX, cY, color,
+				      x * rX // rY, y, y * rX // rY, x)
 			end
-		end)()
+		end
+	end
 
-		local x = rX > rY and rX or rY
+	function T:ellipse(cX, cY, rX, rY, color)
+		local x, step = initE(cX, cY, rX, rY, color)
 		local r, y = x, 0
 		while x >= y do
 			step(x, y)
@@ -145,34 +145,40 @@ local function BMP(X, Y)
 		end
 	end
 
-	function T:line(x1, y1, x2, y2, color)
-		function loop(a1, a2, b1, b2, dA, dB, dotter)
-			local step
-			if a1 > a2 then
-				step = b1 > b2 and 1 or -1
-				a1, a2, b1 = a2, a1, b2
-			else
-				step = b1 < b2 and 1 or -1
-			end
-
-			dotter(a1, b1)
-
-			local t = dA >> 1
-			for a=a1+1,a2 do
-				t = t - dB
-				if t < 0 then
-					t, b1 = t + dA, b1 + step
-				end
-				dotter(a, b1)
-			end
-		end
-
-		local dX, dY = abs(x2 - x1), abs(y2 - y1)
-
-		if dX > dY then
-			loop(x1, x2, y1, y2, dX, dY, function (a,b) T:dot(a,b,color) end)
+	function initL(x1, x2, y1, y2)
+		local step
+		if x1 > x2 then
+			step = y1 > y2 and 1 or -1
+			x1, x2, y1 = x2, x1, y2
 		else
-			loop(y1, y2, x1, x2, dY, dX, function (a,b) T:dot(b,a,color) end)
+			step = y1 < y2 and 1 or -1
+		end
+		return step, x1, x2, y1, y2
+	end
+
+	function loopL(x1, x2, y1, y2, dX, dY, dotter)
+		local step, a1, a2, b1, b2 = initL(x1, x2, y1, y2)
+
+		dotter(a1, b1)
+
+		local t = dX >> 1
+		for a=a1+1,a2 do
+			t = t - dY
+			if t < 0 then
+				t, b1 = t + dX, b1 + step
+			end
+			dotter(a, b1)
+		end
+	end
+
+	function T:line(x1, y1, x2, y2, color)
+		local dX, dY = abs(x2 - x1), abs(y2 - y1)
+		if dX > dY then
+			loopL(x1, x2, y1, y2, dX, dY,
+			      function (a, b) T:dot(a, b, color) end)
+		else
+			loopL(y1, y2, x1, x2, dY, dX,
+			      function (a, b) T:dot(b, a, color) end)
 		end
 	end
 

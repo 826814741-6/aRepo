@@ -68,16 +68,16 @@ run 3dgraph LUA
 run bifur LUA
 run binormalG LUA
 run ccurve LUA
-run circle LUA
+run circle LUA LUAJIT
 run dragoncurve LUA
 run dragoncurveR LUA
-run ellipse LUA
+run ellipse LUA LUAJIT
 run gasket LUA
 run grBMP LUA LUAJIT PY
 run hilbert LUA
 run julia LUA
 run koch LUA
-run line LUA
+run line LUA LUAJIT
 run lissajouscurve AWK LUA
 run lorenz LUA
 run sierpinski LUA

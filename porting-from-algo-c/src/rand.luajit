@@ -29,6 +29,12 @@ local function RAND(seed)
 		T.next = seed
 	end
 
+	function T:randRaw()
+		T:rand()
+		return T.next
+	end
+
+
 	return T
 end
 

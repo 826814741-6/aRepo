@@ -36,7 +36,7 @@
 | chaos.c      |                                          |
 | chi2.c       | chisqdist.awk,distribution.lua           |
 | ci.c         | integral.lua                             |
-| circle.c     | grBMP.lua                                |
+| circle.c     | grBMP.{lua,luajit}                       |
 | collatz.c    |                                          |
 | combinat.c   | combination.{awk,lua}                    |
 | common.c     |                                          |
@@ -64,7 +64,7 @@
 | e.c          | e.{awk,bash,fth,lua}                     |
 | egypfrac.c   |                                          |
 | eigen.c      |                                          |
-| ellipse.c    | grBMP.lua                                |
+| ellipse.c    | grBMP.{lua,luajit}                       |
 | endian.c     |                                          |
 | epsplot.c    | -                                        |
 | euler.c      |                                          |
@@ -142,7 +142,7 @@
 | krnd.c       |                                          |
 | lagrange.c   |                                          |
 | life.c       |                                          |
-| line.c       | grBMP.lua                                |
+| line.c       | grBMP.{lua,luajit}                       |
 | lissaj.c     | lissajouscurve.{awk,lua}                 |
 | list1.c      |                                          |
 | list2.c      |                                          |

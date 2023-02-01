@@ -1,0 +1,33 @@
+--
+--	from src/ellipse.c
+--
+--	void gr_ellipse(int, int, int, int, long)	to	BMP; :ellipse
+--
+
+local M = require 'grBMP'
+local H = require 'rand'
+
+local BMP, PRESET_COLORS = M.BMP, M.PRESET_COLORS
+local RAND = H.RAND
+
+do
+	local x, y = 640, 400
+	local bmp = BMP(x, y)
+
+	bmp:clear(PRESET_COLORS.BLACK)
+
+	local r = RAND()
+	for _=1,100 do
+		bmp:ellipse(
+			tonumber(r:rand()) % x,
+			tonumber(r:rand()) % y,
+			tonumber(r:rand()) % 100,
+			tonumber(r:rand()) % 100,
+			tonumber(r:randRaw() % (0xffffff + 1))
+		)
+	end
+
+	local fh = io.open("results/ellipse-lj.bmp", "w")
+	bmp:write(fh)
+	fh:close()
+end
