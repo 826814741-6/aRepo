@@ -143,7 +143,7 @@
 | lagrange.c   |                                          |
 | life.c       |                                          |
 | line.c       | grBMP.lua                                |
-| lissaj.c     | lissajouscurve.lua                       |
+| lissaj.c     | lissajouscurve.{awk,lua}                 |
 | list1.c      |                                          |
 | list2.c      |                                          |
 | log.c        |                                          |
@@ -247,7 +247,7 @@
 | stirling.c   | stirling.{awk,bash,fth,lua}              |
 | strmatch.c   |                                          |
 | sum.c        | sum.{awk,lua}                            |
-| svgplot.c    | svgplot.{lua,py}                         |
+| svgplot.c    | svgplot.{awk,lua,py}                     |
 | swap.c       | swap.{awk,lua}                           |
 | sweep.c      |                                          |
 | tarai.c      | tarai.{awk,fth,lua}                      |

@@ -11,6 +11,7 @@
 #	https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
 #
 
+AWK=
 LUA=
 LUAJIT=
 PY=
@@ -22,11 +23,23 @@ error() {
 	exit 1
 }
 
+[ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
 [ "$(command -v $PY)" = "" ] && error "PY"
 
 #
+
+runAWK() {
+	local SVGLIB_PREFIX=svgplot
+	local HELPER="-f src/_helper.awk"
+
+	if [ "${1}" != "${SVGLIB_PREFIX}" ]; then
+		HELPER="${HELPER} -f src/${SVGLIB_PREFIX}.awk"
+	fi
+
+	$AWK $HELPER -f src/${1}.awk -f examples/${1}.awk
+}
 
 runLUA() {
 	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
@@ -65,8 +78,8 @@ run hilbert LUA
 run julia LUA
 run koch LUA
 run line LUA
-run lissajouscurve LUA
+run lissajouscurve AWK LUA
 run lorenz LUA
 run sierpinski LUA
-run svgplot LUA PY
+run svgplot AWK LUA PY
 run treecurve LUA
