@@ -34,7 +34,6 @@ local function RAND(seed)
 		return T.next
 	end
 
-
 	return T
 end
 

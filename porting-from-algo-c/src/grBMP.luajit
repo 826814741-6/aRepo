@@ -156,11 +156,11 @@ local function BMP(X, Y)
 		else
 			step = y1 < y2 and 1 or -1
 		end
-		return step, x1, x2, y1, y2
+		return step, x1, x2, y1
 	end
 
 	function loopL(x1, x2, y1, y2, dX, dY, dotter)
-		local step, a1, a2, b1, b2 = initL(x1, x2, y1, y2)
+		local step, a1, a2, b1 = initL(x1, x2, y1, y2)
 
 		dotter(a1, b1)
 

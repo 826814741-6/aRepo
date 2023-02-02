@@ -26,7 +26,7 @@ end
 local function isISBN10(s)
 	assert(
 		type(s) == "string" and #s == 10,
-		"ERROR: ISBN-10 must be just a 10-digit string."
+		"ERROR: ISBN-10 must be just 10 digits."
 	)
 
 	local t, f = {}, slicer(s)
@@ -43,7 +43,7 @@ end
 local function isISBN13(s)
 	assert(
 		type(s) == "string" and #s == 13,
-		"ERROR: ISBN-13 must be just a 13-digit string."
+		"ERROR: ISBN-13 must be just 13 digits."
 	)
 
 	local t, w, f = 0, 1, slicer(s)
