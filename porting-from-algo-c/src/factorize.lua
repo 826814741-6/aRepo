@@ -24,8 +24,8 @@ local function f(initialNumber)
 		n = n // 2
 	end
 
-	d = 3
-	q = n // d
+	local d = 3
+	local q = n // d
 	while q >= d do
 		if n%d == 0 then
 			yield(d)
@@ -51,8 +51,8 @@ local fM = hasBC and function (initialValue)
 		bn = bn / bn2
 	end
 
-	d = bn3
-	q = bn / d
+	local d = bn3
+	local q = bn / d
 	while q >= d do
 		if isZero(bn % d) then
 			yield(d)
