@@ -73,7 +73,7 @@
 | evalcf.c     |                                          |
 | exp.c        |                                          |
 | factanal.c   |                                          |
-| factoriz.c   |                                          |
+| factoriz.c   | factorize.{lua,py}                       |
 | factrep.c    |                                          |
 | fdist.c      | distribution.lua                         |
 | fft.c        | fft.lua                                  |

@@ -5,6 +5,10 @@
 #
 #	e.g.
 #	LUA=/path/to/lua or LUA=lua
+#	PY='micropython -X heapsize=2wM -X emit=native' (*)
+#
+#	*) Quick reference for the UNIX and Windows ports
+#	https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
 #
 
 AWK=
@@ -12,6 +16,7 @@ BASH=
 FTH=
 LUA=
 LUAJIT=
+PY=
 
 #
 
@@ -25,6 +30,7 @@ error() {
 [ "$(command -v $FTH)" = "" ] && error "FTH"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
+[ "$(command -v $PY)" = "" ] && error "PY"
 
 #
 
@@ -46,6 +52,10 @@ runLUA() {
 
 runLUAJIT() {
 	LUA_PATH='src/?.luajit' $LUAJIT examples/${1}.luajit
+}
+
+runPY() {
+	MICROPYPATH='src' PYTHONPATH='src' $PY src/${1}.py
 }
 
 #
@@ -71,6 +81,7 @@ run cuberoot AWK FTH LUA LUAJIT
 run dayweek AWK LUA
 run e AWK BASH FTH LUA
 run eulerian AWK BASH FTH LUA
+run factorize LUA PY
 run fdist LUA
 run fft LUA
 run fib AWK FTH LUA
