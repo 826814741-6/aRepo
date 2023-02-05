@@ -29,6 +29,7 @@ error() {
 [ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $BASH)" = "" ] && error "BASH"
 [ "$(command -v $FTH)" = "" ] && error "FTH"
+[ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
 [ "$(command -v $PY)" = "" ] && error "PY"
