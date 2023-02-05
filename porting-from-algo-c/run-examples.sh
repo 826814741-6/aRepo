@@ -14,6 +14,7 @@
 AWK=
 BASH=
 FTH=
+HAXE=
 LUA=
 LUAJIT=
 PY=
@@ -44,6 +45,10 @@ runBASH() {
 
 runFTH() {
 	$FTH -q examples/${1}.fth
+}
+
+runHAXE() {
+	$HAXE --interp -p examples --main Demo -D ${1}
 }
 
 runLUA() {
@@ -79,7 +84,7 @@ run combination AWK LUA
 run crnd LUA LUAJIT
 run cuberoot AWK FTH LUA LUAJIT
 run dayweek AWK LUA
-run e AWK BASH FTH LUA
+run e AWK BASH FTH HAXE LUA
 run eulerian AWK BASH FTH LUA
 run factorize LUA PY
 run fdist LUA
@@ -99,7 +104,7 @@ run montecarlo LUA
 run moveblock AWK LUA
 run multiply AWK BASH FTH LUA LUAJIT
 run normal AWK LUA
-run pi AWK FTH LUA
+run pi AWK FTH HAXE LUA
 run power AWK BASH LUA LUAJIT
 run rand FTH LUA LUAJIT
 run randperm LUA

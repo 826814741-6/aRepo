@@ -61,7 +61,7 @@
 | distsort.c   |                                          |
 | dragon2.c    | dragoncurve.lua                          |
 | dragon.c     | dragoncurve.lua                          |
-| e.c          | e.{awk,bash,fth,lua}                     |
+| e.c          | e.{awk,bash,fth,lua}, E.hx               |
 | egypfrac.c   |                                          |
 | eigen.c      |                                          |
 | ellipse.c    | grBMP.{lua,luajit}                       |
@@ -189,8 +189,8 @@
 | permfac.c    |                                          |
 | permnum.c    |                                          |
 | permsign.c   |                                          |
-| pi1.c        | pi.{awk,fth,lua}                         |
-| pi2.c        | pi.{awk,fth,lua}                         |
+| pi1.c        | pi.{awk,fth,lua}, Pi.hx                  |
+| pi2.c        | pi.{awk,fth,lua}, Pi.hx                  |
 | plotter.c    |                                          |
 | poly.c       |                                          |
 | polygam.c    |                                          |
@@ -273,12 +273,13 @@
 | zeta.c       | zeta.lua                                 |
 
 #
-#	AWK:        *.awk
-#	Bash:       *.bash
-#	PForth(*1): *.fth
-#	Python:     *.py
-#	Lua(*2):    *.lua
-#	LuaJIT:     *.luajit
+#	*.awk:     AWK
+#	*.bash:    Bash
+#	*.fth:     PForth (*1)
+#	*.hx:      Haxe
+#	*.py:      CPython3/MicroPython
+#	*.lua:     Lua (*2)
+#	*.luajit:  LuaJIT
 #
 #	*1) https://github.com/philburk/pforth
 #	*2) 5.3-
