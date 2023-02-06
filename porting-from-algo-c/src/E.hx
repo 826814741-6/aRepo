@@ -23,5 +23,5 @@ function e():Float {
 }
 
 function demo() {
-	trace(E.e());
+	trace(e());
 }

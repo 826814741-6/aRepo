@@ -47,6 +47,6 @@ do
 	plotter:plotEnd(true)
 
 	with("results/svgplot-WB.svg", "w", function (fh)
-		plotter:write(fh)
+		plotter:writeOneByOne(fh)
 	end)
 end

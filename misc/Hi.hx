@@ -9,21 +9,26 @@
 //
 
 //
+//	in interpreter (Eval target):
+//	$ haxe -L littleBigInt --interp --main Hi
+//
 //	in HashLink:
-//	$ haxe -lib littleBigInt --hl hi.hl --main Hi
+//	$ haxe -L littleBigInt --hl hi.hl --main Hi
 //	$ hl hi.hl
 //
 //	in HashLink/C:
-//	$ haxe -lib littleBigInt --hl out/main.c --main Hi
+//	$ haxe -L littleBigInt --hl out/main.c --main Hi
 //	$ gcc -Iout out/main.c -lhl -o hi [...some options...]
 //	$ ./hi
 //
-//	(in JVM:(*))
-//	$ haxe -lib littleBigInt --jvm hi.jar --main Hi
+//	(in JVM: (*)
+//	$ haxe -L littleBigInt --jvm hi.jar --main Hi
 //	$ java -jar hi.jar
 //
-//	*) As of 18th Jan 2023,
-//	   littleBigInt doesn't announce the support for JVM target.
+//	  *) As of 18th Jan 2023,
+//	     littleBigInt doesn't announce the support for JVM target.)
+//
+//	(see: https://haxe.org/manual/compiler-usage.html#common-arguments)
 //
 
 function f(n:BigInt, a:Array<String>):Array<String> {

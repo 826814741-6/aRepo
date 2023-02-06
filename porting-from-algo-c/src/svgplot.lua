@@ -16,7 +16,7 @@
 --	:draw					to	:draw
 --	:drawRel				to	:drawRel
 --							:reset
---							:write
+--							:write, :writeOneByOne
 --
 
 local function header(x, y)
@@ -73,6 +73,7 @@ local function svgPlot(X, Y)
 	return T
 end
 
+local T_concat = table.concat
 local T_insert = table.insert
 
 local function svgPlotWithBuffering(X, Y)
@@ -109,6 +110,16 @@ local function svgPlotWithBuffering(X, Y)
 	end
 
 	function T:write(fh)
+		fh = fh ~= nil and fh or io.stdout
+
+		fh:write(header(X, Y))
+		fh:write(pathStart())
+		fh:write(T_concat(T.buffer))
+		fh:write(pathEnd(T.isClosePath))
+		fh:write(footer())
+	end
+
+	function T:writeOneByOne(fh)
 		fh = fh ~= nil and fh or io.stdout
 
 		fh:write(header(X, Y))
