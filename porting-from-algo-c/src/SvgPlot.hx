@@ -44,7 +44,7 @@ private abstract class BaseWriter extends Base {
 }
 
 private abstract class BaseWriterWithBuffering extends Base {
-	var buf:StringBuf;
+	var buf:StringBuf = new StringBuf();
 	var isClosePath:Bool;
 
 	abstract public function plotEnd(isClosePath:Bool=false):Void;
@@ -174,7 +174,6 @@ function demo() {
 	//
 
 	var plotter = new SvgPlotWithBuffering(300, 300);
-	plotter.reset();
 	sample(plotter);
 	plotter.plotEnd(true);
 
