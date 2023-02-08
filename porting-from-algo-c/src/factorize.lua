@@ -14,6 +14,7 @@ local create = coroutine.create
 local resume = coroutine.resume
 local status = coroutine.status
 local yield = coroutine.yield
+local write = io.write
 local insert = table.insert
 
 local function f(initialNumber)
@@ -74,21 +75,21 @@ end
 local function factorize(n)
 	local co = create(f)
 
-	io.write(g(co, n))
+	write(g(co, n))
 	while status(co) == "suspended" do
-		io.write(" * ", g(co))
+		write(" * ", g(co))
 	end
-	io.write("\n")
+	write("\n")
 end
 
 local factorizeM = hasBC and function (v)
 	local co = create(fM)
 
-	io.write(tostring(g(co, v)))
+	write(tostring(g(co, v)))
 	while status(co) == "suspended" do
-		io.write(" * ", tostring(g(co)))
+		write(" * ", tostring(g(co)))
 	end
-	io.write("\n")
+	write("\n")
 end or nil
 
 local function factorizeT(n)

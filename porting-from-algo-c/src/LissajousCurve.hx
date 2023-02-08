@@ -25,22 +25,21 @@ function lissajousCurve(plotter, n, offset) {
 		);
 }
 
-function demo() {
-	var n = 300;
-	var offset = 10;
+//
 
-	//
-
+private function demoA(n, offset) {
 	var path = "results/lissajouscurve-hx.svg";
 	var fh = sys.io.File.write(path);
+
 	var plotter = new SvgPlot.SvgPlot((n + offset) * 2, (n + offset) * 2);
 	plotter.plotStart(fh);
 	lissajousCurve(plotter, n, offset);
 	plotter.plotEnd(true);
+
 	fh.close();
+}
 
-	//
-
+private function demoB(n, offset) {
 	var plotter = new SvgPlot.SvgPlotWithBuffering((n + offset) * 2, (n + offset) * 2);
 	lissajousCurve(plotter, n, offset);
 	plotter.plotEnd(true);
@@ -49,4 +48,12 @@ function demo() {
 	var fh = sys.io.File.write(path);
 	plotter.write(fh);
 	fh.close();
+}
+
+function demo() {
+	var n = 300;
+	var offset = 10;
+
+	demoA(n, offset);
+	demoB(n, offset);
 }
