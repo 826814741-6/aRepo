@@ -164,14 +164,13 @@ private function sample(plotter) {
 
 private function demoA() {
 	var path = "results/svgplot-hx.svg";
-	var fh = sys.io.File.write(path);
 
-	var plotter = new SvgPlot(300, 300);
-	plotter.plotStart(fh);
-	sample(plotter);
-	plotter.plotEnd(true);
-
-	fh.close();
+	Helper.with(path, (fh:sys.io.FileOutput) -> {
+		var plotter = new SvgPlot(300, 300);
+		plotter.plotStart(fh);
+		sample(plotter);
+		plotter.plotEnd(true);
+	});
 }
 
 private function demoB() {
@@ -180,9 +179,9 @@ private function demoB() {
 	plotter.plotEnd(true);
 
 	var path = "results/svgplot-hx-WB.svg";
-	var fh = sys.io.File.write(path);
-	plotter.write(fh);
-	fh.close();
+	Helper.with(path, (fh:sys.io.FileOutput) -> {
+		plotter.write(fh);
+	});
 }
 
 function demo() {
