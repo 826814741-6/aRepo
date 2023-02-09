@@ -6,8 +6,6 @@
 
 package src;
 
-import src.SvgPlot;
-
 private function stepX(n, offset, x):Float {
 	return n + offset + n * Math.cos(x);
 }
