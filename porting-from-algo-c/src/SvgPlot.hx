@@ -165,7 +165,7 @@ private function sample(plotter) {
 private function demoA() {
 	var path = "results/svgplot-hx.svg";
 
-	Helper.with(path, (fh:sys.io.FileOutput) -> {
+	Helper.withFileWrite(path, (fh) -> {
 		var plotter = new SvgPlot(300, 300);
 		plotter.plotStart(fh);
 		sample(plotter);
@@ -179,9 +179,7 @@ private function demoB() {
 	plotter.plotEnd(true);
 
 	var path = "results/svgplot-hx-WB.svg";
-	Helper.with(path, (fh:sys.io.FileOutput) -> {
-		plotter.write(fh);
-	});
+	Helper.withFileWrite(path, (fh) -> plotter.write(fh));
 }
 
 function demo() {

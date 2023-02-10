@@ -28,7 +28,7 @@ function lissajousCurve(plotter, n, offset) {
 private function demoA(n, offset) {
 	var path = "results/lissajouscurve-hx.svg";
 
-	Helper.with(path, (fh:sys.io.FileOutput) -> {
+	Helper.withFileWrite(path, (fh) -> {
 		var plotter = new SvgPlot.SvgPlot((n + offset) * 2, (n + offset) * 2);
 		plotter.plotStart(fh);
 		lissajousCurve(plotter, n, offset);
@@ -42,9 +42,7 @@ private function demoB(n, offset) {
 	plotter.plotEnd(true);
 
 	var path = "results/lissajouscurve-hx-WB.svg";
-	Helper.with(path, (fh:sys.io.FileOutput) -> {
-		plotter.write(fh);
-	});
+	Helper.withFileWrite(path, (fh) -> plotter.write(fh));
 }
 
 function demo() {
