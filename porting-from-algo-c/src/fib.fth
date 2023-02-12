@@ -66,7 +66,7 @@ privatize
 
 private{
 
-: iter  ( a b n -- a b n )
+: rec  ( a b n -- a b n )
    dup 0> if
       1- -rot over + swap rot
       recurse
@@ -76,7 +76,7 @@ private{
 }private
 
 : fib4  ( n -- n )
-   1 0 rot iter
+   1 0 rot rec
    drop nip
 ;
 

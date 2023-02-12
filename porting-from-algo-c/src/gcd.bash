@@ -6,18 +6,18 @@
 #	int ngcd(int, int[])		to	ngcd
 #
 
-_iter() {
+_rec() {
 	if [ "${2}" -eq "0" ]; then
 		printf "${1}"
 		exit
 	else
-		_iter ${2} $((${1} % ${2}))
+		_rec ${2} $((${1} % ${2}))
 	fi
 }
 
 gcdR() {
 	[ "$#" -eq "2" ] || exit
-	printf $(_iter $@)
+	printf $(_rec $@)
 }
 
 gcdL() {

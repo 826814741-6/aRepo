@@ -29,20 +29,20 @@ local eM = ret and function (digit)
 	return r, n
 end or nil
 
-local function iter(r, a, n, prev)
+local function rec(r, a, n, prev)
 	if r ~= prev then
-		return iter(r + a, a / n, n + 1, r)
+		return rec(r + a, a / n, n + 1, r)
 	end
 	return r, n
 end
 
 local function eR()
-	return iter(0, 1, 1)
+	return rec(0, 1, 1)
 end
 
 local eMR = ret and function (digit)
 	M.digits(digit)
-	return iter(M.new(0), M.new(1), 1)
+	return rec(M.new(0), M.new(1), 1)
 end or nil
 
 return {

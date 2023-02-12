@@ -33,11 +33,11 @@ function mulA(a, b,	r) {
 #	return r
 #}
 #
-#function _iter(a, b, r) {
-#	return a ? _iter(_rshift(a,1), _lshift(b,1), _and(a,1)?r+b:r) : r
+#function _rec(a, b, r) {
+#	return a ? _rec(_rshift(a,1), _lshift(b,1), _and(a,1)?r+b:r) : r
 #}
 #function mulC(a, b) {
-#	return _iter(a, b, 0)
+#	return _rec(a, b, 0)
 #}
 #
 
@@ -55,11 +55,11 @@ function mulA(a, b,	r) {
 #	return r
 #}
 #
-#function _iter(a, b, r) {
-#	return a ? _iter(rshift(a,1), lshift(b,1), and(a,1)?r+b:r) : r
+#function _rec(a, b, r) {
+#	return a ? _rec(rshift(a,1), lshift(b,1), and(a,1)?r+b:r) : r
 #}
 #function mulC(a, b) {
-#	return _iter(a, b, 0)
+#	return _rec(a, b, 0)
 #}
 
 #

@@ -8,18 +8,18 @@
 --	a part of main				to	dragonCurve
 --
 
-local function iter(plotter, i, dx, dy, sign)
+local function rec(plotter, i, dx, dy, sign)
 	if i == 0 then
 		plotter:drawRel(dx, dy)
 	else
-		iter(plotter, i-1, (dx - sign*dy) / 2, (dy + sign*dx) / 2, 1)
-		iter(plotter, i-1, (dx + sign*dy) / 2, (dy - sign*dx) / 2, -1)
+		rec(plotter, i-1, (dx - sign*dy) / 2, (dy + sign*dx) / 2, 1)
+		rec(plotter, i-1, (dx + sign*dy) / 2, (dy - sign*dx) / 2, -1)
 	end
 end
 
 local function dragonCurveR(plotter, order, dx, dy, sign, x0, y0)
 	plotter:move(x0, y0)
-	iter(plotter, order, dx, dy, sign)
+	rec(plotter, order, dx, dy, sign)
 end
 
 local function dragonCurve(plotter, order, x0, y0)

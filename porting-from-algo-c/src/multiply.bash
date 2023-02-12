@@ -24,16 +24,16 @@ mulB() {
 	printf $r
 }
 
-_iter() {
+_rec() {
 	local t
 	if [ "${1}" -ne "0" ]; then
 		[ "$((${1} & 1))" -eq "1" ] && t=$((${3} + ${2})) || t=${3}
-		_iter $((${1} >> 1)) $((${2} << 1)) $t
+		_rec $((${1} >> 1)) $((${2} << 1)) $t
 	else
 		printf ${3}
 	fi
 }
 
 mulC() {
-	printf $(_iter ${1} ${2} 0)
+	printf $(_rec ${1} ${2} 0)
 }

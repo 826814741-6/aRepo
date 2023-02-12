@@ -20,9 +20,9 @@ local function loop(x, a, n)
 	return r
 end
 
-local function iter(x, a, i)
+local function rec(x, a, i)
 	if i > 0 then
-		return iter(x, (i*i*x*x) / (2*i + 1 + a), i-1)
+		return rec(x, (i*i*x*x) / (2*i + 1 + a), i-1)
 	end
 	return a
 end
@@ -43,11 +43,11 @@ local function atanR(x, n, pi)
 	n = n == nil and N or n
 	pi = pi == nil and math.pi or pi
 	if x > 1 then
-		return pi / 2 - (1/x) / (1 + iter(1/x, 0, n))
+		return pi / 2 - (1/x) / (1 + rec(1/x, 0, n))
 	elseif x < -1 then
-		return -pi / 2 - (1/x) / (1 + iter(1/x, 0, n))
+		return -pi / 2 - (1/x) / (1 + rec(1/x, 0, n))
 	else
-		return x / (1 + iter(x, 0, n))
+		return x / (1 + rec(x, 0, n))
 	end
 end
 

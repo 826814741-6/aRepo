@@ -34,14 +34,14 @@ end
 
 local function ngcdR(a)
 	assert(type(a) == "table", "ngcdR needs a table (of numbers).")
-	function iter(i, d)
+	function rec(i, d)
 		if i > #a or d == 1 then
 			return d
 		else
-			return iter(i+1, gcdR(a[i], d))
+			return rec(i+1, gcdR(a[i], d))
 		end
 	end
-	return iter(1, a[1])
+	return rec(1, a[1])
 end
 
 return {

@@ -36,17 +36,17 @@ function ngcdL(a,	i, d) {
 # ERROR in MAWK (not raised in NAWK/GAWK)
 #
 # mawk: gcd.awk: line 37: illegal reference to local variable a
-# mawk: gcd.awk: line 41: type error in arg(1) in call to _iter
+# mawk: gcd.awk: line 41: type error in arg(1) in call to _rec
 #
-#function _iter(a, i, d) {
+#function _rec(a, i, d) {
 #	if (i > length(a) || d == 1)
 #		return d
 #	else
-#		return _iter(a, i+1, gcdR(a[i], d))
+#		return _rec(a, i+1, gcdR(a[i], d))
 #}
 #
 #function ngcdR(a) {
-#	return _iter(a, 1, a[1])
+#	return _rec(a, 1, a[1])
 #}
 #
 

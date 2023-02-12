@@ -35,14 +35,14 @@ local function fib3(n)
 end
 
 local function fib4(n)
-	function iter(a, b, c)
+	function rec(a, b, c)
 		if c < n then
-			return iter(a + b, a, c + 1)
+			return rec(a + b, a, c + 1)
 		else
 			return a
 		end
 	end
-	return iter(1, 0, 1)
+	return rec(1, 0, 1)
 end
 
 return {

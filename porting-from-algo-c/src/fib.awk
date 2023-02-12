@@ -35,15 +35,15 @@ function fib3(n,	a, b, c, t) {
 	return a
 }
 
-function _iter(n, a, b, c) {
+function _rec(n, a, b, c) {
 	if (c < n)
-		return _iter(n, a + b, a, c + 1)
+		return _rec(n, a + b, a, c + 1)
 	else
 		return a
 }
 
 function fib4(n) {
-	return _iter(n, 1, 0, 1)
+	return _rec(n, 1, 0, 1)
 }
 
 #

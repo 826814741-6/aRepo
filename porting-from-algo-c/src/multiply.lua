@@ -23,10 +23,10 @@ local function mulB(a, b)
 end
 
 local function mulC(a, b)
-	function iter(a, b, r)
-		return a ~= 0 and iter(a>>1, b<<1, a&1==1 and r+b or r) or r
+	function rec(a, b, r)
+		return a ~= 0 and rec(a>>1, b<<1, a&1==1 and r+b or r) or r
 	end
-	return iter(a, b, 0)
+	return rec(a, b, 0)
 end
 
 return {

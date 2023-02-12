@@ -7,11 +7,13 @@ function decrement(n) { return n - 1 }
 function increment(n) { return n + 1 }
 
 #
-#	For filling the gap between mawk and others(nawk,gawk) a little:
+#	_length(): filling the gap of length() between mawk and others(nawk,gawk)
 #
-#	function _length(a) {
-#		...
-#	}
+function _length(a,	r, e) {
+	r = 0
+	for (e in a) r += 1
+	return r
+}
 #
 #	function f(a) { return length(a) }
 #	function g(a) { return _length(a) }
@@ -28,11 +30,6 @@ function increment(n) { return n + 1 }
 #	*) ERROR message in mawk
 #	mawk: ... : type error in arg(1) in call to f
 #
-function _length(a,	r, e) {
-	r = 0
-	for (e in a) r += 1
-	return r
-}
 
 function concat(a,	r, i) {
 	r = ""

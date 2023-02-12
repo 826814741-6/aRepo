@@ -44,14 +44,14 @@ _helperAssign() {
 	printf $r
 }
 
-_iter() {
+_rec() {
 	if [ "${4}" -ne "0" ]; then
-		_iter $((${1} * ${1})) ${2} $(_helperAssign ${3} ${4} ${1}) $((${4} >> 1))
+		_rec $((${1} * ${1})) ${2} $(_helperAssign ${3} ${4} ${1}) $((${4} >> 1))
 	else
 		printf $(_helperFormat ${3} ${2} 16)
 	fi
 }
 
 iPowR() {
-	printf $(_iter ${1} ${2} 1 $(_abs ${2}))
+	printf $(_rec ${1} ${2} 1 $(_abs ${2}))
 }
