@@ -94,12 +94,7 @@ BEGIN {
 	t1 = 0
 	t1 += _t_ngcd("1", 1)
 	t1 += _t_ngcd("10", 10)
-	# t1 += _t_ngcd("2 3", 1)
-	# TODO:
-	#	split("2 3", a)
-	#	print ngcdL(a)
-	#
-	#	2 (... but must be 1)
+	t1 += _t_ngcd("2 3", 1)
 	t1 += _t_ngcd("22 22 22 22 22", 22 )
 	t1 += _t_ngcd("11 22 33 44 55 66 77 88 99 110", 11 )
 
@@ -110,5 +105,5 @@ BEGIN {
 	# 2147483647*6700417 (14389035935580799) > 1<<53
 	t1 += _t_ngcd("2147483647 2147483647 14389035935580799", 2147483647 ) # nawk 2147483647, mawk/gawk 1
 
-	printf "ngcdL and ngcdR seem to be fine (in %d/%d samples).\n", t1, 7
+	printf "ngcdL and ngcdR seem to be fine (in %d/%d samples).\n", t1, 8
 }
