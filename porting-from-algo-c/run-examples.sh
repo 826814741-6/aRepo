@@ -13,6 +13,7 @@
 
 AWK=
 BASH=
+DMD=
 FTH=
 HAXE=
 LUA=
@@ -28,6 +29,7 @@ error() {
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $BASH)" = "" ] && error "BASH"
+[ "$(command -v $DMD)" = "" ] && error "DMD"
 [ "$(command -v $FTH)" = "" ] && error "FTH"
 [ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
@@ -42,6 +44,10 @@ runAWK() {
 
 runBASH() {
 	$BASH examples/${1}.bash
+}
+
+runDMD() {
+	$DMD -run src/${1}.d
 }
 
 runFTH() {
@@ -99,7 +105,7 @@ run isbn LUA
 run isbn13 LUA
 run komachi LUA
 run luhn LUA
-run machineepsilon LUA
+run machineepsilon DMD LUA
 run mccarthy AWK BASH FTH LUA
 run montecarlo LUA
 run moveblock AWK LUA

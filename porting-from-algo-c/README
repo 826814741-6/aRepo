@@ -151,7 +151,7 @@
 | lu.c         |                                             |
 | lucas.c      |                                             |
 | luhn.c       | checkdigit.lua                              |
-| maceps.c     | machineepsilon.lua                          |
+| maceps.c     | machineepsilon.{d,lua}                      |
 | macrornd.c   |                                             |
 | magic4.c     |                                             |
 | magicsq.c    |                                             |
@@ -275,6 +275,7 @@
 #
 #	*.awk:     AWK
 #	*.bash:    Bash
+#	*.d:       D
 #	*.fth:     PForth (*1)
 #	*.hx:      Haxe
 #	*.py:      CPython3/MicroPython
