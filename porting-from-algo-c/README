@@ -151,7 +151,7 @@
 | lu.c         |                                             |
 | lucas.c      |                                             |
 | luhn.c       | checkdigit.lua                              |
-| maceps.c     | machineepsilon.{d,lua,py}                   |
+| maceps.c     | machineepsilon.{d,lua,py},MachineEpsilon.hx |
 | macrornd.c   |                                             |
 | magic4.c     |                                             |
 | magicsq.c    |                                             |

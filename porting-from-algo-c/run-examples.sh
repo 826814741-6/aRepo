@@ -105,7 +105,7 @@ run isbn LUA
 run isbn13 LUA
 run komachi LUA
 run luhn LUA
-run machineepsilon DMD LUA PY
+run machineepsilon DMD HAXE LUA PY
 run mccarthy AWK BASH FTH LUA
 run montecarlo LUA
 run moveblock AWK LUA

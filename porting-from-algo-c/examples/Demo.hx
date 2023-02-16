@@ -2,6 +2,10 @@
 import src.E.demo;
 #end
 
+#if machineepsilon
+import src.MachineEpsilon.demo;
+#end
+
 #if pi
 import src.Pi.demo;
 #end
@@ -15,6 +19,8 @@ import src.LissajousCurve.demo;
 #if svgplot
 import src.SvgPlot.demo;
 #end
+
+//
 
 function main() {
 	demo();
