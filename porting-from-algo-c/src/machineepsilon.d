@@ -6,7 +6,8 @@
 
 import core.thread : Fiber;
 
-void machineEpsilon(ref double e) {
+void machineEpsilon(ref double e)
+{
     e = 1;
     while (1 + e > 1) {
         Fiber.yield();
@@ -16,15 +17,20 @@ void machineEpsilon(ref double e) {
 
 //
 
-import std.stdio : writef;
-
-void fmt(double e) {
-    writef("% -14g % -14g % -14g\n", e, 1 + e, (1 + e) - 1);
-}
-
-void demo() {
+void demo()
+{
     enum FLT_EPSILON = 1.19209290e-07;          // from src/float.ie3
     enum DBL_EPSILON = 2.2204460492503131e-16;  // from src/float.ie3
+
+    import std.stdio : writef;
+
+    void fmt(double e)
+    {
+        writef("% -14g % -14g % -14g\n", e, 1 + e, (1 + e) - 1);
+    }
+
+    writef(" e              1 + e          (1 + e) - 1\n");
+    writef("-------------- -------------- --------------\n");
 
     double e;
     auto fiber = new Fiber(() => machineEpsilon(e));
@@ -46,6 +52,7 @@ void demo() {
 
 //
 
-void main() {
+void main()
+{
     demo();
 }
