@@ -91,7 +91,7 @@ run combination AWK LUA
 run crnd LUA LUAJIT
 run cuberoot AWK FTH LUA LUAJIT
 run dayweek AWK LUA
-run e AWK BASH FTH HAXE LUA
+run e AWK BASH DMD FTH HAXE LUA
 run eulerian AWK BASH FTH LUA
 run factorize LUA PY
 run fdist LUA
@@ -105,7 +105,7 @@ run isbn LUA
 run isbn13 LUA
 run komachi LUA
 run luhn LUA
-run machineepsilon DMD LUA
+run machineepsilon DMD LUA PY
 run mccarthy AWK BASH FTH LUA
 run montecarlo LUA
 run moveblock AWK LUA
