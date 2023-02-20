@@ -59,14 +59,10 @@ local function oneByOne(co, ...)
 	end
 end
 
-local function allAtOnce()
-	local buf = {}
+local function buffering(buf)
 	return function (co, ...)
-		local _, v, isEnd = resume(co, ...)
-		insert(buf, ("1/%s"):format(v))  -- %s and [bc's] number; see below
-		if isEnd == true then
-			write(concat(buf, " + "), "\n")
-		end
+		local _, v = resume(co, ...)
+		buf:insert(("1/%s"):format(v))   -- %s and [bc's] number; see below
 	end
 end
 
@@ -77,8 +73,30 @@ end
 --	-- Lua 5.4 Reference manual > String.format
 --
 
+local function makeBuffer()
+	local T = { buf = {} }
+
+	function T:insert(s)
+		insert(T.buf, s)
+	end
+
+	function T:writeln()
+		write(concat(T.buf, " + "), "\n")
+	end
+
+	return T
+end
+
 return {
 	egyptianFraction = g(f, oneByOne),
-	egyptianFractionB = g(f, allAtOnce()),
-	egyptianFractionM = hasBC and g(fM, allAtOnce()) or nil
+	egyptianFractionB = function (n, d)
+		local b = makeBuffer()
+		g(f, buffering(b))(n, d)
+		b:writeln()
+	end,
+	egyptianFractionM = hasBC and function (n, d)
+		local b = makeBuffer()
+		g(fM, buffering(b))(n, d)
+		b:writeln()
+	end or nil
 }
