@@ -3,7 +3,10 @@
 --
 --	a part of main		to	egyptianFraction
 --	egyptianFraction	to	egyptianFractionB
---	egyptianFraction	to	egyptianFractionM
+--	egyptianFraction	to	egyptianFractionM (depends lbc(*))
+--
+--	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
+--	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
 local M = require 'egyptianfraction'
@@ -27,7 +30,12 @@ do
 	write("denominator is > ")
 	local d = read()
 	write(("%s/%s = "):format(n, d))
-	egyptianFractionM(n, d)
+
+	if egyptianFractionM ~= nil then
+		egyptianFractionM(n, d)
+	else
+		egyptianFractionB(tonumber(n), tonumber(d))
+	end
 
 --
 --	Note:

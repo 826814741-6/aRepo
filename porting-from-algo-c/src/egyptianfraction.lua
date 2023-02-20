@@ -3,7 +3,10 @@
 --
 --	a part of main		to	egyptianFraction
 --	egyptianFraction	to	egyptianFractionB
---	egyptianFraction	to	egyptianFractionM
+--	egyptianFraction	to	egyptianFractionM (depends lbc(*))
+--
+--	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
+--	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
 local create = coroutine.create
@@ -50,9 +53,9 @@ end
 local function oneByOne(co, ...)
 	local _, v, isEnd = resume(co, ...)
 	if isEnd == true then
-		write(("1/%s\n"):format(v))      -- %s and number; see below
+		write(("1/%s\n"):format(v))      -- %s and [bc's] number; see below
 	else
-		write(("1/%s + "):format(v))     -- %s and number; see below
+		write(("1/%s + "):format(v))     -- %s and [bc's] number; see below
 	end
 end
 
@@ -77,5 +80,5 @@ end
 return {
 	egyptianFraction = g(f, oneByOne),
 	egyptianFractionB = g(f, allAtOnce()),
-	egyptianFractionM = g(fM, allAtOnce())
+	egyptianFractionM = hasBC and g(fM, allAtOnce()) or nil
 }
