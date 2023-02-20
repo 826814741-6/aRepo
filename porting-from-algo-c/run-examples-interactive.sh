@@ -5,11 +5,16 @@
 #
 #	e.g.
 #	LUA=/path/to/lua or LUA=lua
+#	PY='micropython -X heapsize=2wM -X emit=native' (*)
+#
+#	*) Quick reference for the UNIX and Windows ports
+#	https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
 #
 
 AWK=
 BASH=
 LUA=
+PY=
 
 #
 
@@ -21,6 +26,7 @@ error() {
 [ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $BASH)" = "" ] && error "BASH"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
+[ "$(command -v $PY)" = "" ] && error "PY"
 
 #
 
@@ -36,6 +42,10 @@ runLUA() {
 	LUA_PATH='src/?.lua' $LUA examples/${1}.lua
 }
 
+runPY() {
+	MICROPYPATH='src' PYTHONPATH='src' $PY src/${1}.py
+}
+
 #
 
 run() {
@@ -48,5 +58,6 @@ run() {
 }
 
 run 105 AWK BASH LUA
+run egyptianfraction LUA PY
 run josephus LUA
 run water AWK BASH LUA

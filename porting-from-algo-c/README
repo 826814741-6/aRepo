@@ -62,7 +62,7 @@
 | dragon2.c    | dragoncurve.lua                             |
 | dragon.c     | dragoncurve.lua                             |
 | e.c          | e.{awk,bash,d,fth,lua}, E.hx                |
-| egypfrac.c   |                                             |
+| egypfrac.c   | egyptianfraction.{lua,py}                   |
 | eigen.c      |                                             |
 | ellipse.c    | grBMP.{lua,luajit}                          |
 | endian.c     |                                             |
