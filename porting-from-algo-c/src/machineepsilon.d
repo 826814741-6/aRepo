@@ -6,7 +6,7 @@
 
 import core.thread : Fiber;
 
-void machineEpsilon(ref double e)
+void machineEpsilon(T)(ref T e)
 {
     e = 1;
     while (1 + e > 1) {
@@ -24,7 +24,7 @@ void demo()
 
     import std.stdio : writef;
 
-    void fmt(double e)
+    void fmt(T)(T e)
     {
         writef("% -14g % -14g % -14g\n", e, 1 + e, (1 + e) - 1);
     }
@@ -32,21 +32,33 @@ void demo()
     writef(" e              1 + e          (1 + e) - 1\n");
     writef("-------------- -------------- --------------\n");
 
-    double e;
-    auto fiber = new Fiber(() => machineEpsilon(e));
+    double d;
+    real r;
+    auto fDouble = new Fiber(() => machineEpsilon(d));
+    auto fReal = new Fiber(() => machineEpsilon(r));
 
-    while (fiber.state != Fiber.State.TERM) {
-        fiber.call();
-        fmt(e);
-        if (e - FLT_EPSILON <= DBL_EPSILON)
+    while (fDouble.state != Fiber.State.TERM) {
+        fDouble.call();
+        fReal.call();
+        fmt(d);
+        if (d - FLT_EPSILON <= DBL_EPSILON)
             break;
     }
 
     writef("^------- FLT_EPSILON\n");
 
-    while (fiber.state != Fiber.State.TERM) {
-        fiber.call();
-        fmt(e);
+    while (fDouble.state != Fiber.State.TERM) {
+        fDouble.call();
+        fReal.call();
+        fmt(d);
+    }
+
+    writef("v------- continue with another fiber of 'real' type\n");
+    // ..., if your env supports the 80 bit Extended Real type.
+
+    while (fReal.state != Fiber.State.TERM) {
+        fReal.call();
+        fmt(r);
     }
 }
 

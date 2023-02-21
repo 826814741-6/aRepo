@@ -4,12 +4,12 @@
 //	long double ee(void)	to	e
 //
 
-double e()
+auto e(T)(T zero, T one)
 {
-    double r = 0;
-    double a = 1;
-    double n = 1;
-    double prev;
+    auto r = zero;
+    auto a = one;
+    auto n = one;
+    auto prev = zero;
 
     do {
         prev = r;
@@ -25,11 +25,15 @@ double e()
 
 void demo()
 {
+    import std.math : E;
     import std.stdio : writef;
 
-    double r = e();
+    double d = e(cast(double) 0, cast(double) 1);
+    real r = e(cast(real) 0, cast(real) 1);
 
-    writef("%.14f\n%.18f\n", r, r);
+    writef("%.14f\n%.20f %a (%s)\n", d, d, d, "double");
+    writef("%.14f\n%.20f %a (%s)\n", r, r, r, "real");
+    writef("%.14f\n%.20f %a (%s)\n", E, E, E, "std.math.E");
 }
 
 //
