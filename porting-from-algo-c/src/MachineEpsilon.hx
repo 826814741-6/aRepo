@@ -29,16 +29,9 @@ class MEIterator {
 private function fmt(e:Float):String {
 	var buf = new StringBuf();
 
-	var g = (m, n) -> m - Std.string(n).length;
-	var f = (m, n) -> {
-		buf.add(n);
-		for (_ in 0...g(m, n))
-			buf.addChar(32);  // " "
-	};
-
-	f(25, e);
-	f(21, 1 + e);
-	f(23, (1 + e) - 1);
+	Helper.leftAlignWithSpace(buf, 25, e);
+	Helper.leftAlignWithSpace(buf, 21, 1 + e);
+	Helper.leftAlignWithSpace(buf, 23, (1 + e) - 1);
 
 	return buf.toString();
 }
