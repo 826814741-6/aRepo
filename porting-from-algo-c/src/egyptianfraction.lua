@@ -31,7 +31,7 @@ local function fR(n, d)
 	if d % n ~= 0 then
 		local t = d // n + 1
 		yield(t)
-		return f(n * t - d, d * t)
+		return fR(n * t - d, d * t)
 	end
 	return d // n, true
 end
