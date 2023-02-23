@@ -2,6 +2,7 @@
 --	from src/egypfrac.c
 --
 --	a part of main		to	egyptianFraction
+--	egyptianFraction	to	egyptianFractionR
 --	egyptianFraction	to	egyptianFractionB
 --	egyptianFraction	to	egyptianFractionM (depends lbc(*))
 --
@@ -12,6 +13,7 @@
 local M = require 'egyptianfraction'
 
 local egyptianFraction = M.egyptianFraction
+local egyptianFractionR = M.egyptianFractionR
 local egyptianFractionB = M.egyptianFractionB
 local egyptianFractionM = M.egyptianFractionM
 
@@ -22,6 +24,8 @@ do
 
 	write("e.g. 2/5 = ")
 	egyptianFraction(2, 5)
+	write("e.g. 3/5 = ")
+	egyptianFractionR(3, 5)
 	write("e.g. 20/30 = ")
 	egyptianFractionB(20, 30)
 
@@ -39,9 +43,12 @@ do
 
 --
 --	Note:
---	In some(most?) cases, egyptianFraction and egyptianFractionB are fragile.
+--	In some(most?) cases,
+--	egyptianFraction, egyptianFractionR and egyptianFractionB are fragile.
 --
 --	> egyptianFraction(10, 122)
+--	1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
+--	> egyptianFractionR(10, 122)
 --	1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
 --	> egyptianFractionB(10, 122)
 --	1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601

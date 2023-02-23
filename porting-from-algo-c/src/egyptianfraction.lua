@@ -2,6 +2,7 @@
 --	from src/egypfrac.c
 --
 --	a part of main		to	egyptianFraction
+--	egyptianFraction	to	egyptianFractionR
 --	egyptianFraction	to	egyptianFractionB
 --	egyptianFraction	to	egyptianFractionM (depends lbc(*))
 --
@@ -22,6 +23,15 @@ local function f(n, d)
 		local t = d // n + 1
 		yield(t)
 		n, d = n * t - d, d * t
+	end
+	return d // n, true
+end
+
+local function fR(n, d)
+	if d % n ~= 0 then
+		local t = d // n + 1
+		yield(t)
+		return f(n * t - d, d * t)
 	end
 	return d // n, true
 end
@@ -89,6 +99,7 @@ end
 
 return {
 	egyptianFraction = g(f, oneByOne),
+	egyptianFractionR = g(fR, oneByOne),
 	egyptianFractionB = function (n, d)
 		local b = makeBuffer()
 		g(f, buffering(b))(n, d)
