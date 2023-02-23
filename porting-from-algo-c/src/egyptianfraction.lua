@@ -70,7 +70,7 @@ end
 --	> The specifier 's' expects a string; if its argument is not a string,
 --	> it is converted to one following the same rules of 'tostring'.
 --
---	-- Lua 5.4 Reference manual > String.format
+--	-- Lua 5.4 Reference manual > string.format
 --
 
 local function makeBuffer()

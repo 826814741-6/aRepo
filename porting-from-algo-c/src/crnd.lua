@@ -10,7 +10,7 @@ local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1; see below
 
 --
 -- >> The type number represents both integer numbers and real (floating-point)
--- >>  numbers, using two subtypes: integer and float.
+-- >> numbers, using two subtypes: integer and float.
 -- >>
 -- >> Standard Lua uses 64-bit integers and double-precision (64-bit) floats,
 -- >> but you can also compile Lua so that it uses 32-bit integers and/or
@@ -20,13 +20,17 @@ local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1; see below
 --
 --   ...(float)... [math.mininteger ...(integer/float)... math.maxinteger] ...(float)...
 --
--- ..., and the 'integer' type of Lua seems to be signed by default.
+-- > assert(math.maxinteger == 9223372036854775807)
+-- true
+-- > assert(math.mininteger == -9223372036854775808)
+-- true
+-- > ("%u %u %u"):format(math.maxinteger, math.mininteger, -1)
+-- 9223372036854775807 9223372036854775808 18446744073709551615
 --
--- assert(math.maxinteger == 9223372036854775807)
--- assert(math.mininteger == -9223372036854775808)
---
--- assert(math.type(N) == 'float')
--- assert(N == 18446744073709551615.0)
+-- > assert(math.type(N) == 'float')
+-- true
+-- > ("%f, %q"):format(N, N)
+-- 18446744073709551616.000000, 0x1p+64
 --
 
 local function crnd(x)
@@ -50,11 +54,14 @@ local function crnd(x)
 end
 
 --
--- Wrapping around in case of overflows in 'interger' arithmetic; in 5.4(5.3-)
+-- Wrapping around in case of overflows in 'integer' arithmetic:
 --
--- assert(math.mininteger == (math.maxinteger+1))
--- assert(math.maxinteger > (math.maxinteger+1))
--- cf. assert(math.ult(math.maxinteger, math.maxinteger+1) == true)
+-- > assert(math.mininteger == math.maxinteger + 1)
+-- true
+-- > assert(math.mininteger - 1 == math.maxinteger)
+-- true
+-- > assert(math.ult(math.maxinteger, math.maxinteger + 1) == true) -- cf.
+-- true
 --
 -- >> In case of overflows in integer arithmetic, all operations wrap around,
 -- >> according to the usual rules of two-complement arithmetic.
