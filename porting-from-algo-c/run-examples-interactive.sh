@@ -13,6 +13,7 @@
 
 AWK=
 BASH=
+HAXE=
 LUA=
 PY=
 
@@ -25,6 +26,7 @@ error() {
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $BASH)" = "" ] && error "BASH"
+[ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $PY)" = "" ] && error "PY"
 
@@ -36,6 +38,10 @@ runAWK() {
 
 runBASH() {
 	$BASH examples/${1}.bash
+}
+
+runHAXE() {
+	$HAXE --interp -p examples --main Demo -D ${1}
 }
 
 runLUA() {
@@ -58,6 +64,6 @@ run() {
 }
 
 run 105 AWK BASH LUA
-run egyptianfraction LUA PY
+run egyptianfraction HAXE LUA PY
 run josephus LUA
 run water AWK BASH LUA

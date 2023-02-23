@@ -22,6 +22,12 @@ import src.SvgPlot.demo;
 
 //
 
+#if egyptianfraction
+import src.EgyptianFraction.demo;
+#end
+
+//
+
 function main() {
 	demo();
 }
