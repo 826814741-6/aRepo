@@ -18,7 +18,7 @@ local write = io.write
 local concat = table.concat
 local insert = table.insert
 
-local function f(n, d)
+local function body(n, d)
 	while d % n ~= 0 do
 		local t = d // n + 1
 		yield(t)
@@ -27,11 +27,11 @@ local function f(n, d)
 	return d // n, true
 end
 
-local function fR(n, d)
+local function bodyR(n, d)
 	if d % n ~= 0 then
 		local t = d // n + 1
 		yield(t)
-		return fR(n * t - d, d * t)
+		return bodyR(n * t - d, d * t)
 	end
 	return d // n, true
 end
@@ -39,7 +39,7 @@ end
 local hasBC, M = pcall(require, "bc")
 local isZero = hasBC and M.iszero or nil
 
-local fM = hasBC and function (n, d)
+local bodyM = hasBC and function (n, d)
 	local n, d, one = M.new(n), M.new(d), M.new(1)
 	while not isZero(d % n) do
 		local t = d / n + one
@@ -49,13 +49,13 @@ local fM = hasBC and function (n, d)
 	return d / n, true
 end or nil
 
-local function g(funcA, funcB)
+local function coSteps(coBodyFunction, coResumeFunction)
 	return function (n, d)
-		local co = create(funcA)
+		local co = create(coBodyFunction)
 
-		funcB(co, n, d)
+		coResumeFunction(co, n, d)
 		while status(co) == "suspended" do
-			funcB(co)
+			coResumeFunction(co)
 		end
 	end
 end
@@ -98,16 +98,16 @@ local function makeBuffer()
 end
 
 return {
-	egyptianFraction = g(f, oneByOne),
-	egyptianFractionR = g(fR, oneByOne),
+	egyptianFraction = coSteps(body, oneByOne),
+	egyptianFractionR = coSteps(bodyR, oneByOne),
 	egyptianFractionB = function (n, d)
 		local b = makeBuffer()
-		g(f, buffering(b))(n, d)
+		coSteps(body, buffering(b))(n, d)
 		b:writeln()
 	end,
 	egyptianFractionM = hasBC and function (n, d)
 		local b = makeBuffer()
-		g(fM, buffering(b))(n, d)
+		coSteps(bodyM, buffering(b))(n, d)
 		b:writeln()
 	end or nil
 }
