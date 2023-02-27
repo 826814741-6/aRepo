@@ -21,11 +21,11 @@ class EFIterator {
 		return this.state;
 	}
 
-	public function next() {
+	public function next():String {
 		if (this.d % this.n != 0) {
 			var t = Math.floor(this.d / this.n) + 1;
-			this.n = n * t - d;
-			this.d = d * t;
+			this.n = this.n * t - this.d;
+			this.d = this.d * t;
 			return '1/$t + ';
 		} else {
 			this.state = false;
