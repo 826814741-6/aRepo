@@ -195,10 +195,15 @@ do
 	--
 	a:set(r, i)
 	c:set(r, i)
-	a.log()
-	a.exp()
-	c.log()
-	c.exp()
+	a.conjugate().conjugate()
+	c.conjugate().conjugate()
+	assert(complexNumber(r, i) == a)
+	assert(complexNumber(r, i) == c)
+	--
+	a:set(r, i)
+	c:set(r, i)
+	a.log().exp()
+	c.log().exp()
 	assert(complexNumber(r, i):log():exp() == a)
 	assert(complexNumber(r, i):log():exp() == c)
 end

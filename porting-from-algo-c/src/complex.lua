@@ -323,18 +323,22 @@ end
 local function overloadWithInplaceMethods(c)
 	c.conjugate = function ()
 		c.i = -c.i
+		return c
 	end
 
 	c.add = function (a)
 		c.r, c.i = c.r + a.r, c.i + a.i
+		return c
 	end
 
 	c.sub = function (a)
 		c.r, c.i = c.r - a.r, c.i - a.i
+		return c
 	end
 
 	c.mul = function (a)
 		c.r, c.i = c.r * a.r - c.i * a.i, c.r * a.i + c.i * a.r
+		return c
 	end
 
 	c.div = function (a)
@@ -347,6 +351,7 @@ local function overloadWithInplaceMethods(c)
 			local d = a.r * w + a.i
 			c.r, c.i = (c.r * w + c.i) / d, (c.i * w - c.r) / d
 		end
+		return c
 	end
 
 	c.pow = function (a)
@@ -356,14 +361,17 @@ local function overloadWithInplaceMethods(c)
 		r, i = a.r * r - a.i * i, a.r * i + a.i * r
 		-- exp(mul(a, log(c)))
 		c.r, c.i = exp(r) * cos(i), exp(r) * sin(i)
+		return c
 	end
 
 	c.exp = function ()
 		c.r, c.i = exp(c.r) * cos(c.i), exp(c.r) * sin(c.i)
+		return c
 	end
 
 	c.log = function ()
 		c.r, c.i = 0.5 * log(c.r * c.r + c.i * c.i), atan(c.i, c.r)
+		return c
 	end
 
 	c.sqrt = function ()
@@ -374,18 +382,21 @@ local function overloadWithInplaceMethods(c)
 			c.r = SQRT05 * abs(c.i) / w
 			c.i = c.i >= 0 and SQRT05 * w or -SQRT05 * w
 		end
+		return c
 	end
 
 	c.sin = function ()
 		local e = exp(c.i)
 		local f = 1 / e
 		c.r, c.i = 0.5 * sin(c.r) * (e + f), 0.5 * cos(c.r) * (e - f)
+		return c
 	end
 
 	c.cos = function ()
 		local e = exp(c.i)
 		local f = 1 / e
 		c.r, c.i = 0.5 * cos(c.r) * (f + e), 0.5 * sin(c.r) * (f - e)
+		return c
 	end
 
 	c.tan = function ()
@@ -393,18 +404,21 @@ local function overloadWithInplaceMethods(c)
 		local f = 1 / e
 		local d = cos(2 * c.r) + 0.5 * (e + f)
 		c.r, c.i = sin(2 * c.r) / d, 0.5 * (e - f) / d
+		return c
 	end
 
 	c.sinh = function ()
 		local e = exp(c.r)
 		local f = 1 / e
 		c.r, c.i = 0.5 * (e - f) * cos(c.i), 0.5 * (e + f) * sin(c.i)
+		return c
 	end
 
 	c.cosh = function ()
 		local e = exp(c.r)
 		local f = 1 / e
 		c.r, c.i = 0.5 * (e + f) * cos(c.i), 0.5 * (e - f) * sin(c.i)
+		return c
 	end
 
 	c.tanh = function ()
@@ -412,6 +426,7 @@ local function overloadWithInplaceMethods(c)
 		local f = 1 / e
 		local d = 0.5 * (e + f) + cos(2 * c.i)
 		c.r, c.i = 0.5 * (e - f) / d, sin(2 * c.i) / d
+		return c
 	end
 end
 
