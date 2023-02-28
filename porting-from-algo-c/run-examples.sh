@@ -88,7 +88,7 @@ run change AWK LUA
 run chisqdist AWK LUA
 run ci LUA
 run combination AWK LUA
-run complex LUA
+run complex HAXE LUA
 run crnd LUA LUAJIT
 run cuberoot AWK FTH LUA LUAJIT
 run dayweek AWK LUA
