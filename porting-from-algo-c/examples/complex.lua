@@ -213,14 +213,17 @@ function toPolarForm(c)
 	return ("%gxCis(%g(rad)) (%g(deg))"):format(c:abs(), c:arg(), deg(c:arg()))
 end
 
-function getReciprocal(c)
-	local r, i = c:conjugate():get()
+function getReciprocal(c, initialFunction)
+	initialFunction = initialFunction ~= nil and initialFunction or complexNumber
+
+	local r, i = c:get()
 	if r == 0 and i == 0 then
 		io.stderr:write("Error: can't get the reciprocal of 0+0i\n")
 		return
 	end
-	local t = c:abs() * c:abs()
-	return complexNumber(r / t, i / t)
+
+	local t = c:abs()
+	return initialFunction(r / (t * t), -i / (t * t))
 end
 
 do
@@ -234,4 +237,6 @@ do
 
 	local e, f = complexNumberS(1, 0), complexNumberS(23, 45)
 	assert(e == f * getReciprocal(f))
+	overloadWithInplaceMethods(f)
+	assert(e == f.mul(getReciprocal(f)))
 end
