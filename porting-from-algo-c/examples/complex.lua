@@ -235,7 +235,7 @@ do
 	print(("%5s : %s"):format(c, toPolarForm(c)))
 	print(("%5s : %s"):format(d, toPolarForm(d)))
 
-	print("v------- see roundoff error")
+	print("v------- see some errors in floating-point arithmetic")
 	print(("a, b, c, d : %s, %s, %s, %s"):format(a, b, c, d))
 	print(("a - a:log():exp() : %s"):format(a - a:log():exp()))
 	print(("b - b:log():exp() : %s"):format(b - b:log():exp()))
