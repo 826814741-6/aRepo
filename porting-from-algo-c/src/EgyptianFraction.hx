@@ -6,40 +6,42 @@
 
 package src;
 
+typedef Fraction = {
+	var n:Int;  // numerator
+	var d:Int;  // denominator
+}
+
 class EFIterator {
-	var n:Int;
-	var d:Int;
+	var f:Fraction;
 	var state:Bool;
 
-	public function new(numerator, denominator) {
-		this.n = numerator;
-		this.d = denominator;
-		this.state = true;
+	public function new(fraction) {
+		f = { n: fraction.n, d: fraction.d };
+		state = true;
 	}
 
 	public function hasNext():Bool {
-		return this.state;
+		return state;
 	}
 
 	public function next():String {
-		if (this.d % this.n != 0) {
-			var t = Math.floor(this.d / this.n) + 1;
-			this.n = this.n * t - this.d;
-			this.d = this.d * t;
-			return '1/$t + ';
+		return if (f.d % f.n != 0) {
+			var t = Math.floor(f.d / f.n) + 1;
+			f = { n: f.n * t - f.d, d: f.d * t };
+			'1/$t + ';
 		} else {
-			this.state = false;
-			return '1/${Math.floor(this.d / this.n)}';
+			state = false;
+			'1/${Math.floor(f.d / f.n)}';
 		}
 	}
 }
 
 //
 
-private function run(n:Int, d:Int) {
-	var it = new EFIterator(n, d);
+private function run(f:Fraction) {
+	var it = new EFIterator(f);
 
-	Sys.print('$n/$d = ');
+	Sys.print('${f.n}/${f.d} = ');
 	for (e in it)
 		Sys.print(e);
 	Sys.println("");
@@ -49,20 +51,18 @@ function demo() {
 	Sys.println("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...");
 
 	Sys.print("e.g. ");
-	var n:Int = 2;
-	var d:Int = 5;
-	run(n, d);
+	var f:Fraction = { n: 2, d: 5 };
+	run(f);
 
 	Sys.print("e.g. ");
-	n = 3;
-	d = 5;
-	run(n, d);
+	f = { n: 3, d: 5 };
+	run(f);
 
 	Sys.print("numerator is > ");
-	n = Std.parseInt(Sys.stdin().readLine());
+	f.n = Std.parseInt(Sys.stdin().readLine());
 	Sys.print("denominator is > ");
-	d = Std.parseInt(Sys.stdin().readLine());
-	run(n, d);
+	f.d = Std.parseInt(Sys.stdin().readLine());
+	run(f);
 
 	//
 	// Note:
