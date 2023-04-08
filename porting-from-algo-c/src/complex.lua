@@ -25,7 +25,7 @@
 --	complex c_cosh(complex)			to	:cosh, cnCosh / .cosh
 --	complex c_tanh(complex)			to	:tanh, cnTanh / .tanh
 --
---							/ overloadWithInplaceMethods
+--							/ overrideWithInplaceMethods
 --
 
 local abs = math.abs
@@ -320,7 +320,7 @@ end
 
 --------
 
-local function overloadWithInplaceMethods(c)
+local function overrideWithInplaceMethods(c)
 	c.conjugate = function ()
 		c.i = -c.i
 		return c
@@ -467,7 +467,7 @@ return {
 	cnSinh = cnSinh,
 	cnCosh = cnCosh,
 	cnTanh = cnTanh,
-	overloadWithInplaceMethods = overloadWithInplaceMethods,
+	overrideWithInplaceMethods = overrideWithInplaceMethods,
 	cnAbs = cnAbs,
 	cnArg = cnArg
 }

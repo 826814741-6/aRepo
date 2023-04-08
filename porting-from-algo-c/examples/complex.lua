@@ -25,7 +25,7 @@
 --	complex c_cosh(complex)			to	:cosh, cnCosh / .cosh
 --	complex c_tanh(complex)			to	:tanh, cnTanh / .tanh
 --
---							/ overloadWithInplaceMethods
+--							/ overrideWithInplaceMethods
 --
 
 local M = require 'complex'
@@ -46,7 +46,7 @@ local cnTan = M.cnTan
 local cnSinh = M.cnSinh
 local cnCosh = M.cnCosh
 local cnTanh = M.cnTanh
-local overloadWithInplaceMethods = M.overloadWithInplaceMethods
+local overrideWithInplaceMethods = M.overrideWithInplaceMethods
 local cnAbs = M.cnAbs
 local cnArg = M.cnArg
 
@@ -87,8 +87,8 @@ do
 
 	assert(a == c and b == d)
 	local r, i = a:get()
-	overloadWithInplaceMethods(a)
-	overloadWithInplaceMethods(c)
+	overrideWithInplaceMethods(a)
+	overrideWithInplaceMethods(c)
 	--
 	local t = complexNumberS(r, i):conjugate()
 	a.conjugate()
