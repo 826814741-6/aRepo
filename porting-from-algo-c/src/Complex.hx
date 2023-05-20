@@ -213,9 +213,13 @@ class ComplexNumber {
 		c = { r: a.r, i: a.i };
 	}
 
-	public function get():Complex { return c; }
+	public function get():Complex {
+		return c;
+	}
 
-	public function set(a:Complex) { c = a; }
+	public function set(a:Complex) {
+		c = { r: a.r, i: a.i };
+	}
 
 	public function toString():String {
 		return c.r + (if (c.i < 0) "" else "+") + c.i + "i";

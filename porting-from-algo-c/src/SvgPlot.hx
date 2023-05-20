@@ -21,7 +21,7 @@
 
 package src;
 
-private abstract class Base {
+abstract class Base {
 	var x:Int;
 	var y:Int;
 
@@ -150,7 +150,7 @@ private function format(s:String, x:Float, y:Float):String {
 
 //
 
-private function sample(plotter) {
+private function sample(plotter:Base) {
 	for (i in 0...5) {
 		var t:Float = 2 * Math.PI * i / 5;
 		var x:Float = 150 + 140 * Math.cos(t);

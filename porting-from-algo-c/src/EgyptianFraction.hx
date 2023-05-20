@@ -15,7 +15,7 @@ class EFIterator {
 	var f:Fraction;
 	var state:Bool;
 
-	public function new(fraction) {
+	public function new(fraction:Fraction) {
 		f = { n: fraction.n, d: fraction.d };
 		state = true;
 	}
