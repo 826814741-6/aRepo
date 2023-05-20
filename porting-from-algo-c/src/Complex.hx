@@ -218,7 +218,8 @@ class ComplexNumber {
 	}
 
 	public function set(a:Complex) {
-		c = { r: a.r, i: a.i };
+		c.r = a.r;
+		c.i = a.i;
 	}
 
 	public function toString():String {
