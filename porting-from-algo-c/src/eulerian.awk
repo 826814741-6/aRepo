@@ -13,7 +13,7 @@ function eulerianNumber(n, k) {
 #
 
 #
-#	rep(s,n) from src/_helper.awk
+#	rep(s,n) from _helper.awk
 #
 
 BEGIN {

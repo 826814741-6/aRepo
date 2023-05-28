@@ -34,7 +34,7 @@ function phi(x,		t, d) {
 #
 
 #
-#	rep(s,n) from src/_helper.awk
+#	rep(s,n) from _helper.awk
 #
 
 BEGIN {

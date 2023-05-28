@@ -57,7 +57,7 @@ function fPow(x, n) {
 #
 
 #
-#	_p(b) from src/_helper.awk
+#	_p(b) from _helper.awk
 #
 
 BEGIN {

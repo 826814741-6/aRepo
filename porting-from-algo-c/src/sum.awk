@@ -27,7 +27,7 @@ function sum2(a, n,	r, rest, i, t) {
 #
 
 #
-#	_p(b) from src/_helper.awk
+#	_p(b) from _helper.awk
 #
 
 BEGIN {

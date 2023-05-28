@@ -26,7 +26,7 @@ function rotate(a, left, mid, right) {
 #
 
 #
-#	concat(a) from src/_helper.awk
+#	concat(a) from _helper.awk
 #
 
 BEGIN {

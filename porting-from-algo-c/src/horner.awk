@@ -34,7 +34,7 @@ function horner(a, x,	len, p, i) {
 #
 
 #
-#	_length(a) from src/_helper.awk
+#	_length(a) from _helper.awk
 #
 
 function fmt(a,		len, r, i) {

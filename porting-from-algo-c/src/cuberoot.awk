@@ -65,7 +65,7 @@ function iCbrt(x,	r, t) {
 #
 
 #
-#	_p(b) from src/_helper.awk
+#	_p(b) from _helper.awk
 #
 
 function _t_iCbrt(l, r,		i, t) {
@@ -93,9 +93,7 @@ BEGIN {
 }
 
 #
-#	*) Please choose a number depending on the purpose and situation.
-#
-#	e.g. a list of elapsed time - running _t_iCbrt(0, n) on my old cheap laptop
+#	*) a list of elapsed time - running _t_iCbrt(0, n) on my old cheap laptop
 #
 #	in luajit, n == 1<<28 (2^28):
 #

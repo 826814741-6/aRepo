@@ -33,7 +33,7 @@ function combination(n, k,	a, i, j) {
 #
 
 #
-#	rep(s,n) from src/_helper.awk
+#	rep(s,n) from _helper.awk
 #
 function pHeader(l, r, w0, w1,		padding, fmt, border, i) {
 	padding = rep(" ", w0)
@@ -80,11 +80,11 @@ BEGIN {
 #		print
 #	}
 #
-#	The result of the above sample depends on your environment, build options and so on.
+#	The result of above code depends on your environment, build options and so on.
 #
-#	For example, executing with nawk/mawk/gawk on my old cheap laptop:
+#	For example, executing it with nawk/mawk/gawk on my old cheap laptop are:
 #
-#	$ nawk -f src/_helper.awk -f src/combination.awk -f examples/combination.awk
+#	$ nawk -f src/_helper.awk -f src/combination.awk
 #	...
 #	                         65                     66                     67
 #	    ---------------------------------------------------------------------
@@ -102,7 +102,7 @@ BEGIN {
 #	38 |    1448194831602515456    3413602103063072256    7886597962249166848
 #	39 |    1002596421878664448    2450791253481180160    5864393356544251904
 #
-#	$ mawk -f src/_helper.awk -f src/combination.awk -f examples/combination.awk
+#	$ mawk -f src/_helper.awk -f src/combination.awk
 #	...
 #	                         65                     66                     67
 #	    ---------------------------------------------------------------------
@@ -120,7 +120,7 @@ BEGIN {
 #	38 |             2147483647             2147483647             2147483647
 #	39 |             2147483647             2147483647             2147483647
 #
-#	$ gawk -f src/_helper.awk -f src/combination.awk -f examples/combination.awk
+#	$ gawk -f src/_helper.awk -f src/combination.awk
 #	...
 #	                         65                     66                     67
 #	    ---------------------------------------------------------------------
