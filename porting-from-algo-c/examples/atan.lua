@@ -18,8 +18,12 @@ local guessProperLoopCountM = M.guessProperLoopCountM
 --
 --	local aVariable <const> = value
 --
---	is a new feature of local variables in Lua 5.4.
---	(see 3.3.7 - Local Declarations (Lua 5.4 Reference Manual))
+--	is one of new features in Lua 5.4.
+--
+--	>> ... const, which declares a constant variable, that is,
+--	>> a variable that cannot be assigned to after its initialization; ...
+--	>>
+--	>> 3.3.7 - Local Declarations (Lua 5.4 Reference Manual)
 --
 -- local DBL_EPSILON <const> = 2.2204460492503131E-16
 local DBL_EPSILON = 2.2204460492503131E-16

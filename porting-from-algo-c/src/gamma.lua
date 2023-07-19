@@ -9,8 +9,12 @@
 --
 --	local aVariable <const> = value
 --
---	is a new feature of local variables in Lua 5.4.
---	(see 3.3.7 - Local Declarations (Lua 5.4 Reference Manual))
+--	is one of new features in Lua 5.4.
+--
+--	>> ... const, which declares a constant variable, that is,
+--	>> a variable that cannot be assigned to after its initialization; ...
+--	>>
+--	>> 3.3.7 - Local Declarations (Lua 5.4 Reference Manual)
 --
 -- local PI <const> = math.pi
 
