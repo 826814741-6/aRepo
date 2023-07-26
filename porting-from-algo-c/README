@@ -278,9 +278,9 @@
 #	*.d:       D
 #	*.fth:     PForth (*1)
 #	*.hx:      Haxe
-#	*.py:      CPython3/MicroPython
 #	*.lua:     Lua (*2)
 #	*.luajit:  LuaJIT
+#	*.py:      CPython3/MicroPython
 #
 #	*1) https://github.com/philburk/pforth
 #	*2) 5.3-
