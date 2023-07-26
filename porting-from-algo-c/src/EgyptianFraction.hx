@@ -2,46 +2,70 @@
 //	from src/egypfrac.c
 //
 //	a part of main		to	EFIterator
+//	EFIterator		to	EFIteratorM (*)
+//
+//	*) depends on littleBigInt
+//	https://github.com/maitag/littleBigInt
 //
 
 package src;
 
-typedef Fraction = {
-	var n:Int;  // numerator
-	var d:Int;  // denominator
-}
+@:generic
+private abstract class EFIBase<T> {
+	var n:T;
+	var d:T;
+	var state:Bool = true;
 
-class EFIterator {
-	var f:Fraction;
-	var state:Bool;
-
-	public function new(fraction:Fraction) {
-		f = { n: fraction.n, d: fraction.d };
-		state = true;
+	public function new(numerator:T, denominator:T) {
+		n = numerator;
+		d = denominator;
 	}
 
 	public function hasNext():Bool {
 		return state;
 	}
 
+	abstract public function next():String;
+}
+
+class EFIterator extends EFIBase<Int> {
 	public function next():String {
-		return if (f.d % f.n != 0) {
-			var t = Math.floor(f.d / f.n) + 1;
-			f = { n: f.n * t - f.d, d: f.d * t };
+		return if (d % n != 0) {
+			var t = Math.floor(d / n) + 1;
+			n = n * t - d;
+			d = d * t;
 			'1/$t + ';
 		} else {
 			state = false;
-			'1/${Math.floor(f.d / f.n)}';
+			'1/${Math.floor(d / n)}';
 		}
 	}
 }
 
+#if hasLittleBigInt
+class EFIteratorM extends EFIBase<BigInt> {
+	public function next():String {
+		return if (d % n != 0) {
+			var t = workarounds(n, d) + 1;
+			n = n * t - d;
+			d = d * t;
+			'1/$t + ';
+		} else {
+			state = false;
+			'1/${workarounds(n, d)}';
+		}
+	}
+
+	function workarounds(n:BigInt, d:BigInt):BigInt {
+		return if (d/n != null) d/n else 0;
+	}
+}
+#end
+
 //
 
-private function run(f:Fraction) {
-	var it = new EFIterator(f);
-
-	Sys.print('${f.n}/${f.d} = ');
+private function run(n:Int, d:Int, it:Iterator<String>) {
+	Sys.print('${n}/${d} = ');
 	for (e in it)
 		Sys.print(e);
 	Sys.println("");
@@ -51,18 +75,20 @@ function demo() {
 	Sys.println("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...");
 
 	Sys.print("e.g. ");
-	var f:Fraction = { n: 2, d: 5 };
-	run(f);
+	run(2, 5, new EFIterator(2, 5));
 
 	Sys.print("e.g. ");
-	f = { n: 3, d: 5 };
-	run(f);
+	run(3, 5, new EFIterator(3, 5));
 
 	Sys.print("numerator is > ");
-	f.n = Std.parseInt(Sys.stdin().readLine());
+	var n = Std.parseInt(Sys.stdin().readLine());
 	Sys.print("denominator is > ");
-	f.d = Std.parseInt(Sys.stdin().readLine());
-	run(f);
+	var d = Std.parseInt(Sys.stdin().readLine());
+	#if hasLittleBigInt
+	run(n, d, new EFIteratorM(n, d));
+	#else
+	run(n, d, new EFIterator(n, d));
+	#end
 
 	//
 	// Note:

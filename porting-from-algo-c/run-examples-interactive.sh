@@ -14,6 +14,7 @@
 AWK=
 BASH=
 HAXE=
+HAXELIB=
 LUA=
 PY=
 
@@ -27,8 +28,15 @@ error() {
 [ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $BASH)" = "" ] && error "BASH"
 [ "$(command -v $HAXE)" = "" ] && error "HAXE"
+[ "$(command -v $HAXELIB)" = "" ] && error "HAXELIB"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $PY)" = "" ] && error "PY"
+
+#
+
+[ "$(command -v grep)" != "" ] &&
+[ "$($HAXELIB list | grep littleBigInt)" != "" ] &&
+HAXE="$HAXE -L littleBigInt -D hasLittleBigInt"
 
 #
 
