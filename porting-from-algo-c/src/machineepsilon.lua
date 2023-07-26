@@ -4,7 +4,7 @@
 --	a part of main		to	machineEpsilon
 --
 
-function machineEpsilon()
+local function machineEpsilon()
 	local co = coroutine.create(function ()
 		local e = 1
 		while 1 + e > 1 do
