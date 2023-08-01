@@ -34,8 +34,7 @@ error() {
 
 #
 
-[ "$(command -v grep)" != "" ] &&
-[ "$($HAXELIB list | grep littleBigInt)" != "" ] &&
+[ "$($HAXELIB list littleBigInt)" != "" ] &&
 HAXE="$HAXE -L littleBigInt -D hasLittleBigInt"
 
 #
