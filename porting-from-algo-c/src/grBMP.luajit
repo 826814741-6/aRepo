@@ -27,6 +27,8 @@ local band, lshift, rshift = bit.band, bit.lshift, bit.rshift
 local char = string.char
 local abs, floor = math.abs, math.floor
 
+local t_new = require 'table.new'
+
 local function NBLEWriter(n)
 	return function (fh, x)
 		for i=1,n do
@@ -42,11 +44,11 @@ local write4B = NBLEWriter(4)
 
 local function BMP(X, Y)
 	local T = {
-		data = {}
+		data = t_new(Y, 0)
 	}
 
 	for i=1,Y do
-		T.data[i] = {}
+		T.data[i] = t_new(X, 0)
 	end
 
 	function header(fh)
