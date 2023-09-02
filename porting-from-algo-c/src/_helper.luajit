@@ -23,9 +23,17 @@ local function readOnlyTable(t)
 	})
 end
 
+local function with(path, mode, f)
+	local fh = io.open(path, mode)
+	local ret = pcall(f, fh)
+	fh:close()
+	assert(ret == true)
+end
+
 return {
 	abs = abs,
 	atLeastOne = atLeastOne,
 	count = count,
-	readOnlyTable = readOnlyTable
+	readOnlyTable = readOnlyTable,
+	with = with
 }

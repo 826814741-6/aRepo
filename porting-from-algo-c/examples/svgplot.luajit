@@ -1,0 +1,63 @@
+--
+--	from src/svgplot.c
+--
+--	void plot_start(int, int)		to	svgPlot; :plotStart
+--	void plot_end(int)			to	svgPlot; :plotEnd
+--	void move(double, double)		to	svgPlot; :move
+--	void move_rel(double, double)		to	svgPlot; :moveRel
+--	void draw(double, double)		to	svgPlot; :draw
+--	void draw_rel(double, double)		to	svgPlot; :drawRel
+--
+--						to	svgPlotWholeBuffering
+--						to	svgPlotWithBuffering
+--
+
+local M = require 'svgplot'
+local H = require '_helper'
+
+local svgPlot = M.svgPlot
+local svgPlotWholeBuffering = M.svgPlotWholeBuffering
+local svgPlotWithBuffering = M.svgPlotWithBuffering
+local with = H.with
+
+local pi, cos, sin = math.pi, math.cos, math.sin
+
+function sample(plotter)
+	for i=0,4 do
+		local theta = 2 * pi * i / 5
+		local x, y = 150 + 140 * cos(theta), 150 + 140 * sin(theta)
+		if i == 0 then
+			plotter:move(x, y)
+		else
+			plotter:draw(x, y)
+		end
+	end
+end
+
+do
+	with("results/svgplot-lj.svg", "w", function (fh)
+		local plotter = svgPlot(300, 300)
+		plotter:plotStart(fh)
+		sample(plotter)
+		plotter:plotEnd(true)
+	end)
+end
+
+do
+	local plotter = svgPlotWholeBuffering(300, 300)
+	sample(plotter)
+	plotter:plotEnd(true)
+
+	with("results/svgplot-lj-WB-A.svg", "w", function (fh)
+		plotter:writeOneByOne(fh)
+	end)
+end
+
+do
+	with("results/svgplot-lj-WB-B.svg", "w", function (fh)
+		local plotter = svgPlotWithBuffering(300, 300)
+		plotter:plotStart(fh, 2)
+		sample(plotter)
+		plotter:plotEnd(true)
+	end)
+end
