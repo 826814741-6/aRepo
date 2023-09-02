@@ -37,7 +37,7 @@ private function demoA(n, offset) {
 }
 
 private function demoB(n, offset) {
-	var plotter = new SvgPlot.SvgPlotWithBuffering((n + offset) * 2, (n + offset) * 2);
+	var plotter = new SvgPlot.SvgPlotWholeBuffering((n + offset) * 2, (n + offset) * 2);
 	lissajousCurve(plotter, n, offset);
 	plotter.plotEnd(true);
 

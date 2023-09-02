@@ -8,7 +8,7 @@
 //	void draw(double, double)		to	.draw
 //	void draw_rel(double, double)		to	.drawRel
 //
-//	SvgPlot					to	SvgPlotWithBuffering
+//	SvgPlot					to	SvgPlotWholeBuffering
 //	.plotStart
 //	.plotEnd				to	[.plotEnd]
 //	.move					to	.move
@@ -43,7 +43,7 @@ private abstract class BaseWriter extends Base {
 	abstract public function plotEnd(isClosePath:Bool=false):Void;
 }
 
-private abstract class BaseWriterWithBuffering extends Base {
+private abstract class BaseWriterWholeBuffering extends Base {
 	var buf:StringBuf = new StringBuf();
 	var isClosePath:Bool;
 
@@ -82,7 +82,7 @@ class SvgPlot extends BaseWriter {
 	}
 }
 
-class SvgPlotWithBuffering extends BaseWriterWithBuffering {
+class SvgPlotWholeBuffering extends BaseWriterWholeBuffering {
 	public function plotEnd(isClosePath:Bool=false) {
 		this.isClosePath = isClosePath;
 	}
@@ -174,7 +174,7 @@ private function demoA() {
 }
 
 private function demoB() {
-	var plotter = new SvgPlotWithBuffering(300, 300);
+	var plotter = new SvgPlotWholeBuffering(300, 300);
 	sample(plotter);
 	plotter.plotEnd(true);
 

@@ -8,7 +8,7 @@
 --	void draw(double, double)		to	:draw
 --	void draw_rel(double, double)		to	:drawRel
 --
---	svgPlot					to	svgPlotWithBuffering
+--	svgPlot					to	svgPlotWholeBuffering
 --	:plotStart
 --	:plotEnd				to	[:plotEnd]
 --	:move					to	:move
@@ -76,7 +76,7 @@ end
 local T_concat = table.concat
 local T_insert = table.insert
 
-local function svgPlotWithBuffering(X, Y)
+local function svgPlotWholeBuffering(X, Y)
 	local T = {
 		buffer = {},
 		isClosePath = false
@@ -136,5 +136,5 @@ end
 
 return {
 	svgPlot = svgPlot,
-	svgPlotWithBuffering = svgPlotWithBuffering
+	svgPlotWholeBuffering = svgPlotWholeBuffering
 }
