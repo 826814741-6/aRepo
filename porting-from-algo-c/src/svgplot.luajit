@@ -8,7 +8,7 @@
 --	void draw(double, double)		to	:draw
 --	void draw_rel(double, double)		to	:drawRel
 --
---	svgPlot					to	svgPlotWholeBuffering
+--	svgPlot,svgPlotWithBuffering		to	svgPlotWholeBuffering
 --	:plotStart
 --	:plotEnd				to	[:plotEnd]
 --	:move					to	:move

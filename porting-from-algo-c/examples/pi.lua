@@ -2,7 +2,7 @@
 --	from src/pi1.c
 --
 --	long double pi(void)	to	machinLike
---	machinLike		to	machinLikeM (depends lbc(*))
+--	machinLike		to	machinLikeM (depends on lbc(*))
 --
 --	from src/pi2.c
 --
@@ -23,7 +23,7 @@ do
 	print("-------- machinLike:")
 	p1(machinLike())
 
-	print("-------- machinLikeM (depends lbc):")
+	print("-------- machinLikeM (depends on lbc):")
 	print(machinLikeM ~= nil and machinLikeM(50) or "")
 
 	print("-------- gaussLegendre n:")

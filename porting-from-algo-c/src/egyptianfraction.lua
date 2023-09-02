@@ -4,7 +4,7 @@
 --	a part of main		to	egyptianFraction
 --	egyptianFraction	to	egyptianFractionR
 --	egyptianFraction	to	egyptianFractionB
---	egyptianFraction	to	egyptianFractionM (depends lbc(*))
+--	egyptianFraction	to	egyptianFractionM (depends on lbc(*))
 --
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)

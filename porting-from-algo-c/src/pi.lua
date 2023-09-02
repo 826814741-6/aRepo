@@ -2,7 +2,7 @@
 --	from src/pi1.c
 --
 --	long double pi(void)	to	machinLike
---	machinLike		to	machinLikeM (depends lbc(*))
+--	machinLike		to	machinLikeM (depends on lbc(*))
 --
 --	from src/pi2.c
 --

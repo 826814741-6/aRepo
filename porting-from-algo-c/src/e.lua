@@ -3,8 +3,8 @@
 --
 --	long double ee(void)	to	e
 --	e			to	eR
---	e			to	eM (depends lbc(*))
---	e			to	eMR (depends lbc(*))
+--	e			to	eM (depends on lbc(*))
+--	e			to	eMR (depends on lbc(*))
 --
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)

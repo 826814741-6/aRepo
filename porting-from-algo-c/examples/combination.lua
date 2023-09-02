@@ -3,7 +3,7 @@
 --
 --	int comb(int, int)				to	combinationR
 --	unsigned long combination(int, int)		to	combination
---	combination					to	combinationM (depends lbc(*))
+--	combination					to	combinationM (depends on lbc(*))
 --
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)

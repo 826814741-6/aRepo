@@ -2,9 +2,9 @@
 --	from src/factoriz.c
 --
 --	void factorize(int)	to	factorize
---	factorize		to	factorizeM (depends lbc(*))
+--	factorize		to	factorizeM (depends on lbc(*))
 --	factorize		to	factorizeT
---	factorize		to	factorizeCO (depends lbc(*))
+--	factorize		to	factorizeCO (depends on lbc(*))
 --
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)

@@ -2,7 +2,7 @@
 --	from src/sqrt.c
 --
 --	double mysqrt(double)		to	fSqrt
---	fSqrt				to	fSqrtM (depends lbc(*))
+--	fSqrt				to	fSqrtM (depends on lbc(*))
 --
 --	from src/isqrt.c
 --

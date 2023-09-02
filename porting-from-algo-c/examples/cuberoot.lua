@@ -3,7 +3,7 @@
 --
 --	double cuberoot(double)		to	fCbrt
 --	double cuberoot2(double)	to	fCbrt2
---	fCbrt				to	fCbrtM (depends lbc(*))
+--	fCbrt				to	fCbrtM (depends on lbc(*))
 --
 --	from src/icubrt.c
 --
