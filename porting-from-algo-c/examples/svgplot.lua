@@ -9,6 +9,7 @@
 --	void draw_rel(double, double)		to	svgPlot; :drawRel
 --
 --						to	svgPlotWholeBuffering
+--						to	svgPlotWithBuffering
 --
 
 local M = require 'svgplot'
@@ -16,6 +17,7 @@ local H = require '_helper'
 
 local svgPlot = M.svgPlot
 local svgPlotWholeBuffering = M.svgPlotWholeBuffering
+local svgPlotWithBuffering = M.svgPlotWithBuffering
 local with = H.with
 
 local pi, cos, sin = math.pi, math.cos, math.sin
@@ -46,7 +48,16 @@ do
 	sample(plotter)
 	plotter:plotEnd(true)
 
-	with("results/svgplot-WB.svg", "w", function (fh)
+	with("results/svgplot-WB-A.svg", "w", function (fh)
 		plotter:writeOneByOne(fh)
+	end)
+end
+
+do
+	with("results/svgplot-WB-B.svg", "w", function (fh)
+		local plotter = svgPlotWithBuffering(300, 300)
+		plotter:plotStart(fh, 2)
+		sample(plotter)
+		plotter:plotEnd(true)
 	end)
 end

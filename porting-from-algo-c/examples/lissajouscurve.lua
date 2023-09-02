@@ -10,6 +10,7 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local svgPlotWholeBuffering = M0.svgPlotWholeBuffering
+local svgPlotWithBuffering = M0.svgPlotWithBuffering
 local lissajousCurve = M1.lissajousCurve
 local with = H.with
 
@@ -27,7 +28,16 @@ end
 do
 	local plotter = svgPlotWholeBuffering((n + offset) * 2, (n + offset) * 2)
 	lissajousCurve(plotter, n, offset)
-	with("results/lissajouscurve-WB.svg", "w", function (fh)
+	with("results/lissajouscurve-WB-A.svg", "w", function (fh)
 		plotter:write(fh)
+	end)
+end
+
+do
+	with("results/lissajouscurve-WB-B.svg", "w", function (fh)
+		local plotter = svgPlotWithBuffering((n + offset) * 2, (n + offset) * 2)
+		plotter:plotStart(fh, 30)
+		lissajousCurve(plotter, n, offset)
+		plotter:plotEnd()
 	end)
 end

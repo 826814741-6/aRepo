@@ -41,8 +41,19 @@ private function demoB(n, offset) {
 	lissajousCurve(plotter, n, offset);
 	plotter.plotEnd(true);
 
-	var path = "results/lissajouscurve-hx-WB.svg";
+	var path = "results/lissajouscurve-hx-WB-A.svg";
 	Helper.withFileWrite(path, (fh) -> plotter.write(fh));
+}
+
+private function demoC(n, offset) {
+	var path = "results/lissajouscurve-hx-WB-B.svg";
+
+	Helper.withFileWrite(path, (fh) -> {
+		var plotter = new SvgPlot.SvgPlotWithBuffering((n + offset) * 2, (n + offset) * 2);
+		plotter.plotStart(fh, 30);
+		lissajousCurve(plotter, n, offset);
+		plotter.plotEnd(true);
+	});
 }
 
 function demo() {
@@ -51,4 +62,5 @@ function demo() {
 
 	demoA(n, offset);
 	demoB(n, offset);
+	demoC(n, offset);
 }

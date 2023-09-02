@@ -8,7 +8,7 @@
 --	void draw(double, double)		to	:draw
 --	void draw_rel(double, double)		to	:drawRel
 --
---	svgPlot					to	svgPlotWholeBuffering
+--	svgPlot,svgPlotWithBuffering		to	svgPlotWholeBuffering
 --	:plotStart
 --	:plotEnd				to	[:plotEnd]
 --	:move					to	:move
@@ -134,7 +134,69 @@ local function svgPlotWholeBuffering(X, Y)
 	return T
 end
 
+local function svgPlotWithBuffering(X, Y)
+	local T = {
+		fh = nil,
+		buffer = {},
+		counter = 0,
+		limit = 1
+	}
+
+	function writer()
+		T.counter = T.counter + 1
+		if T.counter >= T.limit then
+			T.fh:write(T_concat(T.buffer))
+			reset()
+		end
+	end
+
+	function reset()
+		T.buffer, T.counter = {}, 0
+	end
+
+	function T:plotStart(fh, limit)
+		reset()
+		T.limit = limit ~= nil and limit or 1
+		T.fh = fh ~= nil and fh or io.stdout
+		T.fh:write(header(X, Y))
+		T.fh:write(pathStart())
+	end
+
+	function T:plotEnd(isClosePath)
+		if #T.buffer > 0 then
+			T.fh:write(T_concat(T.buffer))
+		end
+		T.fh:write(pathEnd(isClosePath))
+		T.fh:write(footer())
+		T.fh, T.limit = nil, 1
+		reset()
+	end
+
+	function T:move(x, y)
+		T_insert(T.buffer, ("M %g %g "):format(x, Y - y))
+		writer()
+	end
+
+	function T:moveRel(x, y)
+		T_insert(T.buffer, ("m %g %g "):format(x, -y))
+		writer()
+	end
+
+	function T:draw(x, y)
+		T_insert(T.buffer, ("L %g %g "):format(x, Y - y))
+		writer()
+	end
+
+	function T:drawRel(x, y)
+		T_insert(T.buffer, ("l %g %g "):format(x, -y))
+		writer()
+	end
+
+	return T
+end
+
 return {
 	svgPlot = svgPlot,
-	svgPlotWholeBuffering = svgPlotWholeBuffering
+	svgPlotWholeBuffering = svgPlotWholeBuffering,
+	svgPlotWithBuffering = svgPlotWithBuffering
 }

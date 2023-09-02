@@ -8,7 +8,7 @@
 //	void draw(double, double)		to	.draw
 //	void draw_rel(double, double)		to	.drawRel
 //
-//	SvgPlot					to	SvgPlotWholeBuffering
+//	SvgPlot,SvgPlotWithBuffering		to	SvgPlotWholeBuffering
 //	.plotStart
 //	.plotEnd				to	[.plotEnd]
 //	.move					to	.move
@@ -50,6 +50,16 @@ private abstract class BaseWriterWholeBuffering extends Base {
 	abstract public function plotEnd(isClosePath:Bool=false):Void;
 	abstract public function reset():Void;
 	abstract public function write(fh:sys.io.FileOutput):Void;
+}
+
+private abstract class BaseWriterWithBuffering extends Base {
+	var fh:sys.io.FileOutput;
+	var buf:StringBuf;
+	var counter:Int;
+	var limit:Int;
+
+	abstract public function plotStart(fh:sys.io.FileOutput, limit:Int):Void;
+	abstract public function plotEnd(isClosePath:Bool=false):Void;
 }
 
 class SvgPlot extends BaseWriter {
@@ -116,6 +126,60 @@ class SvgPlotWholeBuffering extends BaseWriterWholeBuffering {
 	}
 }
 
+class SvgPlotWithBuffering extends BaseWriterWithBuffering {
+	function writer() {
+		this.counter += 1;
+		if (this.counter >= this.limit) {
+			this.fh.writeString(this.buf.toString());
+			reset();
+		}
+	}
+
+	function reset() {
+		this.buf = new StringBuf();
+		this.counter = 0;
+	}
+
+	public function plotStart(fh:sys.io.FileOutput, limit:Int) {
+		reset();
+		this.limit = limit;
+		this.fh = fh;
+		this.fh.writeString(header(this.x, this.y));
+		this.fh.writeString(pathStart());
+	}
+
+	public function plotEnd(isClosePath:Bool=false) {
+		if (this.buf.length > 0) {
+			this.fh.writeString(this.buf.toString());
+		}
+		this.fh.writeString(pathEnd(isClosePath));
+		this.fh.writeString(footer());
+		this.fh = null;
+		this.limit = 0;
+		reset();
+	}
+
+	public function move(x:Float, y:Float) {
+		this.buf.add(format('M', x, this.y - y));
+		writer();
+	}
+
+	public function moveRel(x:Float, y:Float) {
+		this.buf.add(format('m', x, -y));
+		writer();
+	}
+
+	public function draw(x:Float, y:Float) {
+		this.buf.add(format('L', x, this.y - y));
+		writer();
+	}
+
+	public function drawRel(x:Float, y:Float) {
+		this.buf.add(format('l', x, -y));
+		writer();
+	}
+}
+
 private function header(x:Int, y:Int):String {
 	return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$x" height="$y">
 ';
@@ -178,11 +242,23 @@ private function demoB() {
 	sample(plotter);
 	plotter.plotEnd(true);
 
-	var path = "results/svgplot-hx-WB.svg";
+	var path = "results/svgplot-hx-WB-A.svg";
 	Helper.withFileWrite(path, (fh) -> plotter.write(fh));
+}
+
+private function demoC() {
+	var path = "results/svgplot-hx-WB-B.svg";
+
+	Helper.withFileWrite(path, (fh) -> {
+		var plotter = new SvgPlotWithBuffering(300, 300);
+		plotter.plotStart(fh, 2);
+		sample(plotter);
+		plotter.plotEnd(true);
+	});
 }
 
 function demo() {
 	demoA();
 	demoB();
+	demoC();
 }
