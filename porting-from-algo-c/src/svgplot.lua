@@ -8,7 +8,7 @@
 --	void draw(double, double)		to	:draw
 --	void draw_rel(double, double)		to	:drawRel
 --
---	svgPlot					to	svgPlotWholeBuffering
+--	svgPlot,svgPlotWithBuffering		to	svgPlotWholeBuffering
 --	:plotStart
 --	:plotEnd				to	[:plotEnd]
 --	:move					to	:move
@@ -17,16 +17,6 @@
 --	:drawRel				to	:drawRel
 --							:reset
 --							:write, :writeOneByOne
---
---	svgPlot					to	svgPlotWithBuffering
---	:plotStart				to	:plotStart
---	:plotEnd				to	:plotEnd
---	:move					to	:move
---	:moveRel				to	:moveRel
---	:draw					to	:draw
---	:drawRel				to	:drawRel
---							(:_reset)
---							(:_writer)
 --
 
 local function header(x, y)
@@ -144,62 +134,77 @@ local function svgPlotWholeBuffering(X, Y)
 	return T
 end
 
-local function svgPlotWithBuffering(X, Y)
+local function makeBuffer()
 	local T = {
-		fh = nil,
 		buffer = {},
 		counter = 0,
 		limit = 1
 	}
 
-	function T:_writer()
+	function T:writer(fh, s)
+		T_insert(T.buffer, s)
+
 		T.counter = T.counter + 1
 		if T.counter >= T.limit then
-			T.fh:write(T_concat(T.buffer))
-			T:_reset()
+			fh:write(T_concat(T.buffer))
+			T:reset()
 		end
 	end
 
-	function T:_reset()
+	function T:reset()
 		T.buffer, T.counter = {}, 0
 	end
 
-	function T:plotStart(fh, limit)
-		T:_reset()
+	function T:setLimit(limit)
 		T.limit = limit ~= nil and limit or 1
+	end
+
+	function T:tailStep(fh)
+		if #T.buffer > 0 then
+			fh:write(T_concat(T.buffer))
+		end
+	end
+
+	return T
+end
+
+local function svgPlotWithBuffering(X, Y)
+	local T = {
+		fh = nil,
+		buffer = makeBuffer()
+	}
+
+	function T:plotStart(fh, limit)
+		T.buffer:reset()
+		T.buffer:setLimit(limit)
 		T.fh = fh ~= nil and fh or io.stdout
 		T.fh:write(header(X, Y))
 		T.fh:write(pathStart())
 	end
 
 	function T:plotEnd(isClosePath)
-		if #T.buffer > 0 then
-			T.fh:write(T_concat(T.buffer))
-		end
+		T.buffer:tailStep(T.fh)
 		T.fh:write(pathEnd(isClosePath))
 		T.fh:write(footer())
-		T.fh, T.limit = nil, 1
-		T:_reset()
+		T.fh = nil
+		T.buffer:setLimit()
+		T.buffer:reset()
 	end
 
 	function T:move(x, y)
-		T_insert(T.buffer, ("M %g %g "):format(x, Y - y))
-		T:_writer()
+		T.buffer:writer(T.fh, ("M %g %g "):format(x, Y - y))
 	end
 
 	function T:moveRel(x, y)
-		T_insert(T.buffer, ("m %g %g "):format(x, -y))
-		T:_writer()
+		T.buffer:writer(T.fh, ("m %g %g "):format(x, -y))
 	end
 
 	function T:draw(x, y)
-		T_insert(T.buffer, ("L %g %g "):format(x, Y - y))
-		T:_writer()
+		T.buffer:writer(T.fh, ("L %g %g "):format(x, Y - y))
 	end
 
 	function T:drawRel(x, y)
-		T_insert(T.buffer, ("l %g %g "):format(x, -y))
-		T:_writer()
+		T.buffer:writer(T.fh, ("l %g %g "):format(x, -y))
 	end
 
 	return T
