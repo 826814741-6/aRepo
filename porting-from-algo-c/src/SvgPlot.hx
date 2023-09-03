@@ -58,7 +58,7 @@ private abstract class BaseWriterWithBuffering extends Base {
 	var counter:Int;
 	var limit:Int;
 
-	abstract public function plotStart(fh:sys.io.FileOutput, limit:Int):Void;
+	abstract public function plotStart(fh:sys.io.FileOutput, limit:Int=1):Void;
 	abstract public function plotEnd(isClosePath:Bool=false):Void;
 }
 
@@ -140,7 +140,7 @@ class SvgPlotWithBuffering extends BaseWriterWithBuffering {
 		this.counter = 0;
 	}
 
-	public function plotStart(fh:sys.io.FileOutput, limit:Int) {
+	public function plotStart(fh:sys.io.FileOutput, limit:Int=1) {
 		reset();
 		this.limit = limit;
 		this.fh = fh;
@@ -155,7 +155,7 @@ class SvgPlotWithBuffering extends BaseWriterWithBuffering {
 		this.fh.writeString(pathEnd(isClosePath));
 		this.fh.writeString(footer());
 		this.fh = null;
-		this.limit = 0;
+		this.limit = 1;
 		reset();
 	}
 
