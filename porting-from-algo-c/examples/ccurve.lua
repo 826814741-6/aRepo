@@ -1,7 +1,7 @@
 --
 --	from src/ccurve.c
 --
---	void c(int, double, double)	to	ccurve
+--	void c(int, double, double)	to	cCurve
 --
 
 local M0 = require 'svgplot'
@@ -9,7 +9,7 @@ local M1 = require 'ccurve'
 local H = require '_helper'
 
 local svgPlot = M0.svgPlot
-local ccurve = M1.ccurve
+local cCurve = M1.cCurve
 local with = H.with
 
 function sampleWriter(pathPrefix)
@@ -19,7 +19,7 @@ function sampleWriter(pathPrefix)
 		with(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
 			plotter:move(100, 200)
-			ccurve(plotter, n, 200, 0)
+			cCurve(plotter, n, 200, 0)
 			plotter:plotEnd()
 		end)
 	end
