@@ -89,7 +89,7 @@ local function coFirst(co, n)
 end
 
 local function coRest(co)
-	local _, v = resume(co, n)
+	local _, v = resume(co)
 	write((" * %s"):format(v))
 end
 
