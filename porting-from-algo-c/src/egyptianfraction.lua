@@ -24,7 +24,7 @@ local function body(n, d)
 		yield(t)
 		n, d = n * t - d, d * t
 	end
-	return d // n, true
+	return d // n
 end
 
 local function bodyR(n, d)
@@ -33,39 +33,61 @@ local function bodyR(n, d)
 		yield(t)
 		return bodyR(n * t - d, d * t)
 	end
-	return d // n, true
+	return d // n
 end
 
 local hasBC, M = pcall(require, "bc")
 local isZero = hasBC and M.iszero or nil
+local bn1 = hasBC and M.new(1) or nil
 
 local bodyM = hasBC and function (n, d)
-	local n, d, one = M.new(n), M.new(d), M.new(1)
+	local n, d = M.new(n), M.new(d)
 	while not isZero(d % n) do
-		local t = d / n + one
+		local t = d / n + bn1
 		yield(t)
 		n, d = n * t - d, d * t
 	end
-	return d / n, true
+	return d / n
 end or nil
 
-local function coSteps(coBodyFunction, coResumeFunction)
-	return function (n, d)
-		local co = create(coBodyFunction)
+--
 
-		coResumeFunction(co, n, d)
+local function coStepsA(coBody, coFirst, coRest, coPost)
+	return function (n, d)
+		local co = create(coBody)
+
+		coFirst(co, n, d)
 		while status(co) == "suspended" do
-			coResumeFunction(co)
+			coRest(co)
 		end
+		coPost()
 	end
 end
 
-local function oneByOne(co, ...)
-	local _, v, isEnd = resume(co, ...)
-	if isEnd == true then
-		write(("1/%s\n"):format(v))      -- %s and [bc's] number; see below
-	else
-		write(("1/%s + "):format(v))     -- %s and [bc's] number; see below
+local function coFirst(co, n, d)
+	local _, v = resume(co, n, d)
+	write(("1/%s"):format(v))
+end
+
+local function coRest(co)
+	local _, v = resume(co)
+	write((" + 1/%s"):format(v))
+end
+
+local function coPost()
+	write("\n")
+end
+
+--
+
+local function coStepsB(coBody, coResume)
+	return function (n, d)
+		local co = create(coBody)
+
+		coResume(co, n, d)
+		while status(co) == "suspended" do
+			coResume(co)
+		end
 	end
 end
 
@@ -97,17 +119,19 @@ local function makeBuffer()
 	return T
 end
 
+--
+
 return {
-	egyptianFraction = coSteps(body, oneByOne),
-	egyptianFractionR = coSteps(bodyR, oneByOne),
+	egyptianFraction = coStepsA(body, coFirst, coRest, coPost),
+	egyptianFractionR = coStepsA(bodyR, coFirst, coRest, coPost),
 	egyptianFractionB = function (n, d)
 		local b = makeBuffer()
-		coSteps(body, buffering(b))(n, d)
+		coStepsB(body, buffering(b))(n, d)
 		b:writeln()
 	end,
 	egyptianFractionM = hasBC and function (n, d)
 		local b = makeBuffer()
-		coSteps(bodyM, buffering(b))(n, d)
+		coStepsB(bodyM, buffering(b))(n, d)
 		b:writeln()
 	end or nil
 }

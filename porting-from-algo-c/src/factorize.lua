@@ -3,8 +3,7 @@
 --
 --	void factorize(int)	to	factorize
 --	factorize		to	factorizeM (depends on lbc(*))
---	factorize		to	factorizeT
---	factorize		to	factorizeCO (depends on lbc(*))
+--	factorize		to	factorizeT (depends on lbc(*))
 --
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
@@ -15,9 +14,10 @@ local resume = coroutine.resume
 local status = coroutine.status
 local yield = coroutine.yield
 local write = io.write
+local concat = table.concat
 local insert = table.insert
 
-local function f(initialNumber)
+local function body(initialNumber)
 	local n = initialNumber
 
 	while n >= 4 and n%2 == 0 do
@@ -41,11 +41,13 @@ local function f(initialNumber)
 end
 
 local hasBC, bc = pcall(require, 'bc')
-local isZero = hasBC and bc.iszero or nil
+local isZero = hasBC and bc.iszero or ni
+local bn2 = hasBC and bc.new(2) or ni
+local bn3 = hasBC and bc.new(3) or ni
+local bn4 = hasBC and bc.new(4) or ni
 
-local fM = hasBC and function (initialValue)
+local bodyM = hasBC and function (initialValue)
 	local bn = bc.new(initialValue)
-	local bn2, bn3, bn4 = bc.new(2), bc.new(3), bc.new(4)
 
 	while bn >= bn4 and isZero(bn % bn2) do
 		yield(bn2)
@@ -67,50 +69,95 @@ local fM = hasBC and function (initialValue)
 	return bn
 end or nil
 
-local function g(co, ...)
-	local _, v = resume(co, ...)
-	return v
+--
+
+local function coStepsA(coBody, coFirst, coRest, coPost)
+	return function (n)
+		local co = create(coBody)
+
+		coFirst(co, n)
+		while status(co) == "suspended" do
+			coRest(co)
+		end
+		coPost()
+	end
 end
 
-local function factorize(n)
-	local co = create(f)
+local function coFirst(co, n)
+	local _, v = resume(co, n)
+	write(("%s"):format(v))
+end
 
-	write(g(co, n))
-	while status(co) == "suspended" do
-		write(" * ", g(co))
-	end
+local function coRest(co)
+	local _, v = resume(co, n)
+	write((" * %s"):format(v))
+end
+
+local function coPost()
 	write("\n")
 end
 
-local factorizeM = hasBC and function (v)
-	local co = create(fM)
+--
 
-	write(tostring(g(co, v)))
-	while status(co) == "suspended" do
-		write(" * ", tostring(g(co)))
+local function coStepsB(coBody, coResume)
+	return function (n)
+		local co = create(coBody)
+
+		coResume(co, n)
+		while status(co) == "suspended" do
+			coResume(co)
+		end
 	end
-	write("\n")
-end or nil
-
-local function factorizeT(n)
-	local t = {}
-	local co = create(f)
-
-	insert(t, g(co, n))
-	while status(co) == "suspended" do
-		insert(t, g(co))
-	end
-
-	return t
 end
 
-local factorizeCO = hasBC and function ()
-	return create(fM)
-end or nil
+local function buffering(buf)
+	return function (co, ...)
+		local _, v = resume(co, ...)
+		buf:insert(("%s"):format(v))
+	end
+end
+
+local function makeBuffer()
+	local T = { buf = {} }
+
+	function T:insert(s)
+		insert(T.buf, s)
+	end
+
+	function T:writeln()
+		write(concat(T.buf, " * "), "\n")
+	end
+
+	return T
+end
+
+local function demo(n)
+	local co = create(bodyM)
+
+	local _, v = resume(co, bn2 ^ n * 997 * 10007)
+	assert(v == bn2)
+
+	for i=2,n do
+		_, v = resume(co)
+		assert(v == bn2)
+	end
+
+	_, v = resume(co)
+	assert(v == bc.new(997))
+
+	_, v = resume(co)
+	assert(v == bc.new(10007))
+end
+
+--
 
 return {
-	factorize = factorize,
-	factorizeM = factorizeM,
-	factorizeT = factorizeT,
-	factorizeCO = factorizeCO
+	factorize = coStepsA(body, coFirst, coRest, coPost),
+	factorizeM = hasBC and coStepsA(bodyM, coFirst, coRest, coPost) or nil,
+	factorizeT = hasBC and function (n)
+		local b = makeBuffer()
+		coStepsB(bodyM, buffering(b))(n)
+		b:writeln()
+	end or nil,
+	demo = hasBC and demo or nil
 }
