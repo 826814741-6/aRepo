@@ -30,7 +30,7 @@
 | bubsort.c    |                                                    |
 | cannibal.c   |                                                    |
 | cardano.c    |                                                    |
-| ccurve.c     | ccurve.lua                                         |
+| ccurve.c     | ccurve.{awk,lua}                                   |
 | cfint.c      |                                                    |
 | change.c     | change.{awk,lua}                                   |
 | chaos.c      |                                                    |
@@ -257,7 +257,7 @@
 | toposort.c   |                                                    |
 | totient.c    | totient.{awk,bash,fth,lua}                         |
 | tree.c       |                                                    |
-| treecurv.c   | treecurve.lua                                      |
+| treecurv.c   | treecurve.{awk,lua}                                |
 | tridiag.c    |                                                    |
 | trig.c       |                                                    |
 | trigint.c    |                                                    |
