@@ -41,10 +41,10 @@ local function body(initialNumber)
 end
 
 local hasBC, bc = pcall(require, 'bc')
-local isZero = hasBC and bc.iszero or ni
-local bn2 = hasBC and bc.new(2) or ni
-local bn3 = hasBC and bc.new(3) or ni
-local bn4 = hasBC and bc.new(4) or ni
+local isZero = hasBC and bc.iszero or nil
+local bn2 = hasBC and bc.new(2) or nil
+local bn3 = hasBC and bc.new(3) or nil
+local bn4 = hasBC and bc.new(4) or nil
 
 local bodyM = hasBC and function (initialValue)
 	local bn = bc.new(initialValue)

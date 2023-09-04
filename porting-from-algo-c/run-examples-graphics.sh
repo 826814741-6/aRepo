@@ -84,8 +84,8 @@ run hilbert LUA
 run julia LUA
 run koch LUA
 run line LUA LUAJIT
-run lissajouscurve AWK HAXE LUA
+run lissajouscurve AWK HAXE LUA LUAJIT
 run lorenz LUA
 run sierpinski LUA
-run svgplot AWK HAXE LUA PY
+run svgplot AWK HAXE LUA LUAJIT PY
 run treecurve LUA
