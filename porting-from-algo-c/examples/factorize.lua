@@ -10,12 +10,12 @@
 --
 
 local M = require 'factorize'
-local hasBC, bc = pcall(require, 'bc')
+local hasBC = pcall(require, 'bc')
 
 local factorize = M.factorize
-local factorizeM = hasBC and M.factorizeM or nil
-local factorizeT = hasBC and M.factorizeT or nil
-local demo = hasBC and M.demo or nil
+local factorizeM = M.factorizeM
+local factorizeT = M.factorizeT
+local demo = M.demo
 
 do
 	for i=1,100 do
@@ -31,5 +31,7 @@ do
 		end
 	end
 
-	demo(10000)
+	if hasBC then
+		demo(10000)
+	end
 end

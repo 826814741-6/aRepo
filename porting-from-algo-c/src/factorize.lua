@@ -131,7 +131,7 @@ local function makeBuffer()
 	return T
 end
 
-local function demo(n)
+local demo = hasBC and function (n)
 	local co = create(bodyM)
 
 	local _, v = resume(co, bn2 ^ n * 997 * 10007)
@@ -147,7 +147,7 @@ local function demo(n)
 
 	_, v = resume(co)
 	assert(v == bc.new(10007))
-end
+end or nil
 
 --
 
