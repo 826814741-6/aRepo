@@ -11,8 +11,8 @@ local co_yield = coroutine.yield
 local t_insert = table.insert
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
-function coStuff(co)
-	local T = { co = co }
+function coStream(co, ...)
+	local T = { co = co(...) }
 
 	function T:skip(n)
 		n = n ~= nil and n or 0
@@ -154,23 +154,23 @@ do
 		print(t_unpack(b ~= nil and b or a:get()))
 	end
 
-	p(coStuff(seq()):take(10))
-	p(coStuff(seq()):skip(50):take(10))
-	p(coStuff(seq()):map(10, function (v) return v*v*v end))
-	p(coStuff(seq()):filter(10, function (_,v) if v%2==0 then return v end end))
+	p(coStream(seq):take(10))
+	p(coStream(seq):skip(50):take(10))
+	p(coStream(seq):map(10, function (v) return v*v*v end))
+	p(coStream(seq):filter(10, function (_,v) if v%2==0 then return v end end))
 
 	print("--")
 
-	local co = coStuff(seq())
+	local co = coStream(seq)
 	p(co:skip(5):take(5):skip(5):take(5))
 
 	local buf = makeBuffer()
-	co = extendWithBufferMethods(coStuff(seq()))
+	co = extendWithBufferMethods(coStream(seq))
 	co:skip(5):takeB(buf,5):skip(5):takeB(buf,5)
 	p(buf)
 
 	buf:reset()
-	co = extendWithBufferMethods(coStuff(seq()))
+	co = extendWithBufferMethods(coStream(seq))
 	co:skip(5):takeB(buf,5):skip(5):take(5):skip(5):takeB(buf,5)
 	p(buf)
 
@@ -178,8 +178,8 @@ do
 
 	local hasBC, bc = pcall(require, 'bc')
 
-	local coA = coStuff(fib())
-	local coB = coStuff(fac(hasBC and bc.new(1) or 1))
+	local coA = coStream(fib)
+	local coB = coStream(fac, hasBC and bc.new(1) or 1)
 
 	p(coA:take(5))
 	p(coA:take(5))
