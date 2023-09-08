@@ -53,7 +53,7 @@ function coStream(co, ...)
 		n = n ~= nil and n or 0
 		f = f ~= nil and f or function (...) return true end
 
-		local r, i = {}, 0
+		local r, i = {}, 1
 		repeat
 			local _, v = co_resume(T.co)
 			if f(i, v) then r[i], i = v, i + 1 end
