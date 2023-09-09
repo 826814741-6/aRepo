@@ -64,7 +64,7 @@ function coStream(co, ...)
 	return T
 end
 
-function extendWithBufferMethods(obj)
+function extendsWithBufferMethods(obj)
 	function obj:takeB(buffer, n)
 		local t, r = obj:take(n)
 		buffer:insert(r)
@@ -165,12 +165,12 @@ do
 	p(co:skip(5):take(5):skip(5):take(5))
 
 	local buf = makeBuffer()
-	co = extendWithBufferMethods(coStream(seq))
+	co = extendsWithBufferMethods(coStream(seq))
 	co:skip(5):takeB(buf,5):skip(5):takeB(buf,5)
 	p(buf)
 
 	buf:reset()
-	co = extendWithBufferMethods(coStream(seq))
+	co = extendsWithBufferMethods(coStream(seq))
 	co:skip(5):takeB(buf,5):skip(5):take(5):skip(5):takeB(buf,5)
 	p(buf)
 

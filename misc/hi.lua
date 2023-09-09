@@ -16,23 +16,11 @@ local I_write = io.write
 local S_char = string.char
 local T_concat, T_insert = table.concat, table.insert
 
-function hi(src)
+function init(src)
 	local T = {
 		source = M_new(src);
 		candidate = {}
 	}
-
-	function T:P()
-		I_write(T_concat(T.candidate))
-	end
-
-	function T:n()
-		I_write(tostring(T.source))
-	end
-
-	function T:n10P()
-		I_write(tostring(T.source), "\n")
-	end
 
 	function makeCandidate()
 		local n, edge = T.source, M_new(255)
@@ -45,6 +33,22 @@ function hi(src)
 	end
 
 	makeCandidate()
+
+	return T
+end
+
+function extends(T)
+	function T:P()
+		I_write(T_concat(T.candidate))
+	end
+
+	function T:n()
+		I_write(tostring(T.source))
+	end
+
+	function T:n10P()
+		I_write(tostring(T.source), "\n")
+	end
 
 	return T
 end
@@ -78,7 +82,7 @@ end
 --
 
 function demo(s)
-	local obj = hi(s)
+	local obj = extends(init(s))
 	obj:P()
 	obj:n10P()
 end
