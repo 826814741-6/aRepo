@@ -90,15 +90,16 @@ function makeBuffer()
 	local T = { buf = {} }
 
 	function T:insert(r)
-		local offset = #T.buf
-		for i,v in ipairs(r) do
-			T.buf[i+offset] = v
-		end
+		t_insert(T.buf, r)
 	end
 
-	function T:get() return T.buf end
+	function T:get()
+		return T.buf
+	end
 
-	function T:reset() T.buf = {} end
+	function T:reset()
+		T.buf = {}
+	end
 
 	return T
 end
@@ -148,10 +149,24 @@ end
 
 --
 
+function flatten(t)
+	local r = {}
+	for _,v1 in ipairs(t) do
+		if type(v1) == 'table' then
+			for _,v2 in ipairs(flatten(v1)) do
+				t_insert(r, v2)
+			end
+		else
+			t_insert(r, v1)
+		end
+	end
+	return r
+end
+
 do
 	function p(...)
 		local a, b = ...
-		print(t_unpack(b ~= nil and b or a:get()))
+		print(t_unpack(b ~= nil and b or flatten(a:get())))
 	end
 
 	p(coStream(seq):take(10))
