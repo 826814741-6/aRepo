@@ -149,6 +149,7 @@ end
 
 --
 
+--v
 function flatten(t)
 	local r = {}
 	for _,v1 in ipairs(t) do
@@ -162,6 +163,7 @@ function flatten(t)
 	end
 	return r
 end
+--^ from the last part of this article: http://lua-users.org/wiki/CurriedLua
 
 do
 	function p(...)
