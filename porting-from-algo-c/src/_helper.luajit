@@ -12,7 +12,7 @@ local function count(f, ...)
 	return c
 end
 
--- from http://lua-users.org/wiki/ReadOnlyTables
+--v
 local function readOnlyTable(t)
 	return setmetatable({}, {
 		__index = t,
@@ -22,6 +22,7 @@ local function readOnlyTable(t)
 		__metatable = false
 	})
 end
+--^ from http://lua-users.org/wiki/ReadOnlyTables
 
 local function with(path, mode, f)
 	local fh = io.open(path, mode)

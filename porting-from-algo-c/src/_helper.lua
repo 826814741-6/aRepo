@@ -18,7 +18,7 @@ local function id(x) return x end
 
 local function increment(x) return x + 1 end
 
--- from http://lua-users.org/wiki/ReadOnlyTables
+--v
 local function readOnlyTable(t)
 	return setmetatable({}, {
 		__index = t,
@@ -28,6 +28,7 @@ local function readOnlyTable(t)
 		__metatable = false
 	})
 end
+--^ from http://lua-users.org/wiki/ReadOnlyTables
 
 --
 --	tableWriter(x, y, w, f, vFmt)
