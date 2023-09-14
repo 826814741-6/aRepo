@@ -4,11 +4,12 @@
 --	double zeta(double)	to	riemannZeta
 --
 
-local H = require '_helper'
+-- local H = require '_helper'
 
-local readOnlyTable = H.readOnlyTable
+-- local readOnlyTable = H.readOnlyTable
 
-local coef = readOnlyTable({
+-- local coef = readOnlyTable({
+local coef = {
 	[0] = 8.333333333333333333333333333e-2,
 	-1.388888888888888888888888889e-3,
 	3.306878306878306878306878307e-5,
@@ -29,7 +30,8 @@ local coef = readOnlyTable({
 	-3.685994940665310178130050728e-29,
 	9.336734257095044668660153106e-31,
 	-2.365022415700629886484029550e-32
-})
+}
+-- })
 
 local function riemannZeta(n)
 	n = n ~= nil and n or 8

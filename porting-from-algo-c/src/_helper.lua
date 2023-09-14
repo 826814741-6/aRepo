@@ -18,17 +18,10 @@ local function id(x) return x end
 
 local function increment(x) return x + 1 end
 
---v
-local function readOnlyTable(t)
-	return setmetatable({}, {
-		__index = t,
-		__newindex = function (t, k, v)
-			error("ERROR: This is a read-only table. You can't assign.")
-		end,
-		__metatable = false
-	})
-end
---^ from http://lua-users.org/wiki/ReadOnlyTables
+-- local function readOnlyTable(t)
+-- 	...
+-- end
+-- see: http://lua-users.org/wiki/ReadOnlyTables
 
 --
 --	tableWriter(x, y, w, f, vFmt)

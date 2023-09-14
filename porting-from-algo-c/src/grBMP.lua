@@ -25,9 +25,9 @@
 --	void gr_wline(double, double, double, double, long)	to	BMP; :wline
 --
 
-local H = require '_helper'
+-- local H = require '_helper'
+-- local readOnlyTable = H.readOnlyTable
 
-local readOnlyTable = H.readOnlyTable
 local unpack = table.unpack
 local abs = math.abs
 local floor = math.floor
@@ -219,13 +219,15 @@ local function makeColor(rgb)
 	return ("<I"):pack(rgb)
 end
 
-local PRESET_COLORS = readOnlyTable({
+-- local PRESET_COLORS = readOnlyTable({
+local PRESET_COLORS = {
 	BLACK = ("<I"):pack(0x000000),
 	WHITE = ("<I"):pack(0xffffff),
 	RED   = ("<I"):pack(0xff0000),
 	GREEN = ("<I"):pack(0x00ff00),
 	BLUE  = ("<I"):pack(0x0000ff)
-})
+}
+-- })
 
 return {
 	BMP = BMP,

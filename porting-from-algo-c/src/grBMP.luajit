@@ -19,9 +19,8 @@
 --	void gr_line(int, int, int, int, long)			to	BMP; :line
 --
 
-local H = require '_helper'
-
-local readOnlyTable = H.readOnlyTable
+-- local H = require '_helper'
+-- local readOnlyTable = H.readOnlyTable
 
 local band, lshift, rshift = bit.band, bit.lshift, bit.rshift
 local char = string.char
@@ -195,13 +194,15 @@ local function BMP(X, Y)
 	return T
 end
 
-local PRESET_COLORS = readOnlyTable({
+-- local PRESET_COLORS = readOnlyTable({
+local PRESET_COLORS = {
 	BLACK = 0x000000,
 	WHITE = 0xffffff,
 	RED   = 0xff0000,
 	GREEN = 0x00ff00,
 	BLUE  = 0x0000ff
-})
+}
+-- })
 
 return {
 	BMP = BMP,

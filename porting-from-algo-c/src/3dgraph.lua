@@ -4,9 +4,9 @@
 --	a part of main		to	tdGraph
 --
 
-local H = require '_helper'
+-- local H = require '_helper'
 
-local readOnlyTable = H.readOnlyTable
+-- local readOnlyTable = H.readOnlyTable
 
 local MAX_VALUE = math.huge
 
@@ -23,7 +23,8 @@ local function checkParameters(parameters)
 	assert(type(parameters.maxY) == "number")
 	assert(type(parameters.maxZ) == "number")
 
-	return readOnlyTable(parameters)
+	-- return readOnlyTable(parameters)
+	return parameters
 end
 
 local function tdGraph(plotter, aFunction, parameters)

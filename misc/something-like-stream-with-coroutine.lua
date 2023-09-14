@@ -149,26 +149,44 @@ end
 
 --
 
---v
-function flatten(t)
+-- something-like-flatten-once
+function flattenOnce(aTable)
+	--
+	-- Please assume that aTable is an table:
+	-- {[1]={...},[2]={...},...,[(sequential)]={...} or {} or v,...,[#t]={...}}
+	--
 	local r = {}
-	for _,v1 in ipairs(t) do
-		if type(v1) == 'table' then
-			for _,v2 in ipairs(flatten(v1)) do
+	for _,v1 in ipairs(aTable) do
+		if type(v1) == "table" then
+			-- {...}
+			for _,v2 in ipairs(v1) do
 				t_insert(r, v2)
 			end
+			-- {}
+			if #v1 == 0 then
+				t_insert(r, "__EMPTY__")
+			end
 		else
+			-- v
 			t_insert(r, v1)
 		end
 	end
 	return r
 end
---^ from the last part of this article: http://lua-users.org/wiki/CurriedLua
+--
+-- If you want to flatten a deeply-nested-table thoroughly,
+-- please see:
+-- - (the last part of) http://lua-users.org/wiki/CurriedLua
+-- - https://stackoverflow.com/questions/67539008/lua-unpack-all-the-hierarchy-of-a-nested-table-and-store-and-return-table-with
+--     and
+-- - https://stackoverflow.com/questions/55108794/what-is-the-difference-between-pairs-and-ipairs-in-lua
+-- - ...
+--
 
 do
 	function p(...)
 		local a, b = ...
-		print(t_unpack(b ~= nil and b or flatten(a:get())))
+		print(t_unpack(b ~= nil and b or flattenOnce(a:get())))
 	end
 
 	p(coStream(seq):take(10))
