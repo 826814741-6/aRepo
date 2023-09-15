@@ -152,7 +152,7 @@ end
 -- something-like-flatten-once
 function flattenOnce(aTable)
 	--
-	-- Please assume that aTable is an table:
+	-- Please assume that aTable is a table:
 	-- {[1]={...},[2]={...},...,[(sequential)]={...} or {} or v,...,[#t]={...}}
 	--
 	local r = {}
