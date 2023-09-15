@@ -70,6 +70,8 @@ BEGIN {
 	}
 
 #
+#	Showing the result of some edge/boundary values on my env:
+#
 #	print "-------- combination (n:65-67, k:27-39)"
 #	pHeader(65, 67, 4, 23)
 #	for (k = 27; k <= 39; k++) {
@@ -79,10 +81,6 @@ BEGIN {
 #		}
 #		print
 #	}
-#
-#	The result of above code depends on your environment, build options and so on.
-#
-#	For example, executing it with nawk/mawk/gawk on my old cheap laptop are:
 #
 #	$ nawk -f src/_helper.awk -f src/combination.awk
 #	...
