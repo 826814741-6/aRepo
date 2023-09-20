@@ -41,9 +41,10 @@ function getLimiter(l, r)
 end
 
 function getMatcher(...)
+	local marker = string.char(31)
 	function fmt(s)
 		val(s):isStr()
-		return s:gsub("^%s+",""):gsub("%s+$",""):gsub("%s","-")
+		return s:gsub("^%s+",""):gsub("%s+$",""):gsub("%s",marker)
 	end
 
 	local t = {}
