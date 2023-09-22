@@ -2,7 +2,6 @@
 --	something-like-stream-with-closure.lua
 --
 --	> lua[jit] something-like-stream-with-closure.lua
---	...
 --
 
 local t_insert = table.insert
@@ -59,26 +58,26 @@ function clStream(f, ...)
 	return T
 end
 
-function extendsWithBufferMethods(obj)
-	function obj:takeB(buffer, n)
-		local t, r = obj:take(n)
+function extendsWithBufferMethods(T)
+	function T:takeB(buffer, n)
+		local t, r = T:take(n)
 		buffer:insert(r)
 		return t, r
 	end
 
-	function obj:mapB(buffer, n, f)
-		local t, r = obj:map(n, f)
+	function T:mapB(buffer, n, f)
+		local t, r = T:map(n, f)
 		buffer:insert(r)
 		return t, r
 	end
 
-	function obj:filterB(buffer, n, f)
-		local t, r = obj:filter(n, f)
+	function T:filterB(buffer, n, f)
+		local t, r = T:filter(n, f)
 		buffer:insert(r)
 		return t, r
 	end
 
-	return obj
+	return T
 end
 
 function makeBuffer()
@@ -102,13 +101,14 @@ end
 --
 
 -- 0, 1, 2, 3, 4, ...
-function seq(one)
-	one = one ~= nil and one or 1
+function seq(start, step)
+	start = start ~= nil and start or 0
+	step = step ~= nil and step or 1
 
-	local i = -one
+	local n = start - step
 	return function ()
-		i = i + one
-		return i
+		n = n + step
+		return n
 	end
 end
 

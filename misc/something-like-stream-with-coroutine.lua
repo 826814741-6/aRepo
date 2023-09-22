@@ -2,7 +2,6 @@
 --	something-like-stream-with-coroutine.lua
 --
 --	> lua[jit] something-like-stream-with-coroutine.lua
---	...
 --
 
 local co_create = coroutine.create
@@ -64,26 +63,26 @@ function coStream(co, ...)
 	return T
 end
 
-function extendsWithBufferMethods(obj)
-	function obj:takeB(buffer, n)
-		local t, r = obj:take(n)
+function extendsWithBufferMethods(T)
+	function T:takeB(buffer, n)
+		local t, r = T:take(n)
 		buffer:insert(r)
 		return t, r
 	end
 
-	function obj:mapB(buffer, n, f)
-		local t, r = obj:map(n, f)
+	function T:mapB(buffer, n, f)
+		local t, r = T:map(n, f)
 		buffer:insert(r)
 		return t, r
 	end
 
-	function obj:filterB(buffer, n, f)
-		local t, r = obj:filter(n, f)
+	function T:filterB(buffer, n, f)
+		local t, r = T:filter(n, f)
 		buffer:insert(r)
 		return t, r
 	end
 
-	return obj
+	return T
 end
 
 function makeBuffer()
@@ -107,15 +106,15 @@ end
 --
 
 -- 0, 1, 2, 3, 4, ...
-function seq(zero, one)
-	zero = zero ~= nil and zero or 0
-	one = one ~= nil and one or 1
+function seq(start, step)
+	start = start ~= nil and start or 0
+	step = step ~= nil and step or 1
 
 	return co_create(function ()
-		local i = zero
+		local n = start
 		while true do
-			co_yield(i)
-			i = i + one
+			co_yield(n)
+			n = n + step
 		end
 	end)
 end
