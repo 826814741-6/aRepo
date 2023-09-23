@@ -28,6 +28,5 @@ return {
 	abs = abs,
 	atLeastOne = atLeastOne,
 	count = count,
-	readOnlyTable = readOnlyTable,
 	with = with
 }

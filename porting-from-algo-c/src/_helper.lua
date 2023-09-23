@@ -80,7 +80,6 @@ return {
 	decrement = decrement,
 	id = id,
 	increment = increment,
-	readOnlyTable = readOnlyTable,
 	tableWriter = tableWriter,
 	with = with
 }
