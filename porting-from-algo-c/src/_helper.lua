@@ -22,6 +22,8 @@ local function increment(x) return x + 1 end
 -- 	...
 -- end
 -- see: http://lua-users.org/wiki/ReadOnlyTables
+--      https://www.lua.org/pil/13.4.5.html
+--      (the last part of) https://www.lua.org/pil/13.3.html
 
 --
 --	tableWriter(x, y, w, f, vFmt)

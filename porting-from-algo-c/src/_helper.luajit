@@ -16,6 +16,8 @@ end
 -- 	...
 -- end
 -- see: http://lua-users.org/wiki/ReadOnlyTables
+--      https://www.lua.org/pil/13.4.5.html
+--      (the last part of) https://www.lua.org/pil/13.3.html
 
 local function with(path, mode, f)
 	local fh = io.open(path, mode)
