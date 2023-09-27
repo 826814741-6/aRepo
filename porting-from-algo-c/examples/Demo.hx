@@ -16,12 +16,20 @@ import src.Pi.demo;
 
 //
 
+#if ccurve
+import src.CCurve.demo;
+#end
+
 #if lissajouscurve
 import src.LissajousCurve.demo;
 #end
 
 #if svgplot
 import src.SvgPlot.demo;
+#end
+
+#if treecurve
+import src.TreeCurve.demo;
 #end
 
 //

@@ -73,7 +73,7 @@ run() {
 run 3dgraph LUA
 run bifur LUA
 run binormalG LUA
-run ccurve AWK LUA
+run ccurve AWK LUA HAXE
 run circle LUA LUAJIT
 run dragoncurve LUA
 run dragoncurveR LUA
@@ -88,4 +88,4 @@ run lissajouscurve AWK HAXE LUA LUAJIT
 run lorenz LUA
 run sierpinski LUA
 run svgplot AWK HAXE LUA LUAJIT PY
-run treecurve AWK LUA
+run treecurve AWK LUA HAXE
