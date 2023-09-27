@@ -21,7 +21,16 @@
 
 package src;
 
-abstract class Base {
+interface Plotter {
+	public function move(x:Float, y:Float):Void;
+	public function moveRel(x:Float, y:Float):Void;
+	public function draw(x:Float, y:Float):Void;
+	public function drawRel(x:Float, y:Float):Void;
+}
+
+//
+
+private abstract class Base implements Plotter {
 	var x:Int;
 	var y:Int;
 
@@ -29,21 +38,16 @@ abstract class Base {
 		this.x = x;
 		this.y = y;
 	}
-
-	abstract public function move(x:Float, y:Float):Void;
-	abstract public function moveRel(x:Float, y:Float):Void;
-	abstract public function draw(x:Float, y:Float):Void;
-	abstract public function drawRel(x:Float, y:Float):Void;
 }
 
-private abstract class BaseWriter extends Base {
+private abstract class Writer extends Base {
 	var fh:sys.io.FileOutput;
 
 	abstract public function plotStart(fh:sys.io.FileOutput):Void;
 	abstract public function plotEnd(isClosePath:Bool=false):Void;
 }
 
-private abstract class BaseWriterWholeBuffering extends Base {
+private abstract class WriterWholeBuffering extends Base {
 	var buf:StringBuf = new StringBuf();
 	var isClosePath:Bool;
 
@@ -52,7 +56,7 @@ private abstract class BaseWriterWholeBuffering extends Base {
 	abstract public function write(fh:sys.io.FileOutput):Void;
 }
 
-private abstract class BaseWriterWithBuffering extends Base {
+private abstract class WriterWithBuffering extends Base {
 	var fh:sys.io.FileOutput;
 	var buf:StringBuf;
 	var counter:Int;
@@ -62,7 +66,9 @@ private abstract class BaseWriterWithBuffering extends Base {
 	abstract public function plotEnd(isClosePath:Bool=false):Void;
 }
 
-class SvgPlot extends BaseWriter {
+//
+
+class SvgPlot extends Writer {
 	public function plotStart(fh:sys.io.FileOutput) {
 		this.fh = fh;
 		this.fh.writeString(header(this.x, this.y));
@@ -92,7 +98,7 @@ class SvgPlot extends BaseWriter {
 	}
 }
 
-class SvgPlotWholeBuffering extends BaseWriterWholeBuffering {
+class SvgPlotWholeBuffering extends WriterWholeBuffering {
 	public function plotEnd(isClosePath:Bool=false) {
 		this.isClosePath = isClosePath;
 	}
@@ -126,7 +132,7 @@ class SvgPlotWholeBuffering extends BaseWriterWholeBuffering {
 	}
 }
 
-class SvgPlotWithBuffering extends BaseWriterWithBuffering {
+class SvgPlotWithBuffering extends WriterWithBuffering {
 	function writer() {
 		this.counter += 1;
 		if (this.counter >= this.limit) {
@@ -195,8 +201,7 @@ private function pathStart():String {
 }
 
 private function pathEnd(isClosePath:Bool):String {
-	var s = if (isClosePath) "Z" else "";
-	return '$s" fill="none" stroke="black" />
+	return '${if (isClosePath) "Z" else ""}" fill="none" stroke="black" />
 ';
 }
 
@@ -207,18 +212,16 @@ private function workarounds(n:Float):String {
 }
 
 private function format(s:String, x:Float, y:Float):String {
-	var xs:String = workarounds(x);
-	var ys:String = workarounds(y);
-	return '$s $xs $ys ';
+	return '$s ${workarounds(x)} ${workarounds(y)} ';
 }
 
 //
 
-private function sample(plotter:Base) {
+private function sample(plotter:Plotter) {
 	for (i in 0...5) {
-		var t:Float = 2 * Math.PI * i / 5;
-		var x:Float = 150 + 140 * Math.cos(t);
-		var y:Float = 150 + 140 * Math.sin(t);
+		final t:Float = 2 * Math.PI * i / 5;
+		final x:Float = 150 + 140 * Math.cos(t);
+		final y:Float = 150 + 140 * Math.sin(t);
 		if (i == 0)
 			plotter.move(x, y);
 		else
@@ -226,31 +229,31 @@ private function sample(plotter:Base) {
 	}
 }
 
-private function demoA() {
-	var path = "results/svgplot-hx.svg";
+//
 
+private function demoA(path) {
 	Helper.withFileWrite(path, (fh) -> {
 		var plotter = new SvgPlot(300, 300);
+
 		plotter.plotStart(fh);
 		sample(plotter);
 		plotter.plotEnd(true);
 	});
 }
 
-private function demoB() {
+private function demoB(path) {
 	var plotter = new SvgPlotWholeBuffering(300, 300);
+
 	sample(plotter);
 	plotter.plotEnd(true);
 
-	var path = "results/svgplot-hx-WB-A.svg";
 	Helper.withFileWrite(path, (fh) -> plotter.write(fh));
 }
 
-private function demoC() {
-	var path = "results/svgplot-hx-WB-B.svg";
-
+private function demoC(path) {
 	Helper.withFileWrite(path, (fh) -> {
 		var plotter = new SvgPlotWithBuffering(300, 300);
+
 		plotter.plotStart(fh, 2);
 		sample(plotter);
 		plotter.plotEnd(true);
@@ -258,7 +261,7 @@ private function demoC() {
 }
 
 function demo() {
-	demoA();
-	demoB();
-	demoC();
+	demoA("results/svgplot-hx.svg");
+	demoB("results/svgplot-hx-WB-A.svg");
+	demoC("results/svgplot-hx-WB-B.svg");
 }
