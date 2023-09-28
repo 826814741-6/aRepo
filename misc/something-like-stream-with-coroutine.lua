@@ -133,6 +133,28 @@ function fib(zero, one)
 	end)
 end
 
+-- {0, 1}, {1, 1}, {1, 2}, {2, 3}, ...
+function fibPair(zero, one)
+	zero = zero ~= nil and zero or 0
+	one = one ~= nil and one or 1
+
+	function bePrintable(a, b)
+		return setmetatable({a, b}, {
+			__tostring = function (t)
+				return ("%s, %s"):format(t[1], t[2])
+			end
+		})
+	end
+
+	return co_create(function ()
+		local a, b = zero, one
+		while true do
+			co_yield(bePrintable(a, b))
+			a, b = b, a + b
+		end
+	end)
+end
+
 -- 1, 2, 6, 24, 120, ...
 function fac(one)
 	one = one ~= nil and one or 1
@@ -183,9 +205,8 @@ end
 --
 
 do
-	function p(...)
-		local a, b = ...
-		print(t_unpack(b ~= nil and b or flattenOnce(a:get())))
+	function p(first, second)
+		print(t_unpack(second ~= nil and second or flattenOnce(first)))
 	end
 
 	p(coStream(seq):take(10))
@@ -201,19 +222,20 @@ do
 	local buf = makeBuffer()
 	co = extendsWithBufferMethods(coStream(seq))
 	co:skip(5):takeB(buf,5):skip(5):takeB(buf,5)
-	p(buf)
+	p(buf:get())
 
 	buf:reset()
 	co = extendsWithBufferMethods(coStream(seq))
 	co:skip(5):takeB(buf,5):skip(5):take(5):skip(5):takeB(buf,5)
-	p(buf)
+	p(buf:get())
 
 	print("--")
 
 	local hasBC, bc = pcall(require, 'bc')
 
 	local coA = coStream(fib)
-	local coB = coStream(fac, hasBC and bc.new(1) or 1)
+	local coB = hasBC and coStream(fibPair, bc.new(0), bc.new(1)) or coStream(fibPair)
+	local coC = coStream(fac, hasBC and bc.new(1) or 1)
 
 	p(coA:take(5))
 	p(coA:take(5))
@@ -221,5 +243,9 @@ do
 
 	p(coB:take(5))
 	p(coB:take(5))
-	p(coB:skip(89):take(1))
+	p(coB:skip(300):take(1))
+
+	p(coC:take(5))
+	p(coC:take(5))
+	p(coC:skip(89):take(1))
 end

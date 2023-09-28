@@ -124,6 +124,26 @@ function fib(zero, one)
 	end
 end
 
+-- {0, 1}, {1, 1}, {1, 2}, {2, 3}, ...
+function fibPair(zero, one)
+	zero = zero ~= nil and zero or 0
+	one = one ~= nil and one or 1
+
+	function bePrintable(a, b)
+		return setmetatable({a, b}, {
+			__tostring = function (t)
+				return ("%s, %s"):format(t[1], t[2])
+			end
+		})
+	end
+
+	local a, b = one, zero
+	return function ()
+		a, b = b, a + b
+		return bePrintable(a, b)
+	end
+end
+
 -- 1, 2, 6, 24, 120, ...
 function fac(one)
 	one = one ~= nil and one or 1
@@ -172,9 +192,8 @@ end
 --
 
 do
-	function p(...)
-		local a, b = ...
-		print(t_unpack(b ~= nil and b or flattenOnce(a:get())))
+	function p(first, second)
+		print(t_unpack(second ~= nil and second or flattenOnce(first)))
 	end
 
 	p(clStream(seq):take(10))
@@ -190,19 +209,20 @@ do
 	local buf = makeBuffer()
 	cl = extendsWithBufferMethods(clStream(seq))
 	cl:skip(5):takeB(buf,5):skip(5):takeB(buf,5)
-	p(buf)
+	p(buf:get())
 
 	buf:reset()
 	cl = extendsWithBufferMethods(clStream(seq))
 	cl:skip(5):takeB(buf,5):skip(5):take(5):skip(5):takeB(buf,5)
-	p(buf)
+	p(buf:get())
 
 	print("--")
 
 	local hasBC, bc = pcall(require, 'bc')
 
 	local clA = clStream(fib)
-	local clB = clStream(fac, hasBC and bc.new(1) or 1)
+	local clB = hasBC and clStream(fibPair, bc.new(0), bc.new(1)) or clStream(fibPair)
+	local clC = clStream(fac, hasBC and bc.new(1) or 1)
 
 	p(clA:take(5))
 	p(clA:take(5))
@@ -210,5 +230,9 @@ do
 
 	p(clB:take(5))
 	p(clB:take(5))
-	p(clB:skip(89):take(1))
+	p(clB:skip(300):take(1))
+
+	p(clC:take(5))
+	p(clC:take(5))
+	p(clC:skip(89):take(1))
 end
