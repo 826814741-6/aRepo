@@ -204,11 +204,66 @@ end
 -- - ...
 --
 
-do
-	function p(first, second)
-		print(t_unpack(second ~= nil and second or flattenOnce(first)))
-	end
+function p(first, second)
+	print(t_unpack(second ~= nil and second or flattenOnce(first)))
+end
 
+--
+
+function _init(...)
+	local t = {}
+	for i,v in ipairs({...}) do
+		t[i] = { v = v, next = i + 1 }
+	end
+	t[#t].next = 1
+	return t
+end
+
+function _unwrap(...)
+	return t_unpack(select(2, ...))
+end
+
+function skipStep(n, ...)
+	for _,v in ipairs({...}) do
+		v:skip(n)
+	end
+end
+
+function skip(n, ...)
+	local t = _init(...)
+
+	local i, j = 1, 1
+	while i <= n do
+		t[j].v:skip(1)
+		i, j = i + 1, t[j].next
+	end
+end
+
+function takeStep(n, ...)
+	local r = {}
+	for i=1,n do
+		local t = {}
+		for j,v in ipairs({...}) do
+			t[j] = _unwrap(v:take(1))
+		end
+		r[i] = t
+	end
+	return r
+end
+
+function take(n, ...)
+	local t = _init(...)
+
+	local r, i, j = {}, 1, 1
+	while i <= n do
+		r[i], i, j = _unwrap(t[j].v:take(1)), i + 1, t[j].next
+	end
+	return r
+end
+
+--
+
+do
 	p(coStream(seq):take(10))
 	p(coStream(seq):skip(50):take(10))
 	p(coStream(seq):map(10, function (v) return v*v*v end))
@@ -248,4 +303,18 @@ do
 	p(coC:take(5))
 	p(coC:take(5))
 	p(coC:skip(89):take(1))
+
+	print("--")
+
+	local a, b, c = coStream(seq), coStream(seq, -5), coStream(seq, 100, -1)
+
+	p(takeStep(3, a, b, c))
+	skipStep(3, a, b, c)
+	p(takeStep(3, a, b, c))
+
+	a, b, c = coStream(seq), coStream(seq, -5), coStream(seq, 100, -1)
+
+	p(take(9, a, b, c))
+	skip(7, a, b, c) b:skip(1) c:skip(1)
+	p(take(9, a, b, c))
 end
