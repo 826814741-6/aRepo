@@ -53,10 +53,10 @@ function coStream(co, ...)
 		f = f ~= nil and f or function (...) return true end
 
 		local r, i = {}, 1
-		repeat
+		while i <= n do
 			local _, v = co_resume(T.co)
 			if f(i, v) then r[i], i = v, i + 1 end
-		until i > n
+		end
 		return T, r
 	end
 
