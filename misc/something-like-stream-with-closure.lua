@@ -155,6 +155,25 @@ function fac(one)
 	end
 end
 
+function beCircular(...)
+	local t = {}
+	for i,v in ipairs({...}) do
+		t[i] = { v = v, next = i + 1 }
+	end
+	t[#t].next = 1
+	return t
+end
+
+-- Sun, Mon, Tue, Wed, ...
+function daysOfTheWeek()
+	local t = beCircular("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+	local i = #t
+	return function ()
+		i = t[i].next
+		return t[i].v
+	end
+end
+
 --
 
 -- something-like-flatten-once
@@ -197,15 +216,6 @@ end
 
 --
 
-function _init(...)
-	local t = {}
-	for i,v in ipairs({...}) do
-		t[i] = { v = v, next = i + 1 }
-	end
-	t[#t].next = 1
-	return t
-end
-
 function _unwrap(...)
 	return t_unpack(select(2, ...))
 end
@@ -217,7 +227,7 @@ function skipStep(n, ...)
 end
 
 function skip(n, ...)
-	local t = _init(...)
+	local t = beCircular(...)
 
 	local i, j = 1, 1
 	while i <= n do
@@ -239,7 +249,7 @@ function takeStep(n, ...)
 end
 
 function take(n, ...)
-	local t = _init(...)
+	local t = beCircular(...)
 
 	local r, i, j = {}, 1, 1
 	while i <= n do
@@ -278,6 +288,7 @@ do
 	local clA = clStream(fib)
 	local clB = hasBC and clStream(fibPair, bc.new(0), bc.new(1)) or clStream(fibPair)
 	local clC = clStream(fac, hasBC and bc.new(1) or 1)
+	local clD = clStream(daysOfTheWeek)
 
 	p(clA:take(5))
 	p(clA:take(5))
@@ -290,6 +301,10 @@ do
 	p(clC:take(5))
 	p(clC:take(5))
 	p(clC:skip(89):take(1))
+
+	p(clD:take(5))
+	p(clD:take(5))
+	p(clD:skip(53):take(7))
 
 	print("--")
 

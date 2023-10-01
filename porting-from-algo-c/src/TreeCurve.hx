@@ -66,4 +66,3 @@ function demo() {
 	demoB("results/treecurve-hx-WB-A.svg");
 	demoC("results/treecurve-hx-WB-B.svg");
 }
-

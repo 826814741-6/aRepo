@@ -168,6 +168,27 @@ function fac(one)
 	end)
 end
 
+function beCircular(...)
+	local t = {}
+	for i,v in ipairs({...}) do
+		t[i] = { v = v, next = i + 1 }
+	end
+	t[#t].next = 1
+	return t
+end
+
+-- Sun, Mon, Tue, Wed, ...
+function daysOfTheWeek()
+	local t = beCircular("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+	local i = 1
+	return co_create(function ()
+		while true do
+			co_yield(t[i].v)
+			i = t[i].next
+		end
+	end)
+end
+
 --
 
 -- something-like-flatten-once
@@ -210,15 +231,6 @@ end
 
 --
 
-function _init(...)
-	local t = {}
-	for i,v in ipairs({...}) do
-		t[i] = { v = v, next = i + 1 }
-	end
-	t[#t].next = 1
-	return t
-end
-
 function _unwrap(...)
 	return t_unpack(select(2, ...))
 end
@@ -230,7 +242,7 @@ function skipStep(n, ...)
 end
 
 function skip(n, ...)
-	local t = _init(...)
+	local t = beCircular(...)
 
 	local i, j = 1, 1
 	while i <= n do
@@ -252,7 +264,7 @@ function takeStep(n, ...)
 end
 
 function take(n, ...)
-	local t = _init(...)
+	local t = beCircular(...)
 
 	local r, i, j = {}, 1, 1
 	while i <= n do
@@ -291,6 +303,7 @@ do
 	local coA = coStream(fib)
 	local coB = hasBC and coStream(fibPair, bc.new(0), bc.new(1)) or coStream(fibPair)
 	local coC = coStream(fac, hasBC and bc.new(1) or 1)
+	local coD = coStream(daysOfTheWeek)
 
 	p(coA:take(5))
 	p(coA:take(5))
@@ -303,6 +316,10 @@ do
 	p(coC:take(5))
 	p(coC:take(5))
 	p(coC:skip(89):take(1))
+
+	p(coD:take(5))
+	p(coD:take(5))
+	p(coD:skip(53):take(7))
 
 	print("--")
 
