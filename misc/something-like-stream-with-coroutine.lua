@@ -177,9 +177,8 @@ function beCircular(...)
 	return t
 end
 
--- Sun, Mon, Tue, Wed, ...
-function daysOfTheWeek()
-	local t = beCircular("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+function getSomethingCircular(...)
+	local t = beCircular(...)
 	local i = 1
 	return co_create(function ()
 		while true do
@@ -187,6 +186,26 @@ function daysOfTheWeek()
 			i = t[i].next
 		end
 	end)
+end
+
+-- Sun, Mon, Tue, Wed, ...
+function daysOfTheWeek()
+	return getSomethingCircular(
+		"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+	)
+end
+--
+-- -- Jan, Feb, Mar, Apr, ...
+-- function monthsOfTheYear()
+-- 	return getSomethingCircular(
+-- 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+-- 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+-- 	)
+-- end
+
+-- 0, 1, 2, 0, 1, 2, ...
+function remaindersDividedBy3()
+	return getSomethingCircular(0, 1, 2)
 end
 
 --
@@ -235,7 +254,7 @@ function _unwrap(...)
 	return t_unpack(select(2, ...))
 end
 
-function skipStep(n, ...)
+function skipCycle(n, ...)
 	for _,v in ipairs({...}) do
 		v:skip(n)
 	end
@@ -251,7 +270,7 @@ function skip(n, ...)
 	end
 end
 
-function takeStep(n, ...)
+function takeCycle(n, ...)
 	local r = {}
 	for i=1,n do
 		local t = {}
@@ -304,6 +323,7 @@ do
 	local coB = hasBC and coStream(fibPair, bc.new(0), bc.new(1)) or coStream(fibPair)
 	local coC = coStream(fac, hasBC and bc.new(1) or 1)
 	local coD = coStream(daysOfTheWeek)
+	local coE = coStream(remaindersDividedBy3)
 
 	p(coA:take(5))
 	p(coA:take(5))
@@ -321,13 +341,17 @@ do
 	p(coD:take(5))
 	p(coD:skip(53):take(7))
 
+	p(coE:take(5))
+	p(coE:take(5))
+	p(coE:skip(50):take(9))
+
 	print("--")
 
 	local a, b, c = coStream(seq), coStream(seq, -5), coStream(seq, 100, -1)
 
-	p(takeStep(3, a, b, c))
-	skipStep(3, a, b, c)
-	p(takeStep(3, a, b, c))
+	p(takeCycle(3, a, b, c))
+	skipCycle(3, a, b, c)
+	p(takeCycle(3, a, b, c))
 
 	a, b, c = coStream(seq), coStream(seq, -5), coStream(seq, 100, -1)
 

@@ -164,14 +164,33 @@ function beCircular(...)
 	return t
 end
 
--- Sun, Mon, Tue, Wed, ...
-function daysOfTheWeek()
-	local t = beCircular("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+function getSomethingCircular(...)
+	local t = beCircular(...)
 	local i = #t
 	return function ()
 		i = t[i].next
 		return t[i].v
 	end
+end
+
+-- Sun, Mon, Tue, Wed, ...
+function daysOfTheWeek()
+	return getSomethingCircular(
+		"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+	)
+end
+--
+-- -- Jan, Feb, Mar, Apr, ...
+-- function monthsOfTheYear()
+-- 	return getSomethingCircular(
+-- 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+-- 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+-- 	)
+-- end
+
+-- 0, 1, 2, 0, 1, 2, ...
+function remaindersDividedBy3()
+	return getSomethingCircular(0, 1, 2)
 end
 
 --
@@ -220,7 +239,7 @@ function _unwrap(...)
 	return t_unpack(select(2, ...))
 end
 
-function skipStep(n, ...)
+function skipCycle(n, ...)
 	for _,v in ipairs({...}) do
 		v:skip(n)
 	end
@@ -236,7 +255,7 @@ function skip(n, ...)
 	end
 end
 
-function takeStep(n, ...)
+function takeCycle(n, ...)
 	local r = {}
 	for i=1,n do
 		local t = {}
@@ -289,6 +308,7 @@ do
 	local clB = hasBC and clStream(fibPair, bc.new(0), bc.new(1)) or clStream(fibPair)
 	local clC = clStream(fac, hasBC and bc.new(1) or 1)
 	local clD = clStream(daysOfTheWeek)
+	local clE = clStream(remaindersDividedBy3)
 
 	p(clA:take(5))
 	p(clA:take(5))
@@ -306,13 +326,17 @@ do
 	p(clD:take(5))
 	p(clD:skip(53):take(7))
 
+	p(clE:take(5))
+	p(clE:take(5))
+	p(clE:skip(50):take(9))
+
 	print("--")
 
 	local a, b, c = clStream(seq), clStream(seq, -5), clStream(seq, 100, -1)
 
-	p(takeStep(3, a, b, c))
-	skipStep(3, a, b, c)
-	p(takeStep(3, a, b, c))
+	p(takeCycle(3, a, b, c))
+	skipCycle(3, a, b, c)
+	p(takeCycle(3, a, b, c))
 
 	a, b, c = clStream(seq), clStream(seq, -5), clStream(seq, 100, -1)
 
