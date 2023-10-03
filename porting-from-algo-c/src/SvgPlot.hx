@@ -3,10 +3,10 @@
 //
 //	void plot_start(int, int)		to	.plotStart
 //	void plot_end(int)			to	.plotEnd
-//	void move(double, double)		to	.move
-//	void move_rel(double, double)		to	.moveRel
-//	void draw(double, double)		to	.draw
-//	void draw_rel(double, double)		to	.drawRel
+//	void move(double, double)		to	.move / Move
+//	void move_rel(double, double)		to	.moveRel / MoveRel
+//	void draw(double, double)		to	.draw / Draw
+//	void draw_rel(double, double)		to	.drawRel / DrawRel
 //
 //	SvgPlot,SvgPlotWithBuffering			SvgPlotWholeBuffering
 //
@@ -15,10 +15,10 @@
 //							.reset
 //							.write
 //
-//	.move						.move
-//	.moveRel					.moveRel
-//	.draw						.draw
-//	.drawRel					.drawRel
+//	.move / Move					.move / Move
+//	.moveRel / MoveRel				.moveRel / MoveRel
+//	.draw / Draw					.draw / Draw
+//	.drawRel / DrawRel				.drawRel / DrawRel
 //
 
 package src;
@@ -28,6 +28,17 @@ interface Plotter {
 	public function moveRel(x:Float, y:Float):Void;
 	public function draw(x:Float, y:Float):Void;
 	public function drawRel(x:Float, y:Float):Void;
+}
+
+interface PlotterE {
+	public function plot(method:Method):Void;
+}
+
+enum Method {
+	Move(x:Float, y:Float);
+	MoveRel(x:Float, y:Float);
+	Draw(x:Float, y:Float);
+	DrawRel(x:Float, y:Float);
 }
 
 //
@@ -138,6 +149,21 @@ class SvgPlot extends Writer implements Plotter {
 	}
 }
 
+class SvgPlotE extends Writer implements PlotterE {
+	public function plot(method:Method) {
+		switch (method) {
+			case Move(x, y):
+				this.fh.writeString(format('M', x, this.y - y));
+			case MoveRel(x, y):
+				this.fh.writeString(format('m', x, -y));
+			case Draw(x, y):
+				this.fh.writeString(format('L', x, this.y - y));
+			case DrawRel(x, y):
+				this.fh.writeString(format('l', x, -y));
+		}
+	}
+}
+
 class SvgPlotWholeBuffering extends WriterWholeBuffering implements Plotter {
 	public function move(x:Float, y:Float) {
 		this.buf.add(format('M', x, this.y - y));
@@ -153,6 +179,21 @@ class SvgPlotWholeBuffering extends WriterWholeBuffering implements Plotter {
 
 	public function drawRel(x:Float, y:Float) {
 		this.buf.add(format('l', x, -y));
+	}
+}
+
+class SvgPlotWholeBufferingE extends WriterWholeBuffering implements PlotterE {
+	public function plot(method:Method) {
+		switch (method) {
+			case Move(x, y):
+				this.buf.add(format('M', x, this.y - y));
+			case MoveRel(x, y):
+				this.buf.add(format('m', x, -y));
+			case Draw(x, y):
+				this.buf.add(format('L', x, this.y - y));
+			case DrawRel(x, y):
+				this.buf.add(format('l', x, -y));
+		}
 	}
 }
 
@@ -175,6 +216,25 @@ class SvgPlotWithBuffering extends WriterWithBuffering implements Plotter {
 	public function drawRel(x:Float, y:Float) {
 		this.buf.add(format('l', x, -y));
 		writer();
+	}
+}
+
+class SvgPlotWithBufferingE extends WriterWithBuffering implements PlotterE {
+	public function plot(method:Method) {
+		switch (method) {
+			case Move(x, y):
+				this.buf.add(format('M', x, this.y - y));
+				writer();
+			case MoveRel(x, y):
+				this.buf.add(format('m', x, -y));
+				writer();
+			case Draw(x, y):
+				this.buf.add(format('L', x, this.y - y));
+				writer();
+			case DrawRel(x, y):
+				this.buf.add(format('l', x, -y));
+				writer();
+		}
 	}
 }
 
@@ -223,39 +283,80 @@ private function sample(plotter:Plotter) {
 	}
 }
 
+private function sampleE(plotter:PlotterE) {
+	for (i in 0...5) {
+		final t:Float = 2 * Math.PI * i / 5;
+		final x:Float = 150 + 140 * Math.cos(t);
+		final y:Float = 150 + 140 * Math.sin(t);
+		if (i == 0)
+			plotter.plot(Move(x, y));
+		else
+			plotter.plot(Draw(x, y));
+	}
+}
+
 //
 
-private function demoA(path) {
-	Helper.withFileWrite(path, (fh) -> {
+private function demoA(prefix) {
+	Helper.withFileWrite('${prefix}.svg', (fh) -> {
 		var plotter = new SvgPlot(300, 300);
 
 		plotter.plotStart(fh);
 		sample(plotter);
 		plotter.plotEnd(true);
 	});
+
+	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+		var plotter = new SvgPlotE(300, 300);
+
+		plotter.plotStart(fh);
+		sampleE(plotter);
+		plotter.plotEnd(true);
+	});
 }
 
-private function demoB(path) {
-	var plotter = new SvgPlotWholeBuffering(300, 300);
+private function demoB(prefix) {
+	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+		var plotter = new SvgPlotWholeBuffering(300, 300);
 
-	sample(plotter);
-	plotter.plotEnd(true);
+		sample(plotter);
+		plotter.plotEnd(true);
 
-	Helper.withFileWrite(path, (fh) -> plotter.write(fh));
+		plotter.write(fh);
+	});
+
+	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+		var plotter = new SvgPlotWholeBufferingE(300, 300);
+
+		sampleE(plotter);
+		plotter.plotEnd(true);
+
+		plotter.write(fh);
+	});
 }
 
-private function demoC(path) {
-	Helper.withFileWrite(path, (fh) -> {
+private function demoC(prefix) {
+	Helper.withFileWrite('${prefix}.svg', (fh) -> {
 		var plotter = new SvgPlotWithBuffering(300, 300);
 
 		plotter.plotStart(fh, 2);
 		sample(plotter);
 		plotter.plotEnd(true);
 	});
+
+	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+		var plotter = new SvgPlotWithBufferingE(300, 300);
+
+		plotter.plotStart(fh, 2);
+		sampleE(plotter);
+		plotter.plotEnd(true);
+	});
 }
 
+//
+
 function demo() {
-	demoA("results/svgplot-hx.svg");
-	demoB("results/svgplot-hx-WB-A.svg");
-	demoC("results/svgplot-hx-WB-B.svg");
+	demoA("results/svgplot-hx");
+	demoB("results/svgplot-hx-WB-A");
+	demoC("results/svgplot-hx-WB-B");
 }
