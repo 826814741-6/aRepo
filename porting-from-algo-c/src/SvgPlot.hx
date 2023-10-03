@@ -49,7 +49,7 @@ private abstract class Writer extends Base {
 
 private abstract class WriterWholeBuffering extends Base {
 	var buf:StringBuf = new StringBuf();
-	var isClosePath:Bool;
+	var isClosePath:Bool = false;
 
 	abstract public function plotEnd(isClosePath:Bool=false):Void;
 	abstract public function reset():Void;

@@ -59,6 +59,6 @@ function demo() {
 	final offset = 10;
 
 	demoA("results/lissajouscurve-hx.svg", n, offset);
-	demoA("results/lissajouscurve-hx-WB-A.svg", n, offset);
-	demoA("results/lissajouscurve-hx-WB-B.svg", n, offset);
+	demoB("results/lissajouscurve-hx-WB-A.svg", n, offset);
+	demoC("results/lissajouscurve-hx-WB-B.svg", n, offset);
 }
