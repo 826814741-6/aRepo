@@ -8,15 +8,17 @@
 //	void draw(double, double)		to	.draw
 //	void draw_rel(double, double)		to	.drawRel
 //
-//	SvgPlot,SvgPlotWithBuffering		to	SvgPlotWholeBuffering
+//	SvgPlot,SvgPlotWithBuffering			SvgPlotWholeBuffering
+//
 //	.plotStart
-//	.plotEnd				to	[.plotEnd]
-//	.move					to	.move
-//	.moveRel				to	.moveRel
-//	.draw					to	.draw
-//	.drawRel				to	.drawRel
+//	.plotEnd					[.plotEnd]
 //							.reset
 //							.write
+//
+//	.move						.move
+//	.moveRel					.moveRel
+//	.draw						.draw
+//	.drawRel					.drawRel
 //
 
 package src;
@@ -30,7 +32,7 @@ interface Plotter {
 
 //
 
-private abstract class Base implements Plotter {
+private class Base {
 	var x:Int;
 	var y:Int;
 
@@ -40,35 +42,9 @@ private abstract class Base implements Plotter {
 	}
 }
 
-private abstract class Writer extends Base {
+private class Writer extends Base {
 	var fh:sys.io.FileOutput;
 
-	abstract public function plotStart(fh:sys.io.FileOutput):Void;
-	abstract public function plotEnd(isClosePath:Bool=false):Void;
-}
-
-private abstract class WriterWholeBuffering extends Base {
-	var buf:StringBuf = new StringBuf();
-	var isClosePath:Bool = false;
-
-	abstract public function plotEnd(isClosePath:Bool=false):Void;
-	abstract public function reset():Void;
-	abstract public function write(fh:sys.io.FileOutput):Void;
-}
-
-private abstract class WriterWithBuffering extends Base {
-	var fh:sys.io.FileOutput;
-	var buf:StringBuf;
-	var counter:Int;
-	var limit:Int;
-
-	abstract public function plotStart(fh:sys.io.FileOutput, limit:Int=1):Void;
-	abstract public function plotEnd(isClosePath:Bool=false):Void;
-}
-
-//
-
-class SvgPlot extends Writer {
 	public function plotStart(fh:sys.io.FileOutput) {
 		this.fh = fh;
 		this.fh.writeString(header(this.x, this.y));
@@ -80,43 +56,14 @@ class SvgPlot extends Writer {
 		this.fh.writeString(footer());
 		this.fh = null;
 	}
-
-	public function move(x:Float, y:Float) {
-		this.fh.writeString(format('M', x, this.y - y));
-	}
-
-	public function moveRel(x:Float, y:Float) {
-		this.fh.writeString(format('m', x, -y));
-	}
-
-	public function draw(x:Float, y:Float) {
-		this.fh.writeString(format('L', x, this.y - y));
-	}
-
-	public function drawRel(x:Float, y:Float) {
-		this.fh.writeString(format('l', x, -y));
-	}
 }
 
-class SvgPlotWholeBuffering extends WriterWholeBuffering {
+private class WriterWholeBuffering extends Base {
+	var buf:StringBuf = new StringBuf();
+	var isClosePath:Bool = false;
+
 	public function plotEnd(isClosePath:Bool=false) {
 		this.isClosePath = isClosePath;
-	}
-
-	public function move(x:Float, y:Float) {
-		this.buf.add(format('M', x, this.y - y));
-	}
-
-	public function moveRel(x:Float, y:Float) {
-		this.buf.add(format('m', x, -y));
-	}
-
-	public function draw(x:Float, y:Float) {
-		this.buf.add(format('L', x, this.y - y));
-	}
-
-	public function drawRel(x:Float, y:Float) {
-		this.buf.add(format('l', x, -y));
 	}
 
 	public function reset() {
@@ -132,7 +79,12 @@ class SvgPlotWholeBuffering extends WriterWholeBuffering {
 	}
 }
 
-class SvgPlotWithBuffering extends WriterWithBuffering {
+private class WriterWithBuffering extends Base {
+	var fh:sys.io.FileOutput;
+	var buf:StringBuf;
+	var counter:Int;
+	var limit:Int;
+
 	function writer() {
 		this.counter += 1;
 		if (this.counter >= this.limit) {
@@ -164,7 +116,47 @@ class SvgPlotWithBuffering extends WriterWithBuffering {
 		this.limit = 1;
 		reset();
 	}
+}
 
+//
+
+class SvgPlot extends Writer implements Plotter {
+	public function move(x:Float, y:Float) {
+		this.fh.writeString(format('M', x, this.y - y));
+	}
+
+	public function moveRel(x:Float, y:Float) {
+		this.fh.writeString(format('m', x, -y));
+	}
+
+	public function draw(x:Float, y:Float) {
+		this.fh.writeString(format('L', x, this.y - y));
+	}
+
+	public function drawRel(x:Float, y:Float) {
+		this.fh.writeString(format('l', x, -y));
+	}
+}
+
+class SvgPlotWholeBuffering extends WriterWholeBuffering implements Plotter {
+	public function move(x:Float, y:Float) {
+		this.buf.add(format('M', x, this.y - y));
+	}
+
+	public function moveRel(x:Float, y:Float) {
+		this.buf.add(format('m', x, -y));
+	}
+
+	public function draw(x:Float, y:Float) {
+		this.buf.add(format('L', x, this.y - y));
+	}
+
+	public function drawRel(x:Float, y:Float) {
+		this.buf.add(format('l', x, -y));
+	}
+}
+
+class SvgPlotWithBuffering extends WriterWithBuffering implements Plotter {
 	public function move(x:Float, y:Float) {
 		this.buf.add(format('M', x, this.y - y));
 		writer();
@@ -185,6 +177,8 @@ class SvgPlotWithBuffering extends WriterWithBuffering {
 		writer();
 	}
 }
+
+//
 
 private function header(x:Int, y:Int):String {
 	return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$x" height="$y">
