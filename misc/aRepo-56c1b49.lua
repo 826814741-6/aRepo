@@ -13,8 +13,14 @@ function f()
 	}
 
 	setmetatable(T, {
-		__tostring = function ()
-			return ("(%d, %d)"):format(#T.buffer, T.counter)
+		__tostring = function (t)
+			--v cf. By the way, T is t? / t is T?
+			local tmp = {}
+			assert({} ~= {} and tmp == tmp)
+			assert(T == t and T.buffer == t.buffer)
+			--^
+
+			return ("(%d, %d)"):format(#t.buffer, t.counter)
 		end
 	})
 
