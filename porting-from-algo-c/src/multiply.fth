@@ -6,11 +6,11 @@
 
 private{
 
-: addTto3 rot over + -rot ;
+: addTopTo3rd rot over + -rot ;
 
 : _A
    begin
-      over 2 mod 1 = if addTto3 then
+      over 2 mod 1 = if addTopTo3rd then
       2 * swap 2 / swap
       over 0=
    until
@@ -18,7 +18,7 @@ private{
 
 : _B
    begin
-      over 1 and 1 = if addTto3 then
+      over 1 and 1 = if addTopTo3rd then
       1 lshift swap 1 rshift swap
       over 0=
    until
@@ -26,7 +26,7 @@ private{
 
 : _C
    over 0<> if
-      over 1 and 1 = if addTto3 then
+      over 1 and 1 = if addTopTo3rd then
       1 lshift swap 1 rshift swap
       recurse
    then

@@ -1,20 +1,23 @@
 --
---	something-like-stream-with-closure.lua
+--	something-like-generator-with-coroutine.lua
 --
---	> lua[jit] something-like-stream-with-closure.lua
+--	> lua[jit] something-like-generator-with-coroutine.lua
 --
 
+local co_create = coroutine.create
+local co_resume = coroutine.resume
+local co_yield = coroutine.yield
 local t_insert = table.insert
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
-function clStream(f, ...)
-	local T = { f = f(...) }
+function coGen(co, ...)
+	local T = { co = co(...) }
 
 	function T:skip(n)
 		n = n ~= nil and n or 0
 
 		for _=1,n do
-			T.f()
+			co_resume(T.co)
 		end
 		return T, {}
 	end
@@ -25,7 +28,8 @@ function clStream(f, ...)
 
 		local r = {}
 		for i=1,n do
-			r[i] = T.f()
+			local _, v = co_resume(T.co)
+			r[i] = v
 		end
 		return T, r
 	end
@@ -37,7 +41,8 @@ function clStream(f, ...)
 
 		local r = {}
 		for i=1,n do
-			r[i] = f(T.f())
+			local _, v = co_resume(T.co)
+			r[i] = f(v)
 		end
 		return T, r
 	end
@@ -49,7 +54,7 @@ function clStream(f, ...)
 
 		local r, i = {}, 1
 		while i <= n do
-			local v = T.f()
+			local _, v = co_resume(T.co)
 			if f(i, v) then r[i], i = v, i + 1 end
 		end
 		return T, r
@@ -105,11 +110,13 @@ function seq(start, step)
 	start = start ~= nil and start or 0
 	step = step ~= nil and step or 1
 
-	local n = start - step
-	return function ()
-		n = n + step
-		return n
-	end
+	return co_create(function ()
+		local n = start
+		while true do
+			co_yield(n)
+			n = n + step
+		end
+	end)
 end
 
 -- 0, 1, 1, 2, 3, ...
@@ -117,11 +124,13 @@ function fib(zero, one)
 	zero = zero ~= nil and zero or 0
 	one = one ~= nil and one or 1
 
-	local a, b = one, zero
-	return function ()
-		a, b = b, a + b
-		return a
-	end
+	return co_create(function ()
+		local a, b = zero, one
+		while true do
+			co_yield(a)
+			a, b = b, a + b
+		end
+	end)
 end
 
 -- {0, 1}, {1, 1}, {1, 2}, {2, 3}, ...
@@ -137,22 +146,26 @@ function fibPair(zero, one)
 		})
 	end
 
-	local a, b = one, zero
-	return function ()
-		a, b = b, a + b
-		return bePrintable(a, b)
-	end
+	return co_create(function ()
+		local a, b = zero, one
+		while true do
+			co_yield(bePrintable(a, b))
+			a, b = b, a + b
+		end
+	end)
 end
 
 -- 1, 2, 6, 24, 120, ...
 function fac(one)
 	one = one ~= nil and one or 1
 
-	local n, acc = one, one
-	return function ()
-		n, acc = n + one, acc * n
-		return acc
-	end
+	return co_create(function ()
+		local n, acc = one, one
+		while true do
+			n, acc = n + one, acc * n
+			co_yield(acc)
+		end
+	end)
 end
 
 function beCircular(...)
@@ -166,11 +179,13 @@ end
 
 function getSomethingCircular(...)
 	local t = beCircular(...)
-	local i = #t
-	return function ()
-		i = t[i].next
-		return t[i].v
-	end
+	local i = 1
+	return co_create(function ()
+		while true do
+			co_yield(t[i].v)
+			i = t[i].next
+		end
+	end)
 end
 
 -- Sun, Mon, Tue, Wed, ...
@@ -280,65 +295,65 @@ end
 --
 
 do
-	p(clStream(seq):take(10))
-	p(clStream(seq):skip(50):take(10))
-	p(clStream(seq):map(10, function (v) return v*v*v end))
-	p(clStream(seq):filter(10, function (_,v) if v%2==0 then return v end end))
+	p(coGen(seq):take(10))
+	p(coGen(seq):skip(50):take(10))
+	p(coGen(seq):map(10, function (v) return v*v*v end))
+	p(coGen(seq):filter(10, function (_,v) if v%2==0 then return v end end))
 
 	print("--")
 
-	local cl = clStream(seq)
-	p(cl:skip(5):take(5):skip(5):take(5))
+	local co = coGen(seq)
+	p(co:skip(5):take(5):skip(5):take(5))
 
 	local buf = makeBuffer()
-	cl = extendsWithBufferMethods(clStream(seq))
-	cl:skip(5):takeB(buf,5):skip(5):takeB(buf,5)
+	co = extendsWithBufferMethods(coGen(seq))
+	co:skip(5):takeB(buf,5):skip(5):takeB(buf,5)
 	p(buf:get())
 
 	buf:reset()
-	cl = extendsWithBufferMethods(clStream(seq))
-	cl:skip(5):takeB(buf,5):skip(5):take(5):skip(5):takeB(buf,5)
+	co = extendsWithBufferMethods(coGen(seq))
+	co:skip(5):takeB(buf,5):skip(5):take(5):skip(5):takeB(buf,5)
 	p(buf:get())
 
 	print("--")
 
 	local hasBC, bc = pcall(require, 'bc')
 
-	local clA = clStream(fib)
-	local clB = hasBC and clStream(fibPair, bc.new(0), bc.new(1)) or clStream(fibPair)
-	local clC = clStream(fac, hasBC and bc.new(1) or 1)
-	local clD = clStream(daysOfTheWeek)
-	local clE = clStream(remaindersDividedBy3)
+	local coA = coGen(fib)
+	local coB = hasBC and coGen(fibPair, bc.new(0), bc.new(1)) or coGen(fibPair)
+	local coC = coGen(fac, hasBC and bc.new(1) or 1)
+	local coD = coGen(daysOfTheWeek)
+	local coE = coGen(remaindersDividedBy3)
 
-	p(clA:take(5))
-	p(clA:take(5))
-	p(clA:skip(30):take(1))
+	p(coA:take(5))
+	p(coA:take(5))
+	p(coA:skip(30):take(1))
 
-	p(clB:take(5))
-	p(clB:take(5))
-	p(clB:skip(300):take(1))
+	p(coB:take(5))
+	p(coB:take(5))
+	p(coB:skip(300):take(1))
 
-	p(clC:take(5))
-	p(clC:take(5))
-	p(clC:skip(89):take(1))
+	p(coC:take(5))
+	p(coC:take(5))
+	p(coC:skip(89):take(1))
 
-	p(clD:take(5))
-	p(clD:take(5))
-	p(clD:skip(53):take(7))
+	p(coD:take(5))
+	p(coD:take(5))
+	p(coD:skip(53):take(7))
 
-	p(clE:take(5))
-	p(clE:take(5))
-	p(clE:skip(50):take(9))
+	p(coE:take(5))
+	p(coE:take(5))
+	p(coE:skip(50):take(9))
 
 	print("--")
 
-	local a, b, c = clStream(seq), clStream(seq, -5), clStream(seq, 100, -1)
+	local a, b, c = coGen(seq), coGen(seq, -5), coGen(seq, 100, -1)
 
 	p(takeCycle(3, a, b, c))
 	skipCycle(3, a, b, c)
 	p(takeCycle(3, a, b, c))
 
-	a, b, c = clStream(seq), clStream(seq, -5), clStream(seq, 100, -1)
+	a, b, c = coGen(seq), coGen(seq, -5), coGen(seq, 100, -1)
 
 	p(take(9, a, b, c))
 	skip(7, a, b, c) b:skip(1) c:skip(1)
