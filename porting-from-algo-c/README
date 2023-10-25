@@ -10,10 +10,10 @@
 
 | source       | target                                             |
 |:------------:|:--------------------------------------------------:|
-| 105.c        | 105.{awk,bash,lua}                                 |
+| 105.c        | 105.{awk,lua}                                      |
 | 3dgraph.c    | 3dgraph.lua                                        |
 | 5num.c       |                                                    |
-| acker.c      | acker.{awk,bash,fth,lua}                           |
+| acker.c      | acker.{awk,fth,lua}                                |
 | area.c       |                                                    |
 | arith.c      |                                                    |
 | atan.c       | atan.lua                                           |
@@ -61,14 +61,14 @@
 | distsort.c   |                                                    |
 | dragon2.c    | dragoncurve.lua                                    |
 | dragon.c     | dragoncurve.lua                                    |
-| e.c          | e.{awk,bash,d,fth,lua}, E.hx                       |
+| e.c          | e.{awk,d,fth,lua}, E.hx                            |
 | egypfrac.c   | egyptianfraction.{lua,py}, EgyptianFraction.hx     |
 | eigen.c      |                                                    |
 | ellipse.c    | grBMP.{lua,luajit}                                 |
 | endian.c     |                                                    |
 | epsplot.c    | -                                                  |
 | euler.c      |                                                    |
-| eulerian.c   | eulerian.{awk,bash,fth,lua}                        |
+| eulerian.c   | eulerian.{awk,fth,lua}                             |
 | eval.c       |                                                    |
 | evalcf.c     |                                                    |
 | exp.c        |                                                    |
@@ -89,7 +89,7 @@
 | gauss5.c     |                                                    |
 | gauss.c      |                                                    |
 | gaussjor.c   |                                                    |
-| gcd.c        | gcd.{awk,bash,lua}                                 |
+| gcd.c        | gcd.{awk,lua}                                      |
 | gencomb.c    |                                                    |
 | genperm.c    |                                                    |
 | gf2fact.c    |                                                    |
@@ -163,7 +163,7 @@
 | matutil.c    |                                                    |
 | maxmin.c     |                                                    |
 | maze.c       |                                                    |
-| mccarthy.c   | mccarthy.{awk,bash,fth,lua}                        |
+| mccarthy.c   | mccarthy.{awk,fth,lua}                             |
 | meansd1.c    |                                                    |
 | meansd2.c    |                                                    |
 | meansd3.c    |                                                    |
@@ -172,7 +172,7 @@
 | monte.c      | montecarlo.lua                                     |
 | movebloc.c   | moveblock.{awk,lua}                                |
 | mrnd.c       |                                                    |
-| multiply.c   | multiply.{awk,bash,fth,lua,luajit}                 |
+| multiply.c   | multiply.{awk,fth,lua,luajit}                      |
 | multprec.c   |                                                    |
 | neville.c    |                                                    |
 | newt1.c      |                                                    |
@@ -197,7 +197,7 @@
 | polytope.c   |                                                    |
 | postfix.c    |                                                    |
 | poweigen.c   |                                                    |
-| power.c      | power.{awk,bash,lua,luajit}                        |
+| power.c      | power.{awk,lua,luajit}                             |
 | primes.c     |                                                    |
 | primroot.c   |                                                    |
 | princo.c     |                                                    |
@@ -244,7 +244,7 @@
 | srchmat.c    |                                                    |
 | statutil.c   |                                                    |
 | stemleaf.c   |                                                    |
-| stirling.c   | stirling.{awk,bash,fth,lua}                        |
+| stirling.c   | stirling.{awk,fth,lua}                             |
 | strmatch.c   |                                                    |
 | sum.c        | sum.{awk,lua}                                      |
 | svgplot.c    | svgplot.{awk,lua,luajit,py}, SvgPlot.hx            |
@@ -255,7 +255,7 @@
 | tdist.c      | distribution.lua                                   |
 | tetromin.c   |                                                    |
 | toposort.c   |                                                    |
-| totient.c    | totient.{awk,bash,fth,lua}                         |
+| totient.c    | totient.{awk,fth,lua}                              |
 | tree.c       |                                                    |
 | treecurv.c   | treecurve.{awk,lua}, TreeCurve.hx                  |
 | tridiag.c    |                                                    |
@@ -265,7 +265,7 @@
 | ulps.c       |                                                    |
 | utmult.c     |                                                    |
 | warshall.c   |                                                    |
-| water.c      | water.{awk,bash,lua}                               |
+| water.c      | water.{awk,lua}                                    |
 | weights.c    |                                                    |
 | whrnd.c      | whrnd.lua                                          |
 | window.c     | grBMP.lua                                          |
@@ -274,14 +274,10 @@
 
 #
 #	*.awk:     AWK
-#	*.bash:    Bash
 #	*.d:       D
-#	*.fth:     PForth (*1)
+#	*.fth:     PForth (https://github.com/philburk/pforth)
 #	*.hx:      Haxe
-#	*.lua:     Lua (*2)
+#	*.lua:     Lua (5.3-)
 #	*.luajit:  LuaJIT
 #	*.py:      CPython3/MicroPython
-#
-#	*1) https://github.com/philburk/pforth
-#	*2) 5.3-
 #

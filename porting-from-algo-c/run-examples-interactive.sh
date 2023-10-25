@@ -12,7 +12,6 @@
 #
 
 AWK=
-BASH=
 HAXE=
 HAXELIB=
 LUA=
@@ -26,7 +25,6 @@ error() {
 }
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
-[ "$(command -v $BASH)" = "" ] && error "BASH"
 [ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $HAXELIB)" = "" ] && error "HAXELIB"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
@@ -41,10 +39,6 @@ HAXE="$HAXE -L littleBigInt -D hasLittleBigInt"
 
 runAWK() {
 	$AWK -f src/_helper.awk -f src/${1}.awk
-}
-
-runBASH() {
-	$BASH examples/${1}.bash
 }
 
 runHAXE() {
@@ -70,7 +64,7 @@ run() {
 	done
 }
 
-run 105 AWK BASH LUA
+run 105 AWK LUA
 run egyptianfraction HAXE LUA PY
 run josephus LUA
-run water AWK BASH LUA
+run water AWK LUA
