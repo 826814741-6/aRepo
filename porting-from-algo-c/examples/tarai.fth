@@ -12,9 +12,21 @@ include src/tarai.fth
 s" 10 5 0 tarai = " type 10 5 0 tarai .
 s" , 10 5 0 tak = " type 10 5 0 tak . 10 emit
 
+private{
+
 variable C
 : incrementC C @ 1+ C ! ;
-' incrementC is tarai.counter
+: initC 0 C ! ;
+: getC C @ ;
 
-0 C ! 10 5 0 tarai drop
-s" 10 5 0 tarai : " type C @ . 10 emit
+}private
+
+' incrementC is tarai.counter
+initC 10 5 0 tarai drop
+s" 10 5 0 tarai : " type getC . 10 emit
+
+' incrementC is tak.counter
+initC 10 5 0 tak drop
+s" 10 5 0 tak : " type getC . 10 emit
+
+privatize

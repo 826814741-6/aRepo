@@ -1,24 +1,9 @@
 ;
-;	Hello, World! in (Chez) Scheme
+;	Hello, World! in s7
 ;
 ;	with something like GNU dc's P command:
 ;	$ dc -e "1468369091346906859060166438166794P"
 ;	(see https://github.com/826814741-6/aRepo/blob/main/misc/hi.sh)
-;
-
-;
-;	$ scheme --script hi.ss
-;	...
-;	$ larceny -r5rs hi.ss
-;	...
-;
-;	Probably, in some(most?) cases,
-;	you need to import some libraries explicitly to run this fun-script.
-;
-;(import (scheme base) (scheme write))
-;
-;	$ larceny -r7rs hi-imported.ss
-;	...
 ;
 
 (define (f n lst)

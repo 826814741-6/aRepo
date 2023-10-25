@@ -89,31 +89,4 @@ fvariable prev
    \ | (b+a)*(b+a)/s
 ;
 
-\
-\    a part of src/pi2.c
-\
-\    int i;
-\    double a, b, s, t, last;
-\
-\    a = 1;  b = 1 / sqrt(2.0);  s = 1;  t = 4;
-\    for (i = 0; i < 3; i++) {
-\        last = a;  a = (a + b) / 2;  b = sqrt(last * b);
-\        s -= t * (a - last) * (a - last);  t *= 2;
-\        printf("%16.14f\n", (a + b) * (a + b) / s);
-\    }
-\
-\        |
-\        V
-\
-\    a = 1.; b = 1. / sqrt(2.); s = 1.; t = 4
-\
-\        prev = a
-\        a = (a + b) / 2.
-\        b = sqrt(prev * b)
-\        s = s - (t * (a - prev) * (a - prev))
-\        t = t * 2
-\
-\    (a + b) * (a + b) / s
-\
-
 privatize
