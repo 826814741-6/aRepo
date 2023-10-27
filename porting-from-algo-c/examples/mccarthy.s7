@@ -1,0 +1,24 @@
+;
+;	from src/mccarthy.c
+;
+;	int McCarthy(int)	to	mccarthy91
+;
+
+(load "src/mccarthy.s7")
+
+(let
+  ((start (ash -1 10))
+   (end 100))
+  (do ((i start (+ i 1)))
+      ((> i end))
+    (unless (= (mccarthy91 i) 91) (exit)))
+  (format #t "mccarthy91 seems to be 91 in ~A to ~A~%" start end))
+
+(let
+  ((start 101)
+   (end 110))
+  (format #t "... and in ~A to ~A are:~%" start end)
+  (do ((i start (+ i 1)))
+      ((> i end))
+    (format #t "~4D:~A" i (mccarthy91 i)))
+  (newline))

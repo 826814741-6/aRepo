@@ -1,0 +1,32 @@
+;
+;	from src/sqrt.c
+;
+;	double mysqrt(double)		to	f-sqrt
+;
+;	from src/isqrt.c
+;
+;	unsigned isqrt(unsigned)	to	i-sqrt
+;
+
+(load "src/nthroot.s7")
+
+(do
+  ((i 0 (+ i 1)))
+  ((> i 20))
+  (let*
+    ((a (f-sqrt (* i 1.)))
+     (b (sqrt (* i 1.))))
+    (format #t "~3D ~22,18F ~22,18F ~A (~A)~%" i a b (= a b) (abs (- a b)))))
+
+(newline)
+
+(let
+  ((start 0)
+   (end (ash 1 16)))
+  (do
+    ((i start (+ i 1)))
+    ((> i end))
+    (let
+      ((j (i-sqrt i)))
+      (unless (and (<= (* j j) i) (> (* (+ j 1) (+ j 1)) i)) (exit))))
+  (format #t "i-sqrt seems to be fine in ~D to ~D.~%" start end))

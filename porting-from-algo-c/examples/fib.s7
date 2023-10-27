@@ -1,0 +1,19 @@
+;
+;	from src/fib.c
+;
+;	int fib1(int)		to	fib1
+;	int fib2(int)		to	fib2
+;	a part of main		to	fib3
+;
+
+(load "src/fib.s7")
+
+(define (sample proc n)
+  (do ((i 1 (+ i 1)))
+      ((> i n))
+    (format #t " ~D" (proc i)))
+  (newline))
+
+(sample fib1 11)
+(sample fib2 11)
+(sample fib3 11)

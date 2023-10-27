@@ -1,0 +1,13 @@
+;
+;	from src/tarai.c
+;
+;	int tarai(int, int, int)	to	tarai
+;	tarai				to	tak(*)
+;
+;	*) https://en.wikipedia.org/wiki/Tak_(function)
+;
+
+(load "src/tarai.s7")
+
+(format #t "(tarai 10 5 0) : ~D (~D)~%" (tarai 10 5 0) (count-tarai 10 5 0))
+(format #t "(tak 10 5 0) : ~D (~D)~%" (tak 10 5 0) (count-tak 10 5 0))

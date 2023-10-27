@@ -1,0 +1,51 @@
+;
+;	from src/pi1.c
+;
+;	long double pi(void)	to	machin-like
+;
+;	from src/pi2.c
+;
+;	a part of main		to	gauss-legendre
+;
+
+(provide 'pi.s7)
+
+(define (machin-like)
+  (letrec
+    ((iter1
+      (lambda (p k t prev)
+        (if (= p prev)
+            p
+            (iter1 (+ p (/ t k)) (+ k 2) (/ t (* -5. 5.)) p))))
+     (iter2
+      (lambda (p k t prev)
+        (if (= p prev)
+            p
+            (iter2 (- p (/ t k)) (+ k 2) (/ t (* -239. 239.)) p)))))
+    (let*
+      ((p0 0.)
+       (k0 1)
+       (t0 (/ 16. 5.))
+       (p1 (iter1 (+ p0 (/ t0 k0)) (+ k0 2) (/ t0 (* -5. 5.)) p0))
+       (k1 1)
+       (t1 (/ 4. 239.)))
+      (iter2 (- p1 (/ t1 k1)) (+ k1 2) (/ t1 (* -239. 239.)) p1))))
+
+(define (gauss-legendre n)
+  (letrec
+    ((ave (lambda (a b) (/ (+ a b) 2.)))
+     (step-t
+      (lambda (a b t u)
+        (- t (* u (- (ave a b) a) (- (ave a b) a)))))
+     (iter
+      (lambda (a b t u i)
+        (if (< i n)
+            (iter (ave a b) (sqrt (* a b)) (step-t a b t u) (* u 2) (+ i 1))
+            (/ (* (+ a b) (+ a b)) t)))))
+    (let*
+      ((a0 1.)
+       (b0 (/ 1. (sqrt 2)))
+       (t0 1.)
+       (u0 4)
+       (i0 1))
+    (iter a0 b0 t0 u0 i0))))

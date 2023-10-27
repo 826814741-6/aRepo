@@ -1,0 +1,19 @@
+;
+;	from src/e.c
+;
+;	long double ee(void)	to	e
+;
+
+(provide 'e.s7)
+
+(define (e)
+  (letrec
+    ((r0 0.)
+     (a0 1.)
+     (n0 1)
+     (iter
+      (lambda (r a n prev)
+        (if (= r prev)
+            r
+            (iter (+ r a) (/ a n) (+ n 1) r)))))
+    (iter (+ r0 a0) (/ a0 n0) (+ n0 1) r0)))
