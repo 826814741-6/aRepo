@@ -299,7 +299,7 @@ private function sampleE(plotter:PlotterE) {
 
 private function demoA(prefix) {
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlot(300, 300);
+		final plotter = new SvgPlot(300, 300);
 
 		plotter.plotStart(fh);
 		sample(plotter);
@@ -307,7 +307,7 @@ private function demoA(prefix) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlotE(300, 300);
+		final plotter = new SvgPlotE(300, 300);
 
 		plotter.plotStart(fh);
 		sampleE(plotter);
@@ -317,7 +317,7 @@ private function demoA(prefix) {
 
 private function demoB(prefix) {
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlotWholeBuffering(300, 300);
+		final plotter = new SvgPlotWholeBuffering(300, 300);
 
 		sample(plotter);
 		plotter.plotEnd(true);
@@ -326,7 +326,7 @@ private function demoB(prefix) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlotWholeBufferingE(300, 300);
+		final plotter = new SvgPlotWholeBufferingE(300, 300);
 
 		sampleE(plotter);
 		plotter.plotEnd(true);
@@ -337,7 +337,7 @@ private function demoB(prefix) {
 
 private function demoC(prefix) {
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlotWithBuffering(300, 300);
+		final plotter = new SvgPlotWithBuffering(300, 300);
 
 		plotter.plotStart(fh, 2);
 		sample(plotter);
@@ -345,7 +345,7 @@ private function demoC(prefix) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlotWithBufferingE(300, 300);
+		final plotter = new SvgPlotWithBufferingE(300, 300);
 
 		plotter.plotStart(fh, 2);
 		sampleE(plotter);

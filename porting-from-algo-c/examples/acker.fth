@@ -6,4 +6,18 @@
 
 include src/acker.fth
 
-.( 3 3 ack = ) 3 3 ack . cr
+private{
+
+variable C
+: incrementC C @ 1+ C ! ;
+: initC 0 C ! ;
+: getC C @ ;
+
+}private
+
+' incrementC is ack.counter
+
+.( 3 3 ack = )
+initC 3 3 ack . .( , ) getC . cr
+
+privatize

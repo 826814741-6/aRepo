@@ -11,13 +11,13 @@ include src/fib.fth
 
 private{
 
-defer fibseq.fib
-: fibseq  ( n -- )
+defer sample.fib
+: sample  ( n -- )
    1
    begin
       2dup >=
    while
-      dup fibseq.fib .
+      dup sample.fib .
       1+
    repeat
    10 emit
@@ -25,16 +25,16 @@ defer fibseq.fib
 
 }private
 
-' fib1 is fibseq.fib
-11 fibseq
+' fib1 is sample.fib
+11 sample
 
-' fib2 is fibseq.fib
-11 fibseq
+' fib2 is sample.fib
+11 sample
 
-' fib3 is fibseq.fib
-11 fibseq
+' fib3 is sample.fib
+11 sample
 
-' fib4 is fibseq.fib
-11 fibseq
+' fib4 is sample.fib
+11 sample
 
 privatize

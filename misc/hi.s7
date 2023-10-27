@@ -1,5 +1,5 @@
 ;
-;	Hello, World! in s7
+;	Hello, World! in s7 (WITH_GMP)
 ;
 ;	with something like GNU dc's P command:
 ;	$ dc -e "1468369091346906859060166438166794P"

@@ -31,11 +31,13 @@ function taraiC(x, y, z)
 end
 
 do
-	print(("%s = %d, %s = %d"):format(
-		"tarai(10,5,0)", tarai(10,5,0), "tak(10,5,0)", tak(10,5,0)))
+	print(("%s = %d (%d)"):format(
+		"tarai(10, 5, 0)", tarai(10, 5, 0), count(tarai, 10, 5, 0)))
+	print(("%s = %d (%d)"):format(
+		"tak(10, 5, 0)", tak(10, 5, 0), count(tak, 10, 5, 0)))
 
-	local _, _C = taraiC(10,5,0)
+	local r, c = taraiC(10, 5, 0)
 
-	print(("%s : %d, %s : %d (%d)"):format(
-		"tarai(10,5,0)", count(tarai,10,5,0), "taraiC(10,5,0)", count(taraiC,10,5,0), _C))
+	print(("%s = %d (%d) (%d)"):format(
+		"taraiC(10, 5, 0)", r, count(taraiC, 10, 5, 0), c))
 end

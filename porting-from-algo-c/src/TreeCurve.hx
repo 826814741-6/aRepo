@@ -52,7 +52,7 @@ function treeCurveE(
 
 private function demoA(prefix, n=10) {
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlot(400, 350);
+		final plotter = new SvgPlot.SvgPlot(400, 350);
 
 		plotter.plotStart(fh);
 		plotter.move(200, 0);
@@ -61,7 +61,7 @@ private function demoA(prefix, n=10) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotE(400, 350);
+		final plotter = new SvgPlot.SvgPlotE(400, 350);
 
 		plotter.plotStart(fh);
 		plotter.plot(Move(200, 0));
@@ -72,7 +72,7 @@ private function demoA(prefix, n=10) {
 
 private function demoB(prefix, n=10) {
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWholeBuffering(400, 350);
+		final plotter = new SvgPlot.SvgPlotWholeBuffering(400, 350);
 
 		plotter.move(200, 0);
 		treeCurve(plotter, n, 100, 0, 0.7, 0.5);
@@ -81,7 +81,7 @@ private function demoB(prefix, n=10) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWholeBufferingE(400, 350);
+		final plotter = new SvgPlot.SvgPlotWholeBufferingE(400, 350);
 
 		plotter.plot(Move(200, 0));
 		treeCurveE(plotter, n, 100, 0, 0.7, 0.5);
@@ -92,7 +92,7 @@ private function demoB(prefix, n=10) {
 
 private function demoC(prefix, n=10) {
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWithBuffering(400, 350);
+		final plotter = new SvgPlot.SvgPlotWithBuffering(400, 350);
 
 		plotter.plotStart(fh, 30);
 		plotter.move(200, 0);
@@ -101,7 +101,7 @@ private function demoC(prefix, n=10) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWithBufferingE(400, 350);
+		final plotter = new SvgPlot.SvgPlotWithBufferingE(400, 350);
 
 		plotter.plotStart(fh, 30);
 		plotter.plot(Move(200, 0));

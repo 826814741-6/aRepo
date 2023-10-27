@@ -18,7 +18,7 @@ def P(num):
 
 # and some utils
 
-def str_to_num(s):
+def str_to_src(s):
     r, j = 0, 0
 
     for i in range(len(s)-1, -1, -1):
@@ -29,4 +29,4 @@ def str_to_num(s):
 #
 
 P(1468369091346906859060166438166794)
-print(str_to_num("Hello, World!\n"))
+print(str_to_src("Hello, World!\n"))

@@ -32,12 +32,12 @@
 //
 
 function f(n:BigInt, a:Array<String>):Array<String> {
-	if (n > 255) {
+	return if (n > 255) {
 		a.insert(0, String.fromCharCode(n % 256));
-		return f(n / 256, a);
+		f(n / 256, a);
 	} else {
 		a.insert(0, String.fromCharCode(n));
-		return a;
+		a;
 	}
 }
 
@@ -50,9 +50,9 @@ function P(n:BigInt) {
 
 function strToSrc(s:String):BigInt {
 	var r:BigInt = 0;
-	var i:Int = s.length-1;
-	var b:BigInt = 256;
+	var i:Int = s.length - 1;
 	var e:Int = 0;
+	final b:BigInt = 256;
 
 	while (i >= 0) {
 		r += StringTools.fastCodeAt(s, i) * b.pow(e);
@@ -66,9 +66,9 @@ function strToSrc(s:String):BigInt {
 //
 
 function main() {
-	var m:BigInt = "1468369091346906859060166438166794";
+	final m:BigInt = "1468369091346906859060166438166794";
 	P(m);
 
-	var s = "Hello, World!\n";
+	final s = "Hello, World!\n";
 	Sys.println(strToSrc(s).toString());
 }

@@ -38,7 +38,7 @@ private function demoA(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlot(size, size);
+		final plotter = new SvgPlot.SvgPlot(size, size);
 
 		plotter.plotStart(fh);
 		lissajousCurve(plotter, n, offset);
@@ -46,7 +46,7 @@ private function demoA(prefix, n, offset) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotE(size, size);
+		final plotter = new SvgPlot.SvgPlotE(size, size);
 
 		plotter.plotStart(fh);
 		lissajousCurveE(plotter, n, offset);
@@ -58,7 +58,7 @@ private function demoB(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWholeBuffering(size, size);
+		final plotter = new SvgPlot.SvgPlotWholeBuffering(size, size);
 
 		lissajousCurve(plotter, n, offset);
 		plotter.plotEnd(true);
@@ -67,7 +67,7 @@ private function demoB(prefix, n, offset) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWholeBufferingE(size, size);
+		final plotter = new SvgPlot.SvgPlotWholeBufferingE(size, size);
 
 		lissajousCurveE(plotter, n, offset);
 		plotter.plotEnd(true);
@@ -80,7 +80,7 @@ private function demoC(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
 	Helper.withFileWrite('${prefix}.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWithBuffering(size, size);
+		final plotter = new SvgPlot.SvgPlotWithBuffering(size, size);
 
 		plotter.plotStart(fh, 30);
 		lissajousCurve(plotter, n, offset);
@@ -88,7 +88,7 @@ private function demoC(prefix, n, offset) {
 	});
 
 	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
-		var plotter = new SvgPlot.SvgPlotWithBufferingE(size, size);
+		final plotter = new SvgPlot.SvgPlotWithBufferingE(size, size);
 
 		plotter.plotStart(fh, 30);
 		lissajousCurveE(plotter, n, offset);

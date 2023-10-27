@@ -36,11 +36,11 @@ function hypot2(x, y,	a, b, t, i) {
 #
 
 BEGIN {
-	printf "%.14f %.20f\n", hypot0(1,2), hypot0(1,2)
-	printf "%.14f %.20f\n", hypot1(1,2), hypot1(1,2)
-	printf "%.14f %.20f\n", hypot2(1,2), hypot2(1,2)
+	printf "hypot0(1, 2) : %.14f %.20f\n", hypot0(1, 2), hypot0(1, 2)
+	printf "hypot1(1, 2) : %.14f %.20f\n", hypot1(1, 2), hypot1(1, 2)
+	printf "hypot2(1, 2) : %.14f %.20f\n", hypot2(1, 2), hypot2(1, 2)
 
-	printf "%.14f %.20f\n", hypot0(2^511,2^512), hypot0(2^511,2^512)
-	printf "%.14f %.20f\n", hypot1(2^511,2^512), hypot1(2^511,2^512)
-	printf "%.14f %.20f\n", hypot2(2^511,2^512), hypot2(2^511,2^512)
+	printf "hypot0(2^512, 2^512) : %f\n", hypot0(2^512, 2^512)
+	printf "hypot1(2^512, 2^512) : %f\n", hypot1(2^512, 2^512)
+	printf "hypot2(2^512, 2^512) : %f\n", hypot2(2^512, 2^512)
 }
