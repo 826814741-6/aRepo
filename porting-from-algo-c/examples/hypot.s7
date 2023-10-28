@@ -16,5 +16,5 @@
 
 (let ((t (expt 2 512)))
   (format #t "(hypot0 (expt 2 512) (expt 2 512)) : ~A~%" (hypot0 t t))
-  (format #t "(hypot1 (expt 2 512) (expt 2 512)) : ~A~%" (hypot0 t t))
-  (format #t "(hypot2 (expt 2 512) (expt 2 512)) : ~A~%" (hypot0 t t)))
+  (format #t "(hypot1 (expt 2 512) (expt 2 512)) : ~A~%" (hypot1 t t))
+  (format #t "(hypot2 (expt 2 512) (expt 2 512)) : ~A~%" (hypot2 t t)))

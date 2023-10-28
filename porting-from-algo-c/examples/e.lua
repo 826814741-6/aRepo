@@ -19,16 +19,13 @@ do
 	local r2, n2 = eR()
 	assert(r1 == r2)
 	assert(n1 == n2)
+	print(("%.14f\n%.18f %q (%d)"):format(r1, r1, r1, n1))
 
-	local r3, r4, n3, n4
 	if eM ~= nil and eMR ~= nil then
-		r3, n3 = eM(50)
-		r4, n4 = eMR(50)
+		local r3, n3 = eM(50)
+		local r4, n4 = eMR(50)
 		assert(r3 == r4)
 		assert(n3 == n4)
+		print(("%s (%d)"):format(r3, n3))
 	end
-
-	print(("%.14f\n%.18f %q (%d)%s"):format(
-		r1, r1, r1, n1,
-		r3 == nil and "" or "\n"..tostring(r3)..(" (%d)"):format(n3)))
 end

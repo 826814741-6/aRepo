@@ -6,11 +6,13 @@
 
 (load "src/e.s7")
 
-(let ((e (e)))
-  (format #t "   ~~E: ~E~%" e)
-  (format #t "   ~~F: ~F~%" e)
-  (format #t "   ~~G: ~G~%" e)
-  (format #t "   ~~A: ~A~%" e)
-  (format #t "~~,20E: ~,20E~%" e)
-  (format #t "~~,20F: ~,20F~%" e)
-  (format #t "~~,20G: ~,20G~%" e))
+(call-with-values
+  e
+  (lambda (e n)
+    (format #t "   ~~E: ~E (~D)~%" e n)
+    (format #t "   ~~F: ~F~%" e)
+    (format #t "   ~~G: ~G~%" e)
+    (format #t "   ~~A: ~A~%" e)
+    (format #t "~~,20E: ~,20E~%" e)
+    (format #t "~~,20F: ~,20F~%" e)
+    (format #t "~~,20G: ~,20G~%" e)))
