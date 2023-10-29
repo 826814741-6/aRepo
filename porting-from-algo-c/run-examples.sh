@@ -13,7 +13,6 @@
 
 AWK=
 DMD=
-FTH=
 HAXE=
 LUA=
 LUAJIT=
@@ -29,7 +28,6 @@ error() {
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $DMD)" = "" ] && error "DMD"
-[ "$(command -v $FTH)" = "" ] && error "FTH"
 [ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
@@ -44,10 +42,6 @@ runAWK() {
 
 runDMD() {
 	$DMD -run src/${1}.d
-}
-
-runFTH() {
-	$FTH -q examples/${1}.fth
 }
 
 runHAXE() {
@@ -81,7 +75,7 @@ run() {
 	done
 }
 
-run acker AWK FTH LUA S7
+run acker AWK LUA S7
 run atan LUA
 run binormal LUA
 run change AWK LUA
@@ -90,39 +84,39 @@ run ci LUA
 run combination AWK LUA
 run complex HAXE LUA
 run crnd LUA LUAJIT
-run cuberoot AWK FTH LUA LUAJIT S7
+run cuberoot AWK LUA LUAJIT S7
 run dayweek AWK LUA
-run e AWK DMD FTH HAXE LUA S7
-run eulerian AWK FTH LUA
+run e AWK DMD HAXE LUA S7
+run eulerian AWK LUA
 run factorize LUA PY
 run fdist LUA
 run fft LUA
-run fib AWK FTH LUA S7
+run fib AWK LUA S7
 run gamma AWK LUA
 run gcd AWK LUA
 run horner AWK LUA
-run hypot AWK FTH LUA S7
+run hypot AWK LUA S7
 run isbn LUA
 run isbn13 LUA
 run komachi LUA
 run luhn LUA
 run machineepsilon DMD HAXE LUA PY
-run mccarthy AWK FTH LUA S7
+run mccarthy AWK LUA S7
 run montecarlo LUA
 run moveblock AWK LUA
-run multiply AWK FTH LUA LUAJIT
+run multiply AWK LUA LUAJIT
 run normal AWK LUA
-run pi AWK FTH HAXE LUA S7
+run pi AWK HAXE LUA S7
 run power AWK LUA LUAJIT
-run rand FTH LUA LUAJIT
+run rand LUA LUAJIT
 run randperm LUA
 run si LUA
-run sqrt AWK FTH LUA LUAJIT S7
-run stirling AWK FTH LUA
+run sqrt AWK LUA LUAJIT S7
+run stirling AWK LUA
 run sum AWK LUA
 run swap AWK LUA
-run tarai AWK FTH LUA S7
+run tarai AWK LUA S7
 run tdist LUA
-run totient AWK FTH LUA
+run totient AWK LUA
 run whrnd LUA
 run zeta LUA
