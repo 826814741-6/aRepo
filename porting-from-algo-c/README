@@ -61,7 +61,7 @@
 | distsort.c   |                                                    |
 | dragon2.c    | dragoncurve.lua                                    |
 | dragon.c     | dragoncurve.lua                                    |
-| e.c          | e.{awk,d,lua,s7}, E.hx                             |
+| e.c          | e.{awk,lua,s7}, E.hx                               |
 | egypfrac.c   | egyptianfraction.{lua,py}, EgyptianFraction.hx     |
 | eigen.c      |                                                    |
 | ellipse.c    | grBMP.{lua,luajit}                                 |
@@ -151,7 +151,7 @@
 | lu.c         |                                                    |
 | lucas.c      |                                                    |
 | luhn.c       | checkdigit.lua                                     |
-| maceps.c     | machineepsilon.{d,lua,py}, MachineEpsilon.hx       |
+| maceps.c     | machineepsilon.{lua,py}, MachineEpsilon.hx         |
 | macrornd.c   |                                                    |
 | magic4.c     |                                                    |
 | magicsq.c    |                                                    |
@@ -274,7 +274,6 @@
 
 #
 #	*.awk:     AWK
-#	*.d:       D
 #	*.hx:      Haxe
 #	*.lua:     Lua (5.3-)
 #	*.luajit:  LuaJIT

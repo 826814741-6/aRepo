@@ -12,7 +12,6 @@
 #
 
 AWK=
-DMD=
 HAXE=
 LUA=
 LUAJIT=
@@ -27,7 +26,6 @@ error() {
 }
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
-[ "$(command -v $DMD)" = "" ] && error "DMD"
 [ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
@@ -38,10 +36,6 @@ error() {
 
 runAWK() {
 	$AWK -f src/_helper.awk -f src/${1}.awk
-}
-
-runDMD() {
-	$DMD -run src/${1}.d
 }
 
 runHAXE() {
@@ -86,7 +80,7 @@ run complex HAXE LUA
 run crnd LUA LUAJIT
 run cuberoot AWK LUA LUAJIT S7
 run dayweek AWK LUA
-run e AWK DMD HAXE LUA S7
+run e AWK HAXE LUA S7
 run eulerian AWK LUA
 run factorize LUA PY
 run fdist LUA
@@ -100,7 +94,7 @@ run isbn LUA
 run isbn13 LUA
 run komachi LUA
 run luhn LUA
-run machineepsilon DMD HAXE LUA PY
+run machineepsilon HAXE LUA PY
 run mccarthy AWK LUA S7
 run montecarlo LUA
 run moveblock AWK LUA
