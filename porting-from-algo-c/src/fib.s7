@@ -19,9 +19,9 @@
              (+ (* a x) (* b y))
              x)))
      (step-y
-       (lambda (b c x y n)
+       (lambda (a b x y n)
          (if (odd? n)
-             (+ (* b x) (* c y))
+             (+ (* a x) (* b y))
              y)))
      (iter
        (lambda (a b c x y n)

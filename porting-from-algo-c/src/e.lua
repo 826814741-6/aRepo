@@ -17,7 +17,7 @@ local function e()
 	repeat
 		r, a, n, prev = r + a, a / n, n + 1, r
 	until r == prev
-	return r, n
+	return r, n - 1
 end
 
 local eM = ret and function (digit)
@@ -26,14 +26,14 @@ local eM = ret and function (digit)
 	repeat
 		r, a, n, prev = r + a, a / n, n + 1, r
 	until r == prev
-	return r, n
+	return r, n - 1
 end or nil
 
 local function rec(r, a, n, prev)
 	if r ~= prev then
 		return rec(r + a, a / n, n + 1, r)
 	end
-	return r, n
+	return r, n - 1
 end
 
 local function eR()

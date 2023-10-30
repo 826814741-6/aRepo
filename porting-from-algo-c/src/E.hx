@@ -6,10 +6,15 @@
 
 package src;
 
-function e():Float {
+typedef Result = {
+	var value : Float;
+	var count : Int;
+}
+
+function e():Result {
 	var r:Float = 0;
 	var a:Float = 1;
-	var n:Float = 1;
+	var n:Int = 1;
 	var prev:Float;
 
 	do {
@@ -19,9 +24,10 @@ function e():Float {
 		n += 1;
 	} while (r != prev);
 
-	return r;
+	return { value: r, count: n - 1 };
 }
 
 function demo() {
-	trace(e());
+	var e = e();
+	trace(e.value, e.count);
 }
