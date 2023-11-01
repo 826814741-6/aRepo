@@ -61,7 +61,7 @@
 | distsort.c   |                                                    |
 | dragon2.c    | dragoncurve.lua                                    |
 | dragon.c     | dragoncurve.lua                                    |
-| e.c          | e.{awk,lua,s7}, E.hx                               |
+| e.c          | e.{awk,dc,lua,s7}, E.hx                            |
 | egypfrac.c   | egyptianfraction.{lua,py}, EgyptianFraction.hx     |
 | eigen.c      |                                                    |
 | ellipse.c    | grBMP.{lua,luajit}                                 |
@@ -209,7 +209,7 @@
 | quadeq.c     |                                                    |
 | radconv.c    |                                                    |
 | radsort.c    |                                                    |
-| rand.c       | rand.{lua,luajit}                                  |
+| rand.c       | rand.{dc,lua,luajit}                               |
 | random.c     |                                                    |
 | randperm.c   | randperm.lua                                       |
 | randvect.c   |                                                    |
@@ -274,6 +274,7 @@
 
 #
 #	*.awk:     AWK
+#	*.dc:      GNU dc
 #	*.hx:      Haxe
 #	*.lua:     Lua (5.3-)
 #	*.luajit:  LuaJIT

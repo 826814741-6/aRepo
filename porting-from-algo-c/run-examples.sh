@@ -12,6 +12,7 @@
 #
 
 AWK=
+DC=
 HAXE=
 LUA=
 LUAJIT=
@@ -26,6 +27,7 @@ error() {
 }
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
+[ "$(command -v $DC)" = "" ] && error "DC"
 [ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
@@ -36,6 +38,10 @@ error() {
 
 runAWK() {
 	$AWK -f src/_helper.awk -f src/${1}.awk
+}
+
+runDC() {
+	$DC src/${1}.dc
 }
 
 runHAXE() {
@@ -80,7 +86,7 @@ run complex HAXE LUA
 run crnd LUA LUAJIT
 run cuberoot AWK LUA LUAJIT S7
 run dayweek AWK LUA
-run e AWK HAXE LUA S7
+run e AWK DC HAXE LUA S7
 run eulerian AWK LUA
 run factorize LUA PY
 run fdist LUA
@@ -102,7 +108,7 @@ run multiply AWK LUA LUAJIT
 run normal AWK LUA
 run pi AWK HAXE LUA S7
 run power AWK LUA LUAJIT
-run rand LUA LUAJIT
+run rand DC LUA LUAJIT
 run randperm LUA
 run si LUA
 run sqrt AWK LUA LUAJIT S7

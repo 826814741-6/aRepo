@@ -32,8 +32,8 @@ BEGIN {
 	printf "   %%g : %g\n", t
 	printf "   %%a : %a\n", t
 	printf "%%.20e : %.20e\n", t
-	printf "%%.20e : %.20f\n", t
-	printf "%%.20e : %.20g\n", t
+	printf "%%.20f : %.20f\n", t
+	printf "%%.20g : %.20g\n", t
 
 	print "# -- efmt(\"%.21f,%d\")"
 
@@ -44,8 +44,8 @@ BEGIN {
 	printf "   %%g : %g\n", _r[1]
 	printf "   %%a : %a\n", _r[1]
 	printf "%%.20e : %.20e\n", _r[1]
-	printf "%%.20e : %.20f\n", _r[1]
-	printf "%%.20e : %.20g\n", _r[1]
+	printf "%%.20f : %.20f\n", _r[1]
+	printf "%%.20g : %.20g\n", _r[1]
 
 	print "# -- efmt(\"%f,%d\")"
 
@@ -56,6 +56,6 @@ BEGIN {
 	printf "   %%g : %g\n", _r[1]
 	printf "   %%a : %a\n", _r[1]
 	printf "%%.20e : %.20e\n", _r[1]
-	printf "%%.20e : %.20f\n", _r[1]
-	printf "%%.20e : %.20g\n", _r[1]
+	printf "%%.20f : %.20f\n", _r[1]
+	printf "%%.20g : %.20g\n", _r[1]
 }
