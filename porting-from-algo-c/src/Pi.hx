@@ -7,6 +7,10 @@
 //
 //	a part of main		to	gaussLegendre
 //
+//	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+//
+//	a part of article	to	leibniz
+//
 
 package src;
 
@@ -53,12 +57,30 @@ function gaussLegendre(n:Int):Float {
 	return (a + b) * (a + b) / t;
 }
 
+function leibniz(n:Int):Float {
+	var r:Float = 0;
+	var sign:Float = 1;
+	var x:Float = 1;
+
+	for (_ in 0...n) {
+		r += sign / x;
+		sign *= -1;
+		x += 2;
+	}
+
+	return r * 4;
+}
+
 function demo() {
 	trace("-------- machinLike:");
 	trace(machinLike());
 	trace("-------- gaussLegendre n:");
-	trace(gaussLegendre(1));
-	trace(gaussLegendre(2));
-	trace(gaussLegendre(3));
-	trace(gaussLegendre(4));
+	trace(gaussLegendre(1), 1);
+	trace(gaussLegendre(2), 2);
+	trace(gaussLegendre(3), 3);
+	trace(gaussLegendre(4), 4);
+	trace("-------- leibniz n:");
+	trace(leibniz(10000), 10000);
+	trace(leibniz(100000), 100000);
+	trace(leibniz(1000000), 1000000);
 }

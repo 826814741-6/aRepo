@@ -8,11 +8,11 @@
 
 (call-with-values
   e
-  (lambda (e n)
-    (format #t "   ~~E: ~E (~D)~%" e n)
-    (format #t "   ~~F: ~F~%" e)
-    (format #t "   ~~G: ~G~%" e)
-    (format #t "   ~~A: ~A~%" e)
-    (format #t "~~,20E: ~,20E~%" e)
-    (format #t "~~,20F: ~,20F~%" e)
-    (format #t "~~,20G: ~,20G~%" e)))
+  (lambda (r n)
+    (format #t "   ~~E: ~E (~D)~%" r n)
+    (format #t "   ~~F: ~F~%" r)
+    (format #t "   ~~G: ~G~%" r)
+    (format #t "   ~~A: ~A~%" r)
+    (format #t "~~,20E: ~,20E~%" r)
+    (format #t "~~,20F: ~,20F~%" r)
+    (format #t "~~,20G: ~,20G~%" r)))

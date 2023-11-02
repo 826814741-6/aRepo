@@ -7,6 +7,10 @@
 #
 #	a part of main		to	gaussLegendre
 #
+#	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+#
+#	a part of article	to	leibniz
+#
 
 function machinLike(	p, k, t, prev) {
 	p = 0; k = 1; t = 16 / 5
@@ -32,6 +36,14 @@ function gaussLegendre(n,	a, b, t, u, prev, i) {
 	return (a + b) * (a + b) / t
 }
 
+function leibniz(n,	r, sign, x, i) {
+	r = 0; sign = 1; x = 1
+	for (i = 0; i < n; i++) {
+		r += sign / x; sign *= -1; x += 2
+	}
+	return r * 4
+}
+
 #
 
 function _p1(n) { printf "%.14f %.20f\n", n, n }
@@ -42,5 +54,12 @@ BEGIN {
 	_p1(machinLike())
 
 	print "-------- gaussLegendre n:"
-	for (i = 1; i <= 3; i++) _p2(i, gaussLegendre(i))
+	_p2(1, gaussLegendre(1))
+	_p2(2, gaussLegendre(2))
+	_p2(3, gaussLegendre(3))
+
+	print "-------- leibniz n:"
+	_p2(10000, leibniz(10000))
+	_p2(100000, leibniz(100000))
+	_p2(1000000, leibniz(1000000))
 }

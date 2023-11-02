@@ -7,6 +7,10 @@
 ;
 ;	a part of main		to	gauss-legendre
 ;
+;	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+;
+;	a part of article	to	leibniz
+;
 
 (provide 'pi.s7)
 
@@ -47,3 +51,12 @@
        (u0 4)
        (i0 1))
       (iter a0 b0 t0 u0 i0))))
+
+(define (leibniz n)
+  (letrec
+    ((iter
+       (lambda (r sign x n)
+         (if (> n 0)
+             (iter (+ r (/ sign x)) (* sign -1) (+ x 2) (- n 1))
+             (* r 4)))))
+    (iter 0. 1. 1. n)))

@@ -7,6 +7,10 @@
 ;
 ;	a part of main		to	gauss-legendre
 ;
+;	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+;
+;	a part of article	to	leibniz
+;
 
 (load "src/pi.s7")
 
@@ -23,3 +27,8 @@
 
 (format #t "-------- pi ((*s7* 'bignum-precision) is ~D):~%" (*s7* 'bignum-precision))
 (format #t "~A~%" pi)
+
+(format #t "-------- leibniz n:~%")
+(format #t "~A (~D)~%" (leibniz 10000) 10000)
+(format #t "~A (~D)~%" (leibniz 100000) 100000)
+(format #t "~A (~D)~%" (leibniz 1000000) 1000000)

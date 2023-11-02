@@ -17,24 +17,26 @@
 (define (tak x y z)
   (if (<= x y)
       z
-      (tak (tarai (- x 1) y z) (tarai (- y 1) z x) (tarai (- z 1) x y))))
+      (tak (tak (- x 1) y z) (tak (- y 1) z x) (tak (- z 1) x y))))
 
 (define (count-tarai x y z)
   (let ((c 0))
-    (letrec ((t (lambda (x y z)
-                  (set! c (+ c 1))
-                  (if (<= x y)
-                      y
-                      (t (t (- x 1) y z) (t (- y 1) z x) (t (- z 1) x y))))))
-      (t x y z))
+    (let ()
+      (define (tarai x y z)
+        (set! c (+ c 1))
+        (if (<= x y)
+            y
+            (tarai (tarai (- x 1) y z) (tarai (- y 1) z x) (tarai (- z 1) x y))))
+      (tarai x y z))
     c))
 
 (define (count-tak x y z)
   (let ((c 0))
-    (letrec ((t (lambda (x y z)
-                  (set! c (+ c 1))
-                  (if (<= x y)
-                      z
-                      (t (t (- x 1) y z) (t (- y 1) z x) (t (- z 1) x y))))))
-      (t x y z))
+    (let ()
+      (define (tak x y z)
+        (set! c (+ c 1))
+        (if (<= x y)
+            z
+            (tak (tak (- x 1) y z) (tak (- y 1) z x) (tak (- z 1) x y))))
+      (tak x y z))
     c))

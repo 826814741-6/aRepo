@@ -11,6 +11,10 @@
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
+--	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+--
+--	a part of article	to	leibniz
+--
 
 local ret, M = pcall(require, "bc")
 
@@ -54,8 +58,17 @@ local function gaussLegendre(n)
 	return (a + b) * (a + b) / t
 end
 
+local function leibniz(n)
+	local r, sign, x = 0, 1, 1
+	for _=1,n do
+		r, sign, x = r + sign / x, sign * -1, x + 2
+	end
+	return r * 4
+end
+
 return {
 	machinLike = machinLike,
 	machinLikeM = machinLikeM,
-	gaussLegendre = gaussLegendre
+	gaussLegendre = gaussLegendre,
+	leibniz = leibniz
 }

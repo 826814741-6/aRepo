@@ -28,6 +28,6 @@ function e():Result {
 }
 
 function demo() {
-	var e = e();
-	trace(e.value, e.count);
+	var r = e();
+	trace(r.value, r.count);
 }
