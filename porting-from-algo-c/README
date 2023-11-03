@@ -13,7 +13,7 @@
 | 105.c        | 105.{awk,lua}                                      |
 | 3dgraph.c    | 3dgraph.lua                                        |
 | 5num.c       |                                                    |
-| acker.c      | acker.{awk,lua,s7}                                 |
+| acker.c      | acker.{awk,lua}                                    |
 | area.c       |                                                    |
 | arith.c      |                                                    |
 | atan.c       | atan.lua                                           |
@@ -53,7 +53,7 @@
 | crc32t.c     |                                                    |
 | crnd.c       | crnd.{lua,luajit}                                  |
 | crypt.c      |                                                    |
-| cuberoot.c   | cuberoot.awk,nthroot.{lua,luajit,s7}               |
+| cuberoot.c   | cuberoot.awk,nthroot.{lua,luajit}                  |
 | dayweek.c    | dayweek.{awk,lua}                                  |
 | delta2.c     |                                                    |
 | dfs.c        |                                                    |
@@ -61,7 +61,7 @@
 | distsort.c   |                                                    |
 | dragon2.c    | dragoncurve.lua                                    |
 | dragon.c     | dragoncurve.lua                                    |
-| e.c          | e.{awk,dc,lua,s7}, E.hx                            |
+| e.c          | e.{awk,dc,lua}, E.hx                               |
 | egypfrac.c   | egyptianfraction.{lua,py}, EgyptianFraction.hx     |
 | eigen.c      |                                                    |
 | ellipse.c    | grBMP.{lua,luajit}                                 |
@@ -77,7 +77,7 @@
 | factrep.c    |                                                    |
 | fdist.c      | distribution.lua                                   |
 | fft.c        | fft.lua                                            |
-| fib.c        | fib.{awk,lua,s7}                                   |
+| fib.c        | fib.{awk,lua}                                      |
 | fibonacc.c   |                                                    |
 | float.c      |                                                    |
 | fmerge.c     |                                                    |
@@ -112,7 +112,7 @@
 | house.c      |                                                    |
 | huffman.c    |                                                    |
 | hyperb.c     |                                                    |
-| hypot.c      | hypot.{awk,lua,s7}                                 |
+| hypot.c      | hypot.{awk,lua}                                    |
 | ibeta.c      |                                                    |
 | icubrt.c     | cuberoot.awk,nthroot.{lua,luajit}                  |
 | ifs.c        |                                                    |
@@ -163,7 +163,7 @@
 | matutil.c    |                                                    |
 | maxmin.c     |                                                    |
 | maze.c       |                                                    |
-| mccarthy.c   | mccarthy.{awk,lua,s7}                              |
+| mccarthy.c   | mccarthy.{awk,lua}                                 |
 | meansd1.c    |                                                    |
 | meansd2.c    |                                                    |
 | meansd3.c    |                                                    |
@@ -189,8 +189,8 @@
 | permfac.c    |                                                    |
 | permnum.c    |                                                    |
 | permsign.c   |                                                    |
-| pi1.c        | pi.{awk,lua,s7}, Pi.hx                             |
-| pi2.c        | pi.{awk,lua,s7}, Pi.hx                             |
+| pi1.c        | pi.{awk,lua}, Pi.hx                                |
+| pi2.c        | pi.{awk,lua}, Pi.hx                                |
 | plotter.c    |                                                    |
 | poly.c       |                                                    |
 | polygam.c    |                                                    |
@@ -239,7 +239,7 @@
 | sosrch.c     |                                                    |
 | spline2.c    |                                                    |
 | spline.c     |                                                    |
-| sqrt.c       | sqrt.awk,nthroot.{lua,luajit,s7}                   |
+| sqrt.c       | sqrt.awk,nthroot.{lua,luajit}                      |
 | squeeze.c    |                                                    |
 | srchmat.c    |                                                    |
 | statutil.c   |                                                    |
@@ -250,7 +250,7 @@
 | svgplot.c    | svgplot.{awk,lua,luajit,py}, SvgPlot.hx            |
 | swap.c       | swap.{awk,lua}                                     |
 | sweep.c      |                                                    |
-| tarai.c      | tarai.{awk,lua,s7}                                 |
+| tarai.c      | tarai.{awk,lua}                                    |
 | tbintree.c   |                                                    |
 | tdist.c      | distribution.lua                                   |
 | tetromin.c   |                                                    |
@@ -279,5 +279,4 @@
 #	*.lua:     Lua (5.3-)
 #	*.luajit:  LuaJIT
 #	*.py:      CPython3/MicroPython
-#	*.s7:      s7 (WITH_GMP)
 #

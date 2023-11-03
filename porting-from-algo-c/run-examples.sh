@@ -17,7 +17,6 @@ HAXE=
 LUA=
 LUAJIT=
 PY=
-S7=
 
 #
 
@@ -32,7 +31,6 @@ error() {
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
 [ "$(command -v $PY)" = "" ] && error "PY"
-[ "$(command -v $S7)" = "" ] && error "S7"
 
 #
 
@@ -60,10 +58,6 @@ runPY() {
 	MICROPYPATH='src' PYTHONPATH='src' $PY src/${1}.py
 }
 
-runS7() {
-	$S7 examples/${1}.s7
-}
-
 #
 
 run() {
@@ -75,7 +69,7 @@ run() {
 	done
 }
 
-run acker AWK LUA S7
+run acker AWK LUA
 run atan LUA
 run binormal LUA
 run change AWK LUA
@@ -84,38 +78,38 @@ run ci LUA
 run combination AWK LUA
 run complex HAXE LUA
 run crnd LUA LUAJIT
-run cuberoot AWK LUA LUAJIT S7
+run cuberoot AWK LUA LUAJIT
 run dayweek AWK LUA
-run e AWK DC HAXE LUA S7
+run e AWK DC HAXE LUA
 run eulerian AWK LUA
 run factorize LUA PY
 run fdist LUA
 run fft LUA
-run fib AWK LUA S7
+run fib AWK LUA
 run gamma AWK LUA
 run gcd AWK LUA
 run horner AWK LUA
-run hypot AWK LUA S7
+run hypot AWK LUA
 run isbn LUA
 run isbn13 LUA
 run komachi LUA
 run luhn LUA
 run machineepsilon HAXE LUA PY
-run mccarthy AWK LUA S7
+run mccarthy AWK LUA
 run montecarlo LUA
 run moveblock AWK LUA
 run multiply AWK LUA LUAJIT
 run normal AWK LUA
-run pi AWK HAXE LUA S7
+run pi AWK HAXE LUA
 run power AWK LUA LUAJIT
 run rand DC LUA LUAJIT
 run randperm LUA
 run si LUA
-run sqrt AWK LUA LUAJIT S7
+run sqrt AWK LUA LUAJIT
 run stirling AWK LUA
 run sum AWK LUA
 run swap AWK LUA
-run tarai AWK LUA S7
+run tarai AWK LUA
 run tdist LUA
 run totient AWK LUA
 run whrnd LUA

@@ -1,2 +1,1 @@
 *.luajit linguist-language=Lua
-*.s7 linguist-language=Scheme

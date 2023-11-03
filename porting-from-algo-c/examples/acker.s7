@@ -1,9 +1,0 @@
-;
-;	from src/acker.c
-;
-;	int A(int, int)		to	ack
-;
-
-(load "src/acker.s7")
-
-(format #t "(ack 3 3) = ~D (~D)~%" (ack 3 3) (count-ack 3 3))
