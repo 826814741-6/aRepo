@@ -79,6 +79,12 @@ function demo() {
 	trace(gaussLegendre(2), 2);
 	trace(gaussLegendre(3), 3);
 	trace(gaussLegendre(4), 4);
+	trace("-------- Math.PI:");
+	trace(Math.PI);
+	trace("-------- Math.atan(1) * 4:");
+	trace(Math.atan(1) * 4);
+	trace("-------- Math.atan2(0.0, -0.0):");
+	trace(Math.atan2(0.0, -0.0));
 	trace("-------- leibniz n:");
 	trace(leibniz(10000), 10000);
 	trace(leibniz(100000), 100000);

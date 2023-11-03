@@ -23,7 +23,7 @@
 --
 
 local H = require '_helper'
-local ret, M = pcall(require, "bc")
+local hasBC, M = pcall(require, "bc")
 
 local abs, atLeastOne = H.abs, H.atLeastOne
 
@@ -40,7 +40,7 @@ local function fSqrt(x)
 	return loopF(x, function (x,t) return (x/t + t) / 2 end)
 end
 
-local fSqrtM = ret and function (x, digit)
+local fSqrtM = hasBC and function (x, digit)
 	M.digits(digit)
 	return fSqrt(M.new(x))
 end or nil
@@ -67,7 +67,7 @@ local fCbrt2 = _f(
 	function (x) return x == 0 end
 )
 
-local fCbrtM = ret and (function (f)
+local fCbrtM = hasBC and (function (f)
 	return function (x, digit)
 		M.digits(digit)
 		return f(M.new(x))

@@ -39,7 +39,7 @@ do
 		{ 65, 67, 1 },
 		{ 27, 39, 1 },
 		{ 2, 23 },
-		{ id, id, function (n, k) return combination(n, k) end },
+		{ id, id, combination },
 		{ "d", "d", "d" }
 	)()
 
@@ -49,7 +49,7 @@ do
 			{ 65, 67, 1 },
 			{ 27, 39, 1 },
 			{ 2, 23 },
-			{ id, id, function (n, k) return combinationM(n, k) end },
+			{ id, id, combinationM },
 			{ "d", "d", "s" }
 		)()
 

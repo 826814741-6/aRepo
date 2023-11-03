@@ -10,7 +10,7 @@
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local ret, M = pcall(require, "bc")
+local hasBC, M = pcall(require, "bc")
 
 local function e()
 	local r, a, n, prev = 0, 1, 1
@@ -20,7 +20,7 @@ local function e()
 	return r, n - 1
 end
 
-local eM = ret and function (digit)
+local eM = hasBC and function (digit)
 	M.digits(digit)
 	local r, a, n, prev = M.new(0), M.new(1), 1
 	repeat
@@ -40,7 +40,7 @@ local function eR()
 	return rec(0, 1, 1)
 end
 
-local eMR = ret and function (digit)
+local eMR = hasBC and function (digit)
 	M.digits(digit)
 	return rec(M.new(0), M.new(1), 1)
 end or nil

@@ -28,6 +28,9 @@
 (format #t "-------- pi ((*s7* 'bignum-precision) is ~D):~%" (*s7* 'bignum-precision))
 (format #t "~A~%" pi)
 
+(format #t "-------- (* (atan 1) 4):~%")
+(format #t "~A~%" (* (atan 1) 4))
+
 (format #t "-------- leibniz n:~%")
 (format #t "~A (~D)~%" (leibniz 10000) 10000)
 (format #t "~A (~D)~%" (leibniz 100000) 100000)

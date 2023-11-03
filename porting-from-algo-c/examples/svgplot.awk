@@ -12,7 +12,7 @@
 function sample(path,	pi, theta, i, x, y) {
 	init(path, 300, 300)
 
-	pi = atan2(0,-0)
+	pi = atan2(0, -0)
 
 	header()
 	pathStart()

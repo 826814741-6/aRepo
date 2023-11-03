@@ -42,14 +42,13 @@ end
 local H = require '_helper'
 local id = H.id
 
-local combination = _combination(id)
-
-local ret, M = pcall(require, "bc")
-
-local combinationM = ret and _combination(function (n) return M.new(n) end) or nil
+local hasBC, M = pcall(require, "bc")
+local M_new = hasBC and M.new or nil
 
 return {
 	combinationR = combinationR,
-	combination = combination,
-	combinationM = combinationM
+	combination = _combination(id),
+	combinationM = hasBC and _combination(function (n)
+		return M_new(n)
+	end) or nil
 }

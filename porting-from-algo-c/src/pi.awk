@@ -58,6 +58,12 @@ BEGIN {
 	_p2(2, gaussLegendre(2))
 	_p2(3, gaussLegendre(3))
 
+	print "-------- atan2(1, 1) * 4:"
+	_p1(atan2(1, 1) * 4)
+
+	print "-------- atan2(0, -0):"
+	_p1(atan2(0, -0))
+
 	print "-------- leibniz n:"
 	_p2(10000, leibniz(10000))
 	_p2(100000, leibniz(100000))

@@ -8,7 +8,8 @@
 local M = require 'stirling'
 local H = require '_helper'
 
-local stirling1, stirling2, id, tableWriter = M.stirling1, M.stirling2, H.id, H.tableWriter
+local stirling1, stirling2 = M.stirling1, M.stirling2
+local id, tableWriter = H.id, H.tableWriter
 
 do
 	print("-------- Stirling numbers of the first kind:")
