@@ -49,11 +49,11 @@ do
 
 	print("-------- machinLikeM (depends on lbc):")
 	if machinLikeM ~= nil then
-		print(machinLikeM(52))
+		print(machinLikeM(100))
 	end
 
 	print("-------- gaussLegendreM n (depends on lbc):")
 	if gaussLegendreM ~= nil then
-		for i=1,6 do print(gaussLegendreM(i, 52), i) end
+		for i=1,6 do print(gaussLegendreM(i, 100), i) end
 	end
 end

@@ -1,0 +1,72 @@
+#
+#	from src/pi1.c
+#
+#	long double pi(void)	to	register m
+#
+#	from src/pi2.c
+#
+#	a part of main		to	register g
+#
+#	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+#
+#	a part of article	to	register l
+#
+
+[
+0sP 1sK 16 5/sT
+[lP dlTlK/+dsP lK2+sK lT5_5*/sT !=y]dsyx
+1sK 4 239/sT
+[lP dlTlK/-dsP lK2+sK lT239_239*/sT !=y]dsyx
+lP
+]sm
+
+# register: P, K, T / m, y
+
+[
+1sA 1 2v/sB 1sT 4sU
+[lA dlB+2/sA dlB*vsB lAr-d*lU*lTr-sT lU2*sU 1-d0<y]dsyxsC
+lAlB+d*lT/
+]sg
+
+# register: A, B, T, U, C / g, y
+
+[
+0sR 1sS 1sX
+[lSlX/lR+sR lS_1*sS lX2+sX 1-d0<y]dsyxsC
+lR4*
+]sl
+
+# register: R, S, X, C / l, y
+
+#
+
+[n10P]1:p
+[n32P40Pn41P10P]2:p
+
+# register: p
+
+20k
+[-------- machinLike (20k):]P10P
+lmx 1;px
+[-------- gaussLegendre n (20k):]P10P
+1d lgx 2;px
+2d lgx 2;px
+3d lgx 2;px
+4d lgx 2;px
+5d lgx 2;px
+6d lgx 2;px
+[-------- leibniz n (20k):]P10P
+10000d llx 2;px
+100000d llx 2;px
+1000000d llx 2;px
+
+100k
+[-------- machinLike (100k):]P10P
+lmx 1;px
+[-------- gaussLegendre n (100k):]P10P
+1d lgx 2;px
+2d lgx 2;px
+3d lgx 2;px
+4d lgx 2;px
+5d lgx 2;px
+6d lgx 2;px

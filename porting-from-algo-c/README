@@ -189,8 +189,8 @@
 | permfac.c    |                                                    |
 | permnum.c    |                                                    |
 | permsign.c   |                                                    |
-| pi1.c        | pi.{awk,lua}, Pi.hx                                |
-| pi2.c        | pi.{awk,lua}, Pi.hx                                |
+| pi1.c        | pi.{awk,dc,lua}, Pi.hx                             |
+| pi2.c        | pi.{awk,dc,lua}, Pi.hx                             |
 | plotter.c    |                                                    |
 | poly.c       |                                                    |
 | polygam.c    |                                                    |

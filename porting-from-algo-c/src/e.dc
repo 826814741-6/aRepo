@@ -4,11 +4,15 @@
 #	long double ee(void)	to	register f
 #
 
-[dsP lAdlN/sA+ lN1+sN dlP!=f]sf
+[
+0sR 1sA 1sN
+[lRdlA+dsR lAlN/sA lN1+sN !=f]dSfxLfc
+lN1- lR
+]sf
 
-# register: P, A, N / f
+# register: R, A, N / f
 
-15k 1sA1sN
-0 lfx n 32P40PlN1-n41P 10P
-50k 1sA1sN
-0 lfx n 32P40PlN1-n41P 10P
+#
+
+15k lfx n32P40Pn41P10P
+50k lfx n32P40Pn41P10P

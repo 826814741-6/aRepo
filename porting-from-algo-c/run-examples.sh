@@ -39,7 +39,7 @@ runAWK() {
 }
 
 runDC() {
-	$DC src/${1}.dc
+	DC_LINE_LENGTH=0 $DC src/${1}.dc
 }
 
 runHAXE() {
@@ -100,7 +100,7 @@ run montecarlo LUA
 run moveblock AWK LUA
 run multiply AWK LUA LUAJIT
 run normal AWK LUA
-run pi AWK HAXE LUA
+run pi AWK DC HAXE LUA
 run power AWK LUA LUAJIT
 run rand DC LUA LUAJIT
 run randperm LUA
