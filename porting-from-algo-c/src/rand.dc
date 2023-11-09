@@ -12,8 +12,8 @@
 
 #
 
-[8[lfx n32P 1-d0<y]dSyx sCLysC 10P 1-d0<y]sy
+[8[lfx n32P 1-d0<y]dSyx sDLysD 10P 1-d0<y]sy
 
-# register: C / y
+# register: D / y
 
 20 lyx c

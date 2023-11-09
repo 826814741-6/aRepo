@@ -6,6 +6,8 @@
 
 package src;
 
+using src.Helper.PathStringExtender;
+
 private inline function stepX(n:Int, offset:Int, x:Float):Float {
 	return n + offset + n * Math.cos(x);
 }
@@ -37,7 +39,7 @@ function lissajousCurveE(plotter:SvgPlot.PlotterE, n:Int, offset:Int) {
 private function demoA(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlot(size, size);
 
 		plotter.plotStart(fh);
@@ -45,7 +47,7 @@ private function demoA(prefix, n, offset) {
 		plotter.plotEnd(true);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotE(size, size);
 
 		plotter.plotStart(fh);
@@ -57,7 +59,7 @@ private function demoA(prefix, n, offset) {
 private function demoB(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWholeBuffering(size, size);
 
 		lissajousCurve(plotter, n, offset);
@@ -66,7 +68,7 @@ private function demoB(prefix, n, offset) {
 		plotter.write(fh);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWholeBufferingE(size, size);
 
 		lissajousCurveE(plotter, n, offset);
@@ -79,7 +81,7 @@ private function demoB(prefix, n, offset) {
 private function demoC(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWithBuffering(size, size);
 
 		plotter.plotStart(fh, 30);
@@ -87,7 +89,7 @@ private function demoC(prefix, n, offset) {
 		plotter.plotEnd(true);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWithBufferingE(size, size);
 
 		plotter.plotStart(fh, 30);

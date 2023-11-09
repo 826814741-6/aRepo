@@ -6,11 +6,11 @@
 
 [
 0sR 1sA 1sN
-[lRdlA+dsR lAlN/sA lN1+sN !=f]dSfxLfc
+[lRdlA+dsR lAlN/sA lN1+sN !=y]dsyx
 lN1- lR
 ]sf
 
-# register: R, A, N / f
+# register: R, A, N / f, y
 
 #
 

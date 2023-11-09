@@ -24,19 +24,19 @@ lP
 
 [
 1sA 1 2v/sB 1sT 4sU
-[lA dlB+2/sA dlB*vsB lAr-d*lU*lTr-sT lU2*sU 1-d0<y]dsyxsC
+[lA dlB+2/sA dlB*vsB lAr-d*lU*lTr-sT lU2*sU 1-d0<y]dsyxsD
 lAlB+d*lT/
 ]sg
 
-# register: A, B, T, U, C / g, y
+# register: A, B, T, U, D / g, y
 
 [
 0sR 1sS 1sX
-[lSlX/lR+sR lS_1*sS lX2+sX 1-d0<y]dsyxsC
+[lSlX/lR+sR lS_1*sS lX2+sX 1-d0<y]dsyxsD
 lR4*
 ]sl
 
-# register: R, S, X, C / l, y
+# register: R, S, X, D / l, y
 
 #
 

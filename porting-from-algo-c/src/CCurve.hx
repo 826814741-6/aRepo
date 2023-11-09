@@ -6,6 +6,8 @@
 
 package src;
 
+using src.Helper.PathStringExtender;
+
 function cCurve(plotter:SvgPlot.Plotter, i:Int, x:Float, y:Float) {
 	if (i == 0) {
 		plotter.drawRel(x, y);
@@ -27,7 +29,7 @@ function cCurveE(plotter:SvgPlot.PlotterE, i:Int, x:Float, y:Float) {
 //
 
 private function demoA(prefix, n=10) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlot(400, 250);
 
 		plotter.plotStart(fh);
@@ -36,7 +38,7 @@ private function demoA(prefix, n=10) {
 		plotter.plotEnd();
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotE(400, 250);
 
 		plotter.plotStart(fh);
@@ -47,7 +49,7 @@ private function demoA(prefix, n=10) {
 }
 
 private function demoB(prefix, n=10) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWholeBuffering(400, 250);
 
 		plotter.move(100, 200);
@@ -56,7 +58,7 @@ private function demoB(prefix, n=10) {
 		plotter.write(fh);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWholeBufferingE(400, 250);
 
 		plotter.plot(Move(100, 200));
@@ -67,7 +69,7 @@ private function demoB(prefix, n=10) {
 }
 
 private function demoC(prefix, n=10) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWithBuffering(400, 250);
 
 		plotter.plotStart(fh, 30);
@@ -76,7 +78,7 @@ private function demoC(prefix, n=10) {
 		plotter.plotEnd();
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWithBufferingE(400, 250);
 
 		plotter.plotStart(fh, 30);

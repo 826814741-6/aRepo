@@ -6,6 +6,8 @@
 
 package src;
 
+using src.Helper.PathStringExtender;
+
 function treeCurve(
 	plotter:SvgPlot.Plotter,
 	n:Int,
@@ -51,7 +53,7 @@ function treeCurveE(
 //
 
 private function demoA(prefix, n=10) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlot(400, 350);
 
 		plotter.plotStart(fh);
@@ -60,7 +62,7 @@ private function demoA(prefix, n=10) {
 		plotter.plotEnd();
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotE(400, 350);
 
 		plotter.plotStart(fh);
@@ -71,7 +73,7 @@ private function demoA(prefix, n=10) {
 }
 
 private function demoB(prefix, n=10) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWholeBuffering(400, 350);
 
 		plotter.move(200, 0);
@@ -80,7 +82,7 @@ private function demoB(prefix, n=10) {
 		plotter.write(fh);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWholeBufferingE(400, 350);
 
 		plotter.plot(Move(200, 0));
@@ -91,7 +93,7 @@ private function demoB(prefix, n=10) {
 }
 
 private function demoC(prefix, n=10) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWithBuffering(400, 350);
 
 		plotter.plotStart(fh, 30);
@@ -100,7 +102,7 @@ private function demoC(prefix, n=10) {
 		plotter.plotEnd();
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot.SvgPlotWithBufferingE(400, 350);
 
 		plotter.plotStart(fh, 30);

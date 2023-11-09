@@ -23,6 +23,8 @@
 
 package src;
 
+using src.Helper.PathStringExtender;
+
 interface Plotter {
 	public function move(x:Float, y:Float):Void;
 	public function moveRel(x:Float, y:Float):Void;
@@ -298,7 +300,7 @@ private function sampleE(plotter:PlotterE) {
 //
 
 private function demoA(prefix) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlot(300, 300);
 
 		plotter.plotStart(fh);
@@ -306,7 +308,7 @@ private function demoA(prefix) {
 		plotter.plotEnd(true);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlotE(300, 300);
 
 		plotter.plotStart(fh);
@@ -316,7 +318,7 @@ private function demoA(prefix) {
 }
 
 private function demoB(prefix) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlotWholeBuffering(300, 300);
 
 		sample(plotter);
@@ -325,7 +327,7 @@ private function demoB(prefix) {
 		plotter.write(fh);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlotWholeBufferingE(300, 300);
 
 		sampleE(plotter);
@@ -336,7 +338,7 @@ private function demoB(prefix) {
 }
 
 private function demoC(prefix) {
-	Helper.withFileWrite('${prefix}.svg', (fh) -> {
+	'${prefix}.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlotWithBuffering(300, 300);
 
 		plotter.plotStart(fh, 2);
@@ -344,7 +346,7 @@ private function demoC(prefix) {
 		plotter.plotEnd(true);
 	});
 
-	Helper.withFileWrite('${prefix}-E.svg', (fh) -> {
+	'${prefix}-E.svg'.fileWrite((fh) -> {
 		final plotter = new SvgPlotWithBufferingE(300, 300);
 
 		plotter.plotStart(fh, 2);
