@@ -23,8 +23,6 @@
 
 package src;
 
-using src.Helper.PathStringExtender;
-
 interface Plotter {
 	public function move(x:Float, y:Float):Void;
 	public function moveRel(x:Float, y:Float):Void;
@@ -273,7 +271,7 @@ private function format(s:String, x:Float, y:Float):String {
 
 //
 
-private function sample(plotter:Plotter) {
+function sample(plotter:Plotter) {
 	for (i in 0...5) {
 		final t:Float = 2 * Math.PI * i / 5;
 		final x:Float = 150 + 140 * Math.cos(t);
@@ -285,7 +283,7 @@ private function sample(plotter:Plotter) {
 	}
 }
 
-private function sampleE(plotter:PlotterE) {
+function sampleE(plotter:PlotterE) {
 	for (i in 0...5) {
 		final t:Float = 2 * Math.PI * i / 5;
 		final x:Float = 150 + 140 * Math.cos(t);
@@ -295,70 +293,4 @@ private function sampleE(plotter:PlotterE) {
 		else
 			plotter.plot(Draw(x, y));
 	}
-}
-
-//
-
-private function demoA(prefix) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlot(300, 300);
-
-		plotter.plotStart(fh);
-		sample(plotter);
-		plotter.plotEnd(true);
-	});
-
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotE(300, 300);
-
-		plotter.plotStart(fh);
-		sampleE(plotter);
-		plotter.plotEnd(true);
-	});
-}
-
-private function demoB(prefix) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBuffering(300, 300);
-
-		sample(plotter);
-		plotter.plotEnd(true);
-
-		plotter.write(fh);
-	});
-
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBufferingE(300, 300);
-
-		sampleE(plotter);
-		plotter.plotEnd(true);
-
-		plotter.write(fh);
-	});
-}
-
-private function demoC(prefix) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWithBuffering(300, 300);
-
-		plotter.plotStart(fh, 2);
-		sample(plotter);
-		plotter.plotEnd(true);
-	});
-
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWithBufferingE(300, 300);
-
-		plotter.plotStart(fh, 2);
-		sampleE(plotter);
-		plotter.plotEnd(true);
-	});
-}
-
-//
-
-function demo() {
-	demoA("results/svgplot-hx");
-	demoB("results/svgplot-hx-WB-A");
-	demoC("results/svgplot-hx-WB-B");
 }

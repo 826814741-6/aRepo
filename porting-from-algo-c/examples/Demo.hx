@@ -1,3 +1,12 @@
+//
+//	from src/complex.c		to	complex
+//	from src/e.c			to	e
+//	from src/maceps.c		to	machineepsilon
+//	from src/{pi1,pi2}.c		to	pi
+//
+//	from src/egypfrac.c		to	egyptianfraction
+//
+
 #if complex
 import src.Complex.demo;
 #end
@@ -12,24 +21,6 @@ import src.MachineEpsilon.demo;
 
 #if pi
 import src.Pi.demo;
-#end
-
-//
-
-#if ccurve
-import src.CCurve.demo;
-#end
-
-#if lissajouscurve
-import src.LissajousCurve.demo;
-#end
-
-#if svgplot
-import src.SvgPlot.demo;
-#end
-
-#if treecurve
-import src.TreeCurve.demo;
 #end
 
 //

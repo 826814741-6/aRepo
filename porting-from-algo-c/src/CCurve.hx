@@ -6,8 +6,6 @@
 
 package src;
 
-using src.Helper.PathStringExtender;
-
 function cCurve(plotter:SvgPlot.Plotter, i:Int, x:Float, y:Float) {
 	if (i == 0) {
 		plotter.drawRel(x, y);
@@ -24,74 +22,4 @@ function cCurveE(plotter:SvgPlot.PlotterE, i:Int, x:Float, y:Float) {
 		cCurveE(plotter, i - 1, (x + y) / 2, (y - x) / 2);
 		cCurveE(plotter, i - 1, (x - y) / 2, (y + x) / 2);
 	}
-}
-
-//
-
-private function demoA(prefix, n=10) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlot.SvgPlot(400, 250);
-
-		plotter.plotStart(fh);
-		plotter.move(100, 200);
-		cCurve(plotter, n, 200, 0);
-		plotter.plotEnd();
-	});
-
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlot.SvgPlotE(400, 250);
-
-		plotter.plotStart(fh);
-		plotter.plot(Move(100, 200));
-		cCurveE(plotter, n, 200, 0);
-		plotter.plotEnd();
-	});
-}
-
-private function demoB(prefix, n=10) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlot.SvgPlotWholeBuffering(400, 250);
-
-		plotter.move(100, 200);
-		cCurve(plotter, n, 200, 0);
-
-		plotter.write(fh);
-	});
-
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlot.SvgPlotWholeBufferingE(400, 250);
-
-		plotter.plot(Move(100, 200));
-		cCurveE(plotter, n, 200, 0);
-
-		plotter.write(fh);
-	});
-}
-
-private function demoC(prefix, n=10) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlot.SvgPlotWithBuffering(400, 250);
-
-		plotter.plotStart(fh, 30);
-		plotter.move(100, 200);
-		cCurve(plotter, n, 200, 0);
-		plotter.plotEnd();
-	});
-
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlot.SvgPlotWithBufferingE(400, 250);
-
-		plotter.plotStart(fh, 30);
-		plotter.plot(Move(100, 200));
-		cCurveE(plotter, n, 200, 0);
-		plotter.plotEnd();
-	});
-}
-
-//
-
-function demo() {
-	demoA("results/ccurve-hx");
-	demoB("results/ccurve-hx-WB-A");
-	demoC("results/ccurve-hx-WB-B");
 }
