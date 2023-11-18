@@ -1,8 +1,8 @@
 //
 //	from src/ccurve.c		to	ccurve
-//	from src/lissajouscurve.c	to	lissajouscurve
+//	from src/lissaj.c		to	lissajouscurve
 //	from src/svgplot.c		to	svgplot
-//	from src/treecurve.c		to	treecurve
+//	from src/treecurv.c		to	treecurve
 //
 
 using src.Helper.PathStringExtender;

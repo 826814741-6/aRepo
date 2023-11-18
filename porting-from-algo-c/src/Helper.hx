@@ -18,16 +18,14 @@ class PathStringExtender {
 
 @:generic
 function leftAlignWithSpace<T>(buf:StringBuf, length:Int, src:T) {
-	var n = length - Std.string(src).length;
+	final n = length - Std.string(src).length;
 	buf.add(src);
-	for (_ in 0...n)
-		buf.addChar(32);
+	buf.add(StringTools.rpad("", " ", n));
 }
 
 @:generic
 function rightAlignWithSpace<T>(buf:StringBuf, length:Int, src:T) {
-	var n = length - Std.string(src).length;
-	for (_ in 0...n)
-		buf.addChar(32);
+	final n = length - Std.string(src).length;
+	buf.add(StringTools.rpad("", " ", n));
 	buf.add(src);
 }
