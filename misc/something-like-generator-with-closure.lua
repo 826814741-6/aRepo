@@ -20,18 +20,7 @@ function clGen(f, ...)
 	end
 
 	-- something-like-take
-	function T:take(n)
-		n = n ~= nil and n or 0
-
-		local r = {}
-		for i=1,n do
-			r[i] = T.f()
-		end
-		return T, r
-	end
-
-	-- something-like-map
-	function T:map(n, f)
+	function T:take(n, f)
 		n = n ~= nil and n or 0
 		f = f ~= nil and f or function (e) return e end
 
@@ -43,38 +32,17 @@ function clGen(f, ...)
 	end
 
 	-- something-like-filter
-	function T:filter(n, f)
+	function T:filter(n, f, g)
 		n = n ~= nil and n or 0
 		f = f ~= nil and f or function (...) return true end
+		g = g ~= nil and g or function (e) return e end
 
 		local r, i = {}, 1
 		while i <= n do
 			local v = T.f()
-			if f(i, v) then r[i], i = v, i + 1 end
+			if f(i, v) then r[i], i = g(v), i + 1 end
 		end
 		return T, r
-	end
-
-	return T
-end
-
-function extendsWithBufferMethods(T)
-	function T:takeB(buffer, n)
-		local t, r = T:take(n)
-		buffer:insert(r)
-		return t, r
-	end
-
-	function T:mapB(buffer, n, f)
-		local t, r = T:map(n, f)
-		buffer:insert(r)
-		return t, r
-	end
-
-	function T:filterB(buffer, n, f)
-		local t, r = T:filter(n, f)
-		buffer:insert(r)
-		return t, r
 	end
 
 	return T
@@ -282,22 +250,33 @@ end
 do
 	p(clGen(seq):take(10))
 	p(clGen(seq):skip(50):take(10))
-	p(clGen(seq):map(10, function (v) return v*v*v end))
+	p(clGen(seq):take(10, function (v) return v*v*v end))
 	p(clGen(seq):filter(10, function (_,v) if v%2==0 then return v end end))
 
 	print("--")
 
-	local cl = clGen(seq)
-	p(cl:skip(5):take(5):skip(5):take(5))
-
 	local buf = makeBuffer()
-	cl = extendsWithBufferMethods(clGen(seq))
-	cl:skip(5):takeB(buf,5):skip(5):takeB(buf,5)
-	p(buf:get())
+
+	p(clGen(seq):skip(3):take(3)) -- 3, 4, 5
+	p(clGen(seq):skip(3):take(3, function (v) buf:insert(v) end)) -- (nothing)
+	p(clGen(seq):skip(3):take(3, function (v) buf:insert(v) return v end)) -- 3, 4, 5
+	p(buf:get()) -- 3, 4, 5, 3, 4, 5
 
 	buf:reset()
-	cl = extendsWithBufferMethods(clGen(seq))
-	cl:skip(5):takeB(buf,5):skip(5):take(5):skip(5):takeB(buf,5)
+
+	clGen(seq)
+		:skip(5) -- 0, 1, 2, 3, 4
+		:filter(
+			5,
+			function (_,v) if v%2==0 then return v end end,
+			function (v) buf:insert(v) end
+		)        -- 6, 8, 10, 12, 14
+		:skip(3) -- 15, 16, 17
+		:filter(
+			5,
+			function (_,v) if v%3==0 then return v end end,
+			function (v) buf:insert(v) end
+		)        -- 18, 21, 24, 27, 30
 	p(buf:get())
 
 	print("--")
