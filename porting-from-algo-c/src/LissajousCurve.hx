@@ -6,13 +6,11 @@
 
 package src;
 
-private inline function stepX(n:Int, offset:Int, x:Float):Float {
+private inline function stepX(n:Int, offset:Int, x:Float):Float
 	return n + offset + n * Math.cos(x);
-}
 
-private inline function stepY(n:Int, offset:Int, y:Float):Float {
+private inline function stepY(n:Int, offset:Int, y:Float):Float
 	return n + offset + n * Math.sin(y);
-}
 
 function lissajousCurve(plotter:SvgPlot.Plotter, n:Int, offset:Int) {
 	plotter.move(stepX(n, offset, 0), stepY(n, offset, 0));

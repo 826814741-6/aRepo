@@ -9,13 +9,11 @@ package src;
 class MEIterator {
 	var e:Float;
 
-	public function new() {
+	public function new()
 		this.e = 1;
-	}
 
-	public function hasNext():Bool {
+	public function hasNext():Bool
 		return 1 + this.e > 1;
-	}
 
 	public function next():Float {
 		var prev = this.e;

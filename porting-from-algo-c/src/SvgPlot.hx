@@ -73,13 +73,11 @@ private class WriterWholeBuffering extends Base {
 	var buf:StringBuf = new StringBuf();
 	var isClosePath:Bool = false;
 
-	public function plotEnd(isClosePath:Bool=false) {
+	public function plotEnd(isClosePath:Bool=false)
 		this.isClosePath = isClosePath;
-	}
 
-	public function reset() {
+	public function reset()
 		this.buf = new StringBuf();
-	}
 
 	public function write(fh:sys.io.FileOutput) {
 		fh.writeString(header(this.x, this.y));
@@ -132,25 +130,21 @@ private class WriterWithBuffering extends Base {
 //
 
 class SvgPlot extends Writer implements Plotter {
-	public function move(x:Float, y:Float) {
+	public function move(x:Float, y:Float)
 		this.fh.writeString(format('M', x, this.y - y));
-	}
 
-	public function moveRel(x:Float, y:Float) {
+	public function moveRel(x:Float, y:Float)
 		this.fh.writeString(format('m', x, -y));
-	}
 
-	public function draw(x:Float, y:Float) {
+	public function draw(x:Float, y:Float)
 		this.fh.writeString(format('L', x, this.y - y));
-	}
 
-	public function drawRel(x:Float, y:Float) {
+	public function drawRel(x:Float, y:Float)
 		this.fh.writeString(format('l', x, -y));
-	}
 }
 
 class SvgPlotE extends Writer implements PlotterE {
-	public function plot(method:Method) {
+	public function plot(method:Method)
 		switch (method) {
 			case Move(x, y):
 				this.fh.writeString(format('M', x, this.y - y));
@@ -161,29 +155,24 @@ class SvgPlotE extends Writer implements PlotterE {
 			case DrawRel(x, y):
 				this.fh.writeString(format('l', x, -y));
 		}
-	}
 }
 
 class SvgPlotWholeBuffering extends WriterWholeBuffering implements Plotter {
-	public function move(x:Float, y:Float) {
+	public function move(x:Float, y:Float)
 		this.buf.add(format('M', x, this.y - y));
-	}
 
-	public function moveRel(x:Float, y:Float) {
+	public function moveRel(x:Float, y:Float)
 		this.buf.add(format('m', x, -y));
-	}
 
-	public function draw(x:Float, y:Float) {
+	public function draw(x:Float, y:Float)
 		this.buf.add(format('L', x, this.y - y));
-	}
 
-	public function drawRel(x:Float, y:Float) {
+	public function drawRel(x:Float, y:Float)
 		this.buf.add(format('l', x, -y));
-	}
 }
 
 class SvgPlotWholeBufferingE extends WriterWholeBuffering implements PlotterE {
-	public function plot(method:Method) {
+	public function plot(method:Method)
 		switch (method) {
 			case Move(x, y):
 				this.buf.add(format('M', x, this.y - y));
@@ -194,7 +183,6 @@ class SvgPlotWholeBufferingE extends WriterWholeBuffering implements PlotterE {
 			case DrawRel(x, y):
 				this.buf.add(format('l', x, -y));
 		}
-	}
 }
 
 class SvgPlotWithBuffering extends WriterWithBuffering implements Plotter {
@@ -220,7 +208,7 @@ class SvgPlotWithBuffering extends WriterWithBuffering implements Plotter {
 }
 
 class SvgPlotWithBufferingE extends WriterWithBuffering implements PlotterE {
-	public function plot(method:Method) {
+	public function plot(method:Method)
 		switch (method) {
 			case Move(x, y):
 				this.buf.add(format('M', x, this.y - y));
@@ -235,29 +223,24 @@ class SvgPlotWithBufferingE extends WriterWithBuffering implements PlotterE {
 				this.buf.add(format('l', x, -y));
 				writer();
 		}
-	}
 }
 
 //
 
-private function header(x:Int, y:Int):String {
+private function header(x:Int, y:Int):String
 	return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$x" height="$y">
 ';
-}
 
-private function footer():String {
+private function footer():String
 	return '</svg>
 ';
-}
 
-private function pathStart():String {
+private function pathStart():String
 	return '<path d="';
-}
 
-private function pathEnd(isClosePath:Bool):String {
+private function pathEnd(isClosePath:Bool):String
 	return '${if (isClosePath) "Z" else ""}" fill="none" stroke="black" />
 ';
-}
 
 // workarounds for something like C-printf-"%g"-format
 private function workarounds(n:Float):String {
@@ -265,13 +248,12 @@ private function workarounds(n:Float):String {
 	return Std.string(Math.round(n * d) / d);
 }
 
-private function format(s:String, x:Float, y:Float):String {
+private function format(s:String, x:Float, y:Float):String
 	return '$s ${workarounds(x)} ${workarounds(y)} ';
-}
 
 //
 
-function sample(plotter:Plotter) {
+function sample(plotter:Plotter)
 	for (i in 0...5) {
 		final t:Float = 2 * Math.PI * i / 5;
 		final x:Float = 150 + 140 * Math.cos(t);
@@ -281,9 +263,8 @@ function sample(plotter:Plotter) {
 		else
 			plotter.draw(x, y);
 	}
-}
 
-function sampleE(plotter:PlotterE) {
+function sampleE(plotter:PlotterE)
 	for (i in 0...5) {
 		final t:Float = 2 * Math.PI * i / 5;
 		final x:Float = 150 + 140 * Math.cos(t);
@@ -293,4 +274,3 @@ function sampleE(plotter:PlotterE) {
 		else
 			plotter.plot(Draw(x, y));
 	}
-}

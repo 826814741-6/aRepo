@@ -287,6 +287,5 @@ private function demoC(prefix, n=10) {
 }
 #end
 
-function main() {
+function main()
 	demo();
-}

@@ -5,7 +5,7 @@ class PathStringExtender {
 		path:String,
 		binary:Bool = true,
 		aFunc:sys.io.FileOutput->Void
-	) {
+	)
 		try {
 			var fh = sys.io.File.write(path, binary);
 			aFunc(fh);
@@ -13,7 +13,6 @@ class PathStringExtender {
 		} catch(e) {
 			trace(e.message);
 		}
-	}
 }
 
 @:generic

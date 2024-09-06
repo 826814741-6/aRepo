@@ -31,6 +31,5 @@ import src.EgyptianFraction.demo;
 
 //
 
-function main() {
+function main()
 	demo();
-}

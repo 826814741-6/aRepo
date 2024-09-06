@@ -21,15 +21,14 @@ private abstract class EFIBase<T> {
 		d = denominator;
 	}
 
-	public function hasNext():Bool {
+	public function hasNext():Bool
 		return state;
-	}
 
 	abstract public function next():String;
 }
 
 class EFIterator extends EFIBase<Int> {
-	public function next():String {
+	public function next():String
 		return if (d % n != 0) {
 			var t = Math.floor(d / n) + 1;
 			n = n * t - d;
@@ -39,12 +38,11 @@ class EFIterator extends EFIBase<Int> {
 			state = false;
 			'1/${Math.floor(d / n)}';
 		}
-	}
 }
 
 #if hasLittleBigInt
 class EFIteratorM extends EFIBase<BigInt> {
-	public function next():String {
+	public function next():String
 		return if (d % n != 0) {
 			var t = workarounds(n, d) + 1;
 			n = n * t - d;
@@ -54,11 +52,9 @@ class EFIteratorM extends EFIBase<BigInt> {
 			state = false;
 			'1/${workarounds(n, d)}';
 		}
-	}
 
-	function workarounds(n:BigInt, d:BigInt):BigInt {
+	function workarounds(n:BigInt, d:BigInt):BigInt
 		return if (d/n != null) d/n else 0;
-	}
 }
 #end
 

@@ -11,7 +11,6 @@
 local M = require 'bc'
 
 local M_new, M_quotrem, M_tonumber = M.new, M.quotrem, M.tonumber
---
 local I_write = io.write
 local S_char = string.char
 local T_concat, T_insert = table.concat, table.insert
@@ -22,17 +21,13 @@ function init(src)
 		candidate = {}
 	}
 
-	function makeCandidate()
-		local n, edge = T.source, M_new(255)
-		while n > edge do
-			local q, r = M_quotrem(n, 256)
-			T_insert(T.candidate, 1, S_char(M_tonumber(r)))
-			n = q
-		end
-		T_insert(T.candidate, 1, S_char(M_tonumber(n)))
+	local n, edge = T.source, M_new(255)
+	while n > edge do
+		local q, r = M_quotrem(n, 256)
+		T_insert(T.candidate, 1, S_char(M_tonumber(r)))
+		n = q
 	end
-
-	makeCandidate()
+	T_insert(T.candidate, 1, S_char(M_tonumber(n)))
 
 	return T
 end
