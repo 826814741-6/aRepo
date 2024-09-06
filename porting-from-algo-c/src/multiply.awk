@@ -1,10 +1,10 @@
 #
 #	from src/multiply.c
 #
-#	unsigned multiply(unsigned, unsigned)	to	mulA(, mulB, mulC)
+#	unsigned multiply(unsigned, unsigned)	to	iMulA(, iMulB, iMulC)
 #
 
-function mulA(a, b,	r) {
+function iMulA(a, b,	r) {
 	r = 0
 	while (a) {
 		if (a%2) r += b
@@ -24,7 +24,7 @@ function mulA(a, b,	r) {
 #	...
 #}
 #
-#function mulB(a, b,	r) {
+#function iMulB(a, b,	r) {
 #	r = 0
 #	while (a) {
 #		if (_and(a,1)) r += b
@@ -36,7 +36,7 @@ function mulA(a, b,	r) {
 #function _rec(a, b, r) {
 #	return a ? _rec(_rshift(a,1), _lshift(b,1), _and(a,1)?r+b:r) : r
 #}
-#function mulC(a, b) {
+#function iMulC(a, b) {
 #	return _rec(a, b, 0)
 #}
 #
@@ -46,7 +46,7 @@ function mulA(a, b,	r) {
 # 9.1.6 Bit-Manipulation Functions
 # https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
 #
-#function mulB(a, b,	r) {
+#function iMulB(a, b,	r) {
 #	r = 0
 #	while (a) {
 #		if (and(a,1)) r += b
@@ -58,7 +58,7 @@ function mulA(a, b,	r) {
 #function _rec(a, b, r) {
 #	return a ? _rec(rshift(a,1), lshift(b,1), and(a,1)?r+b:r) : r
 #}
-#function mulC(a, b) {
+#function iMulC(a, b) {
 #	return _rec(a, b, 0)
 #}
 
@@ -66,9 +66,9 @@ function mulA(a, b,	r) {
 
 BEGIN {
 	printf "%s, %s, %s, %s -> %d, %d, %.2f, %.2f\n",
-		"2*3", "mulA(2,3)", "2.1*3.1", "mulA(2.1,3.1)", 2*3, mulA(2,3), 2.1*3.1, mulA(2.1,3.1)
+		"2*3", "iMulA(2,3)", "2.1*3.1", "iMulA(2.1,3.1)", 2*3, iMulA(2,3), 2.1*3.1, iMulA(2.1,3.1)
 	#printf "%s, %s, %s, %s -> %d, %d, %.2f, %.2f\n",
-	#	"2*3", "mulB(2,3)", "2.1*3.1", "mulB(2.1,3.1)", 2*3, mulB(2,3), 2.1*3.1, mulB(2.1,3.1)
+	#	"2*3", "iMulB(2,3)", "2.1*3.1", "iMulB(2.1,3.1)", 2*3, iMulB(2,3), 2.1*3.1, iMulB(2.1,3.1)
 	#printf "%s, %s, %s, %s -> %d, %d, %.2f, %.2f\n",
-	#	"2*3", "mulC(2,3)", "2.1*3.1", "mulC(2.1,3.1)", 2*3, mulC(2,3), 2.1*3.1, mulC(2.1,3.1)
+	#	"2*3", "iMulC(2,3)", "2.1*3.1", "iMulC(2.1,3.1)", 2*3, iMulC(2,3), 2.1*3.1, iMulC(2.1,3.1)
 }

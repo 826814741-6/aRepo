@@ -1,10 +1,10 @@
 --
 --	from src/multiply.c
 --
---	unsigned multiply(unsigned, unsigned)	to	mulA, mulB, mulC
+--	unsigned multiply(unsigned, unsigned)	to	iMulA, iMulB, iMulC
 --
 
-local function mulA(a, b)
+local function iMulA(a, b)
 	local r = 0
 	while a ~= 0 do
 		if a % 2 == 1 then r = r + b end
@@ -13,7 +13,7 @@ local function mulA(a, b)
 	return r
 end
 
-local function mulB(a, b)
+local function iMulB(a, b)
 	local r = 0
 	while a ~= 0 do
 		if a & 1 == 1 then r = r + b end
@@ -22,7 +22,7 @@ local function mulB(a, b)
 	return r
 end
 
-local function mulC(a, b)
+local function iMulC(a, b)
 	function rec(a, b, r)
 		return a ~= 0 and rec(a>>1, b<<1, a&1==1 and r+b or r) or r
 	end
@@ -30,7 +30,7 @@ local function mulC(a, b)
 end
 
 return {
-	mulA = mulA,
-	mulB = mulB,
-	mulC = mulC
+	iMulA = iMulA,
+	iMulB = iMulB,
+	iMulC = iMulC
 }

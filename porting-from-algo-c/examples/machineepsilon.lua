@@ -17,14 +17,28 @@ do
 	print(" e              1 + e          (1 + e) - 1    e (%q)")
 	print("-------------- -------------- -------------- ---------")
 
+	function pfmt(e)
+		print(
+			("% -14g % -14g % -14g  %q")
+				:format(
+					e,
+					1 + e,
+					(1 + e) - 1,
+					e
+				)
+		)
+	end
+
 	for e in iterator do
-		print(("% -14g % -14g % -14g  %q"):format(e, 1 + e, (1 + e) - 1, e))
-		if e - FLT_EPSILON <= DBL_EPSILON then break end
+		pfmt(e)
+		if e - FLT_EPSILON <= DBL_EPSILON then
+			break
+		end
 	end
 
 	print("^------- FLT_EPSILON")
 
 	for e in iterator do
-		print(("% -14g % -14g % -14g  %q"):format(e, 1 + e, (1 + e) - 1, e))
+		pfmt(e)
 	end
 end

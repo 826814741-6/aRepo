@@ -51,15 +51,15 @@ local function atanR(x, n, pi)
 	end
 end
 
-local ret0, M = pcall(require, "bc")
-local ret1, H = pcall(require, "pi")
+local hasBC, M = pcall(require, "bc")
+local hasPI, H = pcall(require, "pi")
 
-local atanM = (ret0 and ret1) and function (x, n, digit)
+local atanM = (hasBC and hasPI) and function (x, n, digit)
 	M.digits(digit)
 	return atan(M.new(x), n, H.machinLikeM(digit))
 end or nil
 
-local atanMR = (ret0 and ret1) and function (x, n, digit)
+local atanMR = (hasBC and hasPI) and function (x, n, digit)
 	M.digits(digit)
 	return atanR(M.new(x), n, H.machinLikeM(digit))
 end or nil
@@ -71,20 +71,34 @@ local function guessProperLoopCount(l, r, d, border, verbose)
 		local m, n = i/d, 1
 		for j=2,24 do
 			n = j
-			if math.abs(atan(m,n) - math.atan(m)) <= border then
+			if math.abs(atan(m, n) - math.atan(m)) <= border then
 				break
 			end
 		end
 		t = t < n and n or t
 
 		if verbose == true then
-			local a, b, c = atan(m,n), atanR(m,n), math.atan(m)
-			assert(a == b,
-				("atan(%g,%g) ~= atanR(%g,%g)"):format(m,n,m,n))
-			assert(math.abs(a - c) <= border,
-				("math.abs(atan(%g,%g) - math.atan(%g)) > %g"):format(m,n,m,border))
-			print(("%5.2f % .14f % 5g (LOOPCOUNT:%2d) (delta:%g)"):format(
-				m, atan(m,n), math.tan(atan(m,n)), n, math.abs(a-c)))
+			local a, b, c = atan(m, n), atanR(m, n), math.atan(m)
+			assert(
+				a == b,
+				("atan(%g, %g) ~= atanR(%g, %g)")
+					:format(m, n, m, n)
+			)
+			assert(
+				math.abs(a - c) <= border,
+				("math.abs(atan(%g, %g) - math.atan(%g)) > %g")
+					:format(m, n, m, border)
+			)
+			print(
+				("%5.2f % .14f % 5g (LOOPCOUNT:%2d) (delta:%g)")
+					:format(
+						m,
+						a,
+						math.tan(a),
+						n,
+						math.abs(a - c)
+					)
+			)
 		end
 	end
 
@@ -95,7 +109,7 @@ local function guessProperLoopCount(l, r, d, border, verbose)
 	return t
 end
 
-local guessProperLoopCountM = (ret0 and ret1) and function (l, r, d, border, digit, verbose)
+local guessProperLoopCountM = (hasBC and hasPI) and function (l, r, d, border, digit, verbose)
 	local t = 0
 
 	for i=l,r do
@@ -104,15 +118,20 @@ local guessProperLoopCountM = (ret0 and ret1) and function (l, r, d, border, dig
 		for j=2,border do
 			n = j
 			local u = atanM(m, n, digit)
-			if M.iszero(u - prev) then break end
+			if M.iszero(u - prev) then
+				break
+			end
 			prev = u
 		end
 		t = t < n and n or t
 
 		if verbose == true then
-			local a, b = atanM(m,n,digit), atanMR(m,n,digit)
-			assert(M.iszero(a - b),
-				("atanM(%g,%g,%g) ~= atanMR(%g,%g,%g)"):format(m,n,digit,m,n,digit))
+			local a, b = atanM(m, n, digit), atanMR(m, n, digit)
+			assert(
+				M.iszero(a - b),
+				("atanM(%g, %g, %g) ~= atanMR(%g, %g, %g)")
+					:format(m, n, digit, m, n, digit)
+			)
 			print(("%5.2f %s (LOOPCOUNT:%d)"):format(m, a, n))
 		end
 	end

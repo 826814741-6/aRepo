@@ -30,8 +30,18 @@ end
 function p(n, a0, b0, a1, b1, a2, b2)
 	print("      source          fft             inverse")
 	for i=0,n-1 do
-		print(("%4d | %6.3f %6.3f | %6.3f %6.3f | %6.3f %6.3f"):format(
-			i, a0[i], b0[i], a1[i], b1[i], a2[i], b2[i]))
+		print(
+			("%4d | %6.3f %6.3f | %6.3f %6.3f | %6.3f %6.3f")
+				:format(
+					i,
+					a0[i],
+					b0[i],
+					a1[i],
+					b1[i],
+					a2[i],
+					b2[i]
+				)
+		)
 	end
 end
 
