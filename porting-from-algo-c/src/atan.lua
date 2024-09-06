@@ -90,9 +90,9 @@ local function guessProperLoopCount(l, r, d, border, verbose)
 
 	if verbose == true then
 		print(("MAXLOOPCOUNT: %d"):format(t))
-	else
-		return t
 	end
+
+	return t
 end
 
 local guessProperLoopCountM = (ret0 and ret1) and function (l, r, d, border, digit, verbose)
@@ -119,9 +119,9 @@ local guessProperLoopCountM = (ret0 and ret1) and function (l, r, d, border, dig
 
 	if verbose == true then
 		print(("MAXLOOPCOUNT: %d"):format(t))
-	else
-		return t
 	end
+
+	return t
 end or nil
 
 return {
