@@ -6,14 +6,17 @@
 --	atan					to	atanM (depends on lbc(*))
 --	atanR					to	atanMR (depends on lbc(*))
 --
+--							sampleLoopCount
+--							sampleLoopCountM
+--
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
 local M = require 'atan'
 
-local guessProperLoopCount = M.guessProperLoopCount
-local guessProperLoopCountM = M.guessProperLoopCountM
+local sampleLoopCount = M.sampleLoopCount
+local sampleLoopCountM = M.sampleLoopCountM
 
 --
 --	local aVariable <const> = value
@@ -26,14 +29,20 @@ local guessProperLoopCountM = M.guessProperLoopCountM
 --	>> 3.3.7 - Local Declarations (Lua 5.4 Reference Manual)
 --
 -- local DBL_EPSILON <const> = 2.2204460492503131E-16
-local DBL_EPSILON = 2.2204460492503131E-16
+--
+
+local FLT_EPSILON = 1.19209290E-07         -- from src/float.ie3
+local DBL_EPSILON = 2.2204460492503131E-16 -- from src/float.ie3
 
 do
-	print("-------- atan")
-	guessProperLoopCount(-10, 10, 4, DBL_EPSILON, true)
+	print("-------- atan (FLT_EPSILON)")
+	sampleLoopCount(-10, 10, 4, FLT_EPSILON, true)
+
+	print("-------- atan (DBL_EPSILON)")
+	sampleLoopCount(-10, 10, 4, DBL_EPSILON, true)
 
 	print("-------- atanM (51-digit)")
-	if guessProperLoopCountM ~= nil then
-		guessProperLoopCountM(-10, 10, 4, 70, 51, true)
+	if sampleLoopCountM ~= nil then
+		sampleLoopCountM(-10, 10, 4, 51, true)
 	end
 end

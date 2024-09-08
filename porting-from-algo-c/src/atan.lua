@@ -6,11 +6,14 @@
 --	atan					to	atanM (depends on lbc(*))
 --	atanR					to	atanMR (depends on lbc(*))
 --
+--							sampleLoopCount
+--							sampleLoopCountM
+--
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local N = 20 -- see the result of guessProperLoopCount()
+local N = 20 -- see the result of sampleLoopCount()
 
 local function loop(x, a, n)
 	local r = a
@@ -64,83 +67,59 @@ local atanMR = (hasBC and hasPI) and function (x, n, digit)
 	return atanR(M.new(x), n, H.machinLikeM(digit))
 end or nil
 
-local function guessProperLoopCount(l, r, d, border, verbose)
+local function sampleLoopCount(l, r, d, border, verbose)
 	local t = 0
 
 	for i=l,r do
 		local m, n = i/d, 1
-		for j=2,24 do
-			n = j
-			if math.abs(atan(m, n) - math.atan(m)) <= border then
-				break
-			end
+		while math.abs(atan(m, n) - math.atan(m)) > border do
+			n = n + 1
 		end
 		t = t < n and n or t
 
+		assert(atan(m, n) == atanR(m, n))
+
 		if verbose == true then
-			local a, b, c = atan(m, n), atanR(m, n), math.atan(m)
-			assert(
-				a == b,
-				("atan(%g, %g) ~= atanR(%g, %g)")
-					:format(m, n, m, n)
-			)
-			assert(
-				math.abs(a - c) <= border,
-				("math.abs(atan(%g, %g) - math.atan(%g)) > %g")
-					:format(m, n, m, border)
-			)
 			print(
 				("%5.2f % .14f % 5g (LOOPCOUNT:%2d) (delta:%g)")
 					:format(
 						m,
-						a,
-						math.tan(a),
+						atan(m, n),
+						math.tan(atan(m, n)),
 						n,
-						math.abs(a - c)
+						math.abs(atan(m, n) - math.atan(m))
 					)
 			)
 		end
 	end
 
-	if verbose == true then
-		print(("MAXLOOPCOUNT: %d"):format(t))
-	end
-
-	return t
+	print(("MAXLOOPCOUNT: %d"):format(t))
 end
 
-local guessProperLoopCountM = (hasBC and hasPI) and function (l, r, d, border, digit, verbose)
+local sampleLoopCountM = (hasBC and hasPI) and function (l, r, d, digit, verbose)
 	local t = 0
 
 	for i=l,r do
 		local m, n = i/d, 1
-		local prev = atanM(m, n, digit)
-		for j=2,border do
-			n = j
-			local u = atanM(m, n, digit)
-			if M.iszero(u - prev) then
-				break
-			end
-			prev = u
-		end
+		local curr, prev = atanM(m, n, digit)
+		repeat
+			n = n + 1
+			curr, prev = atanM(m, n, digit), curr
+		until M.iszero(curr - prev)
+		n = n - 1
 		t = t < n and n or t
 
+		assert(atanM(m, n, digit) == atanMR(m, n, digit))
+
 		if verbose == true then
-			local a, b = atanM(m, n, digit), atanMR(m, n, digit)
-			assert(
-				M.iszero(a - b),
-				("atanM(%g, %g, %g) ~= atanMR(%g, %g, %g)")
-					:format(m, n, digit, m, n, digit)
+			print(
+				("%5.2f %s (LOOPCOUNT:%d)")
+					:format(m, atanM(m, n, digit), n)
 			)
-			print(("%5.2f %s (LOOPCOUNT:%d)"):format(m, a, n))
 		end
 	end
 
-	if verbose == true then
-		print(("MAXLOOPCOUNT: %d"):format(t))
-	end
-
-	return t
+	print(("MAXLOOPCOUNT: %d"):format(t))
 end or nil
 
 return {
@@ -149,6 +128,6 @@ return {
 	atanM = atanM,
 	atanMR = atanMR,
 	--
-	guessProperLoopCount = guessProperLoopCount,
-	guessProperLoopCountM = guessProperLoopCountM
+	sampleLoopCount = sampleLoopCount,
+	sampleLoopCountM = sampleLoopCountM
 }
