@@ -9,27 +9,21 @@
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local create = coroutine.create
-local resume = coroutine.resume
-local status = coroutine.status
-local yield = coroutine.yield
-local write = io.write
-local concat = table.concat
-local insert = table.insert
+local i_write = io.write
 
-local function body(initialNumber)
-	local n = initialNumber
+local function factorize(x)
+	local n = x
 
-	while n >= 4 and n%2 == 0 do
-		yield(2)
+	while n >= 4 and n % 2 == 0 do
+		i_write("2 * ")
 		n = n // 2
 	end
 
 	local d = 3
 	local q = n // d
 	while q >= d do
-		if n%d == 0 then
-			yield(d)
+		if n % d == 0 then
+			i_write(("%d * "):format(d))
 			n = q
 		else
 			d = d + 2
@@ -37,28 +31,82 @@ local function body(initialNumber)
 		q = n // d
 	end
 
-	return n
+	i_write(("%d\n"):format(n))
 end
 
 local hasBC, bc = pcall(require, 'bc')
 local isZero = hasBC and bc.iszero or nil
-local bn2 = hasBC and bc.new(2) or nil
-local bn3 = hasBC and bc.new(3) or nil
-local bn4 = hasBC and bc.new(4) or nil
+local bc_new = hasBC and bc.new or nil
+local bn2 = hasBC and bc_new(2) or nil
+local bn4 = hasBC and bc_new(4) or nil
 
-local bodyM = hasBC and function (initialValue)
-	local bn = bc.new(initialValue)
+local factorizeM = hasBC and function (x)
+	local bn = bc_new(x)
 
 	while bn >= bn4 and isZero(bn % bn2) do
-		yield(bn2)
+		i_write("2 * ")
 		bn = bn / bn2
 	end
 
-	local d = bn3
+	local d = bc_new(3)
 	local q = bn / d
 	while q >= d do
 		if isZero(bn % d) then
-			yield(d)
+			i_write(("%s * "):format(d))
+			bn = q
+		else
+			d = d + bn2
+		end
+		q = bn / d
+	end
+
+	i_write(("%s\n"):format(bn))
+end or nil
+
+local t_insert = table.insert
+
+local factorizeT = hasBC and function (x)
+	local bn, t = bc_new(x), {}
+
+	while bn >= bn4 and isZero(bn % bn2) do
+		t_insert(t, "2")
+		bn = bn / bn2
+	end
+
+	local d = bc_new(3)
+	local q = bn / d
+	while q >= d do
+		if isZero(bn % d) then
+			t_insert(t, tostring(d))
+			bn = q
+		else
+			d = d + bn2
+		end
+		q = bn / d
+	end
+
+	t_insert(t, tostring(bn))
+
+	return t
+end or nil
+
+local co_create = coroutine.create
+local co_resume = coroutine.resume
+local co_yield = coroutine.yield
+
+local bodyM = hasBC and function (x)
+	local bn = bc_new(x)
+
+	while bn >= bn4 and isZero(bn % bn2) do
+		co_yield(bn2)
+		bn = bn / bn2
+	end
+
+	local d = bc_new(3)
+	local q = bn / d
+	while q >= d do
+		if isZero(bn % d) then
+			co_yield(d)
 			bn = q
 		else
 			d = d + bn2
@@ -69,95 +117,28 @@ local bodyM = hasBC and function (initialValue)
 	return bn
 end or nil
 
---
-
-local function coStepsA(coBody, coFirst, coRest, coPost)
-	return function (n)
-		local co = create(coBody)
-
-		coFirst(co, n)
-		while status(co) == "suspended" do
-			coRest(co)
-		end
-		coPost()
-	end
-end
-
-local function coFirst(co, n)
-	local _, v = resume(co, n)
-	write(("%s"):format(v))
-end
-
-local function coRest(co)
-	local _, v = resume(co)
-	write((" * %s"):format(v))
-end
-
-local function coPost()
-	write("\n")
-end
-
---
-
-local function coStepsB(coBody, coResume)
-	return function (n)
-		local co = create(coBody)
-
-		coResume(co, n)
-		while status(co) == "suspended" do
-			coResume(co)
-		end
-	end
-end
-
-local function buffering(buf)
-	return function (co, ...)
-		local _, v = resume(co, ...)
-		buf:insert(("%s"):format(v))
-	end
-end
-
-local function makeBuffer()
-	local T = { buf = {} }
-
-	function T:insert(s)
-		insert(T.buf, s)
-	end
-
-	function T:writeln()
-		write(concat(T.buf, " * "), "\n")
-	end
-
-	return T
-end
-
 local demo = hasBC and function (n)
-	local co = create(bodyM)
+	local co = co_create(bodyM)
 
-	local _, v = resume(co, bn2 ^ n * 997 * 10007)
+	local _, v = co_resume(co, bn2^n * 997 * 10007)
 	assert(v == bn2)
 
 	for i=2,n do
-		_, v = resume(co)
+		_, v = co_resume(co)
 		assert(v == bn2)
 	end
 
-	_, v = resume(co)
+	_, v = co_resume(co)
 	assert(v == bc.new(997))
 
-	_, v = resume(co)
+	_, v = co_resume(co)
 	assert(v == bc.new(10007))
 end or nil
 
---
-
 return {
-	factorize = coStepsA(body, coFirst, coRest, coPost),
-	factorizeM = hasBC and coStepsA(bodyM, coFirst, coRest, coPost) or nil,
-	factorizeT = hasBC and function (n)
-		local b = makeBuffer()
-		coStepsB(bodyM, buffering(b))(n)
-		b:writeln()
-	end or nil,
-	demo = hasBC and demo or nil
+	factorize = factorize,
+	factorizeM = factorizeM,
+	factorizeT = factorizeT,
+	--
+	demo = demo
 }

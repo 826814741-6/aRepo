@@ -10,7 +10,6 @@
 --
 
 local M = require 'factorize'
-local hasBC = pcall(require, 'bc')
 
 local factorize = M.factorize
 local factorizeM = M.factorizeM
@@ -22,16 +21,18 @@ do
 		io.write(("%5d = "):format(i))
 		factorize(i)
 
-		if hasBC then
+		if factorizeM ~= nil then
 			io.write(("%5d = "):format(i))
 			factorizeM(i)
+		end
 
+		if factorizeT ~= nil then
 			io.write(("%5d = "):format(i))
-			factorizeT(i)
+			io.write(table.concat(factorizeT(i), " * "), "\n")
 		end
 	end
 
-	if hasBC then
+	if demo ~= nil then
 		demo(10000)
 	end
 end

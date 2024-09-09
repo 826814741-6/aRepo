@@ -2,100 +2,49 @@
 --	from src/egypfrac.c
 --
 --	a part of main		to	egyptianFraction
---	egyptianFraction	to	egyptianFractionR
---	egyptianFraction	to	egyptianFractionB
+--	egyptianFraction	to	egyptianFractionT
 --	egyptianFraction	to	egyptianFractionM (depends on lbc(*))
+--	egyptianFraction	to	egyptianFractionCO
 --
 --	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local create = coroutine.create
-local resume = coroutine.resume
-local status = coroutine.status
-local yield = coroutine.yield
-local write = io.write
-local concat = table.concat
-local insert = table.insert
+local i_write = io.write
+local t_insert = table.insert
 
-local function body(n, d)
+local function egyptianFraction(n, d)
 	while d % n ~= 0 do
 		local t = d // n + 1
-		yield(t)
+		i_write(("1/%d + "):format(t))
 		n, d = n * t - d, d * t
 	end
-	return d // n
+	i_write(("1/%d\n"):format(d // n))
 end
 
-local function bodyR(n, d)
-	if d % n ~= 0 then
+local function egyptianFractionT(n, d)
+	local r = {}
+	while d % n ~= 0 do
 		local t = d // n + 1
-		yield(t)
-		return bodyR(n * t - d, d * t)
+		t_insert(r, ("1/%d"):format(t))
+		n, d = n * t - d, d * t
 	end
-	return d // n
+	t_insert(r, ("1/%d"):format(d // n))
+	return r
 end
 
 local hasBC, M = pcall(require, "bc")
 local isZero = hasBC and M.iszero or nil
 local bn1 = hasBC and M.new(1) or nil
 
-local bodyM = hasBC and function (n, d)
+local egyptianFractionM = hasBC and function (n, d)
 	local n, d = M.new(n), M.new(d)
 	while not isZero(d % n) do
 		local t = d / n + bn1
-		yield(t)
+		i_write(("1/%s + "):format(t)) -- %s and tostring; see below
 		n, d = n * t - d, d * t
 	end
-	return d / n
-end or nil
-
---
-
-local function coStepsA(coBody, coFirst, coRest, coPost)
-	return function (n, d)
-		local co = create(coBody)
-
-		coFirst(co, n, d)
-		while status(co) == "suspended" do
-			coRest(co)
-		end
-		coPost()
-	end
-end
-
-local function coFirst(co, n, d)
-	local _, v = resume(co, n, d)
-	write(("1/%s"):format(v))
-end
-
-local function coRest(co)
-	local _, v = resume(co)
-	write((" + 1/%s"):format(v))
-end
-
-local function coPost()
-	write("\n")
-end
-
---
-
-local function coStepsB(coBody, coResume)
-	return function (n, d)
-		local co = create(coBody)
-
-		coResume(co, n, d)
-		while status(co) == "suspended" do
-			coResume(co)
-		end
-	end
-end
-
-local function buffering(buf)
-	return function (co, ...)
-		local _, v = resume(co, ...)
-		buf:insert(("1/%s"):format(v))   -- %s and [bc's] number; see below
-	end
+	i_write(("1/%s\n"):format(d / n))      -- %s and tostring; see below
 end
 
 --
@@ -105,33 +54,47 @@ end
 --	-- Lua 5.4 Reference manual > string.format
 --
 
-local function makeBuffer()
-	local T = { buf = {} }
+local co_create = coroutine.create
+local co_status = coroutine.status
+local co_resume = coroutine.resume
+local co_yield = coroutine.yield
 
-	function T:insert(s)
-		insert(T.buf, s)
+local function bodyR(n, d)
+	if d % n ~= 0 then
+		local t = d // n + 1
+		co_yield(t)
+		return bodyR(n * t - d, d * t)
 	end
-
-	function T:writeln()
-		write(concat(T.buf, " + "), "\n")
-	end
-
-	return T
+	return d // n
 end
 
---
+-- local bodyM = hasBC and function (n, d)
+-- 	local n, d = M.new(n), M.new(d)
+-- 	while not isZero(d % n) do
+-- 		local t = d / n + bn1
+-- 		co_yield(t)
+-- 		n, d = n * t - d, d * t
+-- 	end
+-- 	return d / n
+-- end or nil
+
+local function egyptianFractionCO(n, d)
+	local co = co_create(bodyR)
+
+	local _, v = co_resume(co, n, d)
+	i_write(("1/%s"):format(v))
+
+	while co_status(co) == "suspended" do
+		_, v = co_resume(co)
+		i_write((" + 1/%s"):format(v))
+	end
+
+	i_write("\n")
+end
 
 return {
-	egyptianFraction = coStepsA(body, coFirst, coRest, coPost),
-	egyptianFractionR = coStepsA(bodyR, coFirst, coRest, coPost),
-	egyptianFractionB = function (n, d)
-		local b = makeBuffer()
-		coStepsB(body, buffering(b))(n, d)
-		b:writeln()
-	end,
-	egyptianFractionM = hasBC and function (n, d)
-		local b = makeBuffer()
-		coStepsB(bodyM, buffering(b))(n, d)
-		b:writeln()
-	end or nil
+	egyptianFraction = egyptianFraction,
+	egyptianFractionT = egyptianFractionT,
+	egyptianFractionM = egyptianFractionM,
+	egyptianFractionCO = egyptianFractionCO
 }
