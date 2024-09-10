@@ -46,28 +46,34 @@ local function svgPlot(X, Y)
 		T.fh = fh ~= nil and fh or io.stdout
 		T.fh:write(header(X, Y))
 		T.fh:write(pathStart())
+		return T
 	end
 
 	function T:plotEnd(isClosePath)
 		T.fh:write(pathEnd(isClosePath))
 		T.fh:write(footer())
 		T.fh = nil
+		return T
 	end
 
 	function T:move(x, y)
 		T.fh:write(("M %g %g "):format(x, Y - y))
+		return T
 	end
 
 	function T:moveRel(x, y)
 		T.fh:write(("m %g %g "):format(x, -y))
+		return T
 	end
 
 	function T:draw(x, y)
 		T.fh:write(("L %g %g "):format(x, Y - y))
+		return T
 	end
 
 	function T:drawRel(x, y)
 		T.fh:write(("l %g %g "):format(x, -y))
+		return T
 	end
 
 	return T
@@ -87,26 +93,33 @@ local function svgPlotWholeBuffering(X, Y)
 
 	function T:plotEnd(isClosePath)
 		T.isClosePath = isClosePath
+		return T
 	end
 
 	function T:move(x, y)
 		T_insert(T.buffer, ("M %g %g "):format(x, Y - y))
+		return T
 	end
 
 	function T:moveRel(x, y)
 		T_insert(T.buffer, ("m %g %g "):format(x, -y))
+		return T
 	end
 
 	function T:draw(x, y)
 		T_insert(T.buffer, ("L %g %g "):format(x, Y - y))
+		return T
 	end
 
 	function T:drawRel(x, y)
 		T_insert(T.buffer, ("l %g %g "):format(x, -y))
+		return T
 	end
 
 	function T:reset()
 		T.buffer = {}
+		T.isClosePath = false
+		return T
 	end
 
 	function T:write(fh)
@@ -117,6 +130,8 @@ local function svgPlotWholeBuffering(X, Y)
 		fh:write(T_concat(T.buffer))
 		fh:write(pathEnd(T.isClosePath))
 		fh:write(footer())
+
+		return T
 	end
 
 	function T:writeOneByOne(fh)
@@ -129,6 +144,8 @@ local function svgPlotWholeBuffering(X, Y)
 		end
 		fh:write(pathEnd(T.isClosePath))
 		fh:write(footer())
+
+		return T
 	end
 
 	return T
@@ -180,6 +197,7 @@ local function svgPlotWithBuffering(X, Y)
 		T.fh = fh ~= nil and fh or io.stdout
 		T.fh:write(header(X, Y))
 		T.fh:write(pathStart())
+		return T
 	end
 
 	function T:plotEnd(isClosePath)
@@ -189,22 +207,27 @@ local function svgPlotWithBuffering(X, Y)
 		T.fh = nil
 		T.buffer:setLimit()
 		T.buffer:reset()
+		return T
 	end
 
 	function T:move(x, y)
 		T.buffer:writer(T.fh, ("M %g %g "):format(x, Y - y))
+		return T
 	end
 
 	function T:moveRel(x, y)
 		T.buffer:writer(T.fh, ("m %g %g "):format(x, -y))
+		return T
 	end
 
 	function T:draw(x, y)
 		T.buffer:writer(T.fh, ("L %g %g "):format(x, Y - y))
+		return T
 	end
 
 	function T:drawRel(x, y)
 		T.buffer:writer(T.fh, ("l %g %g "):format(x, -y))
+		return T
 	end
 
 	return T

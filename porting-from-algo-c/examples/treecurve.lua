@@ -10,17 +10,26 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local treeCurve = M1.treeCurve
+local extension = M1.extension
 local with = H.with
 
 function sampleWriter(pathPrefix)
-	local plotter = svgPlot(400, 350)
+	local plotter = extension(svgPlot(400, 350))
 
 	return function (n)
-		with(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
 			plotter:move(200, 0)
 			treeCurve(plotter, n, 100, 0, 0.7, 0.5)
 			plotter:plotEnd()
+		end)
+
+		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			plotter
+				:plotStart(fh)
+				:move(200, 0)
+				:treeCurve(n, 100, 0, 0.7, 0.5)
+				:plotEnd()
 		end)
 	end
 end

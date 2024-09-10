@@ -34,30 +34,63 @@ function sample(plotter)
 	end
 end
 
+function extension(T)
+	function T:sample()
+		sample(T)
+		return T
+	end
+	return T
+end
+
 do
-	with("results/svgplot.svg", "w", function (fh)
+	with("results/svgplot-A.svg", "w", function (fh)
 		local plotter = svgPlot(300, 300)
 		plotter:plotStart(fh)
 		sample(plotter)
 		plotter:plotEnd(true)
 	end)
+
+	with("results/svgplot-B.svg", "w", function (fh)
+		extension(svgPlot(300, 300))
+			:plotStart(fh)
+			:sample()
+			:plotEnd(true)
+	end)
 end
 
 do
 	local plotter = svgPlotWholeBuffering(300, 300)
+
 	sample(plotter)
 	plotter:plotEnd(true)
 
-	with("results/svgplot-WB-A.svg", "w", function (fh)
+	with("results/svgplot-WB-A-A.svg", "w", function (fh)
+		plotter:writeOneByOne(fh)
+	end)
+
+	plotter:reset()
+
+	extension(plotter)
+		:sample()
+		:plotEnd(true)
+
+	with("results/svgplot-WB-A-B.svg", "w", function (fh)
 		plotter:writeOneByOne(fh)
 	end)
 end
 
 do
-	with("results/svgplot-WB-B.svg", "w", function (fh)
+	with("results/svgplot-WB-B-A.svg", "w", function (fh)
 		local plotter = svgPlotWithBuffering(300, 300)
 		plotter:plotStart(fh, 2)
 		sample(plotter)
 		plotter:plotEnd(true)
+	end)
+
+	with("results/svgplot-WB-B-B.svg", "w", function (fh)
+		extension(svgPlotWithBuffering(300, 300))
+			:plotStart(fh, 2)
+			:sample()
+			:plotEnd(true)
 	end)
 end

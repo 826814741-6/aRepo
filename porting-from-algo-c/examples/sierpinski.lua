@@ -13,16 +13,24 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local sierpinski = M1.sierpinski
+local extension = M1.extension
 local with = H.with
 
 function sampleWriter(pathPrefix, size, offset)
-	local plotter = svgPlot(size + offset, size + offset)
+	local plotter = extension(svgPlot(size + offset, size + offset))
 
 	return function (n)
-		with(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
 			sierpinski(plotter, n, size)
 			plotter:plotEnd(true)
+		end)
+
+		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			plotter
+				:plotStart(fh)
+				:sierpinski(n, size)
+				:plotEnd(true)
 		end)
 	end
 end

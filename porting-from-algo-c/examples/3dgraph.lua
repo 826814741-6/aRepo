@@ -10,6 +10,7 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local tdGraph = M1.tdGraph
+local extension = M1.extension
 local with = H.with
 
 function sampleFunction(x, z)
@@ -17,12 +18,19 @@ function sampleFunction(x, z)
 	return math.exp(-t) * math.cos(10 * math.sqrt(t))
 end
 
-function sampleWriter(path, x, y, parameters)
-	with(path, "w", function (fh)
+function sampleWriter(pathPrefix, x, y, parameters)
+	with(("%s-A.svg"):format(pathPrefix), "w", function (fh)
 		local plotter = svgPlot(x, y)
 		plotter:plotStart(fh)
 		tdGraph(plotter, sampleFunction, parameters)
 		plotter:plotEnd()
+	end)
+
+	with(("%s-B.svg"):format(pathPrefix), "w", function (fh)
+		extension(svgPlot(x, y))
+			:plotStart(fh)
+			:tdGraph(sampleFunction, parameters)
+			:plotEnd()
 	end)
 end
 
@@ -40,7 +48,7 @@ do
 		maxY = 1,
 		maxZ = 1
 	}
-	sampleWriter("results/3dgraphA.svg", m*2 + n*4, m + n*3, parameters)
+	sampleWriter("results/3dgraphA", m*2 + n*4, m + n*3, parameters)
 
 	m, n, t, u = 300, 50, 30, 5
 	parameters = {
@@ -55,7 +63,7 @@ do
 		maxY = 1.8,
 		maxZ = 1.8
 	}
-	sampleWriter("results/3dgraphB.svg", m*2 + n*4, m + n*5, parameters)
+	sampleWriter("results/3dgraphB", m*2 + n*4, m + n*5, parameters)
 
 	m, n, t, u = 300, 50, 30, 2
 	parameters = {
@@ -70,5 +78,5 @@ do
 		maxY = 1.0,
 		maxZ = 1.8
 	}
-	sampleWriter("results/3dgraphC.svg", m*2 + n*4, m - n, parameters)
+	sampleWriter("results/3dgraphC", m*2 + n*4, m - n, parameters)
 end

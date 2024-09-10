@@ -13,6 +13,15 @@ local function cCurve(plotter, i, x, y)
 	end
 end
 
+local function extension(T)
+	function T:cCurve(i, x, y)
+		cCurve(T, i, x, y)
+		return T
+	end
+	return T
+end
+
 return {
-	cCurve = cCurve
+	cCurve = cCurve,
+	extension = extension
 }

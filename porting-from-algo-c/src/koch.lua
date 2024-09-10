@@ -21,13 +21,25 @@ local function koch(plotter, d, a, dmax)
 			rec()
 			d = d * 3
 		else
-			plotter:drawRel(d * cos((a % 6) * PI / 3), d * sin((a % 6) * PI / 3))
+			plotter:drawRel(
+				d * cos((a % 6) * PI / 3),
+				d * sin((a % 6) * PI / 3)
+			)
 		end
 	end
 
 	rec()
 end
 
+local function extension(T)
+	function T:koch(d, a, dmax)
+		koch(T, d, a, dmax)
+		return T
+	end
+	return T
+end
+
 return {
-	koch = koch
+	koch = koch,
+	extension = extension
 }

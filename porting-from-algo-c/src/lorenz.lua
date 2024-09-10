@@ -22,6 +22,15 @@ local function lorenzAttractor(plotter, S, R, B, n, a1, a2, a3, a4)
 	end
 end
 
+local function extension(T)
+	function T:lorenzAttractor(S, R, B, n, a1, a2, a3, a4)
+		lorenzAttractor(T, S, R, B, n, a1, a2, a3, a4)
+		return T
+	end
+	return T
+end
+
 return {
-	lorenzAttractor = lorenzAttractor
+	lorenzAttractor = lorenzAttractor,
+	extension = extension
 }

@@ -10,16 +10,24 @@ local H = require '_helper'
 
 local svgPlot = M0.svgPlot
 local dragonCurve = M1.dragonCurve
+local extension = M1.extension
 local with = H.with
 
 function sampleWriter(pathPrefix, x, y, x0, y0)
-	local plotter = svgPlot(x, y)
+	local plotter = extension(svgPlot(x, y))
 
 	return function (n)
-		with(("%s%d.svg"):format(pathPrefix, n), "w", function (fh)
+		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
 			dragonCurve(plotter, n, x0, y0)
 			plotter:plotEnd()
+		end)
+
+		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			plotter
+				:plotStart(fh)
+				:dragonCurve(n, x0, y0)
+				:plotEnd()
 		end)
 	end
 end

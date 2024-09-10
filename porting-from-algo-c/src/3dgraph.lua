@@ -65,6 +65,15 @@ local function tdGraph(plotter, aFunction, parameters)
 	end
 end
 
+local function extension(T)
+	function T:tdGraph(aFunction, parameters)
+		tdGraph(T, aFunction, parameters)
+		return T
+	end
+	return T
+end
+
 return {
-	tdGraph = tdGraph
+	tdGraph = tdGraph,
+	extension = extension
 }

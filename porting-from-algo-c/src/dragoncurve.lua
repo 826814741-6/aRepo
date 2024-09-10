@@ -40,8 +40,9 @@ local function dragonCurve(plotter, order, x0, y0)
 				fold[i], dx1, dy1 = true, -dy, dx
 			end
 
-			plotter:drawRel(dx + dx1, dy + dy1)
-			plotter:drawRel(3 * dx1, 3 * dy1)
+			plotter
+				:drawRel(dx + dx1, dy + dy1)
+				:drawRel(3 * dx1, 3 * dy1)
 
 			dx, dy = dx1, dy1
 		end
@@ -49,7 +50,23 @@ local function dragonCurve(plotter, order, x0, y0)
 	end
 end
 
+local function extension(T)
+	function T:dragonCurveR(order, dx, dy, sign, x0, y0)
+		T:move(x0, y0)
+		rec(T, order, dx, dy, sign)
+		return T
+	end
+
+	function T:dragonCurve(order, x0, y0)
+		dragonCurve(T, order, x0, y0)
+		return T
+	end
+
+	return T
+end
+
 return {
 	dragonCurveR = dragonCurveR,
-	dragonCurve = dragonCurve
+	dragonCurve = dragonCurve,
+	extension = extension
 }

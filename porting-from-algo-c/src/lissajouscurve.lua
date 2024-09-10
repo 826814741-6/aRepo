@@ -20,6 +20,15 @@ local function lissajousCurve(plotter, n, offset)
 	end
 end
 
+local function extension(T)
+	function T:lissajousCurve(n, offset)
+		lissajousCurve(T, n, offset)
+		return T
+	end
+	return T
+end
+
 return {
-	lissajousCurve = lissajousCurve
+	lissajousCurve = lissajousCurve,
+	extension = extension
 }

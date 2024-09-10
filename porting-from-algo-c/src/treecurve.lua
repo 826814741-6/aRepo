@@ -16,6 +16,15 @@ local function treeCurve(plotter, n, length, angle, factor, turn)
 	plotter:moveRel(-x, -y)
 end
 
+local function extension(T)
+	function T:treeCurve(n, length, angle, factor, turn)
+		treeCurve(T, n, length, angle, factor, turn)
+		return T
+	end
+	return T
+end
+
 return {
-	treeCurve = treeCurve
+	treeCurve = treeCurve,
+	extension = extension
 }
