@@ -38,23 +38,17 @@ private function demoA(prefix, n=10) {
 }
 
 private function demoB(prefix, n=10) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBuffering(400, 250);
+	final plotter = new SvgPlotWholeBuffering(400, 250);
+	final plotterE = new SvgPlotWholeBufferingE(400, 250);
 
-		plotter.move(100, 200);
-		plotter.cCurve(n, 200, 0);
+	plotter.move(100, 200);
+	plotterE.plot(Move(100, 200));
 
-		plotter.write(fh);
-	});
+	plotter.cCurve(n, 200, 0);
+	plotterE.cCurveE(n, 200, 0);
 
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBufferingE(400, 250);
-
-		plotter.plot(Move(100, 200));
-		plotter.cCurveE(n, 200, 0);
-
-		plotter.write(fh);
-	});
+	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
+	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
 private function demoC(prefix, n=10) {
@@ -113,23 +107,17 @@ private function demoA(prefix, n, offset) {
 private function demoB(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBuffering(size, size);
+	final plotter = new SvgPlotWholeBuffering(size, size);
+	final plotterE = new SvgPlotWholeBufferingE(size, size);
 
-		plotter.lissajousCurve(n, offset);
-		plotter.plotEnd(true);
+	plotter.lissajousCurve(n, offset);
+	plotterE.lissajousCurveE(n, offset);
 
-		plotter.write(fh);
-	});
+	plotter.plotEnd(true);
+	plotterE.plotEnd(true);
 
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBufferingE(size, size);
-
-		plotter.lissajousCurveE(n, offset);
-		plotter.plotEnd(true);
-
-		plotter.write(fh);
-	});
+	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
+	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
 private function demoC(prefix, n, offset) {
@@ -179,23 +167,17 @@ private function demoA(prefix) {
 }
 
 private function demoB(prefix) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBuffering(300, 300);
+	final plotter = new SvgPlotWholeBuffering(300, 300);
+	final plotterE = new SvgPlotWholeBufferingE(300, 300);
 
-		plotter.sample();
-		plotter.plotEnd(true);
+	plotter.sample();
+	plotterE.sampleE();
 
-		plotter.write(fh);
-	});
+	plotter.plotEnd(true);
+	plotterE.plotEnd(true);
 
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBufferingE(300, 300);
-
-		plotter.sampleE();
-		plotter.plotEnd(true);
-
-		plotter.write(fh);
-	});
+	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
+	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
 private function demoC(prefix) {
@@ -247,23 +229,17 @@ private function demoA(prefix, n=10) {
 }
 
 private function demoB(prefix, n=10) {
-	'${prefix}.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBuffering(400, 350);
+	final plotter = new SvgPlotWholeBuffering(400, 350);
+	final plotterE = new SvgPlotWholeBufferingE(400, 350);
 
-		plotter.move(200, 0);
-		plotter.treeCurve(n, 100, 0, 0.7, 0.5);
+	plotter.move(200, 0);
+	plotterE.plot(Move(200, 0));
 
-		plotter.write(fh);
-	});
+	plotter.treeCurve(n, 100, 0, 0.7, 0.5);
+	plotterE.treeCurveE(n, 100, 0, 0.7, 0.5);
 
-	'${prefix}-E.svg'.fileWrite((fh) -> {
-		final plotter = new SvgPlotWholeBufferingE(400, 350);
-
-		plotter.plot(Move(200, 0));
-		plotter.treeCurveE(n, 100, 0, 0.7, 0.5);
-
-		plotter.write(fh);
-	});
+	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
+	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
 private function demoC(prefix, n=10) {
