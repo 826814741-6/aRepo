@@ -69,7 +69,7 @@ end
 --
 
 -- 0, 1, 2, 3, 4, ...
-function seq(start, step)
+function iota(start, step)
 	start = start ~= nil and start or 0
 	step = step ~= nil and step or 1
 
@@ -248,23 +248,23 @@ end
 --
 
 do
-	p(clGen(seq):take(10))
-	p(clGen(seq):skip(50):take(10))
-	p(clGen(seq):take(10, function (v) return v*v*v end))
-	p(clGen(seq):filter(10, function (_,v) if v%2==0 then return v end end))
+	p(clGen(iota):take(10))
+	p(clGen(iota, 50, -1):skip(50):take(10))
+	p(clGen(iota):take(10, function (v) return v*v*v end))
+	p(clGen(iota):filter(10, function (_,v) if v%2==0 then return v end end))
 
 	print("--")
 
 	local buf = makeBuffer()
 
-	p(clGen(seq):skip(3):take(3)) -- 3, 4, 5
-	p(clGen(seq):skip(3):take(3, function (v) buf:insert(v) end)) -- (nothing)
-	p(clGen(seq):skip(3):take(3, function (v) buf:insert(v) return v end)) -- 3, 4, 5
+	p(clGen(iota):skip(3):take(3)) -- 3, 4, 5
+	p(clGen(iota):skip(3):take(3, function (v) buf:insert(v) end)) -- (nothing)
+	p(clGen(iota):skip(3):take(3, function (v) buf:insert(v) return v end)) -- 3, 4, 5
 	p(buf:get()) -- 3, 4, 5, 3, 4, 5
 
 	buf:reset()
 
-	clGen(seq)
+	clGen(iota)
 		:skip(5) -- 0, 1, 2, 3, 4
 		:filter(
 			5,
@@ -311,13 +311,13 @@ do
 
 	print("--")
 
-	local a, b, c = clGen(seq), clGen(seq, -5), clGen(seq, 100, -1)
+	local a, b, c = clGen(iota), clGen(iota, -5), clGen(iota, 100, -1)
 
 	p(takeCycle(3, a, b, c))
 	skipCycle(3, a, b, c)
 	p(takeCycle(3, a, b, c))
 
-	a, b, c = clGen(seq), clGen(seq, -5), clGen(seq, 100, -1)
+	a, b, c = clGen(iota), clGen(iota, -5), clGen(iota, 100, -1)
 
 	p(take(9, a, b, c))
 	skip(7, a, b, c) b:skip(1) c:skip(1)

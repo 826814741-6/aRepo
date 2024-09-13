@@ -87,7 +87,7 @@ do
 		plotter:plotEnd(true)
 	end)
 
-	with("results/svgplot-lj-WB-B.svg", "w", function (fh)
+	with("results/svgplot-lj-WB-B-B.svg", "w", function (fh)
 		extension(svgPlotWithBuffering(300, 300))
 			:plotStart(fh, 2)
 			:sample()

@@ -45,4 +45,9 @@ do
 	if sampleLoopCountM ~= nil then
 		sampleLoopCountM(-10, 10, 4, 51, true)
 	end
+
+	print("-------- atanM (101-digit)")
+	if sampleLoopCountM ~= nil then
+		sampleLoopCountM(-10, 10, 4, 101, true)
+	end
 end
