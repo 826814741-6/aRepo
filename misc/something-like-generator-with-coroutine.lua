@@ -13,7 +13,7 @@ local t_unpack = table.unpack ~= nil and table.unpack or unpack
 function coGen(co, ...)
 	local T = { co = co(...) }
 
-	function T:skip(n)
+	function T:drop(n)
 		n = n ~= nil and n or 0
 
 		for _=1,n do
@@ -221,18 +221,18 @@ function _unwrap(...)
 	return t_unpack(select(2, ...))
 end
 
-function skipCycle(n, ...)
+function dropCycle(n, ...)
 	for _,v in ipairs({...}) do
-		v:skip(n)
+		v:drop(n)
 	end
 end
 
-function skip(n, ...)
+function drop(n, ...)
 	local t = beCircular(...)
 
 	local i, j = 1, 1
 	while i <= n do
-		t[j].v:skip(1)
+		t[j].v:drop(1)
 		i, j = i + 1, t[j].next
 	end
 end
@@ -263,7 +263,7 @@ end
 
 do
 	p(coGen(iota):take(10))
-	p(coGen(iota, 50, -1):skip(50):take(10))
+	p(coGen(iota, 50, -1):drop(50):take(10))
 	p(coGen(iota):take(10, function (v) return v*v*v end))
 	p(coGen(iota):filter(10, function (_,v) if v%2==0 then return v end end))
 
@@ -271,21 +271,21 @@ do
 
 	local buf = makeBuffer()
 
-	p(coGen(iota):skip(3):take(3)) -- 3, 4, 5
-	p(coGen(iota):skip(3):take(3, function (v) buf:insert(v) end)) -- (nothing)
-	p(coGen(iota):skip(3):take(3, function (v) buf:insert(v) return v end)) -- 3, 4, 5
+	p(coGen(iota):drop(3):take(3)) -- 3, 4, 5
+	p(coGen(iota):drop(3):take(3, function (v) buf:insert(v) end)) -- (nothing)
+	p(coGen(iota):drop(3):take(3, function (v) buf:insert(v) return v end)) -- 3, 4, 5
 	p(buf:get()) -- 3, 4, 5, 3, 4, 5
 
 	buf:reset()
 
 	coGen(iota)
-		:skip(5) -- 0, 1, 2, 3, 4
+		:drop(5) -- 0, 1, 2, 3, 4
 		:filter(
 			5,
 			function (_,v) if v%2==0 then return v end end,
 			function (v) buf:insert(v) end
 		)        -- 6, 8, 10, 12, 14
-		:skip(3) -- 15, 16, 17
+		:drop(3) -- 15, 16, 17
 		:filter(
 			5,
 			function (_,v) if v%3==0 then return v end end,
@@ -305,35 +305,35 @@ do
 
 	p(coA:take(5))
 	p(coA:take(5))
-	p(coA:skip(30):take(1))
+	p(coA:drop(30):take(1))
 
 	p(coB:take(5))
 	p(coB:take(5))
-	p(coB:skip(300):take(1))
+	p(coB:drop(300):take(1))
 
 	p(coC:take(5))
 	p(coC:take(5))
-	p(coC:skip(89):take(1))
+	p(coC:drop(89):take(1))
 
 	p(coD:take(5))
 	p(coD:take(5))
-	p(coD:skip(53):take(7))
+	p(coD:drop(53):take(7))
 
 	p(coE:take(5))
 	p(coE:take(5))
-	p(coE:skip(50):take(9))
+	p(coE:drop(50):take(9))
 
 	print("--")
 
 	local a, b, c = coGen(iota), coGen(iota, -5), coGen(iota, 100, -1)
 
 	p(takeCycle(3, a, b, c))
-	skipCycle(3, a, b, c)
+	dropCycle(3, a, b, c)
 	p(takeCycle(3, a, b, c))
 
 	a, b, c = coGen(iota), coGen(iota, -5), coGen(iota, 100, -1)
 
 	p(take(9, a, b, c))
-	skip(7, a, b, c) b:skip(1) c:skip(1)
+	drop(7, a, b, c) b:drop(1) c:drop(1)
 	p(take(9, a, b, c))
 end
