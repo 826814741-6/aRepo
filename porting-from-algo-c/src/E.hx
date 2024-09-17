@@ -27,7 +27,5 @@ function e():Result {
 	return { value: r, count: n - 1 };
 }
 
-function demo() {
-	var r = e();
-	trace(r.value, r.count);
-}
+function demo()
+	trace(e());

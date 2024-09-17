@@ -10,14 +10,14 @@ class MEIterator {
 	var e:Float;
 
 	public function new()
-		this.e = 1;
+		e = 1;
 
 	public function hasNext():Bool
-		return 1 + this.e > 1;
+		return 1 + e > 1;
 
 	public function next():Float {
-		var prev = this.e;
-		this.e /= 2;
+		final prev = e;
+		e /= 2;
 		return prev;
 	}
 }
@@ -25,7 +25,7 @@ class MEIterator {
 //
 
 private function fmt(e:Float):String {
-	var buf = new StringBuf();
+	final buf = new StringBuf();
 
 	Helper.leftAlignWithSpace(buf, 25, e);
 	Helper.leftAlignWithSpace(buf, 21, 1 + e);
@@ -41,7 +41,7 @@ function demo() {
 	trace(" e                        1 + e                (1 + e) - 1");
 	trace("------------------------ -------------------- -----------------------");
 
-	var it = new MEIterator();
+	final it = new MEIterator();
 
 	for (e in it) {
 		trace(fmt(e));

@@ -31,7 +31,7 @@
 //	(see: https://haxe.org/manual/compiler-usage.html#common-arguments)
 //
 
-function f(n:BigInt, a:Array<String>):Array<String> {
+private function f(n:BigInt, a:Array<String>):Array<String>
 	return if (n > 255) {
 		a.insert(0, String.fromCharCode(n % 256));
 		f(n / 256, a);
@@ -39,12 +39,9 @@ function f(n:BigInt, a:Array<String>):Array<String> {
 		a.insert(0, String.fromCharCode(n));
 		a;
 	}
-}
 
-function P(n:BigInt) {
-	var a = new Array<String>();
-	Sys.print(f(n, a).join(""));
-}
+function P(n:BigInt)
+	Sys.print(f(n, new Array<String>()).join(""));
 
 // and some utils
 

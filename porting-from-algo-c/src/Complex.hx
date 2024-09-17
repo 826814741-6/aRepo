@@ -5,26 +5,26 @@
 //	complex c_conv(double, double)		to	/ ComplexNumber
 //	char * c_string(complex)		to	/ toString
 //
-//	double c_abs(complex)			to	abs / .abs
-//	double c_arg(complex)			to	arg / .arg
+//	double c_abs(complex)			to	cAbs / .abs
+//	double c_arg(complex)			to	cArg / .arg
 //
-//	complex c_conj(complex)			to	conjugate / .conjugate
-//	complex c_add(complex, complex)		to	add / .add
-//	complex c_sub(complex, complex)		to	sub / .sub
-//	complex c_mul(complex, complex)		to	mul / .mul
-//	complex c_div(complex, complex)		to	div / .div
-//	complex c_pow(complex, complex)		to	pow / .pow
+//	complex c_conj(complex)			to	cConjugate / .conjugate
+//	complex c_add(complex, complex)		to	cAdd / .add
+//	complex c_sub(complex, complex)		to	cSub / .sub
+//	complex c_mul(complex, complex)		to	cMul / .mul
+//	complex c_div(complex, complex)		to	cDiv / .div
+//	complex c_pow(complex, complex)		to	cPow / .pow
 //
-//	complex c_exp(complex)			to	exp / .exp
-//	complex c_log(complex)			to	log / .log
-//	complex c_sqrt(complex)			to	sqrt / .sqrt
+//	complex c_exp(complex)			to	cExp / .exp
+//	complex c_log(complex)			to	cLog / .log
+//	complex c_sqrt(complex)			to	cSqrt / .sqrt
 //
-//	complex c_sin(complex)			to	sin / .sin
-//	complex c_cos(complex)			to	cos / .cos
-//	complex c_tan(complex)			to	tan / .tan
-//	complex c_sinh(complex)			to	sinh / .sinh
-//	complex c_cosh(complex)			to	cosh / .cosh
-//	complex c_tanh(complex)			to	tanh / .tanh
+//	complex c_sin(complex)			to	cSin / .sin
+//	complex c_cos(complex)			to	cCos / .cos
+//	complex c_tan(complex)			to	cTan / .tan
+//	complex c_sinh(complex)			to	cSinh / .sinh
+//	complex c_cosh(complex)			to	cCosh / .cosh
+//	complex c_tanh(complex)			to	cTanh / .tanh
 //
 
 package src;
@@ -34,75 +34,59 @@ typedef Complex = {
 	var i:Float;  // imaginary
 }
 
-function abs(c:Complex):Float
+function cAbs(c:Complex):Float
 	return switch [c.r, c.i] {
 		case [0, _]:
 			Math.abs(c.i);
 		case [_, 0]:
 			Math.abs(c.r);
 		case [r, i] if (r < i):
-			var t = r / i;
+			final t = r / i;
 			Math.abs(i) * Math.sqrt(1 + t * t);
 		case [r, i]:
-			var t = i / r;
+			final t = i / r;
 			Math.abs(r) * Math.sqrt(1 + t * t);
 	}
 
-function arg(c:Complex):Float
+function cArg(c:Complex):Float
 	return Math.atan2(c.i, c.r);
 
-function conjugate(c:Complex):Complex
+function cConjugate(c:Complex):Complex
 	return { r: c.r, i: -c.i };
 
-function add(a:Complex, b:Complex):Complex
+function cAdd(a:Complex, b:Complex):Complex
 	return { r: a.r + b.r, i: a.i + b.i };
 
-function sub(a:Complex, b:Complex):Complex
+function cSub(a:Complex, b:Complex):Complex
 	return { r: a.r - b.r, i: a.i - b.i };
 
-function mul(a:Complex, b:Complex):Complex
+function cMul(a:Complex, b:Complex):Complex
 	return {
 		r: a.r * b.r - a.i * b.i,
 		i: a.r * b.i + a.i * b.r
 	};
 
-function div(a:Complex, b:Complex):Complex
+function cDiv(a:Complex, b:Complex):Complex
 	return if (Math.abs(b.r) >= Math.abs(b.i)) {
-		var w = b.i / b.r;
-		var d = b.r + b.i * w;
+		final w = b.i / b.r;
+		final d = b.r + b.i * w;
 		{ r: (a.r + a.i * w) / d, i: (a.i - a.r * w) / d };
 	} else {
-		var w = b.r / b.i;
-		var d = b.r * w + b.i;
+		final w = b.r / b.i;
+		final d = b.r * w + b.i;
 		{ r: (a.r * w + a.i) / d, i: (a.i * w - a.r) / d };
 	};
 
-function pow(a:Complex, b:Complex):Complex {
-	// log(a)
-	var c:Complex = {
-		r: 0.5 * Math.log(a.r * a.r + a.i * a.i),
-		i: Math.atan2(a.i, a.r)
-	};
-	//  mul(b, log(a))
-	c = {
-		r: b.r * c.r - b.i * c.i,
-		i: b.r * c.i + b.i * c.r
-	};
-	//  exp(mul(b, log(a)))
-	c = {
-		r: Math.exp(c.r) * Math.cos(c.i),
-		i: Math.exp(c.r) * Math.sin(c.i)
-	};
-	return c;
-}
+function cPow(a:Complex, b:Complex):Complex
+	return cExp(cMul(b, cLog(a))); // exp(mul(a, log(c)))
 
-function exp(c:Complex):Complex
+function cExp(c:Complex):Complex
 	return {
 		r: Math.exp(c.r) * Math.cos(c.i),
 		i: Math.exp(c.r) * Math.sin(c.i)
 	};
 
-function log(c:Complex):Complex
+function cLog(c:Complex):Complex
 	return {
 		r: 0.5 * Math.log(c.r * c.r + c.i * c.i),
 		i: Math.atan2(c.i, c.r)
@@ -110,8 +94,8 @@ function log(c:Complex):Complex
 
 final SQRT05 = Math.sqrt(0.5);
 
-function sqrt(c:Complex):Complex {
-	var w = Math.sqrt(abs(c) + Math.abs(c.r));
+function cSqrt(c:Complex):Complex {
+	final w = Math.sqrt(cAbs(c) + Math.abs(c.r));
 	return if (c.r >= 0) {
 		{
 			r: SQRT05 * w,
@@ -125,58 +109,52 @@ function sqrt(c:Complex):Complex {
 	};
 }
 
-function sin(c:Complex):Complex {
-	var e = Math.exp(c.i);
-	var f = 1 / e;
+function cSin(c:Complex):Complex {
+	final e = Math.exp(c.i);
 	return {
-		r: 0.5 * Math.sin(c.r) * (e + f),
-		i: 0.5 * Math.cos(c.r) * (e - f)
+		r: 0.5 * Math.sin(c.r) * (e + 1 / e),
+		i: 0.5 * Math.cos(c.r) * (e - 1 / e)
 	};
 }
 
-function cos(c:Complex):Complex {
-	var e = Math.exp(c.i);
-	var f = 1 / e;
+function cCos(c:Complex):Complex {
+	final e = Math.exp(c.i);
 	return {
-		r: 0.5 * Math.cos(c.r) * (f + e),
-		i: 0.5 * Math.sin(c.r) * (f - e)
+		r: 0.5 * Math.cos(c.r) * (1 / e + e),
+		i: 0.5 * Math.sin(c.r) * (1 / e - e)
 	};
 }
 
-function tan(c:Complex):Complex {
-	var e = Math.exp(2 * c.i);
-	var f = 1 / e;
-	var d = Math.cos(2 * c.r) + 0.5 * (e + f);
+function cTan(c:Complex):Complex {
+	final e = Math.exp(2 * c.i);
+	final d = Math.cos(2 * c.r) + 0.5 * (e + 1 / e);
 	return {
 		r: Math.sin(2 * c.r) / d,
-		i: 0.5 * (e - f) / d
+		i: 0.5 * (e - 1 / e) / d
 	};
 }
 
-function sinh(c:Complex):Complex {
-	var e = Math.exp(c.r);
-	var f = 1 / e;
+function cSinh(c:Complex):Complex {
+	final e = Math.exp(c.r);
 	return {
-		r: 0.5 * (e - f) * Math.cos(c.i),
-		i: 0.5 * (e + f) * Math.sin(c.i)
+		r: 0.5 * (e - 1 / e) * Math.cos(c.i),
+		i: 0.5 * (e + 1 / e) * Math.sin(c.i)
 	};
 }
 
-function cosh(c:Complex):Complex {
-	var e = Math.exp(c.r);
-	var f = 1 / e;
+function cCosh(c:Complex):Complex {
+	final e = Math.exp(c.r);
 	return {
-		r: 0.5 * (e + f) * Math.cos(c.i),
-		i: 0.5 * (e - f) * Math.sin(c.i)
+		r: 0.5 * (e + 1 / e) * Math.cos(c.i),
+		i: 0.5 * (e - 1 / e) * Math.sin(c.i)
 	};
 }
 
-function tanh(c:Complex):Complex {
-	var e = Math.exp(2 * c.r);
-	var f = 1 / e;
-	var d = 0.5 * (e + f) + Math.cos(2 * c.i);
+function cTanh(c:Complex):Complex {
+	final e = Math.exp(2 * c.r);
+	final d = 0.5 * (e + 1 / e) + Math.cos(2 * c.i);
 	return {
-		r: 0.5 * (e - f) / d,
+		r: 0.5 * (e - 1 / e) / d,
 		i: Math.sin(2 * c.i) / d
 	};
 }
@@ -184,7 +162,7 @@ function tanh(c:Complex):Complex {
 //
 
 class ComplexNumber {
-	var c:Complex;
+	final c:Complex;
 
 	public function new(a:Complex)
 		c = { r: a.r, i: a.i };
@@ -201,21 +179,10 @@ class ComplexNumber {
 		return c.r + (if (c.i < 0) "" else "+") + c.i + "i";
 
 	public function abs():Float
-		return switch [c.r, c.i] {
-			case [0, _]:
-				Math.abs(c.i);
-			case [_, 0]:
-				Math.abs(c.r);
-			case [r, i] if (r < i):
-				var t = r / i;
-				Math.abs(i) * Math.sqrt(1 + t * t);
-			case [r, i]:
-				var t = i / r;
-				Math.abs(r) * Math.sqrt(1 + t * t);
-		}
+		return cAbs(c);
 
 	public function arg():Float
-		return Math.atan2(c.i, c.r);
+		return cArg(c);
 
 	public function conjugate():ComplexNumber {
 		c.i = -c.i;
@@ -223,158 +190,119 @@ class ComplexNumber {
 	}
 
 	public function add(a:ComplexNumber):ComplexNumber {
-		c = {
-			r: c.r + a.c.r,
-			i: c.i + a.c.i
-		};
+		c.r = c.r + a.c.r;
+		c.i = c.i + a.c.i;
 		return this;
 	}
 
 	public function sub(a:ComplexNumber):ComplexNumber {
-		c = {
-			r: c.r - a.c.r,
-			i: c.i - a.c.i
-		};
+		c.r = c.r - a.c.r;
+		c.i = c.i - a.c.i;
 		return this;
 	}
 
 	public function mul(a:ComplexNumber):ComplexNumber {
-		c = {
-			r: c.r * a.c.r - c.i * a.c.i,
-			i: c.r * a.c.i + c.i * a.c.r
-		}
+		final t = { r: c.r, i: c.i };
+		c.r = t.r * a.c.r - t.i * a.c.i;
+		c.i = t.r * a.c.i + t.i * a.c.r;
 		return this;
 	}
 
 	public function div(a:ComplexNumber):ComplexNumber {
-		c = if (Math.abs(a.c.r) >= Math.abs(a.c.i)) {
-			var w = a.c.i / a.c.r;
-			var d = a.c.r + a.c.i * w;
-			{
-				r: (c.r + c.i * w) / d,
-				i: (c.i - c.r * w) / d
-			};
+		final t = { r: c.r, i: c.i };
+		if (Math.abs(a.c.r) >= Math.abs(a.c.i)) {
+			final w = a.c.i / a.c.r;
+			final d = a.c.r + a.c.i * w;
+			c.r = (t.r + t.i * w) / d;
+			c.i = (t.i - t.r * w) / d;
 		} else {
-			var w = a.c.r / a.c.i;
-			var d = a.c.r * w + a.c.i;
-			{
-				r: (c.r * w + c.i) / d,
-				i: (c.i * w - c.r) / d
-			};
-		};
+			final w = a.c.r / a.c.i;
+			final d = a.c.r * w + a.c.i;
+			c.r = (t.r * w + t.i) / d;
+			c.i = (t.i * w - t.r) / d;
+		}
 		return this;
 	}
 
 	public function pow(a:ComplexNumber):ComplexNumber {
-		// log(c)
-		var t:Complex = {
-			r: 0.5 * Math.log(c.r * c.r + c.i * c.i),
-			i: Math.atan2(c.i, c.r)
-		};
-		// mul(a, log(c))
-		t = {
-			r: a.c.r * t.r - a.c.i * t.i,
-			i: a.c.r * t.i + a.c.i * t.r
-		};
-		// exp(mul(a, log(c)))
-		c = {
-			r: Math.exp(t.r) * Math.cos(t.i),
-			i: Math.exp(t.r) * Math.sin(t.i)
-		};
+		log().mul(a).exp(); // exp(mul(a, log(c)))
 		return this;
 	}
 
 	public function exp():ComplexNumber {
-		c = {
-			r: Math.exp(c.r) * Math.cos(c.i),
-			i: Math.exp(c.r) * Math.sin(c.i)
-		};
+		final t = { r: c.r, i: c.i };
+		c.r = Math.exp(t.r) * Math.cos(t.i);
+		c.i = Math.exp(t.r) * Math.sin(t.i);
 		return this;
 	}
 
 	public function log():ComplexNumber {
-		c = {
-			r: 0.5 * Math.log(c.r * c.r + c.i * c.i),
-			i: Math.atan2(c.i, c.r)
-		};
+		final t = { r: c.r, i: c.i };
+		c.r = 0.5 * Math.log(t.r * t.r + t.i * t.i);
+		c.i = Math.atan2(t.i, t.r);
 		return this;
 	}
 
 	public function sqrt():ComplexNumber {
-		var w = Math.sqrt(abs() + Math.abs(c.r));
-		c = if (c.r >= 0) {
-			{
-				r: SQRT05 * w,
-				i: SQRT05 * c.i / w
-			}
+		final t = c.i;
+		final w = Math.sqrt(abs() + Math.abs(c.r));
+		if (c.r >= 0) {
+			c.r = SQRT05 * w;
+			c.i = SQRT05 * t / w;
 		} else {
-			{
-				r: SQRT05 * Math.abs(c.i) / w,
-				i: (if (c.i >= 0) SQRT05 else -SQRT05) * w
-			}
-		};
+			c.r = SQRT05 * Math.abs(t) / w;
+			c.i = (if (t >= 0) SQRT05 else -SQRT05) * w;
+		}
 		return this;
 	}
 
 	public function sin():ComplexNumber {
-		var e = Math.exp(c.i);
-		var f = 1 / e;
-		c = {
-			r: 0.5 * Math.sin(c.r) * (e + f),
-			i: 0.5 * Math.cos(c.r) * (e - f)
-		};
+		final t = c.r;
+		final e = Math.exp(c.i);
+		c.r = 0.5 * Math.sin(t) * (e + 1 / e);
+		c.i = 0.5 * Math.cos(t) * (e - 1 / e);
 		return this;
 	}
 
 	public function cos():ComplexNumber {
-		var e = Math.exp(c.i);
-		var f = 1 / e;
-		c = {
-			r: 0.5 * Math.cos(c.r) * (f + e),
-			i: 0.5 * Math.sin(c.r) * (f - e)
-		};
+		final t = c.r;
+		final e = Math.exp(c.i);
+		c.r = 0.5 * Math.cos(t) * (1 / e + e);
+		c.i = 0.5 * Math.sin(t) * (1 / e - e);
 		return this;
 	}
 
 	public function tan():ComplexNumber {
-		var e = Math.exp(2 * c.i);
-		var f = 1 / e;
-		var d = Math.cos(2 * c.r) + 0.5 * (e + f);
-		c = {
-			r: Math.sin(2 * c.r) / d,
-			i: 0.5 * (e - f) / d
-		};
+		final t = c.r;
+		final e = Math.exp(2 * c.i);
+		final d = Math.cos(2 * t) + 0.5 * (e + 1 / e);
+		c.r = Math.sin(2 * t) / d;
+		c.i = 0.5 * (e - 1 / e) / d;
 		return this;
 	}
 
 	public function sinh():ComplexNumber {
-		var e = Math.exp(c.r);
-		var f = 1 / e;
-		c = {
-			r: 0.5 * (e - f) * Math.cos(c.i),
-			i: 0.5 * (e + f) * Math.sin(c.i)
-		};
+		final t = c.i;
+		final e = Math.exp(c.r);
+		c.r = 0.5 * (e - 1 / e) * Math.cos(t);
+		c.i = 0.5 * (e + 1 / e) * Math.sin(t);
 		return this;
 	}
 
 	public function cosh():ComplexNumber {
-		var e = Math.exp(c.r);
-		var f = 1 / e;
-		c = {
-			r: 0.5 * (e + f) * Math.cos(c.i),
-			i: 0.5 * (e - f) * Math.sin(c.i)
-		};
+		final t = c.i;
+		final e = Math.exp(c.r);
+		c.r = 0.5 * (e + 1 / e) * Math.cos(t);
+		c.i = 0.5 * (e - 1 / e) * Math.sin(t);
 		return this;
 	}
 
 	public function tanh():ComplexNumber {
-		var e = Math.exp(2 * c.r);
-		var f = 1 / e;
-		var d = 0.5 * (e + f) + Math.cos(2 * c.i);
-		c = {
-			r: 0.5 * (e - f) / d,
-			i: Math.sin(2 * c.i) / d
-		};
+		final t = c.i;
+		final e = Math.exp(2 * c.r);
+		final d = 0.5 * (e + 1 / e) + Math.cos(2 * t);
+		c.r = 0.5 * (e - 1 / e) / d;
+		c.i = Math.sin(2 * t) / d;
 		return this;
 	}
 }
@@ -382,58 +310,58 @@ class ComplexNumber {
 //
 
 function demo() {
-	var a:Complex = { r: 1, i: -2 };
-	var b:Complex = { r: -2, i: 3 };
-	var c = new ComplexNumber(a);
-	var d = new ComplexNumber(b);
+	final a:Complex = { r: 1, i: -2 };
+	final b:Complex = { r: -2, i: 3 };
+	final c = new ComplexNumber(a);
+	final d = new ComplexNumber(b);
 
 	trace('c: $c, a: $a');
 	trace('d: $d, b: $b');
 
 	trace("--");
 
-	trace('c.abs(): ${c.abs()}, abs(a): ${abs(a)}');
-	trace('c.arg(): ${c.arg()}, arg(a): ${arg(a)}');
+	trace('c.abs(): ${c.abs()}, cAbs(a): ${cAbs(a)}');
+	trace('c.arg(): ${c.arg()}, cArg(a): ${cArg(a)}');
 
 	trace("--");
 
-	trace('c.conjugate(): ${c.conjugate()}, conjugate(a): ${conjugate(a)}');
+	trace('c.conjugate(): ${c.conjugate()}, cConjugate(a): ${cConjugate(a)}');
 	c.set(a);
-	trace('c.add(d): ${c.add(d)}, add(a, b): ${add(a, b)}');
+	trace('c.add(d): ${c.add(d)}, cAdd(a, b): ${cAdd(a, b)}');
 	c.set(a);
-	trace('c.sub(d): ${c.sub(d)}, sub(a, b): ${sub(a, b)}');
+	trace('c.sub(d): ${c.sub(d)}, cSub(a, b): ${cSub(a, b)}');
 	c.set(a);
-	trace('c.mul(d): ${c.mul(d)}, mul(a, b): ${mul(a, b)}');
+	trace('c.mul(d): ${c.mul(d)}, cMul(a, b): ${cMul(a, b)}');
 	c.set(a);
-	trace('c.div(d): ${c.div(d)}, div(a, b): ${div(a, b)}');
+	trace('c.div(d): ${c.div(d)}, cDiv(a, b): ${cDiv(a, b)}');
 	c.set(a);
-	trace('c.pow(d): ${c.pow(d)}, pow(a, b): ${pow(a, b)}');
-
-	trace("--");
-
-	c.set(a);
-	trace('c.exp(): ${c.exp()}, exp(a): ${exp(a)}');
-	c.set(a);
-	trace('c.log(): ${c.log()}, log(a): ${log(a)}');
-	c.set(a);
-	trace('c.exp().log(): ${c.exp().log()}, log(exp(a)): ${log(exp(a))}');
-	c.set(a);
-	trace('c.log().exp(): ${c.log().exp()}, exp(log(a)): ${exp(log(a))}');
-	c.set(a);
-	trace('c.sqrt(): ${c.sqrt()}, sqrt(a): ${sqrt(a)}');
+	trace('c.pow(d): ${c.pow(d)}, cPow(a, b): ${cPow(a, b)}');
 
 	trace("--");
 
 	c.set(a);
-	trace('c.sin(): ${c.sin()}, sin(a): ${sin(a)}');
+	trace('c.exp(): ${c.exp()}, cExp(a): ${cExp(a)}');
 	c.set(a);
-	trace('c.cos(): ${c.cos()}, cos(a): ${cos(a)}');
+	trace('c.log(): ${c.log()}, cLog(a): ${cLog(a)}');
 	c.set(a);
-	trace('c.tan(): ${c.tan()}, tan(a): ${tan(a)}');
+	trace('c.exp().log(): ${c.exp().log()}, cLog(cExp(a)): ${cLog(cExp(a))}');
 	c.set(a);
-	trace('c.sinh(): ${c.sinh()}, sinh(a): ${sinh(a)}');
+	trace('c.log().exp(): ${c.log().exp()}, cExp(cLog(a)): ${cExp(cLog(a))}');
 	c.set(a);
-	trace('c.cosh(): ${c.cosh()}, cosh(a): ${cosh(a)}');
+	trace('c.sqrt(): ${c.sqrt()}, cSqrt(a): ${cSqrt(a)}');
+
+	trace("--");
+
 	c.set(a);
-	trace('c.tanh(): ${c.tanh()}, tanh(a): ${tanh(a)}');
+	trace('c.sin(): ${c.sin()}, cSin(a): ${cSin(a)}');
+	c.set(a);
+	trace('c.cos(): ${c.cos()}, cCos(a): ${cCos(a)}');
+	c.set(a);
+	trace('c.tan(): ${c.tan()}, cTan(a): ${cTan(a)}');
+	c.set(a);
+	trace('c.sinh(): ${c.sinh()}, cSinh(a): ${cSinh(a)}');
+	c.set(a);
+	trace('c.cosh(): ${c.cosh()}, cCosh(a): ${cCosh(a)}');
+	c.set(a);
+	trace('c.tanh(): ${c.tanh()}, cTanh(a): ${cTanh(a)}');
 }

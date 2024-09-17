@@ -1,13 +1,13 @@
 package src;
 
 class PathStringExtender {
-	static public function fileWrite(
+	public static function fileWrite(
 		path:String,
 		binary:Bool = true,
 		aFunc:sys.io.FileOutput->Void
 	)
 		try {
-			var fh = sys.io.File.write(path, binary);
+			final fh = sys.io.File.write(path, binary);
 			aFunc(fh);
 			fh.close();
 		} catch(e) {
