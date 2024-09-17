@@ -26,6 +26,8 @@
 //	complex c_cosh(complex)			to	cCosh / .cosh
 //	complex c_tanh(complex)			to	cTanh / .tanh
 //
+//							(return-new-one / in-place)
+//
 
 package src;
 
@@ -189,42 +191,42 @@ class ComplexNumber {
 		return this;
 	}
 
-	public function add(a:ComplexNumber):ComplexNumber {
-		c.r = c.r + a.c.r;
-		c.i = c.i + a.c.i;
+	public function add(a:Complex):ComplexNumber {
+		c.r = c.r + a.r;
+		c.i = c.i + a.i;
 		return this;
 	}
 
-	public function sub(a:ComplexNumber):ComplexNumber {
-		c.r = c.r - a.c.r;
-		c.i = c.i - a.c.i;
+	public function sub(a:Complex):ComplexNumber {
+		c.r = c.r - a.r;
+		c.i = c.i - a.i;
 		return this;
 	}
 
-	public function mul(a:ComplexNumber):ComplexNumber {
+	public function mul(a:Complex):ComplexNumber {
 		final t = { r: c.r, i: c.i };
-		c.r = t.r * a.c.r - t.i * a.c.i;
-		c.i = t.r * a.c.i + t.i * a.c.r;
+		c.r = t.r * a.r - t.i * a.i;
+		c.i = t.r * a.i + t.i * a.r;
 		return this;
 	}
 
-	public function div(a:ComplexNumber):ComplexNumber {
+	public function div(a:Complex):ComplexNumber {
 		final t = { r: c.r, i: c.i };
-		if (Math.abs(a.c.r) >= Math.abs(a.c.i)) {
-			final w = a.c.i / a.c.r;
-			final d = a.c.r + a.c.i * w;
+		if (Math.abs(a.r) >= Math.abs(a.i)) {
+			final w = a.i / a.r;
+			final d = a.r + a.i * w;
 			c.r = (t.r + t.i * w) / d;
 			c.i = (t.i - t.r * w) / d;
 		} else {
-			final w = a.c.r / a.c.i;
-			final d = a.c.r * w + a.c.i;
+			final w = a.r / a.i;
+			final d = a.r * w + a.i;
 			c.r = (t.r * w + t.i) / d;
 			c.i = (t.i * w - t.r) / d;
 		}
 		return this;
 	}
 
-	public function pow(a:ComplexNumber):ComplexNumber {
+	public function pow(a:Complex):ComplexNumber {
 		log().mul(a).exp(); // exp(mul(a, log(c)))
 		return this;
 	}
@@ -313,10 +315,8 @@ function demo() {
 	final a:Complex = { r: 1, i: -2 };
 	final b:Complex = { r: -2, i: 3 };
 	final c = new ComplexNumber(a);
-	final d = new ComplexNumber(b);
 
-	trace('c: $c, a: $a');
-	trace('d: $d, b: $b');
+	trace('c: $c, a: $a, b : $b');
 
 	trace("--");
 
@@ -327,15 +327,15 @@ function demo() {
 
 	trace('c.conjugate(): ${c.conjugate()}, cConjugate(a): ${cConjugate(a)}');
 	c.set(a);
-	trace('c.add(d): ${c.add(d)}, cAdd(a, b): ${cAdd(a, b)}');
+	trace('c.add(b): ${c.add(b)}, cAdd(a, b): ${cAdd(a, b)}');
 	c.set(a);
-	trace('c.sub(d): ${c.sub(d)}, cSub(a, b): ${cSub(a, b)}');
+	trace('c.sub(b): ${c.sub(b)}, cSub(a, b): ${cSub(a, b)}');
 	c.set(a);
-	trace('c.mul(d): ${c.mul(d)}, cMul(a, b): ${cMul(a, b)}');
+	trace('c.mul(b): ${c.mul(b)}, cMul(a, b): ${cMul(a, b)}');
 	c.set(a);
-	trace('c.div(d): ${c.div(d)}, cDiv(a, b): ${cDiv(a, b)}');
+	trace('c.div(b): ${c.div(b)}, cDiv(a, b): ${cDiv(a, b)}');
 	c.set(a);
-	trace('c.pow(d): ${c.pow(d)}, cPow(a, b): ${cPow(a, b)}');
+	trace('c.pow(b): ${c.pow(b)}, cPow(a, b): ${cPow(a, b)}');
 
 	trace("--");
 
