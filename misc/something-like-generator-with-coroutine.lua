@@ -10,8 +10,8 @@ local co_yield = coroutine.yield
 local t_insert = table.insert
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
-function coGen(co, ...)
-	local T = { co = co(...) }
+function coGen(fn, ...)
+	local T = { co = fn(...) }
 
 	function T:drop(n)
 		n = n ~= nil and n or 0

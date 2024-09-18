@@ -80,7 +80,7 @@ function cDiv(a:Complex, b:Complex):Complex
 	};
 
 function cPow(a:Complex, b:Complex):Complex
-	return cExp(cMul(b, cLog(a))); // exp(mul(a, log(c)))
+	return cExp(cMul(b, cLog(a)));
 
 function cExp(c:Complex):Complex
 	return {
@@ -311,12 +311,32 @@ class ComplexNumber {
 
 //
 
+private function toPolarForm(c:Complex):String
+	return '${cAbs(c)}xCis(${cArg(c)})';
+
+private function getReciprocal(c:Complex):Complex
+	return switch [c.r, c.i] {
+		case [0, 0]:
+			c;  // TODO: raise error (or not)
+		case [_, _]:
+			final t = cAbs(c);
+			{ r: c.r / (t * t), i: -c.i / (t * t) };
+	}
+
 function demo() {
 	final a:Complex = { r: 1, i: -2 };
 	final b:Complex = { r: -2, i: 3 };
 	final c = new ComplexNumber(a);
 
 	trace('c: $c, a: $a, b : $b');
+
+	trace('toPolarForm(c.get()): ${toPolarForm(c.get())}');
+	trace('toPolarForm(a): ${toPolarForm(a)}');
+	trace('toPolarForm(b): ${toPolarForm(b)}');
+
+	trace('cMul(c.get(), getReciprocal(c.get())): ${cMul(c.get(), getReciprocal(c.get()))}');
+	trace('cMul(a, getReciprocal(a)): ${cMul(a, getReciprocal(a))}');
+	trace('cMul(b, getReciprocal(b)): ${cMul(b, getReciprocal(b))}');
 
 	trace("--");
 

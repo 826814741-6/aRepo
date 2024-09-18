@@ -7,14 +7,14 @@
 local t_insert = table.insert
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
-function clGen(f, ...)
-	local T = { f = f(...) }
+function clGen(fn, ...)
+	local T = { cl = fn(...) }
 
 	function T:drop(n)
 		n = n ~= nil and n or 0
 
 		for _=1,n do
-			T.f()
+			T.cl()
 		end
 		return T, {}
 	end
@@ -26,7 +26,7 @@ function clGen(f, ...)
 
 		local r = {}
 		for i=1,n do
-			r[i] = f(T.f())
+			r[i] = f(T.cl())
 		end
 		return T, r
 	end
@@ -39,7 +39,7 @@ function clGen(f, ...)
 
 		local r, i = {}, 1
 		while i <= n do
-			local v = T.f()
+			local v = T.cl()
 			if f(i, v) then r[i], i = g(v), i + 1 end
 		end
 		return T, r
