@@ -1,7 +1,7 @@
 --
 --	something-like-Y.lua
 --
---	porting from:
+--	ported from:
 --	https://hg.mozilla.org/mozilla-central/file/tip/js/src/Y.js
 --	and its license is MPL-2.0:
 --	https://www.mozilla.org/en-US/MPL/2.0/

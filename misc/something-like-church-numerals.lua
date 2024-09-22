@@ -1,7 +1,7 @@
 --
 --	something-like-church-numerals.lua
 --
---	porting from:
+--	ported from:
 --	https://gist.github.com/vivekhaldar/2438498
 --
 --	in other langs:

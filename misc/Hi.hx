@@ -31,17 +31,35 @@
 //	(see: https://haxe.org/manual/compiler-usage.html#common-arguments)
 //
 
-private function f(n:BigInt, a:Array<String>):Array<String>
+using Sys;
+
+private function recA(n:BigInt, a:Array<String>):Array<String>
 	return if (n > 255) {
 		a.insert(0, String.fromCharCode(n % 256));
-		f(n / 256, a);
+		recA(n / 256, a);
 	} else {
 		a.insert(0, String.fromCharCode(n));
 		a;
 	}
 
-function P(n:BigInt)
-	Sys.print(f(n, new Array<String>()).join(""));
+private function recL(n:BigInt, l:List<String>):List<String>
+	return if (n > 255) {
+		l.push(String.fromCharCode(n % 256));
+		recL(n / 256, l);
+	} else {
+		l.push(String.fromCharCode(n));
+		l;
+	}
+
+function PwithArray(n:BigInt)
+	recA(n, new Array<String>())
+		.join("")
+		.print();
+
+function PwithList(n:BigInt)
+	recL(n, new List<String>())
+		.join("")
+		.print();
 
 // and some utils
 
@@ -64,8 +82,11 @@ function strToSrc(s:String):BigInt {
 
 function main() {
 	final m:BigInt = "1468369091346906859060166438166794";
-	P(m);
 
-	final s = "Hello, World!\n";
-	Sys.println(strToSrc(s).toString());
+	PwithArray(m);
+	PwithList(m);
+
+	strToSrc("Hello, World!\n")
+		.toString()
+		.println();
 }
