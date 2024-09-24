@@ -1,14 +1,14 @@
 //
 //	SleepSort.hx
 //
-//	> haxe --interp --main SleepSort.hx
+//	> haxe --interp --main SleepSort
 //
 //	using as a reference:
 //	https://docs.emilua.org/api/0.10/tutorial/getting-started.html#hello-sleepsort
 //	and its license is:
 //	https://gitlab.com/emilua/emilua#user-content-license
 //
-//	referece docs:
+//	reference docs:
 //	https://haxe.org/manual/std-threading.html
 //	https://api.haxe.org/sys/thread/index.html
 //

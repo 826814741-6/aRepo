@@ -30,7 +30,9 @@ function taraiC(x, y, z)
 	), _C
 end
 
-do
+function demo(headline)
+	print(headline)
+
 	print(("%s = %d (%d)"):format(
 		"tarai(10, 5, 0)", tarai(10, 5, 0), count(tarai, 10, 5, 0)))
 
@@ -44,4 +46,11 @@ do
 	r, c = taraiC(100, 50, 0)
 	print(("%s = %d (%d) (%d)"):format(
 		"taraiC(100, 50, 0)", r, count(taraiC, 100, 50, 0), c))
+end
+
+do
+	jit.off()
+	demo("-- jit.off()")
+	jit.on()
+	demo("-- jit.on()")
 end

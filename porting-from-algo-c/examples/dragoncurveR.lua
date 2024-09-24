@@ -19,14 +19,18 @@ function sampleWriter(pathPrefix, x, y, dx, dy, sign, x0, y0)
 	return function (n)
 		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
+			plotter:pathStart()
 			dragonCurveR(plotter, n, dx, dy, sign, x0, y0)
+			plotter:pathEnd()
 			plotter:plotEnd()
 		end)
 
 		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter
 				:plotStart(fh)
+				:pathStart()
 				:dragonCurveR(n, dx, dy, sign, x0, y0)
+				:pathEnd()
 				:plotEnd()
 		end)
 	end

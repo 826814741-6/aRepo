@@ -22,15 +22,19 @@ function sampleWriter(pathPrefix, size, offset)
 	return function (n)
 		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
+			plotter:pathStart()
 			sierpinski(plotter, n, size)
-			plotter:plotEnd(true)
+			plotter:pathEnd(true)
+			plotter:plotEnd()
 		end)
 
 		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter
 				:plotStart(fh)
+				:pathStart()
 				:sierpinski(n, size)
-				:plotEnd(true)
+				:pathEnd(true)
+				:plotEnd()
 		end)
 	end
 end

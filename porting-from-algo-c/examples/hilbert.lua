@@ -22,14 +22,18 @@ function sampleWriter(pathPrefix, size, offset)
 	return function (n)
 		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter:plotStart(fh)
+			plotter:pathStart()
 			hilbert(plotter, n, size, offset)
+			plotter:pathEnd()
 			plotter:plotEnd()
 		end)
 
 		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			plotter
 				:plotStart(fh)
+				:pathStart()
 				:hilbert(n, size, offset)
+				:pathEnd()
 				:plotEnd()
 		end)
 	end

@@ -1,29 +1,26 @@
 //
 //	from src/svgplot.c
 //
-//	void plot_start(int, int)		to	.plotStart
-//	void plot_end(int)			to	.plotEnd
-//	void move(double, double)		to	.move / Move
-//	void move_rel(double, double)		to	.moveRel / MoveRel
-//	void draw(double, double)		to	.draw / Draw
-//	void draw_rel(double, double)		to	.drawRel / DrawRel
+//	void plot_start(int, int)	to	.plotStart, .pathStart / PathStart
+//	void plot_end(int)		to	.plotEnd, .pathEnd / PathEnd
+//	void move(double, double)	to	.move / Move
+//	void move_rel(double, double)	to	.moveRel / MoveRel
+//	void draw(double, double)	to	.draw / Draw
+//	void draw_rel(double, double)	to	.drawRel / DrawRel
 //
-//	SvgPlot,SvgPlotWithBuffering			SvgPlotWholeBuffering
+//	SvgPlot,SvgPlotWithBuffering		SvgPlotWholeBuffering
 //
 //	.plotStart
-//	.plotEnd					[.plotEnd]
-//							.reset
-//							.write
-//
-//	.move / Move					.move / Move
-//	.moveRel / MoveRel				.moveRel / MoveRel
-//	.draw / Draw					.draw / Draw
-//	.drawRel / DrawRel				.drawRel / DrawRel
+//	.plotEnd
+//						.reset
+//						.write
 //
 
 package src;
 
 interface Plotter {
+	public function pathStart():Void;
+	public function pathEnd(isClosePath:Bool):Void;
 	public function move(x:Float, y:Float):Void;
 	public function moveRel(x:Float, y:Float):Void;
 	public function draw(x:Float, y:Float):Void;
@@ -35,6 +32,8 @@ interface PlotterE {
 }
 
 enum Method {
+	PathStart;
+	PathEnd(isClosePath:Bool);
 	Move(x:Float, y:Float);
 	MoveRel(x:Float, y:Float);
 	Draw(x:Float, y:Float);
@@ -44,12 +43,12 @@ enum Method {
 //
 
 private class Base {
-	var x:Int;
-	var y:Int;
+	final width:Int;
+	final height:Int;
 
-	public function new(x:Int, y:Int) {
-		this.x = x;
-		this.y = y;
+	public function new(w:Int, h:Int) {
+		width = w;
+		height = h;
 	}
 }
 
@@ -58,33 +57,25 @@ private class Writer extends Base {
 
 	public function plotStart(fh:sys.io.FileOutput) {
 		this.fh = fh;
-		this.fh.writeString(header(this.x, this.y));
-		this.fh.writeString(pathStart());
+		this.fh.writeString(getHeader(width, height));
 	}
 
-	public function plotEnd(isClosePath:Bool=false) {
-		this.fh.writeString(pathEnd(isClosePath));
-		this.fh.writeString(footer());
-		this.fh = null;
+	public function plotEnd() {
+		fh.writeString(getFooter());
+		fh = null;
 	}
 }
 
 private class WriterWholeBuffering extends Base {
 	var buf:StringBuf = new StringBuf();
-	var isClosePath:Bool = false;
-
-	public function plotEnd(isClosePath:Bool=false)
-		this.isClosePath = isClosePath;
 
 	public function reset()
-		this.buf = new StringBuf();
+		buf = new StringBuf();
 
 	public function write(fh:sys.io.FileOutput) {
-		fh.writeString(header(this.x, this.y));
-		fh.writeString(pathStart());
-		fh.writeString(this.buf.toString());
-		fh.writeString(pathEnd(this.isClosePath));
-		fh.writeString(footer());
+		fh.writeString(getHeader(width, height));
+		fh.writeString(buf.toString());
+		fh.writeString(getFooter());
 	}
 }
 
@@ -95,34 +86,31 @@ private class WriterWithBuffering extends Base {
 	var limit:Int;
 
 	function writer() {
-		this.counter += 1;
-		if (this.counter >= this.limit) {
-			this.fh.writeString(this.buf.toString());
+		counter += 1;
+		if (counter >= limit) {
+			fh.writeString(buf.toString());
 			reset();
 		}
 	}
 
 	function reset() {
-		this.buf = new StringBuf();
-		this.counter = 0;
+		buf = new StringBuf();
+		counter = 0;
 	}
 
 	public function plotStart(fh:sys.io.FileOutput, limit:Int=1) {
 		reset();
 		this.limit = limit;
 		this.fh = fh;
-		this.fh.writeString(header(this.x, this.y));
-		this.fh.writeString(pathStart());
+		this.fh.writeString(getHeader(width, height));
 	}
 
-	public function plotEnd(isClosePath:Bool=false) {
-		if (this.buf.length > 0) {
-			this.fh.writeString(this.buf.toString());
+	public function plotEnd() {
+		if (buf.length > 0) {
+			fh.writeString(buf.toString());
 		}
-		this.fh.writeString(pathEnd(isClosePath));
-		this.fh.writeString(footer());
-		this.fh = null;
-		this.limit = 1;
+		fh.writeString(getFooter());
+		fh = null;
 		reset();
 	}
 }
@@ -130,121 +118,154 @@ private class WriterWithBuffering extends Base {
 //
 
 class SvgPlot extends Writer implements Plotter {
+	public function pathStart()
+		fh.writeString(getPathStart());
+
+	public function pathEnd(isClosePath:Bool)
+		fh.writeString(getPathEnd(isClosePath));
+
 	public function move(x:Float, y:Float)
-		this.fh.writeString(format('M', x, this.y - y));
+		fh.writeString(format('M', x, height - y));
 
 	public function moveRel(x:Float, y:Float)
-		this.fh.writeString(format('m', x, -y));
+		fh.writeString(format('m', x, -y));
 
 	public function draw(x:Float, y:Float)
-		this.fh.writeString(format('L', x, this.y - y));
+		fh.writeString(format('L', x, height - y));
 
 	public function drawRel(x:Float, y:Float)
-		this.fh.writeString(format('l', x, -y));
+		fh.writeString(format('l', x, -y));
 }
 
 class SvgPlotE extends Writer implements PlotterE {
 	public function plot(method:Method)
 		switch (method) {
+			case PathStart:
+				fh.writeString(getPathStart());
+			case PathEnd(isClosePath):
+				fh.writeString(getPathEnd(isClosePath));
 			case Move(x, y):
-				this.fh.writeString(format('M', x, this.y - y));
+				fh.writeString(format('M', x, height - y));
 			case MoveRel(x, y):
-				this.fh.writeString(format('m', x, -y));
+				fh.writeString(format('m', x, -y));
 			case Draw(x, y):
-				this.fh.writeString(format('L', x, this.y - y));
+				fh.writeString(format('L', x, height - y));
 			case DrawRel(x, y):
-				this.fh.writeString(format('l', x, -y));
+				fh.writeString(format('l', x, -y));
 		}
 }
 
 class SvgPlotWholeBuffering extends WriterWholeBuffering implements Plotter {
+	public function pathStart()
+		buf.add(getPathStart());
+
+	public function pathEnd(isClosePath:Bool)
+		buf.add(getPathEnd(isClosePath));
+
 	public function move(x:Float, y:Float)
-		this.buf.add(format('M', x, this.y - y));
+		buf.add(format('M', x, height - y));
 
 	public function moveRel(x:Float, y:Float)
-		this.buf.add(format('m', x, -y));
+		buf.add(format('m', x, -y));
 
 	public function draw(x:Float, y:Float)
-		this.buf.add(format('L', x, this.y - y));
+		buf.add(format('L', x, height - y));
 
 	public function drawRel(x:Float, y:Float)
-		this.buf.add(format('l', x, -y));
+		buf.add(format('l', x, -y));
 }
 
 class SvgPlotWholeBufferingE extends WriterWholeBuffering implements PlotterE {
 	public function plot(method:Method)
 		switch (method) {
+			case PathStart:
+				buf.add(getPathStart());
+			case PathEnd(isClosePath):
+				buf.add(getPathEnd(isClosePath));
 			case Move(x, y):
-				this.buf.add(format('M', x, this.y - y));
+				buf.add(format('M', x, height - y));
 			case MoveRel(x, y):
-				this.buf.add(format('m', x, -y));
+				buf.add(format('m', x, -y));
 			case Draw(x, y):
-				this.buf.add(format('L', x, this.y - y));
+				buf.add(format('L', x, height - y));
 			case DrawRel(x, y):
-				this.buf.add(format('l', x, -y));
+				buf.add(format('l', x, -y));
 		}
 }
 
 class SvgPlotWithBuffering extends WriterWithBuffering implements Plotter {
+	public function pathStart() {
+		buf.add(getPathStart());
+		writer();
+	}
+
+	public function pathEnd(isClosePath:Bool) {
+		buf.add(getPathEnd(isClosePath));
+		writer();
+	}
+
 	public function move(x:Float, y:Float) {
-		this.buf.add(format('M', x, this.y - y));
+		buf.add(format('M', x, height - y));
 		writer();
 	}
 
 	public function moveRel(x:Float, y:Float) {
-		this.buf.add(format('m', x, -y));
+		buf.add(format('m', x, -y));
 		writer();
 	}
 
 	public function draw(x:Float, y:Float) {
-		this.buf.add(format('L', x, this.y - y));
+		buf.add(format('L', x, height - y));
 		writer();
 	}
 
 	public function drawRel(x:Float, y:Float) {
-		this.buf.add(format('l', x, -y));
+		buf.add(format('l', x, -y));
 		writer();
 	}
 }
 
 class SvgPlotWithBufferingE extends WriterWithBuffering implements PlotterE {
-	public function plot(method:Method)
+	public function plot(method:Method) {
 		switch (method) {
+			case PathStart:
+				buf.add(getPathStart());
+			case PathEnd(isClosePath):
+				buf.add(getPathEnd(isClosePath));
 			case Move(x, y):
-				this.buf.add(format('M', x, this.y - y));
-				writer();
+				buf.add(format('M', x, height - y));
 			case MoveRel(x, y):
-				this.buf.add(format('m', x, -y));
-				writer();
+				buf.add(format('m', x, -y));
 			case Draw(x, y):
-				this.buf.add(format('L', x, this.y - y));
-				writer();
+				buf.add(format('L', x, height - y));
 			case DrawRel(x, y):
-				this.buf.add(format('l', x, -y));
-				writer();
+				buf.add(format('l', x, -y));
 		}
+		writer();
+	}
 }
 
 //
 
-private function header(x:Int, y:Int):String
-	return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$x" height="$y">
+private function getHeader(w:Int, h:Int):String
+	return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$w" height="$h">
 ';
 
-private function footer():String
+private function getFooter():String
 	return '</svg>
 ';
 
-private function pathStart():String
+private function getPathStart():String
 	return '<path d="';
 
-private function pathEnd(isClosePath:Bool):String
+private function getPathEnd(isClosePath:Bool):String {
 	return '${if (isClosePath) "Z" else ""}" fill="none" stroke="black" />
 ';
+}
 
 // workarounds for something like C-printf-"%g"-format
 private function workarounds(n:Float):String {
-	var d:Float = Math.pow(10, 4);
+	final d:Float = Math.pow(10, 4);
 	return Std.string(Math.round(n * d) / d);
 }
 

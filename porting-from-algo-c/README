@@ -13,7 +13,7 @@
 | 105.c        | 105.{awk,lua}                                      |
 | 3dgraph.c    | 3dgraph.lua                                        |
 | 5num.c       |                                                    |
-| acker.c      | acker.{awk,lua}                                    |
+| acker.c      | acker.{awk,lua,luajit}                             |
 | area.c       |                                                    |
 | arith.c      |                                                    |
 | atan.c       | atan.lua                                           |
@@ -250,7 +250,7 @@
 | svgplot.c    | svgplot.{awk,lua,luajit,py}, SvgPlot.hx            |
 | swap.c       | swap.{awk,lua}                                     |
 | sweep.c      |                                                    |
-| tarai.c      | tarai.{awk,lua}                                    |
+| tarai.c      | tarai.{awk,lua,luajit}                             |
 | tbintree.c   |                                                    |
 | tdist.c      | distribution.lua                                   |
 | tetromin.c   |                                                    |

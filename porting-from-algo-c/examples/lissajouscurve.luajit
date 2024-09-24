@@ -21,14 +21,18 @@ do
 	with("results/lissajouscurve-lj-A.svg", "w", function (fh)
 		local plotter = svgPlot((n + offset) * 2, (n + offset) * 2)
 		plotter:plotStart(fh)
+		plotter:pathStart()
 		lissajousCurve(plotter, n, offset)
+		plotter:pathEnd()
 		plotter:plotEnd()
 	end)
 
 	with("results/lissajouscurve-lj-B.svg", "w", function (fh)
 		extension(svgPlot((n + offset) * 2, (n + offset) * 2))
 			:plotStart(fh)
+			:pathStart()
 			:lissajousCurve(n, offset)
+			:pathEnd()
 			:plotEnd()
 	end)
 end
@@ -36,14 +40,21 @@ end
 do
 	local plotter = svgPlotWholeBuffering((n + offset) * 2, (n + offset) * 2)
 
+	plotter:pathStart()
 	lissajousCurve(plotter, n, offset)
+	plotter:pathEnd()
+
 	with("results/lissajouscurve-lj-WB-A-A.svg", "w", function (fh)
 		plotter:write(fh)
 	end)
 
 	plotter:reset()
 
-	extension(plotter):lissajousCurve(n, offset)
+	extension(plotter)
+		:pathStart()
+		:lissajousCurve(n, offset)
+		:pathEnd()
+
 	with("results/lissajouscurve-lj-WB-A-B.svg", "w", function (fh)
 		plotter:write(fh)
 	end)
@@ -53,14 +64,18 @@ do
 	with("results/lissajouscurve-lj-WB-B-A.svg", "w", function (fh)
 		local plotter = svgPlotWithBuffering((n + offset) * 2, (n + offset) * 2)
 		plotter:plotStart(fh, 30)
+		plotter:pathStart()
 		lissajousCurve(plotter, n, offset)
+		plotter:pathEnd()
 		plotter:plotEnd()
 	end)
 
 	with("results/lissajouscurve-lj-WB-B-B.svg", "w", function (fh)
 		extension(svgPlotWithBuffering((n + offset) * 2, (n + offset) * 2))
 			:plotStart(fh, 30)
+			:pathStart()
 			:lissajousCurve(n, offset)
+			:pathEnd()
 			:plotEnd()
 	end)
 end

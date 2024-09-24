@@ -1,8 +1,8 @@
 #
 #	from src/svgplot.c
 #
-#	void plot_start(int, int)		to	svgPlot; .plotStart
-#	void plot_end(int)			to	svgPlot; .plotEnd
+#	void plot_start(int, int)		to	svgPlot; .plotStart, .pathStart
+#	void plot_end(int)			to	svgPlot; .plotEnd, .pathEnd
 #	void move(double, double)		to	svgPlot; .move
 #	void move_rel(double, double)		to	svgPlot; .moveRel
 #	void draw(double, double)		to	svgPlot; .draw
@@ -27,31 +27,33 @@ def _footer():
 """
 
 class svgPlot:
-    def __init__(self, x, y):
+    def __init__(self, width, height):
         self.fh = None
-        self.X = x
-        self.Y = y
+        self.W = width
+        self.H = height
 
     def plotStart(self, fileHandler=None):
         self.fh = fileHandler if fileHandler != None else sys.stdout
+        self.fh.write(_header(self.W, self.H))
 
-        self.fh.write(_header(self.X, self.Y))
-        self.fh.write(_pathStart())
-
-    def plotEnd(self, isClosePath=False):
-        self.fh.write(_pathEnd(isClosePath))
+    def plotEnd(self):
         self.fh.write(_footer())
-
         self.fh = None
 
+    def pathStart(self):
+        self.fh.write(_pathStart())
+
+    def pathEnd(self, isClosePath=False):
+        self.fh.write(_pathEnd(isClosePath))
+
     def move(self, x, y):
-        self.fh.write("M {0:g} {1:g} ".format(x, self.Y - y))
+        self.fh.write("M {0:g} {1:g} ".format(x, self.H - y))
 
     def moveRel(self, x, y):
         self.fh.write("m {0:g} {1:g} ".format(x, -y))
 
     def draw(self, x, y):
-        self.fh.write("L {0:g} {1:g} ".format(x, self.Y - y))
+        self.fh.write("L {0:g} {1:g} ".format(x, self.H - y))
 
     def drawRel(self, x, y):
         self.fh.write("l {0:g} {1:g} ".format(x, -y))
@@ -61,6 +63,7 @@ def _demo(path):
 
     def sample(plotter, fh):
         plotter.plotStart(fh)
+        plotter.pathStart()
         for i in range(5):
             theta = 2 * math.pi * i / 5
             x, y = 150 + 140 * math.cos(theta), 150 + 140 * math.sin(theta)
@@ -68,7 +71,8 @@ def _demo(path):
                 plotter.move(x, y)
             else:
                 plotter.draw(x, y)
-        plotter.plotEnd(True)
+        plotter.pathEnd(True)
+        plotter.plotEnd()
 
     with open(path, "w") as fh:
         plotter = svgPlot(300, 300)

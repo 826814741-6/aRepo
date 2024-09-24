@@ -1,8 +1,8 @@
 --
 --	from src/svgplot.c
 --
---	void plot_start(int, int)		to	:plotStart
---	void plot_end(int)			to	:plotEnd
+--	void plot_start(int, int)		to	:plotStart, :pathStart
+--	void plot_end(int)			to	:plotEnd, :pathEnd
 --	void move(double, double)		to	:move
 --	void move_rel(double, double)		to	:moveRel
 --	void draw(double, double)		to	:draw
@@ -10,19 +10,15 @@
 --
 --	svgPlot,svgPlotWithBuffering		to	svgPlotWholeBuffering
 --	:plotStart
---	:plotEnd				to	[:plotEnd]
---	:move					to	:move
---	:moveRel				to	:moveRel
---	:draw					to	:draw
---	:drawRel				to	:drawRel
+--	:plotEnd
 --							:reset
 --							:write, :writeOneByOne
 --
 
-local function header(x, y)
+local function header(w, h)
 	return ([[
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="%d" height="%d">
-]]):format(x, y)
+]]):format(w, h)
 end
 
 local function footer()
@@ -39,25 +35,33 @@ local function pathEnd(isClosePath)
 ]]):format(isClosePath and "Z" or "")
 end
 
-local function svgPlot(X, Y)
+local function svgPlot(width, height)
 	local T = { fh = nil }
 
 	function T:plotStart(fh)
 		T.fh = fh ~= nil and fh or io.stdout
-		T.fh:write(header(X, Y))
-		T.fh:write(pathStart())
+		T.fh:write(header(width, height))
 		return T
 	end
 
-	function T:plotEnd(isClosePath)
-		T.fh:write(pathEnd(isClosePath))
+	function T:plotEnd()
 		T.fh:write(footer())
 		T.fh = nil
 		return T
 	end
 
+	function T:pathStart()
+		T.fh:write(pathStart())
+		return T
+	end
+
+	function T:pathEnd(isClosePath)
+		T.fh:write(pathEnd(isClosePath))
+		return T
+	end
+
 	function T:move(x, y)
-		T.fh:write(("M %g %g "):format(x, Y - y))
+		T.fh:write(("M %g %g "):format(x, height - y))
 		return T
 	end
 
@@ -67,7 +71,7 @@ local function svgPlot(X, Y)
 	end
 
 	function T:draw(x, y)
-		T.fh:write(("L %g %g "):format(x, Y - y))
+		T.fh:write(("L %g %g "):format(x, height - y))
 		return T
 	end
 
@@ -82,22 +86,23 @@ end
 local T_concat = table.concat
 local T_insert = table.insert
 
-local function svgPlotWholeBuffering(X, Y)
+local function svgPlotWholeBuffering(width, height)
 	local T = {
-		buffer = {},
-		isClosePath = false
+		buffer = {}
 	}
 
-	-- function T:plotStart()
-	-- end
+	function T:pathStart()
+		T_insert(T.buffer, pathStart())
+		return T
+	end
 
-	function T:plotEnd(isClosePath)
-		T.isClosePath = isClosePath
+	function T:pathEnd(isClosePath)
+		T_insert(T.buffer, pathEnd(isClosePath))
 		return T
 	end
 
 	function T:move(x, y)
-		T_insert(T.buffer, ("M %g %g "):format(x, Y - y))
+		T_insert(T.buffer, ("M %g %g "):format(x, height - y))
 		return T
 	end
 
@@ -107,7 +112,7 @@ local function svgPlotWholeBuffering(X, Y)
 	end
 
 	function T:draw(x, y)
-		T_insert(T.buffer, ("L %g %g "):format(x, Y - y))
+		T_insert(T.buffer, ("L %g %g "):format(x, height - y))
 		return T
 	end
 
@@ -118,17 +123,14 @@ local function svgPlotWholeBuffering(X, Y)
 
 	function T:reset()
 		T.buffer = {}
-		T.isClosePath = false
 		return T
 	end
 
 	function T:write(fh)
 		fh = fh ~= nil and fh or io.stdout
 
-		fh:write(header(X, Y))
-		fh:write(pathStart())
+		fh:write(header(width, height))
 		fh:write(T_concat(T.buffer))
-		fh:write(pathEnd(T.isClosePath))
 		fh:write(footer())
 
 		return T
@@ -137,12 +139,10 @@ local function svgPlotWholeBuffering(X, Y)
 	function T:writeOneByOne(fh)
 		fh = fh ~= nil and fh or io.stdout
 
-		fh:write(header(X, Y))
-		fh:write(pathStart())
+		fh:write(header(width, height))
 		for _,v in ipairs(T.buffer) do
 			fh:write(v)
 		end
-		fh:write(pathEnd(T.isClosePath))
 		fh:write(footer())
 
 		return T
@@ -185,7 +185,7 @@ local function makeBuffer()
 	return T
 end
 
-local function svgPlotWithBuffering(X, Y)
+local function svgPlotWithBuffering(width, height)
 	local T = {
 		fh = nil,
 		buffer = makeBuffer()
@@ -195,14 +195,12 @@ local function svgPlotWithBuffering(X, Y)
 		T.buffer:reset()
 		T.buffer:setLimit(limit)
 		T.fh = fh ~= nil and fh or io.stdout
-		T.fh:write(header(X, Y))
-		T.fh:write(pathStart())
+		T.fh:write(header(width, height))
 		return T
 	end
 
-	function T:plotEnd(isClosePath)
+	function T:plotEnd()
 		T.buffer:tailStep(T.fh)
-		T.fh:write(pathEnd(isClosePath))
 		T.fh:write(footer())
 		T.fh = nil
 		T.buffer:setLimit()
@@ -210,8 +208,18 @@ local function svgPlotWithBuffering(X, Y)
 		return T
 	end
 
+	function T:pathStart()
+		T.buffer:writer(T.fh, pathStart())
+		return T
+	end
+
+	function T:pathEnd(isClosePath)
+		T.buffer:writer(T.fh, pathEnd(isClosePath))
+		return T
+	end
+
 	function T:move(x, y)
-		T.buffer:writer(T.fh, ("M %g %g "):format(x, Y - y))
+		T.buffer:writer(T.fh, ("M %g %g "):format(x, height - y))
 		return T
 	end
 
@@ -221,7 +229,7 @@ local function svgPlotWithBuffering(X, Y)
 	end
 
 	function T:draw(x, y)
-		T.buffer:writer(T.fh, ("L %g %g "):format(x, Y - y))
+		T.buffer:writer(T.fh, ("L %g %g "):format(x, height - y))
 		return T
 	end
 

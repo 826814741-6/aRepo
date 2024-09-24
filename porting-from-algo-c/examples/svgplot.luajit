@@ -1,8 +1,8 @@
 --
 --	from src/svgplot.c
 --
---	void plot_start(int, int)		to	svgPlot; :plotStart
---	void plot_end(int)			to	svgPlot; :plotEnd
+--	void plot_start(int, int)		to	svgPlot; :plotStart, :pathStart
+--	void plot_end(int)			to	svgPlot; :plotEnd, :pathEnd
 --	void move(double, double)		to	svgPlot; :move
 --	void move_rel(double, double)		to	svgPlot; :moveRel
 --	void draw(double, double)		to	svgPlot; :draw
@@ -46,23 +46,28 @@ do
 	with("results/svgplot-lj-A.svg", "w", function (fh)
 		local plotter = svgPlot(300, 300)
 		plotter:plotStart(fh)
+		plotter:pathStart()
 		sample(plotter)
-		plotter:plotEnd(true)
+		plotter:pathEnd(true)
+		plotter:plotEnd()
 	end)
 
 	with("results/svgplot-lj-B.svg", "w", function (fh)
 		extension(svgPlot(300, 300))
 			:plotStart(fh)
+			:pathStart()
 			:sample()
-			:plotEnd(true)
+			:pathEnd(true)
+			:plotEnd()
 	end)
 end
 
 do
 	local plotter = svgPlotWholeBuffering(300, 300)
 
+	plotter:pathStart()
 	sample(plotter)
-	plotter:plotEnd(true)
+	plotter:pathEnd(true)
 
 	with("results/svgplot-lj-WB-A-A.svg", "w", function (fh)
 		plotter:writeOneByOne(fh)
@@ -71,8 +76,9 @@ do
 	plotter:reset()
 
 	extension(plotter)
+		:pathStart()
 		:sample()
-		:plotEnd(true)
+		:pathEnd(true)
 
 	with("results/svgplot-lj-WB-A-B.svg", "w", function (fh)
 		plotter:writeOneByOne(fh)
@@ -83,14 +89,18 @@ do
 	with("results/svgplot-lj-WB-B-A.svg", "w", function (fh)
 		local plotter = svgPlotWithBuffering(300, 300)
 		plotter:plotStart(fh, 2)
+		plotter:pathStart()
 		sample(plotter)
-		plotter:plotEnd(true)
+		plotter:pathEnd(true)
+		plotter:plotEnd()
 	end)
 
 	with("results/svgplot-lj-WB-B-B.svg", "w", function (fh)
 		extension(svgPlotWithBuffering(300, 300))
 			:plotStart(fh, 2)
+			:pathStart()
 			:sample()
-			:plotEnd(true)
+			:pathEnd(true)
+			:plotEnd()
 	end)
 end

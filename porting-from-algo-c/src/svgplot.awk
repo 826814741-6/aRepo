@@ -11,19 +11,19 @@
 
 BEGIN {
 	_OUTPUT_PATH = ""
-	_X = 0
-	_Y = 0
+	_WIDTH = 0
+	_HEIGHT = 0
 }
 
-function init(path, x, y) {
+function init(path, w, h) {
 	_OUTPUT_PATH = path
-	_X = x
-	_Y = y
+	_WIDTH = w
+	_HEIGHT = h
 }
 
 function header() {
 	printf "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"" \
-	       " width=\"%d\" height=\"%d\">\n", _X, _Y > _OUTPUT_PATH
+	       " width=\"%d\" height=\"%d\">\n", _WIDTH, _HEIGHT > _OUTPUT_PATH
 }
 
 function pathStart() {
@@ -40,7 +40,7 @@ function footer() {
 }
 
 function move(x, y) {
-	printf "M %g %g ", x, _Y - y > _OUTPUT_PATH
+	printf "M %g %g ", x, _HEIGHT - y > _OUTPUT_PATH
 }
 
 function moveRel(x, y) {
@@ -48,7 +48,7 @@ function moveRel(x, y) {
 }
 
 function draw(x, y) {
-	printf "L %g %g ", x, _Y - y > _OUTPUT_PATH
+	printf "L %g %g ", x, _HEIGHT - y > _OUTPUT_PATH
 }
 
 function drawRel(x, y) {
