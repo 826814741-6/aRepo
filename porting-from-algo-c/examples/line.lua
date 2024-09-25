@@ -32,7 +32,7 @@ do
 		)
 	end
 
-	with("results/line.bmp", "w", function (fh)
+	with("results/line.bmp", "wb", function (fh)
 		bmp:write(fh)
 	end)
 end

@@ -32,7 +32,7 @@ do
 		)
 	end
 
-	with("results/ellipse.bmp", "w", function (fh)
+	with("results/ellipse.bmp", "wb", function (fh)
 		bmp:write(fh)
 	end)
 end
