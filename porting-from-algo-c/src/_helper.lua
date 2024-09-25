@@ -18,6 +18,24 @@ local function id(x) return x end
 
 local function increment(x) return x + 1 end
 
+local function isNum(v)
+	return type(v) == "number"
+end
+
+local function isStr(v)
+	return type(v) == "string"
+end
+
+local function mustBeNum(v)
+	assert(type(v) == "number", "Must be a number.")
+	return v
+end
+
+local function mustBeStr(v)
+	assert(type(v) == "string", "Must be a string.")
+	return v
+end
+
 -- local function readOnlyTable(t)
 -- 	...
 -- end
@@ -84,6 +102,10 @@ return {
 	decrement = decrement,
 	id = id,
 	increment = increment,
+	isNum = isNum,
+	isStr = isStr,
+	mustBeNum = mustBeNum,
+	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,
 	with = with
 }
