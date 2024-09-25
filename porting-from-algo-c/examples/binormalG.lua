@@ -19,25 +19,25 @@ do
 
 	plotter(bmp, c, 100000, 0.5)
 
-	local fh = io.open("results/binormal5.bmp", "w")
+	local fh = io.open("results/binormal5.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 
 	plotter(bmp, c, 100000, -0.5)
 
-	local fh = io.open("results/binormal5N.bmp", "w")
+	local fh = io.open("results/binormal5N.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 
 	plotter(bmp, c, 100000, 0.9)
 
-	local fh = io.open("results/binormal9.bmp", "w")
+	local fh = io.open("results/binormal9.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 
 	plotter(bmp, c, 100000, -0.9)
 
-	local fh = io.open("results/binormal9N.bmp", "w")
+	local fh = io.open("results/binormal9N.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end

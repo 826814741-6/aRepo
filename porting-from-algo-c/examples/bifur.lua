@@ -17,7 +17,7 @@ do
 	local kmin, kmax, pmin, pmax = 1.5, 3, 0, 1.5
 	bifur(bmp, PRESET_COLORS.BLACK, PRESET_COLORS.WHITE, x, kmin, kmax, pmin, pmax)
 
-	local fh = io.open("results/bifur.bmp", "w")
+	local fh = io.open("results/bifur.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end

@@ -27,7 +27,7 @@ do
 		)
 	end
 
-	local fh = io.open("results/ellipse.bmp", "w")
+	local fh = io.open("results/ellipse.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end

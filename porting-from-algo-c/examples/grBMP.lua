@@ -20,7 +20,7 @@ do
 	bmp:rect(1, x//2 + 1, y//2 + 1, y, PRESET_COLORS.RED)
 	bmp:rect(x//2 + 1, x, y//2 + 1, y, PRESET_COLORS.WHITE)
 
-	local fh = io.open("results/grBMP.bmp", "w")
+	local fh = io.open("results/grBMP.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end

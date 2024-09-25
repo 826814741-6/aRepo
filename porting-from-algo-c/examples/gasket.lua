@@ -17,7 +17,7 @@ do
 	local n = 65
 	sierpinskiGasket(bmp, n, PRESET_COLORS.BLACK, PRESET_COLORS.WHITE)
 
-	local fh = io.open("results/gasket.bmp", "w")
+	local fh = io.open("results/gasket.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end

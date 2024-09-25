@@ -24,7 +24,7 @@ do
 		PRESET_COLORS.WHITE
 	)
 
-	local fh = io.open("results/julia.bmp", "w")
+	local fh = io.open("results/julia.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end

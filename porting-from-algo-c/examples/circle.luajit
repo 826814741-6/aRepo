@@ -26,7 +26,7 @@ do
 		)
 	end
 
-	local fh = io.open("results/circle-lj.bmp", "w")
+	local fh = io.open("results/circle-lj.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end

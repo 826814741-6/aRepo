@@ -27,7 +27,7 @@ do
 		)
 	end
 
-	local fh = io.open("results/line-lj.bmp", "w")
+	local fh = io.open("results/line-lj.bmp", "wb")
 	bmp:write(fh)
 	fh:close()
 end
