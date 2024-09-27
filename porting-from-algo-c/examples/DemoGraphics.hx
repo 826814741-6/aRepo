@@ -86,6 +86,210 @@ private function demoC(prefix, n=10) {
 }
 #end
 
+#if circle
+using src.BasicShapes;
+
+private function demo() {
+	final n = 100;
+	final x = 640;
+	final y = 400;
+
+	final styleR = new StyleMaker()
+		.add(Fill(Black));
+	final styleC = new StyleMaker()
+		.add(Fill(Transparent))
+		.add(Stroke(RandomRGB))
+		.add(StrokeWidth(1));
+
+	demoA("results/circle-hx", n, x, y, styleR, styleC);
+	demoB("results/circle-hx-WB-A", n, x, y, styleR, styleC);
+	demoC("results/circle-hx-WB-B", n, x, y, styleR, styleC);
+}
+
+private function demoA(prefix, n, x, y, styleR, styleC) {
+	'${prefix}.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlot(x, y);
+
+		plotter.plotStart(fh);
+		plotter.randomCircle(n, x, y, styleR, styleC);
+		plotter.plotEnd();
+	});
+
+	'${prefix}-E.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotE(x, y);
+
+		plotter.plotStart(fh);
+		plotter.randomCircleE(n, x, y, styleR, styleC);
+		plotter.plotEnd();
+	});
+}
+
+private function demoB(prefix, n, x, y, styleR, styleC) {
+	final plotter = new SvgPlotWholeBuffering(x, y);
+	final plotterE = new SvgPlotWholeBufferingE(x, y);
+
+	plotter.randomCircle(n, x, y, styleR, styleC);
+	plotterE.randomCircleE(n, x, y, styleR, styleC);
+
+	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
+	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
+}
+
+private function demoC(prefix, n, x, y, styleR, styleC) {
+	'${prefix}.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotWithBuffering(x, y);
+
+		plotter.plotStart(fh, 30);
+		plotter.randomCircle(n, x, y, styleR, styleC);
+		plotter.plotEnd();
+	});
+
+	'${prefix}-E.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotWithBufferingE(x, y);
+
+		plotter.plotStart(fh, 30);
+		plotter.randomCircleE(n, x, y, styleR, styleC);
+		plotter.plotEnd();
+	});
+}
+#end
+
+#if ellipse
+using src.BasicShapes;
+
+private function demo() {
+	final n = 100;
+	final x = 640;
+	final y = 400;
+
+	final styleR = new StyleMaker()
+		.add(Fill(Black));
+	final styleE = new StyleMaker()
+		.add(Fill(Transparent))
+		.add(Stroke(RandomRGB))
+		.add(StrokeWidth(1));
+
+	demoA("results/ellipse-hx", n, x, y, styleR, styleE);
+	demoB("results/ellipse-hx-WB-A", n, x, y, styleR, styleE);
+	demoC("results/ellipse-hx-WB-B", n, x, y, styleR, styleE);
+}
+
+private function demoA(prefix, n, x, y, styleR, styleE) {
+	'${prefix}.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlot(x, y);
+
+		plotter.plotStart(fh);
+		plotter.randomEllipse(n, x, y, styleR, styleE);
+		plotter.plotEnd();
+	});
+
+	'${prefix}-E.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotE(x, y);
+
+		plotter.plotStart(fh);
+		plotter.randomEllipseE(n, x, y, styleR, styleE);
+		plotter.plotEnd();
+	});
+}
+
+private function demoB(prefix, n, x, y, styleR, styleE) {
+	final plotter = new SvgPlotWholeBuffering(x, y);
+	final plotterE = new SvgPlotWholeBufferingE(x, y);
+
+	plotter.randomEllipse(n, x, y, styleR, styleE);
+	plotterE.randomEllipseE(n, x, y, styleR, styleE);
+
+	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
+	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
+}
+
+private function demoC(prefix, n, x, y, styleR, styleE) {
+	'${prefix}.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotWithBuffering(x, y);
+
+		plotter.plotStart(fh, 30);
+		plotter.randomEllipse(n, x, y, styleR, styleE);
+		plotter.plotEnd();
+	});
+
+	'${prefix}-E.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotWithBufferingE(x, y);
+
+		plotter.plotStart(fh, 30);
+		plotter.randomEllipseE(n, x, y, styleR, styleE);
+		plotter.plotEnd();
+	});
+}
+#end
+
+#if line
+using src.BasicShapes;
+
+private function demo() {
+	final n = 100;
+	final x = 640;
+	final y = 400;
+
+	final styleR = new StyleMaker()
+		.add(Fill(Black));
+	final styleL = new StyleMaker()
+		.add(Fill(Transparent))
+		.add(Stroke(RandomRGB))
+		.add(StrokeWidth(1));
+
+	demoA("results/line-hx", n, x, y, styleR, styleL);
+	demoB("results/line-hx-WB-A", n, x, y, styleR, styleL);
+	demoC("results/line-hx-WB-B", n, x, y, styleR, styleL);
+}
+
+private function demoA(prefix, n, x, y, styleR, styleL) {
+	'${prefix}.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlot(x, y);
+
+		plotter.plotStart(fh);
+		plotter.randomLine(n, x, y, styleR, styleL);
+		plotter.plotEnd();
+	});
+
+	'${prefix}-E.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotE(x, y);
+
+		plotter.plotStart(fh);
+		plotter.randomLineE(n, x, y, styleR, styleL);
+		plotter.plotEnd();
+	});
+}
+
+private function demoB(prefix, n, x, y, styleR, styleL) {
+	final plotter = new SvgPlotWholeBuffering(x, y);
+	final plotterE = new SvgPlotWholeBufferingE(x, y);
+
+	plotter.randomLine(n, x, y, styleR, styleL);
+	plotterE.randomLineE(n, x, y, styleR, styleL);
+
+	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
+	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
+}
+
+private function demoC(prefix, n, x, y, styleR, styleL) {
+	'${prefix}.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotWithBuffering(x, y);
+
+		plotter.plotStart(fh, 30);
+		plotter.randomLine(n, x, y, styleR, styleL);
+		plotter.plotEnd();
+	});
+
+	'${prefix}-E.svg'.fileWrite((fh) -> {
+		final plotter = new SvgPlotWithBufferingE(x, y);
+
+		plotter.plotStart(fh, 30);
+		plotter.randomLineE(n, x, y, styleR, styleL);
+		plotter.plotEnd();
+	});
+}
+#end
+
 #if lissajouscurve
 using src.LissajousCurve;
 
