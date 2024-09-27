@@ -12,6 +12,24 @@ local function count(f, ...)
 	return c
 end
 
+local function isNum(v)
+	return type(v) == "number"
+end
+
+local function isStr(v)
+	return type(v) == "string"
+end
+
+local function mustBeNum(v)
+	assert(type(v) == "number", "Must be a number.")
+	return v
+end
+
+local function mustBeStr(v)
+	assert(type(v) == "string", "Must be a string.")
+	return v
+end
+
 -- local function readOnlyTable(t)
 -- 	...
 -- end
@@ -30,5 +48,9 @@ return {
 	abs = abs,
 	atLeastOne = atLeastOne,
 	count = count,
+	isNum = isNum,
+	isStr = isStr,
+	mustBeNum = mustBeNum,
+	mustBeStr = mustBeStr,
 	with = with
 }

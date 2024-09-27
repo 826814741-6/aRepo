@@ -4,11 +4,16 @@
 --	void gr_line(int, int, int, int, long)		to	BMP; :line
 --
 
-local M = require 'grBMP'
-local H = require 'rand'
+local BMP = require 'grBMP'.BMP
+local BLACK = require 'grBMP'.PRESET_COLORS.BLACK
+local makeColor = require 'grBMP'.makeColor
 
-local BMP, BLACK = M.BMP, M.PRESET_COLORS.BLACK
-local RAND = H.RAND
+local svgPlot = require 'svgplot'.svgPlot
+local extension = require 'basicshapes'.extensionForSvgPlot
+local makeStyle = require 'basicshapes'.makeStyle
+
+local RAND = require 'rand'.RAND
+local with = require '_helper'.with
 
 do
 	local x, y = 640, 400
@@ -27,7 +32,47 @@ do
 		)
 	end
 
-	local fh = io.open("results/line-lj.bmp", "wb")
-	bmp:write(fh)
-	fh:close()
+	with("results/line-lj.bmp", "wb", function (fh)
+		bmp:write(fh)
+	end)
+end
+
+local b_band, b_rshift = bit.band, bit.rshift
+
+do
+	local styleR, styleL =
+		makeStyle()
+			:fill("black")
+			:get(),
+		makeStyle()
+			:fill("transparent")
+			:stroke("rgb(%d %d %d)")
+			:strokeWidth(1)
+			:get()
+
+	function toRGB(n)
+		return b_rshift(n, 16), b_band(b_rshift(n, 8), 0xFF), b_band(n, 0xFF)
+	end
+
+	with("results/line-lj.svg", "w", function (fh)
+		local x, y = 640, 400
+		local plotter = extension(svgPlot(x, y))
+
+		plotter:plotStart(fh)
+
+		plotter:rect(0, 0, x, y, 0, 0, styleR)
+
+		local r = RAND()
+		for _=1,100 do
+			plotter:line(
+				tonumber(r:rand()) % x,
+				tonumber(r:rand()) % y,
+				tonumber(r:rand()) % x,
+				tonumber(r:rand()) % y,
+				styleL:format(toRGB(tonumber(r:randRaw() % (0xffffff + 1))))
+			)
+		end
+
+		plotter:plotEnd()
+	end)
 end
