@@ -57,11 +57,11 @@ private class Writer extends Base {
 
 	public function plotStart(fh:sys.io.FileOutput) {
 		this.fh = fh;
-		this.fh.writeString(getHeader(width, height));
+		this.fh.writeString(fmtHeader(width, height));
 	}
 
 	public function plotEnd() {
-		fh.writeString(getFooter());
+		fh.writeString(fmtFooter());
 		fh = null;
 	}
 }
@@ -73,9 +73,9 @@ private class WriterWholeBuffering extends Base {
 		buf = new StringBuf();
 
 	public function write(fh:sys.io.FileOutput) {
-		fh.writeString(getHeader(width, height));
+		fh.writeString(fmtHeader(width, height));
 		fh.writeString(buf.toString());
-		fh.writeString(getFooter());
+		fh.writeString(fmtFooter());
 	}
 }
 
@@ -102,14 +102,14 @@ private class WriterWithBuffering extends Base {
 		reset();
 		this.limit = limit;
 		this.fh = fh;
-		this.fh.writeString(getHeader(width, height));
+		this.fh.writeString(fmtHeader(width, height));
 	}
 
 	public function plotEnd() {
 		if (buf.length > 0) {
 			fh.writeString(buf.toString());
 		}
-		fh.writeString(getFooter());
+		fh.writeString(fmtFooter());
 		fh = null;
 		reset();
 	}
@@ -119,10 +119,10 @@ private class WriterWithBuffering extends Base {
 
 class SvgPlot extends Writer implements Plotter {
 	public function pathStart()
-		fh.writeString(getPathStart());
+		fh.writeString(fmtPathStart());
 
 	public function pathEnd(isClosePath:Bool)
-		fh.writeString(getPathEnd(isClosePath));
+		fh.writeString(fmtPathEnd(isClosePath));
 
 	public function move(x:Float, y:Float)
 		fh.writeString(format('M', x, height - y));
@@ -139,28 +139,28 @@ class SvgPlot extends Writer implements Plotter {
 
 class SvgPlotE extends Writer implements PlotterE {
 	public function plot(method:Method)
-		switch (method) {
+		fh.writeString(switch (method) {
 			case PathStart:
-				fh.writeString(getPathStart());
+				fmtPathStart();
 			case PathEnd(isClosePath):
-				fh.writeString(getPathEnd(isClosePath));
+				fmtPathEnd(isClosePath);
 			case Move(x, y):
-				fh.writeString(format('M', x, height - y));
+				format('M', x, height - y);
 			case MoveRel(x, y):
-				fh.writeString(format('m', x, -y));
+				format('m', x, -y);
 			case Draw(x, y):
-				fh.writeString(format('L', x, height - y));
+				format('L', x, height - y);
 			case DrawRel(x, y):
-				fh.writeString(format('l', x, -y));
-		}
+				format('l', x, -y);
+		});
 }
 
 class SvgPlotWholeBuffering extends WriterWholeBuffering implements Plotter {
 	public function pathStart()
-		buf.add(getPathStart());
+		buf.add(fmtPathStart());
 
 	public function pathEnd(isClosePath:Bool)
-		buf.add(getPathEnd(isClosePath));
+		buf.add(fmtPathEnd(isClosePath));
 
 	public function move(x:Float, y:Float)
 		buf.add(format('M', x, height - y));
@@ -177,30 +177,30 @@ class SvgPlotWholeBuffering extends WriterWholeBuffering implements Plotter {
 
 class SvgPlotWholeBufferingE extends WriterWholeBuffering implements PlotterE {
 	public function plot(method:Method)
-		switch (method) {
+		buf.add(switch (method) {
 			case PathStart:
-				buf.add(getPathStart());
+				fmtPathStart();
 			case PathEnd(isClosePath):
-				buf.add(getPathEnd(isClosePath));
+				fmtPathEnd(isClosePath);
 			case Move(x, y):
-				buf.add(format('M', x, height - y));
+				format('M', x, height - y);
 			case MoveRel(x, y):
-				buf.add(format('m', x, -y));
+				format('m', x, -y);
 			case Draw(x, y):
-				buf.add(format('L', x, height - y));
+				format('L', x, height - y);
 			case DrawRel(x, y):
-				buf.add(format('l', x, -y));
-		}
+				format('l', x, -y);
+		});
 }
 
 class SvgPlotWithBuffering extends WriterWithBuffering implements Plotter {
 	public function pathStart() {
-		buf.add(getPathStart());
+		buf.add(fmtPathStart());
 		writer();
 	}
 
 	public function pathEnd(isClosePath:Bool) {
-		buf.add(getPathEnd(isClosePath));
+		buf.add(fmtPathEnd(isClosePath));
 		writer();
 	}
 
@@ -227,41 +227,40 @@ class SvgPlotWithBuffering extends WriterWithBuffering implements Plotter {
 
 class SvgPlotWithBufferingE extends WriterWithBuffering implements PlotterE {
 	public function plot(method:Method) {
-		switch (method) {
+		buf.add(switch (method) {
 			case PathStart:
-				buf.add(getPathStart());
+				fmtPathStart();
 			case PathEnd(isClosePath):
-				buf.add(getPathEnd(isClosePath));
+				fmtPathEnd(isClosePath);
 			case Move(x, y):
-				buf.add(format('M', x, height - y));
+				format('M', x, height - y);
 			case MoveRel(x, y):
-				buf.add(format('m', x, -y));
+				format('m', x, -y);
 			case Draw(x, y):
-				buf.add(format('L', x, height - y));
+				format('L', x, height - y);
 			case DrawRel(x, y):
-				buf.add(format('l', x, -y));
-		}
+				format('l', x, -y);
+		});
 		writer();
 	}
 }
 
 //
 
-private function getHeader(w:Int, h:Int):String
+private function fmtHeader(w:Int, h:Int):String
 	return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$w" height="$h">
 ';
 
-private function getFooter():String
+private function fmtFooter():String
 	return '</svg>
 ';
 
-private function getPathStart():String
+private function fmtPathStart():String
 	return '<path d="';
 
-private function getPathEnd(isClosePath:Bool):String {
+private function fmtPathEnd(isClosePath:Bool):String
 	return '${if (isClosePath) "Z" else ""}" fill="none" stroke="black" />
 ';
-}
 
 // workarounds for something like C-printf-"%g"-format
 private function workarounds(n:Float):String {
