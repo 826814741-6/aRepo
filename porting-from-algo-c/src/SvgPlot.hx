@@ -366,7 +366,7 @@ class StyleMaker {
 			case Fill(c):
 				'Fill';
 			case PaintOrder(s):
-				'PointOrder';
+				'PaintOrder';
 			case Stroke(c):
 				'Stroke';
 			case StrokeWidth(n):
