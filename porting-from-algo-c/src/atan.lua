@@ -54,18 +54,40 @@ local function atanR(x, n, pi)
 	end
 end
 
-local hasBC, M = pcall(require, "bc")
-local hasPI, H = pcall(require, "pi")
+local hasBC, bc = pcall(require, "bc")
+local hasPI, pi = pcall(require, "pi")
 
 local atanM = (hasBC and hasPI) and function (x, n, digit)
-	M.digits(digit)
-	return atan(M.new(x), n, H.machinLikeM(digit))
+	bc.digits(digit)
+	return atan(bc.new(x), n, pi.machinLikeM(digit))
 end or nil
 
 local atanMR = (hasBC and hasPI) and function (x, n, digit)
-	M.digits(digit)
-	return atanR(M.new(x), n, H.machinLikeM(digit))
+	bc.digits(digit)
+	return atanR(bc.new(x), n, pi.machinLikeM(digit))
 end or nil
+
+--
+
+local function pVerbose(m, n)
+	print(
+		("%5.2f % .14f % 5g (LOOPCOUNT:%2d) (delta:%g)")
+			:format(
+				m,
+				atan(m, n),
+				math.tan(atan(m, n)),
+				n,
+				math.abs(atan(m, n) - math.atan(m))
+			)
+	)
+end
+
+local function pVerboseM(m, n)
+	print(
+		("%5.2f %s (LOOPCOUNT:%d)")
+			:format(m, atanM(m, n, digit), n)
+	)
+end
 
 local function sampleLoopCount(l, r, d, border, verbose)
 	local t = 0
@@ -80,16 +102,7 @@ local function sampleLoopCount(l, r, d, border, verbose)
 		assert(atan(m, n) == atanR(m, n))
 
 		if verbose == true then
-			print(
-				("%5.2f % .14f % 5g (LOOPCOUNT:%2d) (delta:%g)")
-					:format(
-						m,
-						atan(m, n),
-						math.tan(atan(m, n)),
-						n,
-						math.abs(atan(m, n) - math.atan(m))
-					)
-			)
+			pVerbose(m, n)
 		end
 	end
 
@@ -105,17 +118,14 @@ local sampleLoopCountM = (hasBC and hasPI) and function (l, r, d, digit, verbose
 		repeat
 			n = n + 1
 			curr, prev = atanM(m, n, digit), curr
-		until M.iszero(curr - prev)
+		until bc.iszero(curr - prev)
 		n = n - 1
 		t = t < n and n or t
 
 		assert(atanM(m, n, digit) == atanMR(m, n, digit))
 
 		if verbose == true then
-			print(
-				("%5.2f %s (LOOPCOUNT:%d)")
-					:format(m, atanM(m, n, digit), n)
-			)
+			pVerboseM(m, n)
 		end
 	end
 

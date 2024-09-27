@@ -6,9 +6,7 @@
 --	double rnd(void)			to	crnd; :rnd
 --
 
-local M = require 'crnd'
-
-local crnd = M.crnd
+local crnd = require 'crnd'.crnd
 
 function p(m, n, crnd)
 	for _=1,n do

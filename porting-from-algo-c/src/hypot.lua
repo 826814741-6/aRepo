@@ -6,21 +6,19 @@
 --	double hypot2(double, double)		to	hypot2 (Moler-Morrison)
 --
 
-local H = require '_helper'
-
-local abs = H.abs
-local sqrt = math.sqrt
+local abs = require '_helper'.abs
+local m_sqrt = math.sqrt
 
 local function hypot0(x, y)
-	return sqrt(x * x + y * y)
+	return m_sqrt(x * x + y * y)
 end
 
 local function hypot1(x, y)
 	if x == 0 then return abs(y) end
 	if y == 0 then return abs(x) end
 	return abs(x) < abs(y) and
-		abs(y) * sqrt(1 + (x/y) * (x/y)) or
-		abs(x) * sqrt(1 + (y/x) * (y/x))
+		abs(y) * m_sqrt(1 + (x/y) * (x/y)) or
+		abs(x) * m_sqrt(1 + (y/x) * (y/x))
 end
 
 local function hypot2(x, y)

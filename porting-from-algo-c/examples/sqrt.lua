@@ -14,7 +14,7 @@
 
 local M = require 'nthroot'
 
-local sqrt, fSqrt, fSqrtM, iSqrt = math.sqrt, M.fSqrt, M.fSqrtM, M.iSqrt
+local fSqrt, fSqrtM, iSqrt = M.fSqrt, M.fSqrtM, M.iSqrt
 
 local function _t_iSqrt(l, r)
 	for i=l,r-1 do
@@ -32,10 +32,10 @@ do
 			("math.sqrt(%d)\t%.20f\nfSqrt(%d)\t%.20f (%q)")
 				:format(
 					i,
-					sqrt(i),
+					math.sqrt(i),
 					i,
 					fSqrt(i),
-					sqrt(i) == fSqrt(i)
+					math.sqrt(i) == fSqrt(i)
 				)
 		)
 		if fSqrtM ~= nil then

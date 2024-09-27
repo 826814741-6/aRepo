@@ -15,7 +15,8 @@ local function gcdR(x, y)
 	end
 end
 
-local function gcdL(x, y)
+local function gcdL(x0, y0)
+	local x, y = x0, y0
 	while y ~= 0 do
 		x, y = y, x % y
 	end

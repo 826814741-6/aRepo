@@ -20,12 +20,12 @@ local svgPlotWholeBuffering = M.svgPlotWholeBuffering
 local svgPlotWithBuffering = M.svgPlotWithBuffering
 local with = H.with
 
-local pi, cos, sin = math.pi, math.cos, math.sin
+local PI, m_cos, m_sin = math.pi, math.cos, math.sin
 
 function sample(plotter)
 	for i=0,4 do
-		local theta = 2 * pi * i / 5
-		local x, y = 150 + 140 * cos(theta), 150 + 140 * sin(theta)
+		local theta = 2 * PI * i / 5
+		local x, y = 150 + 140 * m_cos(theta), 150 + 140 * m_sin(theta)
 		if i == 0 then
 			plotter:move(x, y)
 		else

@@ -4,9 +4,7 @@
 --	a part of main		to	isMeasurable
 --
 
-local M = require 'gcd'
-
-local gcd = M.gcdL
+local gcd = require 'gcd'.gcdL
 
 local function isMeasurable(a, b, v)
 	return (v <= a or v <= b) and (v % gcd(a, b)) == 0

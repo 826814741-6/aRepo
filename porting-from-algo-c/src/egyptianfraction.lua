@@ -13,7 +13,8 @@
 local i_write = io.write
 local t_insert = table.insert
 
-local function egyptianFraction(n, d)
+local function egyptianFraction(n0, d0)
+	local n, d = n0, d0
 	while d % n ~= 0 do
 		local t = d // n + 1
 		i_write(("1/%d + "):format(t))
@@ -22,8 +23,8 @@ local function egyptianFraction(n, d)
 	i_write(("1/%d\n"):format(d // n))
 end
 
-local function egyptianFractionT(n, d)
-	local r = {}
+local function egyptianFractionT(n0, d0)
+	local r, n, d = {}, n0, d0
 	while d % n ~= 0 do
 		local t = d // n + 1
 		t_insert(r, ("1/%d"):format(t))
@@ -33,12 +34,12 @@ local function egyptianFractionT(n, d)
 	return r
 end
 
-local hasBC, M = pcall(require, "bc")
-local isZero = hasBC and M.iszero or nil
-local bn1 = hasBC and M.new(1) or nil
+local hasBC, bc = pcall(require, "bc")
+local isZero = hasBC and bc.iszero or nil
+local bn1 = hasBC and bc.new(1) or nil
 
-local egyptianFractionM = hasBC and function (n, d)
-	local n, d = M.new(n), M.new(d)
+local egyptianFractionM = hasBC and function (n0, d0)
+	local n, d = bc.new(n0), bc.new(d0)
 	while not isZero(d % n) do
 		local t = d / n + bn1
 		i_write(("1/%s + "):format(t)) -- %s and tostring; see below
@@ -68,8 +69,8 @@ local function bodyR(n, d)
 	return d // n
 end
 
--- local bodyM = hasBC and function (n, d)
--- 	local n, d = M.new(n), M.new(d)
+-- local bodyM = hasBC and function (n0, d0)
+-- 	local n, d = bc.new(n0), bc.new(d0)
 -- 	while not isZero(d % n) do
 -- 		local t = d / n + bn1
 -- 		co_yield(t)

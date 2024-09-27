@@ -6,9 +6,7 @@
 --	double Ci(double)		to	Ci
 --
 
-local M = require 'integral'
-
-local Ci = M.Ci
+local Ci = require 'integral'.Ci
 
 do
 	print(" x     Ci(x)")

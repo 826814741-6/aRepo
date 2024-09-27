@@ -9,12 +9,12 @@
 local M = require 'rand'
 
 local rand, RAND = M.rand, M.RAND
-local write = io.write
+local i_write = io.write
 
 print("-------- rand()")
 for i=1,20 do
 	for j=1,8 do
-		write(("%8d"):format(rand()))
+		i_write(("%8d"):format(rand()))
 	end
 	print()
 end
@@ -23,7 +23,7 @@ print("-------- r:rand()")
 local r = RAND()
 for i=1,20 do
 	for j=1,8 do
-		write(("%8d"):format(r:rand()))
+		i_write(("%8d"):format(r:rand()))
 	end
 	print()
 end

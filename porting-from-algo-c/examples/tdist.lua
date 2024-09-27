@@ -5,9 +5,7 @@
 --	double q_t(int, double)		to	qT
 --
 
-local M = require 'distribution'
-
-local pT = M.pT
+local pT = require 'distribution'.pT
 
 do
 	print("-------- pT(df, t)")

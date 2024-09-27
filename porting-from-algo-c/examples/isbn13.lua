@@ -4,9 +4,7 @@
 --	a part of main		to	isIsbn13
 --
 
-local M = require 'checkdigit'
-
-local isISBN13 = M.isISBN13
+local isISBN13 = require 'checkdigit'.isISBN13
 
 do
 	local s = "9784774196909"

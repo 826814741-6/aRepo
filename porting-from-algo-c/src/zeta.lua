@@ -4,9 +4,7 @@
 --	double zeta(double)	to	riemannZeta
 --
 
--- local H = require '_helper'
-
--- local readOnlyTable = H.readOnlyTable
+-- local readOnlyTable = require '_helper'.readOnlyTable
 
 -- local coef = readOnlyTable({
 local coef = {

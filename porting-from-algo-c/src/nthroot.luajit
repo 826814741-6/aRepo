@@ -34,17 +34,17 @@ local function fSqrt(x)
 	return loopF(x, function (x,t) return (x/t + t) / 2 end)
 end
 
-local lshift, rshift, floor = bit.lshift, bit.rshift, math.floor
+local b_lshift, b_rshift, m_floor = bit.lshift, bit.rshift, math.floor
 
 local function iSqrt(x)
 	if x <= 0 then return 0 end
 
 	local r, t = x, 1
 	while t < r do
-		r, t = rshift(r, 1), lshift(t, 1)
+		r, t = b_rshift(r, 1), b_lshift(t, 1)
 	end
 	repeat
-		r, t = t, rshift((floor(x / t) + t), 1)
+		r, t = t, b_rshift((m_floor(x / t) + t), 1)
 	until t >= r
 
 	return r
@@ -70,10 +70,10 @@ local function iCbrt(x)
 
 	local r, t = x, 1
 	while t < r do
-		r, t = rshift(r, 2), lshift(t, 1)
+		r, t = b_rshift(r, 2), b_lshift(t, 1)
 	end
 	repeat
-		r, t = t, floor((floor(x / (t * t)) + 2 * t) / 3)
+		r, t = t, m_floor((m_floor(x / (t * t)) + 2 * t) / 3)
 	until t >= r
 
 	return r

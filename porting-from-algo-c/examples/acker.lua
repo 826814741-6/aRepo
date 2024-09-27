@@ -4,10 +4,8 @@
 --	int A(int, int)		to	ack
 --
 
-local M = require 'acker'
-local H = require '_helper'
-
-local ack, count = M.ack, H.count
+local ack = require 'acker'.ack
+local count = require '_helper'.count
 
 function cnt(x, y)
 	local _C = 0

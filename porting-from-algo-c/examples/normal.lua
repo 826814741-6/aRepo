@@ -5,9 +5,7 @@
 --	double q_nor(double)		to	qNormal
 --
 
-local M = require 'distribution'
-
-local pNormal = M.pNormal
+local pNormal = require 'distribution'.pNormal
 
 do
 	print(("%-3s %-16s"):format("z", "pNormal(z)"))

@@ -17,7 +17,7 @@
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local hasBC, M = pcall(require, "bc")
+local hasBC, bc = pcall(require, "bc")
 
 local function machinLike()
 	local p, k, t, prev = 0, 1, 16 / 5
@@ -31,46 +31,47 @@ local function machinLike()
 	return p
 end
 
-local machinLikeM = hasBC and function (digit)
-	M.digits(digit)
-	local _0, _1 = M.new(0), M.new(1)
-	local _2, _5, _239 = _1*2, _1*5, _1*239
+local bn0 = hasBC and bc.new(0) or nil
+local bn1 = hasBC and bc.new(1) or nil
 
-	local p, k, t, prev = _0, _1, 16 / _5
+local machinLikeM = hasBC and function (digit)
+	bc.digits(digit)
+	local bn2, bn5, bn239 = bn1 * 2, bn1 * 5, bn1 * 239
+
+	local p, k, t, prev = bn0, bn1, 16 / bn5
 	repeat
-		p, k, t, prev = p + t/k, k + _2, t / (-_5 * _5), p
+		p, k, t, prev = p + t/k, k + bn2, t / (-bn5 * bn5), p
 	until p == prev
-	k, t = _1, 4 / _239
+	k, t = bn1, 4 / bn239
 	repeat
-		p, k, t, prev = p - t/k, k + _2, t / (-_239 * _239), p
+		p, k, t, prev = p - t/k, k + bn2, t / (-bn239 * bn239), p
 	until p == prev
 	return p
 end or nil
 
-local sqrt = math.sqrt
+local m_sqrt = math.sqrt
 
 local function gaussLegendre(n)
-	local a, b, t, u = 1, 1 / sqrt(2), 1, 4
+	local a, b, t, u = 1, 1 / m_sqrt(2), 1, 4
 	for _=1,n do
 		local prev = a
-		a, b = (a + b) / 2, sqrt(prev * b)
+		a, b = (a + b) / 2, m_sqrt(prev * b)
 		t, u = t - u * (a - prev) * (a - prev), u * 2
 	end
 	return (a + b) * (a + b) / t
 end
 
-local M_sqrt = hasBC and M.sqrt or nil
+local bc_sqrt = hasBC and bc.sqrt or nil
 
 local gaussLegendreM = hasBC and function (n, digit)
-	M.digits(digit)
-	local _1 = M.new(1)
-	local _2, _4 = _1*2, _1*4
+	bc.digits(digit)
+	local bn2, bn4 = bn1 * 2, bn1 * 4
 
-	local a, b, t, u = _1, _1 / M_sqrt(2), _1, _4
+	local a, b, t, u = bn1, bn1 / bc_sqrt(2), bn1, bn4
 	for _=1,n do
 		local prev = a
-		a, b = (a + b) / _2, M_sqrt(prev * b)
-		t, u = t - u * (a - prev) * (a - prev), u * _2
+		a, b = (a + b) / bn2, bc_sqrt(prev * b)
+		t, u = t - u * (a - prev) * (a - prev), u * bn2
 	end
 	return (a + b) * (a + b) / t
 end or nil

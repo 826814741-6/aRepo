@@ -4,9 +4,7 @@
 --	a part of main		to	guess105
 --
 
-local M = require '105'
-
-local guess105 = M.guess105
+local guess105 = require '105'.guess105
 
 do
 	io.write("Please pick a number 1 through 100.\n")

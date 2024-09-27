@@ -7,9 +7,7 @@
 --	double p_chi2(int, double)	to	pChiSquare
 --
 
-local M = require 'distribution'
-
-local pChiSquare = M.pChiSquare
+local pChiSquare = require 'distribution'.pChiSquare
 
 do
 	print("-------- pChiSquare(df, chiSq)")

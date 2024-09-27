@@ -33,29 +33,29 @@ local B12 = -691.0 / 2730.0
 local B14 = 7.0 / 6.0
 local B16 = -3617.0 / 510.0
 
-local exp, log, sin = math.exp, math.log, math.sin
+local m_exp, m_log, m_sin = math.exp, math.log, math.sin
 
-local function loggamma(x)
-	local v = 1
+local function loggamma(x0)
+	local v, x = 1, x0
 	while x < N do v, x = v * x, x + 1 end
 	local w = 1 / (x * x)
 	return ((((((((B16 / (16 * 15)) * w + (B14 / (14 * 13))) * w
 		+ (B12 / (12 * 11))) * w + (B10 / (10 * 9))) * w
 		+ (B8 / (8 * 7))) * w + (B6 / (6 * 5))) * w
 		+ (B4 / (4 * 3))) * w + (B2 / (2 * 1))) / x
-		+ 0.5 * LOG_2PI - log(v) - x + (x - 0.5) * log(x)
+		+ 0.5 * LOG_2PI - m_log(v) - x + (x - 0.5) * m_log(x)
 end
 
 local function gamma(x)
 	if x < 0 then
-		return PI / (sin(PI * x) * exp(loggamma(1 - x)))
+		return PI / (m_sin(PI * x) * m_exp(loggamma(1 - x)))
 	else
-		return exp(loggamma(x))
+		return m_exp(loggamma(x))
 	end
 end
 
 local function beta(x, y)
-	return exp(loggamma(x) + loggamma(y) - loggamma(x + y))
+	return m_exp(loggamma(x) + loggamma(y) - loggamma(x + y))
 end
 
 return {

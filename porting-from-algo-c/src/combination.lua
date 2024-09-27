@@ -39,16 +39,15 @@ local function _combination(f)
 	end
 end
 
-local H = require '_helper'
-local id = H.id
+local id = require '_helper'.id
 
-local hasBC, M = pcall(require, "bc")
-local M_new = hasBC and M.new or nil
+local hasBC, bc = pcall(require, "bc")
+local bc_new = hasBC and bc.new or nil
 
 return {
 	combinationR = combinationR,
 	combination = _combination(id),
 	combinationM = hasBC and _combination(function (n)
-		return M_new(n)
+		return bc_new(n)
 	end) or nil
 }

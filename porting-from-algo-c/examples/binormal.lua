@@ -4,11 +4,8 @@
 --	void binormal_rnd(double, double *, double *)	to	binormalRnd
 --
 
-local M0 = require 'crnd'
-local M1 = require 'binormal'
-
-local crnd = M0.crnd
-local binormalRnd = M1.binormalRnd
+local crnd = require 'crnd'.crnd
+local binormalRnd = require 'binormal'.binormalRnd
 
 do
 	local c = crnd()

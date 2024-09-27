@@ -5,9 +5,7 @@
 --	double p_f(int, int, double)		to	pF
 --
 
-local M = require 'distribution'
-
-local pF = M.pF
+local pF = require 'distribution'.pF
 
 do
 	for _,df1 in ipairs({1, 2, 5, 20}) do

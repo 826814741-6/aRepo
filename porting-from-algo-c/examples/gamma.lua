@@ -6,9 +6,7 @@
 --	double beta(double, double)	to	beta
 --
 
-local M = require 'gamma'
-
-local gamma = M.gamma
+local gamma = require 'gamma'.gamma
 
 function p(x) print(("%4.1f  % .15g"):format(x, gamma(x))) end
 

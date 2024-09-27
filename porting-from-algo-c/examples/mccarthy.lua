@@ -4,9 +4,7 @@
 --	int McCarthy(int)	to	mccarthy91
 --
 
-local M = require 'mccarthy'
-
-local mccarthy91 = M.mccarthy91
+local mccarthy91 = require 'mccarthy'.mccarthy91
 
 local function _t_mccarthy91(l, r)
 	for i=l,r do

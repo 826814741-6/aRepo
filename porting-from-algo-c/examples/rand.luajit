@@ -9,7 +9,7 @@
 local M = require 'rand'
 
 local rand, RAND = M.rand, M.RAND
-local write = io.write
+local i_write = io.write
 
 -- see: https://www.freelists.org/post/luajit/cannot-resolve-symbol-printf-with-ffi-msvc-140,4
 function workarounds(cdata)
@@ -19,7 +19,7 @@ end
 print("-------- rand()")
 for i=1,20 do
 	for j=1,8 do
-		write(("%8s"):format(workarounds(rand())))
+		i_write(("%8s"):format(workarounds(rand())))
 	end
 	print()
 end
@@ -28,7 +28,7 @@ print("-------- r:rand()")
 local r = RAND()
 for i=1,20 do
 	for j=1,8 do
-		write(("%8s"):format(workarounds(r:rand())))
+		i_write(("%8s"):format(workarounds(r:rand())))
 	end
 	print()
 end

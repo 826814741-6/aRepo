@@ -7,13 +7,13 @@
 --
 
 local PI = math.pi
-local sin, sqrt = math.sin, math.sqrt
+local m_sin, m_sqrt = math.sin, math.sqrt
 
 local function makeSinTable(n)
 	local tbl = {}
 
-	local dc = 2 * sin(PI / n) * sin(PI / n)
-	local ds = sqrt(dc * (2 - dc))
+	local dc = 2 * m_sin(PI / n) * m_sin(PI / n)
+	local ds = m_sqrt(dc * (2 - dc))
 	local t = 2 * dc
 
 	local c, s = 1, 0
@@ -25,7 +25,7 @@ local function makeSinTable(n)
 		dc, ds = dc + (t * c), ds - (t * s)
 	end
 
-	if n//8 ~= 0 then tbl[n//8] = sqrt(0.5) end
+	if n//8 ~= 0 then tbl[n//8] = m_sqrt(0.5) end
 
 	for i=0,n//4-1 do
 		tbl[(n//2) - i], tbl[(n//2) + i] = tbl[i], -tbl[i]

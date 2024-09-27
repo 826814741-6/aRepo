@@ -4,14 +4,14 @@
 --	a part of main		to	julia
 --
 
-local sqrt = math.sqrt
+local m_sqrt = math.sqrt
 
 local function predicate(x, y, n)
 	return x * x + y * y < n
 end
 
 local function julia(bmp, X, Y, colorA, colorB, colorC, colorD)
-	local C, JMID, YA = 4 / X, Y // 2, sqrt(3) / 2
+	local C, JMID, YA = 4 / X, Y // 2, m_sqrt(3) / 2
 
 	bmp:clear(colorD)
 

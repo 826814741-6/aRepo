@@ -4,8 +4,8 @@
 --	unsigned multiply(unsigned, unsigned)	to	iMulA, iMulB, iMulC
 --
 
-local function iMulA(a, b)
-	local r = 0
+local function iMulA(a0, b0)
+	local r, a, b = 0, a0, b0
 	while a ~= 0 do
 		if a % 2 == 1 then r = r + b end
 		b, a = b * 2, a // 2
@@ -13,8 +13,8 @@ local function iMulA(a, b)
 	return r
 end
 
-local function iMulB(a, b)
-	local r = 0
+local function iMulB(a0, b0)
+	local r, a, b = 0, a0, b0
 	while a ~= 0 do
 		if a & 1 == 1 then r = r + b end
 		b, a = b << 1, a >> 1

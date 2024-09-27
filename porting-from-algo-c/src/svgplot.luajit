@@ -82,11 +82,11 @@ local function svgPlot(width, height)
 	return T
 end
 
-local S_buffer = require 'string.buffer'
+local s_buffer_new = require 'string.buffer'.new
 
 local function svgPlotWholeBuffering(width, height)
 	local T = {
-		buffer = S_buffer.new()
+		buffer = s_buffer_new()
 	}
 
 	function T:pathStart()
@@ -155,7 +155,7 @@ end
 
 local function makeBuffer()
 	local T = {
-		buffer = S_buffer.new(),
+		buffer = s_buffer_new(),
 		counter = 0,
 		limit = 1
 	}

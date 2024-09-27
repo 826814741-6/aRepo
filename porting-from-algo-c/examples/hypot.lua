@@ -11,24 +11,23 @@ local M = require 'hypot'
 local hypot0, hypot1, hypot2 = M.hypot0, M.hypot1, M.hypot2
 
 do
-	local hasBC, bc = pcall(require, "bc") -- (*)
-
-	if hasBC then bc.digits(50) end
-
 	print(("%.17f %q"):format(hypot0(1,2), hypot0(1,2)))
 	print(("%.17f %q"):format(hypot1(1,2), hypot1(1,2)))
 	print(("%.17f %q"):format(hypot2(1,2), hypot2(1,2)))
+
+	local hasBC, bc = pcall(require, "bc") -- (*)
 	if hasBC then
+		bc.digits(50)
 		print(hypot2(bc.new(1), bc.new(2)))
 	end
 
-	print("--------")
+	print("--")
 
 	local n = math.pow(2, 512)
-
 	print(("%f %q"):format(hypot0(n, n), hypot0(n, n)))
 	print(("%f %q"):format(hypot1(n, n), hypot1(n, n)))
 	print(("%f %q"):format(hypot2(n, n), hypot2(n, n)))
+
 	if hasBC then
 		local n = bc.new(2) ^ 512
 		print(hypot2(n, n))

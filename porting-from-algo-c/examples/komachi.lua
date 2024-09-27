@@ -4,16 +4,15 @@
 --	a part of main		to	komachi
 --
 
-local M = require 'komachi'
+local komachi = require 'komachi'.komachi
 
-local komachi = M.komachi
-local write, insert = io.write, table.insert
+local i_write, t_insert = io.write, table.insert
 
 function p(a)
 	for i=1,9 do
-		write(a[i] == 1 and " + " or a[i] == -1 and " - " or "", i)
+		i_write(a[i] == 1 and " + " or a[i] == -1 and " - " or "", i)
 	end
-	write(" = 100\n");
+	i_write(" = 100\n");
 end
 
 function b()
@@ -22,7 +21,7 @@ function b()
 	T.insert = function (a)
 		local r = {}
 		for i,v in ipairs(a) do r[i] = a[i] end
-		insert(T.buffer, r)
+		t_insert(T.buffer, r)
 	end
 
 	T.print = function ()

@@ -83,8 +83,8 @@ local function svgPlot(width, height)
 	return T
 end
 
-local T_concat = table.concat
-local T_insert = table.insert
+local t_concat = table.concat
+local t_insert = table.insert
 
 local function svgPlotWholeBuffering(width, height)
 	local T = {
@@ -92,32 +92,32 @@ local function svgPlotWholeBuffering(width, height)
 	}
 
 	function T:pathStart()
-		T_insert(T.buffer, pathStart())
+		t_insert(T.buffer, pathStart())
 		return T
 	end
 
 	function T:pathEnd(isClosePath)
-		T_insert(T.buffer, pathEnd(isClosePath))
+		t_insert(T.buffer, pathEnd(isClosePath))
 		return T
 	end
 
 	function T:move(x, y)
-		T_insert(T.buffer, ("M %g %g "):format(x, height - y))
+		t_insert(T.buffer, ("M %g %g "):format(x, height - y))
 		return T
 	end
 
 	function T:moveRel(x, y)
-		T_insert(T.buffer, ("m %g %g "):format(x, -y))
+		t_insert(T.buffer, ("m %g %g "):format(x, -y))
 		return T
 	end
 
 	function T:draw(x, y)
-		T_insert(T.buffer, ("L %g %g "):format(x, height - y))
+		t_insert(T.buffer, ("L %g %g "):format(x, height - y))
 		return T
 	end
 
 	function T:drawRel(x, y)
-		T_insert(T.buffer, ("l %g %g "):format(x, -y))
+		t_insert(T.buffer, ("l %g %g "):format(x, -y))
 		return T
 	end
 
@@ -130,7 +130,7 @@ local function svgPlotWholeBuffering(width, height)
 		fh = fh ~= nil and fh or io.stdout
 
 		fh:write(header(width, height))
-		fh:write(T_concat(T.buffer))
+		fh:write(t_concat(T.buffer))
 		fh:write(footer())
 
 		return T
@@ -159,11 +159,11 @@ local function makeBuffer()
 	}
 
 	function T:writer(fh, s)
-		T_insert(T.buffer, s)
+		t_insert(T.buffer, s)
 
 		T.counter = T.counter + 1
 		if T.counter >= T.limit then
-			fh:write(T_concat(T.buffer))
+			fh:write(t_concat(T.buffer))
 			T:reset()
 		end
 	end
@@ -178,7 +178,7 @@ local function makeBuffer()
 
 	function T:tailStep(fh)
 		if #T.buffer > 0 then
-			fh:write(T_concat(T.buffer))
+			fh:write(t_concat(T.buffer))
 		end
 	end
 

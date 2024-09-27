@@ -208,13 +208,12 @@ do
 	assert(complexNumber(r, i):log():exp() == c)
 end
 
-local deg = math.deg
 function toPolarForm(c)
-	return ("%gxCis(%g(rad)) (%g(deg))"):format(c:abs(), c:arg(), deg(c:arg()))
+	return ("%gxCis(%g(rad)) (%g(deg))"):format(c:abs(), c:arg(), math.deg(c:arg()))
 end
 
-function getReciprocal(c, initialFunction)
-	initialFunction = initialFunction ~= nil and initialFunction or complexNumber
+function getReciprocal(c, init)
+	init = init ~= nil and init or complexNumber
 
 	local r, i = c:get()
 	if r == 0 and i == 0 then
@@ -223,7 +222,7 @@ function getReciprocal(c, initialFunction)
 	end
 
 	local t = c:abs()
-	return initialFunction(r / (t * t), -i / (t * t))
+	return init(r / (t * t), -i / (t * t))
 end
 
 do
@@ -235,13 +234,16 @@ do
 	print(("%5s : %s"):format(c, toPolarForm(c)))
 	print(("%5s : %s"):format(d, toPolarForm(d)))
 
-	print("v------- see some errors in floating-point arithmetic")
+	print("--")
+
 	print(("a, b, c, d : %s, %s, %s, %s"):format(a, b, c, d))
 	print(("a - a:log():exp() : %s"):format(a - a:log():exp()))
 	print(("b - b:log():exp() : %s"):format(b - b:log():exp()))
 	print(("c - c:log():exp() : %s"):format(c - c:log():exp()))
 	print(("d - d:log():exp() : %s"):format(d - d:log():exp()))
+
 	print("--")
+
 	c, d = complexNumberS(23, 45), complexNumberS(1, 0)
 	print(("a, b, c, d : %s, %s, %s, %s"):format(a, b, c, d))
 	print(("d - a * getReciprocal(a) : %s"):format(d - a * getReciprocal(a)))

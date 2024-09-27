@@ -6,11 +6,9 @@
 --	int fft(int, double [], double [])	to	cooleyTukey
 --
 
-local M = require 'fft'
+local cooleyTukey = require 'fft'.cooleyTukey
 
-local cooleyTukey = M.cooleyTukey
-
-local sin, cos = math.sin, math.cos
+local m_sin, m_cos = math.sin, math.cos
 local PI = math.pi
 
 function sample(n, fA, fB)
@@ -51,7 +49,7 @@ do
 
 	local x0, y0 = sample(
 		n,
-		function (n, i) return 6 * cos(6*PI*i/n) + 4 * sin(18*PI*i/n) end,
+		function (n, i) return 6 * m_cos(6*PI*i/n) + 4 * m_sin(18*PI*i/n) end,
 		function () return 0 end
 	)
 	local x1, y1, x2, y2 = {}, {}, {}, {}

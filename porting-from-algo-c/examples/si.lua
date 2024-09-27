@@ -6,9 +6,7 @@
 --	double Si(double)		to	Si
 --
 
-local M = require 'integral'
-
-local Si = M.Si
+local Si = require 'integral'.Si
 
 do
 	print(" x     Si(x)");

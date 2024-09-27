@@ -6,7 +6,8 @@
 #	factorize		to	factorizeL
 #
 
-def factorize(x):
+def factorize(x0):
+    x = x0
     while x >= 4 and x % 2 == 0:
         print("2 * ", end="")
         x = x // 2
@@ -23,7 +24,8 @@ def factorize(x):
 
     print("{0}".format(x))
 
-def factorizeG(x):
+def factorizeG(x0):
+    x = x0
     while x >= 4 and x % 2 == 0:
         yield 2
         x = x // 2
@@ -40,8 +42,8 @@ def factorizeG(x):
 
     yield x
 
-def factorizeL(x, fmt=lambda x: x):
-    r = []
+def factorizeL(x0, fmt=lambda x: x):
+    r, x = [], x0
 
     while x >= 4 and x % 2 == 0:
         r.append(fmt(2))

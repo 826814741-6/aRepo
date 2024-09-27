@@ -4,8 +4,8 @@
 --	unsigned phi(unsigned)		to	phi
 --
 
-local function phi(x)
-	local t = x
+local function phi(x0)
+	local x, t = x0, x0
 	if x % 2 == 0 then
 		t = t // 2
 		repeat

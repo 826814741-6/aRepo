@@ -4,9 +4,7 @@
 --	double horner(int, double a[], double)		to	horner
 --
 
-local M = require 'horner'
-
-local horner = M.horner
+local horner = require 'horner'.horner
 
 function fmt(a)
 	assert(#a > 0, "ERROR: 'a' must be a table that contains at least one element.")

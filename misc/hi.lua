@@ -8,41 +8,41 @@
 --	depends on lbc-101; https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc
 --
 
-local M = require 'bc'
+local bc = require 'bc'
 
-local M_new, M_quotrem, M_tonumber = M.new, M.quotrem, M.tonumber
-local I_write = io.write
-local S_char = string.char
-local T_concat, T_insert = table.concat, table.insert
+local bc_new, bc_quotrem, bc_tonumber = bc.new, bc.quotrem, bc.tonumber
+local i_write = io.write
+local s_char = string.char
+local t_concat, t_insert = table.concat, table.insert
 
 function init(src)
 	local T = {
-		source = M_new(src);
+		source = bc_new(src);
 		candidate = {}
 	}
 
-	local n, edge = T.source, M_new(255)
+	local n, edge = T.source, bc_new(255)
 	while n > edge do
-		local q, r = M_quotrem(n, 256)
-		T_insert(T.candidate, 1, S_char(M_tonumber(r)))
+		local q, r = bc_quotrem(n, 256)
+		t_insert(T.candidate, 1, s_char(bc_tonumber(r)))
 		n = q
 	end
-	T_insert(T.candidate, 1, S_char(M_tonumber(n)))
+	t_insert(T.candidate, 1, s_char(bc_tonumber(n)))
 
 	return T
 end
 
 function extends(T)
 	function T:P()
-		I_write(T_concat(T.candidate))
+		i_write(t_concat(T.candidate))
 	end
 
 	function T:n()
-		I_write(tostring(T.source))
+		i_write(tostring(T.source))
 	end
 
 	function T:n10P()
-		I_write(tostring(T.source), "\n")
+		i_write(tostring(T.source), "\n")
 	end
 
 	return T
@@ -51,7 +51,7 @@ end
 -- and some utils
 
 function tbl2src(t)
-	local r, j, step = M_new(0), 0, M_new(256)
+	local r, j, step = bc_new(0), 0, bc_new(256)
 
 	for i=#t,1,-1 do
 		r, j = r + t[i] * (step ^ j), j + 1
@@ -64,7 +64,7 @@ function split(s, p, f)
 	local r = {}
 
 	for e in s:gmatch(p) do
-		T_insert(r, f(e))
+		t_insert(r, f(e))
 	end
 
 	return r

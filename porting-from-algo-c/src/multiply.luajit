@@ -4,31 +4,31 @@
 --	unsigned multiply(unsigned, unsigned)	to	iMulA, iMulB, iMulC
 --
 
-local floor = math.floor
+local m_floor = math.floor
 
-local function iMulA(a, b)
-	local r = 0
+local function iMulA(a0, b0)
+	local r, a, b = 0, a0, b0
 	while a ~= 0 do
 		if a % 2 == 1 then r = r + b end
-		b, a = b * 2, floor(a / 2)
+		b, a = b * 2, m_floor(a / 2)
 	end
 	return r
 end
 
-local band, lshift, rshift = bit.band, bit.lshift, bit.rshift
+local b_band, b_lshift, b_rshift = bit.band, bit.lshift, bit.rshift
 
-local function iMulB(a, b)
-	local r = 0
+local function iMulB(a0, b0)
+	local r, a, b = 0, a0, b0
 	while a ~= 0 do
-		if band(a,1) == 1 then r = r + b end
-		b, a = lshift(b,1), rshift(a,1)
+		if b_band(a,1) == 1 then r = r + b end
+		b, a = b_lshift(b,1), b_rshift(a,1)
 	end
 	return r
 end
 
 local function iMulC(a, b)
 	function rec(a, b, r)
-		return a ~= 0 and rec(rshift(a,1), lshift(b,1), band(a,1)==1 and r+b or r) or r
+		return a ~= 0 and rec(b_rshift(a,1), b_lshift(b,1), b_band(a,1)==1 and r+b or r) or r
 	end
 	return rec(a, b, 0)
 end

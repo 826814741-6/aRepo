@@ -4,9 +4,7 @@
 --	double zeta(double)	to	riemannZeta
 --
 
-local M = require 'zeta'
-
-local riemannZeta = M.riemannZeta
+local riemannZeta = require 'zeta'.riemannZeta
 
 do
 	local zeta = riemannZeta()

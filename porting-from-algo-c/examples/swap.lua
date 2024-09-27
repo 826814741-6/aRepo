@@ -4,9 +4,7 @@
 --	void swap(int *, int *)		to	swap
 --
 
-local M = require 'swap'
-
-local swap = M.swap
+local swap = require 'swap'.swap
 
 do
 	local a = { 1.23, 4.56, 7.89 }

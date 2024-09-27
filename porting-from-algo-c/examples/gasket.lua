@@ -7,7 +7,7 @@
 local M0 = require 'grBMP'
 local M1 = require 'sierpinski'
 
-local BMP, PRESET_COLORS = M0.BMP, M0.PRESET_COLORS
+local BMP, BLACK, WHITE = M0.BMP, M0.PRESET_COLORS.BLACK, M0.PRESET_COLORS.WHITE
 local sierpinskiGasket = M1.sierpinskiGasket
 
 do
@@ -15,7 +15,7 @@ do
 	local bmp = BMP(x, y)
 
 	local n = 65
-	sierpinskiGasket(bmp, n, PRESET_COLORS.BLACK, PRESET_COLORS.WHITE)
+	sierpinskiGasket(bmp, n, BLACK, WHITE)
 
 	local fh = io.open("results/gasket.bmp", "wb")
 	bmp:write(fh)

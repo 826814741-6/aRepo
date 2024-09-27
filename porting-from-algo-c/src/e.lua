@@ -10,24 +10,15 @@
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local hasBC, M = pcall(require, "bc")
+local hasBC, bc = pcall(require, "bc")
 
-local function e()
-	local r, a, n, prev = 0, 1, 1
+local function loop(r0, a0)
+	local r, a, n, prev = r0, a0, 1
 	repeat
 		r, a, n, prev = r + a, a / n, n + 1, r
 	until r == prev
 	return r, n - 1
 end
-
-local eM = hasBC and function (digit)
-	M.digits(digit)
-	local r, a, n, prev = M.new(0), M.new(1), 1
-	repeat
-		r, a, n, prev = r + a, a / n, n + 1, r
-	until r == prev
-	return r, n - 1
-end or nil
 
 local function rec(r, a, n, prev)
 	if r ~= prev then
@@ -36,13 +27,22 @@ local function rec(r, a, n, prev)
 	return r, n - 1
 end
 
+local function e()
+	return loop(0, 1)
+end
+
+local eM = hasBC and function (digit)
+	bc.digits(digit)
+	return loop(bc.new(0), bc.new(1))
+end or nil
+
 local function eR()
 	return rec(0, 1, 1)
 end
 
 local eMR = hasBC and function (digit)
-	M.digits(digit)
-	return rec(M.new(0), M.new(1), 1)
+	bc.digits(digit)
+	return rec(bc.new(0), bc.new(1), 1)
 end or nil
 
 return {

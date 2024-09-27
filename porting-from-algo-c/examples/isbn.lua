@@ -4,9 +4,7 @@
 --	a part of main		to	isISBN10
 --
 
-local M = require 'checkdigit'
-
-local isISBN10 = M.isISBN10
+local isISBN10 = require 'checkdigit'.isISBN10
 
 do
 	local s = "4871483517"

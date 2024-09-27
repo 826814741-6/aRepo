@@ -6,12 +6,12 @@
 
 local PI = math.pi
 
-local sin = math.sin
-local cos = math.cos
+local m_sin = math.sin
+local m_cos = math.cos
 
 local function lissajousCurve(plotter, n, offset)
 	function step(a, b)
-		return n + offset + n * cos(a), n + offset + n * sin(b)
+		return n + offset + n * m_cos(a), n + offset + n * m_sin(b)
 	end
 
 	plotter:move(step(0, 0))

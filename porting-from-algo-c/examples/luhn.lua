@@ -4,9 +4,7 @@
 --	a part of main		to	isLuhn
 --
 
-local M = require 'checkdigit'
-
-local isLuhn = M.isLuhn
+local isLuhn = require 'checkdigit'.isLuhn
 
 function p(s)
 	print(("%s is %s."):format(s, isLuhn(s) and "valid" or "invalid"))

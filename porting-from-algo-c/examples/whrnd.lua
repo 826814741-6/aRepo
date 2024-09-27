@@ -5,9 +5,7 @@
 --	double rnd(void)			to	whrnd; :rnd
 --
 
-local M = require 'whrnd'
-
-local whrnd = M.whrnd
+local whrnd = require 'whrnd'.whrnd
 
 function p(m, n, wh)
 	for _=1,n do

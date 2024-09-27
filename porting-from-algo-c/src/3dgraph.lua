@@ -4,9 +4,7 @@
 --	a part of main		to	tdGraph
 --
 
--- local H = require '_helper'
-
--- local readOnlyTable = H.readOnlyTable
+-- local readOnlyTable = require '_helper'.readOnlyTable
 
 local MAX_VALUE = math.huge
 

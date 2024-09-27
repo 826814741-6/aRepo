@@ -48,7 +48,7 @@ function cAbs(c:Complex):Float
 		case [r, i]:
 			final t = i / r;
 			Math.abs(r) * Math.sqrt(1 + t * t);
-	}
+	};
 
 function cArg(c:Complex):Float
 	return Math.atan2(c.i, c.r);

@@ -7,13 +7,13 @@
 
 local H = require '_helper'
 
-local floor = math.floor
+local m_floor = math.floor
 local decrement = H.decrement
 local increment = H.increment
 
 local function shuffle(a, rand) -- see below
 	for i=#a,1,-1 do
-		local j = floor(increment(i) * rand:rnd())
+		local j = m_floor(increment(i) * rand:rnd())
 		a[i], a[j] = a[j], a[i]
 	end
 end

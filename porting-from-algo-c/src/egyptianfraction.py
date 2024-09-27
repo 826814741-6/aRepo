@@ -6,22 +6,24 @@
 #	egyptianFraction	to	egyptianFractionL
 #
 
-def egyptianFraction(n, d):
+def egyptianFraction(n0, d0):
+    n, d = n0, d0
     while d % n != 0:
         t = d // n + 1
         print("1/{0} + ".format(t), end="")
         n, d = n * t - d, d * t
     print("1/{0}".format(d // n))
 
-def egyptianFractionG(n, d):
+def egyptianFractionG(n0, d0):
+    n, d = n0, d0
     while d % n != 0:
         t = d // n + 1
         yield t
         n, d = n * t - d, d * t
     yield d // n
 
-def egyptianFractionL(n, d, fmt=lambda t: t):
-    r = []
+def egyptianFractionL(n0, d0, fmt=lambda t: t):
+    r, n, d = [], n0, d0
     while d % n != 0:
         t = d // n + 1
         r.append(fmt(t))

@@ -20,14 +20,14 @@
 
 local PI = math.pi
 
-local atan = math.atan
-local exp = math.exp
-local sqrt = math.sqrt
+local m_atan = math.atan
+local m_exp = math.exp
+local m_sqrt = math.sqrt
 
 local function pNormal(z, n)
 	n = n ~= nil and n or 200
 
-	local t = z * exp(-0.5 * z * z) / sqrt(2 * PI)
+	local t = z * m_exp(-0.5 * z * z) / m_sqrt(2 * PI)
 	local p = t
 
 	for i=3,n,2 do
@@ -55,11 +55,11 @@ local function qChiSquare(df, chiSq)
 	end
 
 	if df % 2 == 1 then
-		if df == 1 then return 2 * qNormal(sqrt(chiSq)) end
-		return 2 * (qNormal(sqrt(chiSq)) +
-			loop(3, sqrt(chiSq) * exp(-0.5 * chiSq) / sqrt(2 * PI)))
+		if df == 1 then return 2 * qNormal(m_sqrt(chiSq)) end
+		return 2 * (qNormal(m_sqrt(chiSq)) +
+			loop(3, m_sqrt(chiSq) * m_exp(-0.5 * chiSq) / m_sqrt(2 * PI)))
 	else
-		return loop(2, exp(-0.5 * chiSq))
+		return loop(2, m_exp(-0.5 * chiSq))
 	end
 end
 
@@ -86,8 +86,8 @@ local function qF(df1, df2, f)
 		end
 		return p
 	else
-		local p = atan(sqrt(df2 / (df1 * f)))
-		local t = sqrt(sin2 * cos2)
+		local p = m_atan(m_sqrt(df2 / (df1 * f)))
+		local t = m_sqrt(sin2 * cos2)
 		for i=3,df1,2 do
 			p, t = p + t, t * ((i - 1) * sin2 / i)
 		end
@@ -108,14 +108,14 @@ local function pT(df, t)
 	local cos2 = df / (df + t * t)
 
 	local p = 0
-	local s = t < 0 and -sqrt(1 - cos2) or sqrt(1 - cos2)
+	local s = t < 0 and -m_sqrt(1 - cos2) or m_sqrt(1 - cos2)
 
 	for i=df%2+2,df,2 do
 		p, s = p + s, s * ((i - 1) * cos2 / i)
 	end
 
 	if df % 2 == 1 then
-		return 0.5 + (p * sqrt(cos2) + atan(t/sqrt(df))) / PI
+		return 0.5 + (p * m_sqrt(cos2) + m_atan(t/m_sqrt(df))) / PI
 	else
 		return (1 + p) / 2
 	end

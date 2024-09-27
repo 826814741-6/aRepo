@@ -12,8 +12,6 @@
 --	double Ci(double)		to	Ci
 --
 
-local H = require '_helper'
-
 local EULER = 0.577215664901532860606512090082 -- from src/ci.c; see below
 local PI = math.pi
 
@@ -27,13 +25,12 @@ local PI = math.pi
 -- *) I do not touch the value of LUA_32BITS in luaconf.h. (see manual 2.1)
 --
 
-local sin, cos, log = math.sin, math.cos, math.log
-local id = H.id
+local m_sin, m_cos, m_log = math.sin, math.cos, math.log
+local id = require '_helper'.id
 
 local function seriesExpansion(r0, t0, k0)
-	return function (x)
-		local r, t = r0(x), t0(x)
-		x = -x * x
+	return function (x0)
+		local r, t, x = r0(x0), t0(x0), -x0 * x0
 		for k=k0,1000,2 do
 			t = t * (x / ((k - 1) * k))
 			local prev = r
@@ -74,14 +71,14 @@ local siS = seriesExpansion(
 	id, id, 3
 )
 local ciS = seriesExpansion(
-	function (x) return EULER + log(x) end, function (x) return 1 end, 2
+	function (x) return EULER + m_log(x) end, function (x) return 1 end, 2
 )
 
 local siA = asymptoticExpansion(function (fmax, fmin, gmax, gmin, x)
-	return 0.5 * (PI - (fmax + fmin) * cos(x) - (gmax + gmin) * sin(x))
+	return 0.5 * (PI - (fmax + fmin) * m_cos(x) - (gmax + gmin) * m_sin(x))
 end)
 local ciA = asymptoticExpansion(function (fmax, fmin, gmax, gmin, x)
-	return 0.5 * ((fmax + fmin) * sin(x) - (gmax + gmin) * cos(x))
+	return 0.5 * ((fmax + fmin) * m_sin(x) - (gmax + gmin) * m_cos(x))
 end)
 
 local function Si(x)

@@ -13,7 +13,6 @@ local i_write = io.write
 
 local function factorize(x)
 	local n = x
-
 	while n >= 4 and n % 2 == 0 do
 		i_write("2 * ")
 		n = n // 2
@@ -42,7 +41,6 @@ local bn4 = hasBC and bc_new(4) or nil
 
 local factorizeM = hasBC and function (x)
 	local bn = bc_new(x)
-
 	while bn >= bn4 and isZero(bn % bn2) do
 		i_write("2 * ")
 		bn = bn / bn2
@@ -67,7 +65,6 @@ local t_insert = table.insert
 
 local factorizeT = hasBC and function (x)
 	local bn, t = bc_new(x), {}
-
 	while bn >= bn4 and isZero(bn % bn2) do
 		t_insert(t, "2")
 		bn = bn / bn2
