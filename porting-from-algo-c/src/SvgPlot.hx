@@ -342,26 +342,26 @@ class SvgPlotWithBufferingE extends WriterWithBuffering implements PlotterE {
 
 class StyleMaker {
 	final buf:List<() -> String>;
-	final tag:Map<String, Bool>;
+	final tagged:Map<String, Bool>;
 
 	public function new() {
 		buf = new List<() -> String>();
-		tag = new Map<String, Bool>();
+		tagged = new Map<String, Bool>();
 	}
 
 	public function get():String
 		return buf.map(e -> e()).join(' ');
 
 	public function add(style:Style):StyleMaker {
-		final t = getTag(style);
-		if (!tag.exists(t)) {
-			tag[t] = true;
+		final k = getKey(style);
+		if (!tagged.exists(k)) {
+			tagged[k] = true;
 			buf.add(fmtStyle(style));
 		}
 		return this;
 	}
 
-	function getTag(style:Style):String
+	function getKey(style:Style):String
 		return switch(style) {
 			case Fill(c):
 				'Fill';
