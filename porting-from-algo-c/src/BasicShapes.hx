@@ -6,7 +6,9 @@
 
 package src;
 
-function randomCircle(plotter:SvgPlot.Plotter, n, x, y, styleR, styleC) {
+using src.SvgPlot;
+
+function randomCircle(plotter:Plotter, n, x, y, styleR, styleC) {
 	plotter.rect(0, 0, x, y, 0, 0, styleR);
 	for (_ in 0...n)
 		plotter.circle(
@@ -17,7 +19,7 @@ function randomCircle(plotter:SvgPlot.Plotter, n, x, y, styleR, styleC) {
 		);
 }
 
-function randomCircleE(plotter:SvgPlot.PlotterE, n, x, y, styleR, styleC) {
+function randomCircleE(plotter:PlotterE, n, x, y, styleR, styleC) {
 	plotter.plot(Rect(0, 0, x, y, 0, 0, styleR));
 	for (_ in 0...n)
 		plotter.plot(Circle(
@@ -28,7 +30,7 @@ function randomCircleE(plotter:SvgPlot.PlotterE, n, x, y, styleR, styleC) {
 		));
 }
 
-function randomEllipse(plotter:SvgPlot.Plotter, n, x, y, styleR, styleE) {
+function randomEllipse(plotter:Plotter, n, x, y, styleR, styleE) {
 	plotter.rect(0, 0, x, y, 0, 0, styleR);
 	for (_ in 0...n)
 		plotter.ellipse(
@@ -40,7 +42,7 @@ function randomEllipse(plotter:SvgPlot.Plotter, n, x, y, styleR, styleE) {
 		);
 }
 
-function randomEllipseE(plotter:SvgPlot.PlotterE, n, x, y, styleR, styleE) {
+function randomEllipseE(plotter:PlotterE, n, x, y, styleR, styleE) {
 	plotter.plot(Rect(0, 0, x, y, 0, 0, styleR));
 	for (_ in 0...n)
 		plotter.plot(Ellipse(
@@ -52,7 +54,7 @@ function randomEllipseE(plotter:SvgPlot.PlotterE, n, x, y, styleR, styleE) {
 		));
 }
 
-function randomLine(plotter:SvgPlot.Plotter, n, x, y, styleR, styleL) {
+function randomLine(plotter:Plotter, n, x, y, styleR, styleL) {
 	plotter.rect(0, 0, x, y, 0, 0, styleR);
 	for (_ in 0...n)
 		plotter.line(
@@ -64,7 +66,7 @@ function randomLine(plotter:SvgPlot.Plotter, n, x, y, styleR, styleL) {
 		);
 }
 
-function randomLineE(plotter:SvgPlot.PlotterE, n, x, y, styleR, styleL) {
+function randomLineE(plotter:PlotterE, n, x, y, styleR, styleL) {
 	plotter.plot(Rect(0, 0, x, y, 0, 0, styleR));
 	for (_ in 0...n)
 		plotter.plot(Line(

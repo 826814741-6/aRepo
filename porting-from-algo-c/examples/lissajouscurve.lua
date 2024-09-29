@@ -9,8 +9,8 @@ local M1 = require 'lissajouscurve'
 local H = require '_helper'
 
 local svgPlot = M0.svgPlot
-local svgPlotWholeBuffering = M0.svgPlotWholeBuffering
-local svgPlotWithBuffering = M0.svgPlotWithBuffering
+local svgPlotWholeBuffer = M0.svgPlotWholeBuffer
+local svgPlotWithBuffer = M0.svgPlotWithBuffer
 local lissajousCurve = M1.lissajousCurve
 local extension = M1.extension
 local with = H.with
@@ -38,7 +38,7 @@ do
 end
 
 do
-	local plotter = svgPlotWholeBuffering((n + offset) * 2, (n + offset) * 2)
+	local plotter = svgPlotWholeBuffer((n + offset) * 2, (n + offset) * 2)
 
 	plotter:pathStart()
 	lissajousCurve(plotter, n, offset)
@@ -62,7 +62,7 @@ end
 
 do
 	with("results/lissajouscurve-WB-B-A.svg", "w", function (fh)
-		local plotter = svgPlotWithBuffering((n + offset) * 2, (n + offset) * 2)
+		local plotter = svgPlotWithBuffer((n + offset) * 2, (n + offset) * 2)
 		plotter:plotStart(fh, 30)
 		plotter:pathStart()
 		lissajousCurve(plotter, n, offset)
@@ -71,7 +71,7 @@ do
 	end)
 
 	with("results/lissajouscurve-WB-B-B.svg", "w", function (fh)
-		extension(svgPlotWithBuffering((n + offset) * 2, (n + offset) * 2))
+		extension(svgPlotWithBuffer((n + offset) * 2, (n + offset) * 2))
 			:plotStart(fh, 30)
 			:pathStart()
 			:lissajousCurve(n, offset)

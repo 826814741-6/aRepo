@@ -161,7 +161,7 @@ end
 
 return {
 	extensionForSvgPlot = extension,
-	extensionForSvgPlotWholeBuffering = extensionForWhole,
-	extensionForSvgPlotWithBuffering = extensionForWith,
+	extensionForSvgPlotWholeBuffer = extensionForWhole,
+	extensionForSvgPlotWithBuffer = extensionForWith,
 	makeStyle = makeStyle
 }

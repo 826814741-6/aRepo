@@ -1,5 +1,7 @@
 package src;
 
+using src.SvgPlot;
+
 class PathStringExtender {
 	public static function fileWrite(
 		path:String,

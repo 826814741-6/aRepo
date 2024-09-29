@@ -6,8 +6,34 @@
 
 package src;
 
+using src.SvgPlot;
+
 function treeCurve(
-	plotter:SvgPlot.Plotter,
+	plotter:Plotter,
+	n:Int,
+	length:Float,
+	angle:Float,
+	factor:Float,
+	turn:Float
+) {
+	rec(plotter, n, length, angle, factor, turn);
+	return plotter;
+}
+
+function treeCurveE(
+	plotter:PlotterE,
+	n:Int,
+	length:Float,
+	angle:Float,
+	factor:Float,
+	turn:Float
+) {
+	recE(plotter, n, length, angle, factor, turn);
+	return plotter;
+}
+
+private function rec(
+	plotter:Plotter,
 	n:Int,
 	length:Float,
 	angle:Float,
@@ -20,15 +46,15 @@ function treeCurve(
 	plotter.drawRel(x, y);
 
 	if (n > 0) {
-		treeCurve(plotter, n - 1, length * factor, angle + turn, factor, turn);
-		treeCurve(plotter, n - 1, length * factor, angle - turn, factor, turn);
+		rec(plotter, n - 1, length * factor, angle + turn, factor, turn);
+		rec(plotter, n - 1, length * factor, angle - turn, factor, turn);
 	}
 
 	plotter.moveRel(-x, -y);
 }
 
-function treeCurveE(
-	plotter:SvgPlot.PlotterE,
+private function recE(
+	plotter:PlotterE,
 	n:Int,
 	length:Float,
 	angle:Float,
@@ -41,8 +67,8 @@ function treeCurveE(
 	plotter.plot(DrawRel(x, y));
 
 	if (n > 0) {
-		treeCurveE(plotter, n - 1, length * factor, angle + turn, factor, turn);
-		treeCurveE(plotter, n - 1, length * factor, angle - turn, factor, turn);
+		recE(plotter, n - 1, length * factor, angle + turn, factor, turn);
+		recE(plotter, n - 1, length * factor, angle - turn, factor, turn);
 	}
 
 	plotter.plot(MoveRel(-x, -y));

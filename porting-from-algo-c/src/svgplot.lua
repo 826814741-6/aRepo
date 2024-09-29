@@ -8,7 +8,7 @@
 --	void draw(double, double)		to	:draw
 --	void draw_rel(double, double)		to	:drawRel
 --
---	svgPlot,svgPlotWithBuffering		to	svgPlotWholeBuffering
+--	svgPlot,svgPlotWithBuffer		to	svgPlotWholeBuffer
 --	:plotStart
 --	:plotEnd
 --							:reset
@@ -34,6 +34,24 @@ local function pathEnd(isClosePath)
 	return ([[%s" fill="none" stroke="black" />
 ]]):format(isClosePath and "Z" or "")
 end
+
+local function move(x, y)
+	return ("M %g %g "):format(x, y)
+end
+
+local function moveRel(x, y)
+	return ("m %g %g "):format(x, y)
+end
+
+local function draw(x, y)
+	return ("L %g %g "):format(x, y)
+end
+
+local function drawRel(x, y)
+	return ("l %g %g "):format(x, y)
+end
+
+--
 
 local function svgPlot(width, height)
 	local T = { fh = nil }
@@ -61,22 +79,22 @@ local function svgPlot(width, height)
 	end
 
 	function T:move(x, y)
-		T.fh:write(("M %g %g "):format(x, height - y))
+		T.fh:write(move(x, height - y))
 		return T
 	end
 
 	function T:moveRel(x, y)
-		T.fh:write(("m %g %g "):format(x, -y))
+		T.fh:write(moveRel(x, -y))
 		return T
 	end
 
 	function T:draw(x, y)
-		T.fh:write(("L %g %g "):format(x, height - y))
+		T.fh:write(draw(x, height - y))
 		return T
 	end
 
 	function T:drawRel(x, y)
-		T.fh:write(("l %g %g "):format(x, -y))
+		T.fh:write(drawRel(x, -y))
 		return T
 	end
 
@@ -86,7 +104,7 @@ end
 local t_concat = table.concat
 local t_insert = table.insert
 
-local function svgPlotWholeBuffering(width, height)
+local function svgPlotWholeBuffer(width, height)
 	local T = {
 		buffer = {}
 	}
@@ -102,22 +120,22 @@ local function svgPlotWholeBuffering(width, height)
 	end
 
 	function T:move(x, y)
-		t_insert(T.buffer, ("M %g %g "):format(x, height - y))
+		t_insert(T.buffer, move(x, height - y))
 		return T
 	end
 
 	function T:moveRel(x, y)
-		t_insert(T.buffer, ("m %g %g "):format(x, -y))
+		t_insert(T.buffer, moveRel(x, -y))
 		return T
 	end
 
 	function T:draw(x, y)
-		t_insert(T.buffer, ("L %g %g "):format(x, height - y))
+		t_insert(T.buffer, draw(x, height - y))
 		return T
 	end
 
 	function T:drawRel(x, y)
-		t_insert(T.buffer, ("l %g %g "):format(x, -y))
+		t_insert(T.buffer, drawRel(x, -y))
 		return T
 	end
 
@@ -185,7 +203,7 @@ local function makeBuffer()
 	return T
 end
 
-local function svgPlotWithBuffering(width, height)
+local function svgPlotWithBuffer(width, height)
 	local T = {
 		fh = nil,
 		buffer = makeBuffer()
@@ -219,22 +237,22 @@ local function svgPlotWithBuffering(width, height)
 	end
 
 	function T:move(x, y)
-		T.buffer:writer(T.fh, ("M %g %g "):format(x, height - y))
+		T.buffer:writer(T.fh, move(x, height - y))
 		return T
 	end
 
 	function T:moveRel(x, y)
-		T.buffer:writer(T.fh, ("m %g %g "):format(x, -y))
+		T.buffer:writer(T.fh, moveRel(x, -y))
 		return T
 	end
 
 	function T:draw(x, y)
-		T.buffer:writer(T.fh, ("L %g %g "):format(x, height - y))
+		T.buffer:writer(T.fh, draw(x, height - y))
 		return T
 	end
 
 	function T:drawRel(x, y)
-		T.buffer:writer(T.fh, ("l %g %g "):format(x, -y))
+		T.buffer:writer(T.fh, drawRel(x, -y))
 		return T
 	end
 
@@ -243,6 +261,6 @@ end
 
 return {
 	svgPlot = svgPlot,
-	svgPlotWholeBuffering = svgPlotWholeBuffering,
-	svgPlotWithBuffering = svgPlotWithBuffering
+	svgPlotWholeBuffer = svgPlotWholeBuffer,
+	svgPlotWithBuffer = svgPlotWithBuffer
 }

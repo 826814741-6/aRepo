@@ -8,16 +8,16 @@
 --	void draw(double, double)		to	svgPlot; :draw
 --	void draw_rel(double, double)		to	svgPlot; :drawRel
 --
---						to	svgPlotWholeBuffering
---						to	svgPlotWithBuffering
+--						to	svgPlotWholeBuffer
+--						to	svgPlotWithBuffer
 --
 
 local M = require 'svgplot'
 local H = require '_helper'
 
 local svgPlot = M.svgPlot
-local svgPlotWholeBuffering = M.svgPlotWholeBuffering
-local svgPlotWithBuffering = M.svgPlotWithBuffering
+local svgPlotWholeBuffer = M.svgPlotWholeBuffer
+local svgPlotWithBuffer = M.svgPlotWithBuffer
 local with = H.with
 
 local PI, m_cos, m_sin = math.pi, math.cos, math.sin
@@ -63,7 +63,7 @@ do
 end
 
 do
-	local plotter = svgPlotWholeBuffering(300, 300)
+	local plotter = svgPlotWholeBuffer(300, 300)
 
 	plotter:pathStart()
 	sample(plotter)
@@ -87,7 +87,7 @@ end
 
 do
 	with("results/svgplot-lj-WB-B-A.svg", "w", function (fh)
-		local plotter = svgPlotWithBuffering(300, 300)
+		local plotter = svgPlotWithBuffer(300, 300)
 		plotter:plotStart(fh, 2)
 		plotter:pathStart()
 		sample(plotter)
@@ -96,7 +96,7 @@ do
 	end)
 
 	with("results/svgplot-lj-WB-B-B.svg", "w", function (fh)
-		extension(svgPlotWithBuffering(300, 300))
+		extension(svgPlotWithBuffer(300, 300))
 			:plotStart(fh, 2)
 			:pathStart()
 			:sample()
