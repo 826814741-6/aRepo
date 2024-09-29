@@ -23,13 +23,23 @@ function main() {
 
 	final a = [8, 42, 38, 111, 2, 39, 1];
 
-	sort(a, 100);
-	"-".println();
-	sort(a, 1000);
-	"-".println();
-	sort(a, 10000);
+	"--- by add(): 'Adds an element at the end of this Deque.'".println();
 
-	"---".println();
+	sortByAdd(a, 100);
+	"-".println();
+	sortByAdd(a, 1000);
+	"-".println();
+	sortByAdd(a, 10000);
+
+	"--- by push(): 'Adds an element at the front of this Deque.'".println();
+
+	sortByPush(a, 100);
+	"-".println();
+	sortByPush(a, 1000);
+	"-".println();
+	sortByPush(a, 10000);
+
+	"--- and s...or..t........Z..Z.....ZZZZZZZZZZZZZ".println();
 
 	sortZZZ(a, 100, 2);
 	"-".println();
@@ -41,13 +51,28 @@ function main() {
 }
 
 #if (target.threaded)
-private function sort(a:Array<Int>, d:Int) {
+private function sortByAdd(a:Array<Int>, d:Int) {
 	final dq = new Deque();
 
 	for (n in a) {
 		Thread.create(() -> {
 			(n / d).sleep();
 			dq.add(n);
+		});
+	}
+
+	for (_ in a) {
+		dq.pop(true).println();
+	}
+}
+
+private function sortByPush(a:Array<Int>, d:Int) {
+	final dq = new Deque();
+
+	for (n in a) {
+		Thread.create(() -> {
+			(n / d).sleep();
+			dq.push(n);
 		});
 	}
 
