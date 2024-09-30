@@ -95,6 +95,21 @@ local function with(path, mode, f)
 	assert(ret == true)
 end
 
+local function withPlt(path, plotter, n)
+	assert(
+		type(plotter.plotStart) == "function"
+			and type(plotter.plotEnd) == "function",
+		"Error: plotter must be a instance of svgPlot or svgPlot'With'Buffer"
+	)
+	return function (aFunc)
+		with(path, "w", function (fh)
+			plotter:plotStart(fh, n)
+			aFunc(plotter)
+			plotter:plotEnd()
+		end)
+	end
+end
+
 return {
 	abs = abs,
 	atLeastOne = atLeastOne,
@@ -107,5 +122,6 @@ return {
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,
-	with = with
+	with = with,
+	withPlt = withPlt
 }

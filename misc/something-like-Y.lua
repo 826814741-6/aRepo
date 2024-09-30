@@ -13,12 +13,18 @@
 
 function Y(f)
 	return (function (x) return f(function(v) return x(x)(v) end) end)(function (x) return f(function(v) return x(x)(v) end) end)
-
-	-- following code (above + newline) probably raise error in LuaJIT (not in Lua)
-	-- return (function (x) return f(function(v) return x(x)(v) end) end)
-	--        (function (x) return f(function(v) return x(x)(v) end) end)
-	-- > luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
 end
+--
+-- Depending on the position of parentheses, an error may occur in LuaJIT. (not in Lua)
+--
+-- return (function (x) return f(function(v) return x(x)(v) end) end)
+--        (function (x) return f(function(v) return x(x)(v) end) end)
+-- > luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
+--
+-- return (function (x) return f(function(v) return x(x)(v) end) end)(
+--         function (x) return f(function(v) return x(x)(v) end) end)
+-- > ...
+--
 
 function YM(f, h)
 	return function (a)

@@ -18,7 +18,7 @@ private function demo() {
 }
 
 private function demoA(prefix, n=10) {
-	withPlt('${prefix}.svg', new SvgPlot(400, 250))
+	'${prefix}.svg'.withPlt(new SvgPlot(400, 250))
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -27,7 +27,7 @@ private function demoA(prefix, n=10) {
 				.pathEnd(false);
 		});
 
-	withPltE('${prefix}-E.svg', new SvgPlotE(400, 250))
+	'${prefix}-E.svg'.withPltE(new SvgPlotE(400, 250))
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -58,7 +58,7 @@ private function demoB(prefix, n=10) {
 }
 
 private function demoC(prefix, n=10) {
-	withPltWB('${prefix}.svg', new SvgPlotWithBuffer(400, 250), 30)
+	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(400, 250), 30)
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -67,7 +67,7 @@ private function demoC(prefix, n=10) {
 				.pathEnd(false);
 		});
 
-	withPltWBE('${prefix}-E.svg', new SvgPlotWithBufferE(400, 250), 30)
+	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(400, 250), 30)
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -99,12 +99,12 @@ private function demo() {
 }
 
 private function demoA(prefix, n, x, y, styleR, styleC) {
-	withPlt('${prefix}.svg', new SvgPlot(x, y))
+	'${prefix}.svg'.withPlt(new SvgPlot(x, y))
 		((plotter) -> {
 			plotter.randomCircle(n, x, y, styleR, styleC);
 		});
 
-	withPltE('${prefix}-E.svg', new SvgPlotE(x, y))
+	'${prefix}-E.svg'.withPltE(new SvgPlotE(x, y))
 		((plotter) -> {
 			plotter.randomCircleE(n, x, y, styleR, styleC);
 		});
@@ -122,12 +122,12 @@ private function demoB(prefix, n, x, y, styleR, styleC) {
 }
 
 private function demoC(prefix, n, x, y, styleR, styleC) {
-	withPltWB('${prefix}.svg', new SvgPlotWithBuffer(x, y), 30)
+	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(x, y), 30)
 		((plotter) -> {
 			plotter.randomCircle(n, x, y, styleR, styleC);
 		});
 
-	withPltWBE('${prefix}-E.svg', new SvgPlotWithBufferE(x, y), 30)
+	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(x, y), 30)
 		((plotter) -> {
 			plotter.randomCircleE(n, x, y, styleR, styleC);
 		});
@@ -155,12 +155,12 @@ private function demo() {
 }
 
 private function demoA(prefix, n, x, y, styleR, styleE) {
-	withPlt('${prefix}.svg', new SvgPlot(x, y))
+	'${prefix}.svg'.withPlt(new SvgPlot(x, y))
 		((plotter) -> {
 			plotter.randomEllipse(n, x, y, styleR, styleE);
 		});
 
-	withPltE('${prefix}-E.svg', new SvgPlotE(x, y))
+	'${prefix}-E.svg'.withPltE(new SvgPlotE(x, y))
 		((plotter) -> {
 			plotter.randomEllipseE(n, x, y, styleR, styleE);
 		});
@@ -178,12 +178,12 @@ private function demoB(prefix, n, x, y, styleR, styleE) {
 }
 
 private function demoC(prefix, n, x, y, styleR, styleE) {
-	withPltWB('${prefix}.svg', new SvgPlotWithBuffer(x, y), 30)
+	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(x, y), 30)
 		((plotter) -> {
 			plotter.randomEllipse(n, x, y, styleR, styleE);
 		});
 
-	withPltWBE('${prefix}-E.svg', new SvgPlotWithBufferE(x, y), 30)
+	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(x, y), 30)
 		((plotter) -> {
 			plotter.randomEllipseE(n, x, y, styleR, styleE);
 		});
@@ -211,12 +211,12 @@ private function demo() {
 }
 
 private function demoA(prefix, n, x, y, styleR, styleL) {
-	withPlt('${prefix}.svg', new SvgPlot(x, y))
+	'${prefix}.svg'.withPlt(new SvgPlot(x, y))
 		((plotter) -> {
 			plotter.randomLine(n, x, y, styleR, styleL);
 		});
 
-	withPltE('${prefix}-E.svg', new SvgPlotE(x, y))
+	'${prefix}-E.svg'.withPltE(new SvgPlotE(x, y))
 		((plotter) -> {
 			plotter.randomLineE(n, x, y, styleR, styleL);
 		});
@@ -234,12 +234,12 @@ private function demoB(prefix, n, x, y, styleR, styleL) {
 }
 
 private function demoC(prefix, n, x, y, styleR, styleL) {
-	withPltWB('${prefix}.svg', new SvgPlotWithBuffer(x, y), 30)
+	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(x, y), 30)
 		((plotter) -> {
 			plotter.randomLine(n, x, y, styleR, styleL);
 		});
 
-	withPltWBE('${prefix}-E.svg', new SvgPlotWithBufferE(x, y), 30)
+	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(x, y), 30)
 		((plotter) -> {
 			plotter.randomLineE(n, x, y, styleR, styleL);
 		});
@@ -261,7 +261,7 @@ private function demo() {
 private function demoA(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	withPlt('${prefix}.svg', new SvgPlot(size, size))
+	'${prefix}.svg'.withPlt(new SvgPlot(size, size))
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -269,7 +269,7 @@ private function demoA(prefix, n, offset) {
 				.pathEnd(true);
 		});
 
-	withPltE('${prefix}-E.svg', new SvgPlotE(size, size))
+	'${prefix}-E.svg'.withPltE(new SvgPlotE(size, size))
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -301,7 +301,7 @@ private function demoB(prefix, n, offset) {
 private function demoC(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	withPltWB('${prefix}.svg', new SvgPlotWithBuffer(size, size), 30)
+	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(size, size), 30)
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -309,7 +309,7 @@ private function demoC(prefix, n, offset) {
 				.pathEnd(true);
 		});
 
-	withPltWBE('${prefix}-E.svg', new SvgPlotWithBufferE(size, size), 30)
+	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(size, size), 30)
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -327,7 +327,7 @@ private function demo() {
 }
 
 private function demoA(prefix) {
-	withPlt('${prefix}.svg', new SvgPlot(300, 300))
+	'${prefix}.svg'.withPlt(new SvgPlot(300, 300))
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -335,7 +335,7 @@ private function demoA(prefix) {
 				.pathEnd(true);
 		});
 
-	withPltE('${prefix}-E.svg', new SvgPlotE(300, 300))
+	'${prefix}-E.svg'.withPltE(new SvgPlotE(300, 300))
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -363,7 +363,7 @@ private function demoB(prefix) {
 }
 
 private function demoC(prefix) {
-	withPltWB('${prefix}.svg', new SvgPlotWithBuffer(300, 300), 2)
+	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(300, 300), 2)
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -371,7 +371,7 @@ private function demoC(prefix) {
 				.pathEnd(true);
 		});
 
-	withPltWBE('${prefix}-E.svg', new SvgPlotWithBufferE(300, 300), 2)
+	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(300, 300), 2)
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -391,7 +391,7 @@ private function demo() {
 }
 
 private function demoA(prefix, n=10) {
-	withPlt('${prefix}.svg', new SvgPlot(400, 350))
+	'${prefix}.svg'.withPlt(new SvgPlot(400, 350))
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -400,7 +400,7 @@ private function demoA(prefix, n=10) {
 				.pathEnd(false);
 		});
 
-	withPltE('${prefix}-E.svg', new SvgPlotE(400, 350))
+	'${prefix}-E.svg'.withPltE(new SvgPlotE(400, 350))
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -431,7 +431,7 @@ private function demoB(prefix, n=10) {
 }
 
 private function demoC(prefix, n=10) {
-	withPltWB('${prefix}.svg', new SvgPlotWithBuffer(400, 350), 100)
+	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(400, 350), 100)
 		((plotter) -> {
 			plotter
 				.pathStart()
@@ -440,7 +440,7 @@ private function demoC(prefix, n=10) {
 				.pathEnd(false);
 		});
 
-	withPltWBE('${prefix}-E.svg', new SvgPlotWithBufferE(400, 350), 100)
+	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(400, 350), 100)
 		((plotter) -> {
 			plotter
 				.plot(PathStart)
@@ -450,42 +450,6 @@ private function demoC(prefix, n=10) {
 		});
 }
 #end
-
-private function withPlt(path:String, plotter:SvgPlot)
-	return (aFunc:SvgPlot -> Void) -> {
-		path.fileWrite((fh) -> {
-			plotter.plotStart(fh);
-			aFunc(plotter);
-			plotter.plotEnd();
-		});
-	};
-
-private function withPltE(path:String, plotter:SvgPlotE)
-	return (aFunc:SvgPlotE -> Void) -> {
-		path.fileWrite((fh) -> {
-			plotter.plotStart(fh);
-			aFunc(plotter);
-			plotter.plotEnd();
-		});
-	};
-
-private function withPltWB(path:String, plotter:SvgPlotWithBuffer, i:Int)
-	return (aFunc:SvgPlotWithBuffer -> Void) -> {
-		path.fileWrite((fh) -> {
-			plotter.plotStart(fh, i);
-			aFunc(plotter);
-			plotter.plotEnd();
-		});
-	};
-
-private function withPltWBE(path:String, plotter:SvgPlotWithBufferE, i:Int)
-	return (aFunc:SvgPlotWithBufferE -> Void) -> {
-		path.fileWrite((fh) -> {
-			plotter.plotStart(fh, i);
-			aFunc(plotter);
-			plotter.plotEnd();
-		});
-	};
 
 function main()
 	demo();

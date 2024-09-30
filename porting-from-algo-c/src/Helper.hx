@@ -15,6 +15,46 @@ class PathStringExtender {
 		} catch(e) {
 			trace(e.message);
 		}
+
+	public static function withPlt(path:String, plotter:SvgPlot)
+		return (aFunc:SvgPlot -> Void) ->
+			fileWrite(path, (fh) -> {
+				plotter.plotStart(fh);
+				aFunc(plotter);
+				plotter.plotEnd();
+			});
+
+	public static function withPltE(path:String, plotter:SvgPlotE)
+		return (aFunc:SvgPlotE -> Void) ->
+			fileWrite(path, (fh) -> {
+				plotter.plotStart(fh);
+				aFunc(plotter);
+				plotter.plotEnd();
+			});
+
+	public static function withPltWB(
+		path:String,
+		plotter:SvgPlotWithBuffer,
+		i:Int
+	)
+		return (aFunc:SvgPlotWithBuffer -> Void) ->
+			fileWrite(path, (fh) -> {
+				plotter.plotStart(fh, i);
+				aFunc(plotter);
+				plotter.plotEnd();
+			});
+
+	public static function withPltWBE(
+		path:String,
+		plotter:SvgPlotWithBufferE,
+		i:Int
+	)
+		return (aFunc:SvgPlotWithBufferE -> Void) ->
+			fileWrite(path, (fh) -> {
+				plotter.plotStart(fh, i);
+				aFunc(plotter);
+				plotter.plotEnd();
+			});
 }
 
 @:generic

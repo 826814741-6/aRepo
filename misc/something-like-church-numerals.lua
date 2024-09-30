@@ -56,15 +56,22 @@ function Pred(n)
 	return function (f)
 		return function (x)
 			return n(function (g) return function (h) return h(g(f)) end end)(function (y) return x end)(function (x) return x end)
-
-			-- following code (above + newline) probably raise error in LuaJIT (not in Lua)
-			-- return n(function (g) return function (h) return h(g(f)) end end)
-			--         (function (y) return x end)
-			--         (function (x) return x end)
-			-- > luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
 		end
 	end
 end
+--
+-- Depending on the position of parentheses, an error may occur in LuaJIT. (not in Lua)
+--
+-- return n(function (g) return function (h) return h(g(f)) end end)
+--         (function (y) return x end)
+--         (function (x) return x end)
+-- > luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
+--
+-- return n(function (g) return function (h) return h(g(f)) end end)(
+--         function (y) return x end)(
+--         function (x) return x end)
+-- > ...
+--
 
 function Sub(n)
 	return function (m)
