@@ -55,22 +55,22 @@ end
 
 local function extensionForWhole(T)
 	function T:circle(cx, cy, r, style)
-		t_insert(T.buffer, circle(cx, cy, r, style))
+		T.buffer:put(circle(cx, cy, r, style))
 		return T
 	end
 
 	function T:ellipse(cx, cy, rx, ry, style)
-		t_insert(T.buffer, ellipse(cx, cy, rx, ry, style))
+		T.buffer:put(ellipse(cx, cy, rx, ry, style))
 		return T
 	end
 
 	function T:line(x1, y1, x2, y2, style)
-		t_insert(T.buffer, line(x1, y1, x2, y2, style))
+		T.buffer:put(line(x1, y1, x2, y2, style))
 		return T
 	end
 
 	function T:rect(x, y, w, h, rx, ry, style)
-		t_insert(T.buffer, rect(x, y, w, h, rx, ry, style))
+		T.buffer:put(rect(x, y, w, h, rx, ry, style))
 		return T
 	end
 

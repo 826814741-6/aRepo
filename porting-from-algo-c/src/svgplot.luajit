@@ -62,7 +62,7 @@ local function svgPlot(width, height)
 		return T
 	end
 
-	function T:plotEnd(isClosePath)
+	function T:plotEnd()
 		T.fh:write(footer())
 		T.fh = nil
 		return T
@@ -109,32 +109,32 @@ local function svgPlotWholeBuffer(width, height)
 	}
 
 	function T:pathStart()
-		T.buffer:putf(pathStart())
+		T.buffer:put(pathStart())
 		return T
 	end
 
 	function T:pathEnd(isClosePath)
-		T.buffer:putf(pathEnd(isClosePath))
+		T.buffer:put(pathEnd(isClosePath))
 		return T
 	end
 
 	function T:move(x, y)
-		T.buffer:putf(move(x, height - y))
+		T.buffer:put(move(x, height - y))
 		return T
 	end
 
 	function T:moveRel(x, y)
-		T.buffer:putf(moveRel(x, -y))
+		T.buffer:put(moveRel(x, -y))
 		return T
 	end
 
 	function T:draw(x, y)
-		T.buffer:putf(draw(x, height - y))
+		T.buffer:put(draw(x, height - y))
 		return T
 	end
 
 	function T:drawRel(x, y)
-		T.buffer:putf(drawRel(x, -y))
+		T.buffer:put(drawRel(x, -y))
 		return T
 	end
 
@@ -180,7 +180,7 @@ local function makeBuffer()
 	}
 
 	function T:writer(fh, ...)
-		T.buffer:putf(...)
+		T.buffer:put(...)
 
 		T.counter = T.counter + 1
 		if T.counter >= T.limit then
@@ -221,7 +221,7 @@ local function svgPlotWithBuffer(width, height)
 		return T
 	end
 
-	function T:plotEnd(isClosePath)
+	function T:plotEnd()
 		T.buffer:tailStep(T.fh)
 		T.fh:write(footer())
 		T.fh = nil
