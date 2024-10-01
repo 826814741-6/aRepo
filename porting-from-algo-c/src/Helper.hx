@@ -16,45 +16,59 @@ class PathStringExtender {
 			trace(e.message);
 		}
 
-	public static function withPlt(path:String, plotter:SvgPlot)
-		return (aFunc:SvgPlot -> Void) ->
-			fileWrite(path, (fh) -> {
-				plotter.plotStart(fh);
-				aFunc(plotter);
-				plotter.plotEnd();
-			});
-
-	public static function withPltE(path:String, plotter:SvgPlotE)
-		return (aFunc:SvgPlotE -> Void) ->
-			fileWrite(path, (fh) -> {
-				plotter.plotStart(fh);
-				aFunc(plotter);
-				plotter.plotEnd();
-			});
-
-	public static function withPltWB(
+	public static function withSvgPlot(
 		path:String,
-		plotter:SvgPlotWithBuffer,
-		i:Int
+		w:Int,
+		h:Int,
+		aFunc:SvgPlot -> Void
 	)
-		return (aFunc:SvgPlotWithBuffer -> Void) ->
-			fileWrite(path, (fh) -> {
-				plotter.plotStart(fh, i);
-				aFunc(plotter);
-				plotter.plotEnd();
-			});
+		fileWrite(path, (fh) -> {
+			final plotter = new SvgPlot(w, h);
+			plotter.plotStart(fh);
+			aFunc(plotter);
+			plotter.plotEnd();
+		});
 
-	public static function withPltWBE(
+	public static function withSvgPlotE(
 		path:String,
-		plotter:SvgPlotWithBufferE,
-		i:Int
+		w:Int,
+		h:Int,
+		aFunc:SvgPlotE -> Void
 	)
-		return (aFunc:SvgPlotWithBufferE -> Void) ->
-			fileWrite(path, (fh) -> {
-				plotter.plotStart(fh, i);
-				aFunc(plotter);
-				plotter.plotEnd();
-			});
+		fileWrite(path, (fh) -> {
+			final plotter = new SvgPlotE(w, h);
+			plotter.plotStart(fh);
+			aFunc(plotter);
+			plotter.plotEnd();
+		});
+
+	public static function withSvgPlotWithBuffer(
+		path:String,
+		w:Int,
+		h:Int,
+		limit:Int,
+		aFunc:SvgPlotWithBuffer -> Void
+	)
+		fileWrite(path, (fh) -> {
+			final plotter = new SvgPlotWithBuffer(w, h);
+			plotter.plotStart(fh, limit);
+			aFunc(plotter);
+			plotter.plotEnd();
+		});
+
+	public static function withSvgPlotWithBufferE(
+		path:String,
+		w:Int,
+		h:Int,
+		limit:Int,
+		aFunc:SvgPlotWithBufferE -> Void
+	)
+		fileWrite(path, (fh) -> {
+			final plotter = new SvgPlotWithBufferE(w, h);
+			plotter.plotStart(fh, limit);
+			aFunc(plotter);
+			plotter.plotEnd();
+		});
 }
 
 @:generic

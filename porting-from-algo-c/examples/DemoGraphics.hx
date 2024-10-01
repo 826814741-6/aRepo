@@ -18,23 +18,21 @@ private function demo() {
 }
 
 private function demoA(prefix, n=10) {
-	'${prefix}.svg'.withPlt(new SvgPlot(400, 250))
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.move(100, 200)
-				.cCurve(n, 200, 0)
-				.pathEnd(false);
-		});
+	'${prefix}.svg'.withSvgPlot(400, 250, (plotter) -> {
+		plotter
+			.pathStart()
+			.move(100, 200)
+			.cCurve(n, 200, 0)
+			.pathEnd(false);
+	});
 
-	'${prefix}-E.svg'.withPltE(new SvgPlotE(400, 250))
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.plot(Move(100, 200))
-				.cCurveE(n, 200, 0)
-				.plot(PathEnd(false));
-		});
+	'${prefix}-E.svg'.withSvgPlotE(400, 250, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.plot(Move(100, 200))
+			.cCurveE(n, 200, 0)
+			.plot(PathEnd(false));
+	});
 }
 
 private function demoB(prefix, n=10) {
@@ -58,23 +56,21 @@ private function demoB(prefix, n=10) {
 }
 
 private function demoC(prefix, n=10) {
-	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(400, 250), 30)
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.move(100, 200)
-				.cCurve(n, 200, 0)
-				.pathEnd(false);
-		});
+	'${prefix}.svg'.withSvgPlotWithBuffer(400, 250, 30, (plotter) -> {
+		plotter
+			.pathStart()
+			.move(100, 200)
+			.cCurve(n, 200, 0)
+			.pathEnd(false);
+	});
 
-	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(400, 250), 30)
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.plot(Move(100, 200))
-				.cCurveE(n, 200, 0)
-				.plot(PathEnd(false));
-		});
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(400, 250, 30, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.plot(Move(100, 200))
+			.cCurveE(n, 200, 0)
+			.plot(PathEnd(false));
+	});
 }
 #end
 
@@ -99,15 +95,13 @@ private function demo() {
 }
 
 private function demoA(prefix, n, x, y, styleR, styleC) {
-	'${prefix}.svg'.withPlt(new SvgPlot(x, y))
-		((plotter) -> {
-			plotter.randomCircle(n, x, y, styleR, styleC);
-		});
+	'${prefix}.svg'.withSvgPlot(x, y, (plotter) -> {
+		plotter.randomCircle(n, x, y, styleR, styleC);
+	});
 
-	'${prefix}-E.svg'.withPltE(new SvgPlotE(x, y))
-		((plotter) -> {
-			plotter.randomCircleE(n, x, y, styleR, styleC);
-		});
+	'${prefix}-E.svg'.withSvgPlotE(x, y, (plotter) -> {
+		plotter.randomCircleE(n, x, y, styleR, styleC);
+	});
 }
 
 private function demoB(prefix, n, x, y, styleR, styleC) {
@@ -122,15 +116,13 @@ private function demoB(prefix, n, x, y, styleR, styleC) {
 }
 
 private function demoC(prefix, n, x, y, styleR, styleC) {
-	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(x, y), 30)
-		((plotter) -> {
-			plotter.randomCircle(n, x, y, styleR, styleC);
-		});
+	'${prefix}.svg'.withSvgPlotWithBuffer(x, y, 30, (plotter) -> {
+		plotter.randomCircle(n, x, y, styleR, styleC);
+	});
 
-	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(x, y), 30)
-		((plotter) -> {
-			plotter.randomCircleE(n, x, y, styleR, styleC);
-		});
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(x, y, 30, (plotter) -> {
+		plotter.randomCircleE(n, x, y, styleR, styleC);
+	});
 }
 #end
 
@@ -155,15 +147,13 @@ private function demo() {
 }
 
 private function demoA(prefix, n, x, y, styleR, styleE) {
-	'${prefix}.svg'.withPlt(new SvgPlot(x, y))
-		((plotter) -> {
-			plotter.randomEllipse(n, x, y, styleR, styleE);
-		});
+	'${prefix}.svg'.withSvgPlot(x, y, (plotter) -> {
+		plotter.randomEllipse(n, x, y, styleR, styleE);
+	});
 
-	'${prefix}-E.svg'.withPltE(new SvgPlotE(x, y))
-		((plotter) -> {
-			plotter.randomEllipseE(n, x, y, styleR, styleE);
-		});
+	'${prefix}-E.svg'.withSvgPlotE(x, y, (plotter) -> {
+		plotter.randomEllipseE(n, x, y, styleR, styleE);
+	});
 }
 
 private function demoB(prefix, n, x, y, styleR, styleE) {
@@ -178,15 +168,13 @@ private function demoB(prefix, n, x, y, styleR, styleE) {
 }
 
 private function demoC(prefix, n, x, y, styleR, styleE) {
-	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(x, y), 30)
-		((plotter) -> {
-			plotter.randomEllipse(n, x, y, styleR, styleE);
-		});
+	'${prefix}.svg'.withSvgPlotWithBuffer(x, y, 30, (plotter) -> {
+		plotter.randomEllipse(n, x, y, styleR, styleE);
+	});
 
-	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(x, y), 30)
-		((plotter) -> {
-			plotter.randomEllipseE(n, x, y, styleR, styleE);
-		});
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(x, y, 30, (plotter) -> {
+		plotter.randomEllipseE(n, x, y, styleR, styleE);
+	});
 }
 #end
 
@@ -211,15 +199,13 @@ private function demo() {
 }
 
 private function demoA(prefix, n, x, y, styleR, styleL) {
-	'${prefix}.svg'.withPlt(new SvgPlot(x, y))
-		((plotter) -> {
-			plotter.randomLine(n, x, y, styleR, styleL);
-		});
+	'${prefix}.svg'.withSvgPlot(x, y, (plotter) -> {
+		plotter.randomLine(n, x, y, styleR, styleL);
+	});
 
-	'${prefix}-E.svg'.withPltE(new SvgPlotE(x, y))
-		((plotter) -> {
-			plotter.randomLineE(n, x, y, styleR, styleL);
-		});
+	'${prefix}-E.svg'.withSvgPlotE(x, y, (plotter) -> {
+		plotter.randomLineE(n, x, y, styleR, styleL);
+	});
 }
 
 private function demoB(prefix, n, x, y, styleR, styleL) {
@@ -234,15 +220,13 @@ private function demoB(prefix, n, x, y, styleR, styleL) {
 }
 
 private function demoC(prefix, n, x, y, styleR, styleL) {
-	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(x, y), 30)
-		((plotter) -> {
-			plotter.randomLine(n, x, y, styleR, styleL);
-		});
+	'${prefix}.svg'.withSvgPlotWithBuffer(x, y, 30, (plotter) -> {
+		plotter.randomLine(n, x, y, styleR, styleL);
+	});
 
-	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(x, y), 30)
-		((plotter) -> {
-			plotter.randomLineE(n, x, y, styleR, styleL);
-		});
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(x, y, 30, (plotter) -> {
+		plotter.randomLineE(n, x, y, styleR, styleL);
+	});
 }
 #end
 
@@ -261,21 +245,19 @@ private function demo() {
 private function demoA(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	'${prefix}.svg'.withPlt(new SvgPlot(size, size))
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.lissajousCurve(n, offset)
-				.pathEnd(true);
-		});
+	'${prefix}.svg'.withSvgPlot(size, size, (plotter) -> {
+		plotter
+			.pathStart()
+			.lissajousCurve(n, offset)
+			.pathEnd(true);
+	});
 
-	'${prefix}-E.svg'.withPltE(new SvgPlotE(size, size))
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.lissajousCurveE(n, offset)
-				.plot(PathEnd(true));
-		});
+	'${prefix}-E.svg'.withSvgPlotE(size, size, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.lissajousCurveE(n, offset)
+			.plot(PathEnd(true));
+	});
 }
 
 private function demoB(prefix, n, offset) {
@@ -301,52 +283,51 @@ private function demoB(prefix, n, offset) {
 private function demoC(prefix, n, offset) {
 	final size = (n + offset) * 2;
 
-	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(size, size), 30)
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.lissajousCurve(n, offset)
-				.pathEnd(true);
-		});
+	'${prefix}.svg'.withSvgPlotWithBuffer(size, size, 30, (plotter) -> {
+		plotter
+			.pathStart()
+			.lissajousCurve(n, offset)
+			.pathEnd(true);
+	});
 
-	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(size, size), 30)
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.lissajousCurveE(n, offset)
-				.plot(PathEnd(true));
-		});
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(size, size, 30, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.lissajousCurveE(n, offset)
+			.plot(PathEnd(true));
+	});
 }
 #end
 
 #if svgplot
 private function demo() {
-	demoA("results/svgplot-hx");
-	demoB("results/svgplot-hx-WB-A");
-	demoC("results/svgplot-hx-WB-B");
+	final w = 300;
+	final h = 300;
+
+	demoA("results/svgplot-hx", w, h);
+	demoB("results/svgplot-hx-WB-A", w, h);
+	demoC("results/svgplot-hx-WB-B", w, h);
 }
 
-private function demoA(prefix) {
-	'${prefix}.svg'.withPlt(new SvgPlot(300, 300))
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.sample()
-				.pathEnd(true);
-		});
+private function demoA(prefix, w, h) {
+	'${prefix}.svg'.withSvgPlot(w, h, (plotter) -> {
+		plotter
+			.pathStart()
+			.sample()
+			.pathEnd(true);
+	});
 
-	'${prefix}-E.svg'.withPltE(new SvgPlotE(300, 300))
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.sampleE()
-				.plot(PathEnd(true));
-		});
+	'${prefix}-E.svg'.withSvgPlotE(w, h, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.sampleE()
+			.plot(PathEnd(true));
+	});
 }
 
-private function demoB(prefix) {
-	final plotter = new SvgPlotWholeBuffer(300, 300);
-	final plotterE = new SvgPlotWholeBufferE(300, 300);
+private function demoB(prefix, w, h) {
+	final plotter = new SvgPlotWholeBuffer(w, h);
+	final plotterE = new SvgPlotWholeBufferE(w, h);
 
 	plotter
 		.pathStart()
@@ -362,22 +343,20 @@ private function demoB(prefix) {
 	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
-private function demoC(prefix) {
-	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(300, 300), 2)
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.sample()
-				.pathEnd(true);
-		});
+private function demoC(prefix, w, h) {
+	'${prefix}.svg'.withSvgPlotWithBuffer(w, h, 2, (plotter) -> {
+		plotter
+			.pathStart()
+			.sample()
+			.pathEnd(true);
+	});
 
-	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(300, 300), 2)
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.sampleE()
-				.plot(PathEnd(true));
-		});
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(w, h, 2, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.sampleE()
+			.plot(PathEnd(true));
+	});
 }
 #end
 
@@ -391,23 +370,21 @@ private function demo() {
 }
 
 private function demoA(prefix, n=10) {
-	'${prefix}.svg'.withPlt(new SvgPlot(400, 350))
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.move(200, 0)
-				.treeCurve(n, 100, 0, 0.7, 0.5)
-				.pathEnd(false);
-		});
+	'${prefix}.svg'.withSvgPlot(400, 350, (plotter) -> {
+		plotter
+			.pathStart()
+			.move(200, 0)
+			.treeCurve(n, 100, 0, 0.7, 0.5)
+			.pathEnd(false);
+	});
 
-	'${prefix}-E.svg'.withPltE(new SvgPlotE(400, 350))
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.plot(Move(200, 0))
-				.treeCurveE(n, 100, 0, 0.7, 0.5)
-				.plot(PathEnd(false));
-		});
+	'${prefix}-E.svg'.withSvgPlotE(400, 350, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.plot(Move(200, 0))
+			.treeCurveE(n, 100, 0, 0.7, 0.5)
+			.plot(PathEnd(false));
+	});
 }
 
 private function demoB(prefix, n=10) {
@@ -431,23 +408,21 @@ private function demoB(prefix, n=10) {
 }
 
 private function demoC(prefix, n=10) {
-	'${prefix}.svg'.withPltWB(new SvgPlotWithBuffer(400, 350), 100)
-		((plotter) -> {
-			plotter
-				.pathStart()
-				.move(200, 0)
-				.treeCurve(n, 100, 0, 0.7, 0.5)
-				.pathEnd(false);
-		});
+	'${prefix}.svg'.withSvgPlotWithBuffer(400, 350, 100, (plotter) -> {
+		plotter
+			.pathStart()
+			.move(200, 0)
+			.treeCurve(n, 100, 0, 0.7, 0.5)
+			.pathEnd(false);
+	});
 
-	'${prefix}-E.svg'.withPltWBE(new SvgPlotWithBufferE(400, 350), 100)
-		((plotter) -> {
-			plotter
-				.plot(PathStart)
-				.plot(Move(200, 0))
-				.treeCurveE(n, 100, 0, 0.7, 0.5)
-				.plot(PathEnd(false));
-		});
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(400, 350, 100, (plotter) -> {
+		plotter
+			.plot(PathStart)
+			.plot(Move(200, 0))
+			.treeCurveE(n, 100, 0, 0.7, 0.5)
+			.plot(PathEnd(false));
+	});
 }
 #end
 
