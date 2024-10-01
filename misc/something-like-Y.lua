@@ -19,11 +19,16 @@ end
 --
 -- return (function (x) return f(function(v) return x(x)(v) end) end)
 --        (function (x) return f(function(v) return x(x)(v) end) end)
--- > luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
+--
+-- > luajit.exe something-like-Y.lua
+-- luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
+-- >
 --
 -- return (function (x) return f(function(v) return x(x)(v) end) end)(
 --         function (x) return f(function(v) return x(x)(v) end) end)
--- > ...
+--
+-- > luajit.exe something-like-Y.lua
+-- >
 --
 
 function YM(f, h)

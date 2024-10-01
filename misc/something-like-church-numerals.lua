@@ -65,12 +65,17 @@ end
 -- return n(function (g) return function (h) return h(g(f)) end end)
 --         (function (y) return x end)
 --         (function (x) return x end)
--- > luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
+--
+-- > luajit.exe something-like-church-numerals.lua
+-- luajit.exe: ...:...: ambiguous syntax (function call x new statement) near '('
+-- >
 --
 -- return n(function (g) return function (h) return h(g(f)) end end)(
 --         function (y) return x end)(
 --         function (x) return x end)
--- > ...
+--
+-- > luajit.exe something-like-church-numerals.lua
+-- >
 --
 
 function Sub(n)

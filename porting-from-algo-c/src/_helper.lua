@@ -99,7 +99,7 @@ local function withPlt(path, plotter, n)
 	assert(
 		type(plotter.plotStart) == "function"
 			and type(plotter.plotEnd) == "function",
-		"Error: plotter must be a instance of svgPlot or svgPlot'With'Buffer"
+		"Error: plotter must be an instance of svgPlot or svgPlot'With'Buffer"
 	)
 	return function (aFunc)
 		with(path, "w", function (fh)

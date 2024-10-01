@@ -6,7 +6,6 @@
 
 local BMP = require 'grBMP'.BMP
 local BLACK = require 'grBMP'.PRESET_COLORS.BLACK
-local makeColor = require 'grBMP'.makeColor
 
 local svgPlot = require 'svgplot'.svgPlot
 local svgPlotWholeBuffer = require 'svgplot'.svgPlotWholeBuffer
