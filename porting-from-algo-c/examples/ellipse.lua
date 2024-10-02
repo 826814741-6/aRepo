@@ -19,7 +19,7 @@ local makeStyle = require 'basicshapes'.makeStyle
 
 local RAND = require 'rand'.RAND
 local with = require '_helper'.with
-local withPlt = require '_helper'.withPlt
+local withPlotter = require '_helper'.withPlotter
 
 do
 	local x, y = 640, 400
@@ -74,10 +74,12 @@ do
 			:strokeWidth(1)
 			:get()
 
-	withPlt("results/ellipse.svg", ext(svgPlot(x, y)))
-		(function (plotter)
-			sample(plotter, n, x, y, styleR, styleE)
-		end)
+	withPlotter(
+		"results/ellipse.svg",
+		ext(svgPlot(x, y))
+	)(function (plotter)
+		sample(plotter, n, x, y, styleR, styleE)
+	end)
 
 	do
 		local plotter = extForWhole(svgPlotWholeBuffer(x, y))
@@ -87,8 +89,11 @@ do
 		end)
 	end
 
-	withPlt("results/ellipse-WB-B.svg", extForWith(svgPlotWithBuffer(x, y)), 100)
-		(function (plotter)
-			sample(plotter, n, x, y, styleR, styleE)
-		end)
+	withPlotter(
+		"results/ellipse-WB-B.svg",
+		extForWith(svgPlotWithBuffer(x, y)),
+		100
+	)(function (plotter)
+		sample(plotter, n, x, y, styleR, styleE)
+	end)
 end

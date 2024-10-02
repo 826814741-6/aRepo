@@ -19,13 +19,16 @@ local svgPlot = M.svgPlot
 local svgPlotWholeBuffer = M.svgPlotWholeBuffer
 local svgPlotWithBuffer = M.svgPlotWithBuffer
 local with = H.with
+local withPlotter = H.withPlotter
 
 local PI, m_cos, m_sin = math.pi, math.cos, math.sin
 
-function sample(plotter)
+function sample(plotter, n, offset)
 	for i=0,4 do
 		local theta = 2 * PI * i / 5
-		local x, y = 150 + 140 * m_cos(theta), 150 + 140 * m_sin(theta)
+		local x, y =
+			n / 2 + (n / 2 - offset) * m_cos(theta),
+			n / 2 + (n / 2 - offset) * m_sin(theta)
 		if i == 0 then
 			plotter:move(x, y)
 		else
@@ -34,39 +37,52 @@ function sample(plotter)
 	end
 end
 
-function extension(T)
-	function T:sample()
-		sample(T)
+local function extension(T)
+	function T:sample(n, offset)
+		sample(T, n, offset)
 		return T
 	end
 	return T
 end
 
 do
+	local size, offset = 300, 10
+
 	with("results/svgplot-A.svg", "w", function (fh)
-		local plotter = svgPlot(300, 300)
+		local plotter = svgPlot(size, size)
 		plotter:plotStart(fh)
 		plotter:pathStart()
-		sample(plotter)
+		sample(plotter, size, offset)
 		plotter:pathEnd(true)
 		plotter:plotEnd()
 	end)
 
 	with("results/svgplot-B.svg", "w", function (fh)
-		extension(svgPlot(300, 300))
+		extension(svgPlot(size, size))
 			:plotStart(fh)
-			:pathStart(fh)
-			:sample()
+			:pathStart()
+			:sample(size, offset)
 			:pathEnd(true)
 			:plotEnd()
+	end)
+
+	withPlotter(
+		"results/svgplot-C.svg",
+		extension(svgPlot(size, size))
+	)(function (plotter)
+		plotter
+			:pathStart()
+			:sample(size, offset)
+			:pathEnd(true)
 	end)
 end
 
 do
-	local plotter = svgPlotWholeBuffer(300, 300)
+	local size, offset = 300, 10
+	local plotter = svgPlotWholeBuffer(size, size)
 
 	plotter:pathStart()
-	sample(plotter)
+	sample(plotter, size, offset)
 	plotter:pathEnd(true)
 
 	with("results/svgplot-WB-A-A.svg", "w", function (fh)
@@ -77,7 +93,7 @@ do
 
 	extension(plotter)
 		:pathStart()
-		:sample()
+		:sample(size, offset)
 		:pathEnd(true)
 
 	with("results/svgplot-WB-A-B.svg", "w", function (fh)
@@ -86,21 +102,34 @@ do
 end
 
 do
+	local size, offset = 300, 10
+
 	with("results/svgplot-WB-B-A.svg", "w", function (fh)
-		local plotter = svgPlotWithBuffer(300, 300)
+		local plotter = svgPlotWithBuffer(size, size)
 		plotter:plotStart(fh, 2)
 		plotter:pathStart()
-		sample(plotter)
+		sample(plotter, size, offset)
 		plotter:pathEnd(true)
 		plotter:plotEnd()
 	end)
 
 	with("results/svgplot-WB-B-B.svg", "w", function (fh)
-		extension(svgPlotWithBuffer(300, 300))
+		extension(svgPlotWithBuffer(size, size))
 			:plotStart(fh, 2)
 			:pathStart()
-			:sample()
+			:sample(size, offset)
 			:pathEnd(true)
 			:plotEnd()
+	end)
+
+	withPlotter(
+		"results/svgplot-WB-B-C.svg",
+		extension(svgPlotWithBuffer(size, size)),
+		2
+	)(function (plotter)
+		plotter
+			:pathStart()
+			:sample(size, offset)
+			:pathEnd(true)
 	end)
 end

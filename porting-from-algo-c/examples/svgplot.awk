@@ -9,8 +9,8 @@
 #	void draw_rel(double, double)		to	drawRel
 #
 
-function sample(path,	pi, theta, i, x, y) {
-	init(path, 300, 300)
+function sample(path, size, offset,	pi, theta, i, x, y) {
+	init(path, size, size)
 
 	pi = atan2(0, -0)
 
@@ -18,8 +18,8 @@ function sample(path,	pi, theta, i, x, y) {
 	pathStart()
 	for (i = 0; i < 5; i++) {
 		theta = 2 * pi * i / 5
-		x = 150 + 140 * cos(theta)
-		y = 150 + 140 * sin(theta)
+		x = size / 2 + (size / 2 - offset) * cos(theta)
+		y = size / 2 + (size / 2 - offset) * sin(theta)
 		if (i == 0)
 			move(x, y)
 		else
@@ -30,5 +30,5 @@ function sample(path,	pi, theta, i, x, y) {
 }
 
 BEGIN {
-	sample("results/svgplot-awk.svg")
+	sample("results/svgplot-awk.svg", 300, 10)
 }

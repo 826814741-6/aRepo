@@ -502,32 +502,32 @@ private function fmtColor(c:Color):String
 
 //
 
-function sample(plotter:Plotter):Plotter {
-	loop(plotter);
+function sample(plotter:Plotter, n:Int, offset:Int):Plotter {
+	loop(plotter, n, offset);
 	return plotter;
 }
 
-function sampleE(plotter:PlotterE):PlotterE {
-	loopE(plotter);
+function sampleE(plotter:PlotterE, n:Int, offset:Int):PlotterE {
+	loopE(plotter, n, offset);
 	return plotter;
 }
 
-private function loop(plotter:Plotter)
+private function loop(plotter:Plotter, n:Int, offset:Int)
 	for (i in 0...5) {
 		final t:Float = 2 * Math.PI * i / 5;
-		final x:Float = 150 + 140 * Math.cos(t);
-		final y:Float = 150 + 140 * Math.sin(t);
+		final x:Float = n / 2 + (n / 2 - offset) * Math.cos(t);
+		final y:Float = n / 2 + (n / 2 - offset) * Math.sin(t);
 		if (i == 0)
 			plotter.move(x, y);
 		else
 			plotter.draw(x, y);
 	}
 
-private function loopE(plotter:PlotterE)
+private function loopE(plotter:PlotterE, n:Int, offset:Int)
 	for (i in 0...5) {
 		final t:Float = 2 * Math.PI * i / 5;
-		final x:Float = 150 + 140 * Math.cos(t);
-		final y:Float = 150 + 140 * Math.sin(t);
+		final x:Float = n / 2 + (n / 2 - offset) * Math.cos(t);
+		final y:Float = n / 2 + (n / 2 - offset) * Math.sin(t);
 		if (i == 0)
 			plotter.plot(Move(x, y));
 		else

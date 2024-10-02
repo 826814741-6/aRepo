@@ -301,60 +301,60 @@ private function demoC(prefix, n, offset) {
 
 #if svgplot
 private function demo() {
-	final w = 300;
-	final h = 300;
+	final size = 300;
+	final offset = 10;
 
-	demoA("results/svgplot-hx", w, h);
-	demoB("results/svgplot-hx-WB-A", w, h);
-	demoC("results/svgplot-hx-WB-B", w, h);
+	demoA("results/svgplot-hx", size, offset);
+	demoB("results/svgplot-hx-WB-A", size, offset);
+	demoC("results/svgplot-hx-WB-B", size, offset);
 }
 
-private function demoA(prefix, w, h) {
-	'${prefix}.svg'.withSvgPlot(w, h, (plotter) -> {
+private function demoA(prefix, n, offset) {
+	'${prefix}.svg'.withSvgPlot(n, n, (plotter) -> {
 		plotter
 			.pathStart()
-			.sample()
+			.sample(n, offset)
 			.pathEnd(true);
 	});
 
-	'${prefix}-E.svg'.withSvgPlotE(w, h, (plotter) -> {
+	'${prefix}-E.svg'.withSvgPlotE(n, n, (plotter) -> {
 		plotter
 			.plot(PathStart)
-			.sampleE()
+			.sampleE(n, offset)
 			.plot(PathEnd(true));
 	});
 }
 
-private function demoB(prefix, w, h) {
-	final plotter = new SvgPlotWholeBuffer(w, h);
-	final plotterE = new SvgPlotWholeBufferE(w, h);
+private function demoB(prefix, n, offset) {
+	final plotter = new SvgPlotWholeBuffer(n, n);
+	final plotterE = new SvgPlotWholeBufferE(n, n);
 
 	plotter
 		.pathStart()
-		.sample()
+		.sample(n, offset)
 		.pathEnd(true);
 
 	plotterE
 		.plot(PathStart)
-		.sampleE()
+		.sampleE(n, offset)
 		.plot(PathEnd(true));
 
 	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
 	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
-private function demoC(prefix, w, h) {
-	'${prefix}.svg'.withSvgPlotWithBuffer(w, h, 2, (plotter) -> {
+private function demoC(prefix, n, offset) {
+	'${prefix}.svg'.withSvgPlotWithBuffer(n, n, 2, (plotter) -> {
 		plotter
 			.pathStart()
-			.sample()
+			.sample(n, offset)
 			.pathEnd(true);
 	});
 
-	'${prefix}-E.svg'.withSvgPlotWithBufferE(w, h, 2, (plotter) -> {
+	'${prefix}-E.svg'.withSvgPlotWithBufferE(n, n, 2, (plotter) -> {
 		plotter
 			.plot(PathStart)
-			.sampleE()
+			.sampleE(n, offset)
 			.plot(PathEnd(true));
 	});
 }

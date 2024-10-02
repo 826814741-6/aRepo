@@ -61,12 +61,12 @@ class svgPlot:
 def _demo(path):
     import math
 
-    def sample(plotter, fh):
+    def sample(plotter, fh, n, offset):
         plotter.plotStart(fh)
         plotter.pathStart()
         for i in range(5):
             theta = 2 * math.pi * i / 5
-            x, y = 150 + 140 * math.cos(theta), 150 + 140 * math.sin(theta)
+            x, y = n/2 + (n/2 - offset) * math.cos(theta), n/2 + (n/2 - offset) * math.sin(theta)
             if i == 0:
                 plotter.move(x, y)
             else:
@@ -75,8 +75,9 @@ def _demo(path):
         plotter.plotEnd()
 
     with open(path, "w") as fh:
-        plotter = svgPlot(300, 300)
-        sample(plotter, fh)
+        size, offset = 300, 10
+        plotter = svgPlot(size, size)
+        sample(plotter, fh, size, offset)
 
 if __name__ == "__main__":
     _demo("results/svgplot-py.svg")

@@ -95,7 +95,7 @@ local function with(path, mode, f)
 	assert(ret == true)
 end
 
-local function withPlt(path, plotter, n)
+local function withPlotter(path, plotter, n)
 	assert(
 		type(plotter.plotStart) == "function"
 			and type(plotter.plotEnd) == "function",
@@ -123,5 +123,5 @@ return {
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,
 	with = with,
-	withPlt = withPlt
+	withPlotter = withPlotter
 }
