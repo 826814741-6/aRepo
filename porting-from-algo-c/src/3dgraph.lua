@@ -63,7 +63,10 @@ local function tdGraph(plotter, aFunction, parameters)
 	end
 end
 
+local mustBePlotter = require 'svgplot'.mustBePlotter
+
 local function extension(T)
+	mustBePlotter(T)
 	function T:tdGraph(aFunction, parameters)
 		tdGraph(T, aFunction, parameters)
 		return T

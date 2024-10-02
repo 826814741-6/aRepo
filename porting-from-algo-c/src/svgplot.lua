@@ -53,6 +53,50 @@ end
 
 --
 
+local function mustBePlotter(T)
+	assert(
+		type(T.pathStart) == "function"
+		and type(T.pathEnd) == "function"
+		and type(T.move) == "function"
+		and type(T.moveRel) == "function"
+		and type(T.draw) == "function"
+		and type(T.drawRel) == "function"
+	)
+	return T
+end
+
+local function mustBeSvgPlot(T)
+	assert(
+		type(T.buffer) == "nil"
+		and type(T.plotStart) == "function"
+		and type(T.plotEnd) == "function"
+	)
+	return mustBePlotter(T)
+end
+
+local function mustBeSvgPlotWholeBuffer(T)
+	assert(
+		type(T.buffer) == "table"
+		and type(T.buffer.buffer) == "nil"
+		and type(T.reset) == "function"
+		and type(T.write) == "function"
+		and type(T.writeOneByOne) == "function"
+	)
+	return mustBePlotter(T)
+end
+
+local function mustBeSvgPlotWithBuffer(T)
+	assert(
+		type(T.buffer) == "table"
+		and type(T.buffer.buffer) == "table"
+		and type(T.plotStart) == "function"
+		and type(T.plotEnd) == "function"
+	)
+	return mustBePlotter(T)
+end
+
+--
+
 local function svgPlot(width, height)
 	local T = { fh = nil }
 
@@ -98,7 +142,7 @@ local function svgPlot(width, height)
 		return T
 	end
 
-	return T
+	return mustBeSvgPlot(T)
 end
 
 local t_concat = table.concat
@@ -166,7 +210,7 @@ local function svgPlotWholeBuffer(width, height)
 		return T
 	end
 
-	return T
+	return mustBeSvgPlotWholeBuffer(T)
 end
 
 local function makeBuffer()
@@ -256,10 +300,14 @@ local function svgPlotWithBuffer(width, height)
 		return T
 	end
 
-	return T
+	return mustBeSvgPlotWithBuffer(T)
 end
 
 return {
+	mustBePlotter = mustBePlotter,
+	mustBeSvgPlot = mustBeSvgPlot,
+	mustBeSvgPlotWholeBuffer = mustBeSvgPlotWholeBuffer,
+	mustBeSvgPlotWithBuffer = mustBeSvgPlotWithBuffer,
 	svgPlot = svgPlot,
 	svgPlotWholeBuffer = svgPlotWholeBuffer,
 	svgPlotWithBuffer = svgPlotWithBuffer

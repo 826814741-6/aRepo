@@ -75,7 +75,10 @@ local function sierpinski(plotter, order, n)
 	plotter:drawRel(h, -h)
 end
 
+local mustBePlotter = require 'svgplot'.mustBePlotter
+
 local function extension(T)
+	mustBePlotter(T)
 	function T:sierpinski(order, n)
 		sierpinski(T, order, n)
 		return T

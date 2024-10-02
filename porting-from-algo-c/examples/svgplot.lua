@@ -37,7 +37,10 @@ function sample(plotter, n, offset)
 	end
 end
 
+local mustBePlotter = require 'svgplot'.mustBePlotter
+
 local function extension(T)
+	mustBePlotter(T)
 	function T:sample(n, offset)
 		sample(T, n, offset)
 		return T

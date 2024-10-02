@@ -31,7 +31,10 @@ local function koch(plotter, d, a, dmax)
 	rec()
 end
 
+local mustBePlotter = require 'svgplot'.mustBePlotter
+
 local function extension(T)
+	mustBePlotter(T)
 	function T:koch(d, a, dmax)
 		koch(T, d, a, dmax)
 		return T

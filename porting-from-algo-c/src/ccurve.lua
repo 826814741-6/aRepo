@@ -13,7 +13,10 @@ local function cCurve(plotter, i, x, y)
 	end
 end
 
+local mustBePlotter = require 'svgplot'.mustBePlotter
+
 local function extension(T)
+	mustBePlotter(T)
 	function T:cCurve(i, x, y)
 		cCurve(T, i, x, y)
 		return T

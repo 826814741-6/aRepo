@@ -50,7 +50,11 @@ local function dragonCurve(plotter, order, x0, y0)
 	end
 end
 
+local mustBePlotter = require 'svgplot'.mustBePlotter
+
 local function extension(T)
+	mustBePlotter(T)
+
 	function T:dragonCurveR(order, dx, dy, sign, x0, y0)
 		T:move(x0, y0)
 		rec(T, order, dx, dy, sign)

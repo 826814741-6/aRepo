@@ -6,6 +6,10 @@ local isStr = require '_helper'.isStr
 local mustBeNum = require '_helper'.mustBeNum
 local mustBeStr = require '_helper'.mustBeStr
 
+local mustBeSvgPlot = require 'svgplot'.mustBeSvgPlot
+local mustBeSvgPlotWholeBuffer = require 'svgplot'.mustBeSvgPlotWholeBuffer
+local mustBeSvgPlotWithBuffer = require 'svgplot'.mustBeSvgPlotWithBuffer
+
 local t_concat = table.concat
 local t_insert = table.insert
 
@@ -29,7 +33,23 @@ local function rect(x, y, w, h, rx, ry, style)
 ]]):format(x, y, w, h, rx, ry, isStr(style) and style or "")
 end
 
+--
+
+local function mustBeBSPlotter(T)
+	assert(
+		type(T.circle) == "function"
+		and type(T.ellipse) == "function"
+		and type(T.line) == "function"
+		and type(T.rect) == "function"
+	)
+	return T
+end
+
+--
+
 local function extension(T)
+	mustBeSvgPlot(T)
+
 	function T:circle(cx, cy, r, style)
 		T.fh:write(circle(cx, cy, r, style))
 		return T
@@ -50,10 +70,12 @@ local function extension(T)
 		return T
 	end
 
-	return T
+	return mustBeBSPlotter(T)
 end
 
 local function extensionForWhole(T)
+	mustBeSvgPlotWholeBuffer(T)
+
 	function T:circle(cx, cy, r, style)
 		t_insert(T.buffer, circle(cx, cy, r, style))
 		return T
@@ -74,10 +96,12 @@ local function extensionForWhole(T)
 		return T
 	end
 
-	return T
+	return mustBeBSPlotter(T)
 end
 
 local function extensionForWith(T)
+	mustBeSvgPlotWithBuffer(T)
+
 	function T:circle(cx, cy, r, style)
 		T.buffer:writer(T.fh, circle(cx, cy, r, style))
 		return T
@@ -98,7 +122,7 @@ local function extensionForWith(T)
 		return T
 	end
 
-	return T
+	return mustBeBSPlotter(T)
 end
 
 local function makeStyle()
