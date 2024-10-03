@@ -15,8 +15,8 @@
 
 using Sys;
 
-import sys.thread.Thread;
 import sys.thread.Deque;
+import sys.thread.Thread;
 
 function main() {
 	#if (target.threaded)

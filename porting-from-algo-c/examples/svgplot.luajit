@@ -15,6 +15,7 @@
 local M = require 'svgplot'
 local H = require '_helper'
 
+local mustBePlotter = M.mustBePlotter
 local svgPlot = M.svgPlot
 local svgPlotWholeBuffer = M.svgPlotWholeBuffer
 local svgPlotWithBuffer = M.svgPlotWithBuffer
@@ -36,8 +37,6 @@ function sample(plotter, n, offset)
 		end
 	end
 end
-
-local mustBePlotter = require 'svgplot'.mustBePlotter
 
 local function extension(T)
 	mustBePlotter(T)
