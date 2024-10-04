@@ -19,6 +19,8 @@ local mustBePlotter = M.mustBePlotter
 local svgPlot = M.svgPlot
 local svgPlotWholeBuffer = M.svgPlotWholeBuffer
 local svgPlotWithBuffer = M.svgPlotWithBuffer
+local styleMaker = M.styleMaker
+local SV = M.StyleValue
 local with = H.with
 local withPlotter = H.withPlotter
 
@@ -47,15 +49,30 @@ local function extension(T)
 	return T
 end
 
-do
-	local size, offset = 300, 10
+local size, offset = 300, 10
+local styleA, styleB, styleC =
+	styleMaker()
+		:fill(SV.None)
+		:stroke(SV.Black)
+		:get(),
+	styleMaker()
+		:fill(SV.None)
+		:stroke(SV.RandomRGB)
+		:strokeWidth(5)
+		:get(),
+	styleMaker()
+		:fill(SV.RandomRGB)
+		:stroke(SV.RandomRGB)
+		:strokeWidth(10)
+		:get()
 
+do
 	with("results/svgplot-A.svg", "w", function (fh)
 		local plotter = svgPlot(size, size)
 		plotter:plotStart(fh)
 		plotter:pathStart()
 		sample(plotter, size, offset)
-		plotter:pathEnd(true)
+		plotter:pathEnd(true, styleA)
 		plotter:plotEnd()
 	end)
 
@@ -64,7 +81,7 @@ do
 			:plotStart(fh)
 			:pathStart()
 			:sample(size, offset)
-			:pathEnd(true)
+			:pathEnd(true, styleB)
 			:plotEnd()
 	end)
 
@@ -75,17 +92,16 @@ do
 		plotter
 			:pathStart()
 			:sample(size, offset)
-			:pathEnd(true)
+			:pathEnd(true, styleC)
 	end)
 end
 
 do
-	local size, offset = 300, 10
 	local plotter = svgPlotWholeBuffer(size, size)
 
 	plotter:pathStart()
 	sample(plotter, size, offset)
-	plotter:pathEnd(true)
+	plotter:pathEnd(true, styleA)
 
 	with("results/svgplot-WB-A-A.svg", "w", function (fh)
 		plotter:writeOneByOne(fh)
@@ -96,7 +112,7 @@ do
 	extension(plotter)
 		:pathStart()
 		:sample(size, offset)
-		:pathEnd(true)
+		:pathEnd(true, styleB)
 
 	with("results/svgplot-WB-A-B.svg", "w", function (fh)
 		plotter:writeOneByOne(fh)
@@ -104,14 +120,12 @@ do
 end
 
 do
-	local size, offset = 300, 10
-
 	with("results/svgplot-WB-B-A.svg", "w", function (fh)
 		local plotter = svgPlotWithBuffer(size, size)
 		plotter:plotStart(fh, 2)
 		plotter:pathStart()
 		sample(plotter, size, offset)
-		plotter:pathEnd(true)
+		plotter:pathEnd(true, styleA)
 		plotter:plotEnd()
 	end)
 
@@ -120,7 +134,7 @@ do
 			:plotStart(fh, 2)
 			:pathStart()
 			:sample(size, offset)
-			:pathEnd(true)
+			:pathEnd(true, styleB)
 			:plotEnd()
 	end)
 
@@ -132,6 +146,6 @@ do
 		plotter
 			:pathStart()
 			:sample(size, offset)
-			:pathEnd(true)
+			:pathEnd(true, styleC)
 	end)
 end

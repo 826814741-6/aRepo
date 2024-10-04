@@ -15,10 +15,13 @@
 --							:write, :writeOneByOne
 --
 
+local mustBeNum = require '_helper'.mustBeNum
+local mustBeStr = require '_helper'.mustBeStr
+
 local function header(w, h)
 	return ([[
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="%d" height="%d">
-]]):format(w, h)
+]]):format(mustBeNum(w), mustBeNum(h))
 end
 
 local function footer()
@@ -30,9 +33,9 @@ local function pathStart()
 	return [[<path d="]]
 end
 
-local function pathEnd(isClosePath)
-	return ([[%s" fill="none" stroke="black" />
-]]):format(isClosePath and "Z" or "")
+local function pathEnd(isClosePath, style)
+	return ([[%s" %s />
+]]):format(isClosePath and "Z" or "", mustBeStr(style))
 end
 
 local function move(x, y)
@@ -117,8 +120,8 @@ local function svgPlot(width, height)
 		return T
 	end
 
-	function T:pathEnd(isClosePath)
-		T.fh:write(pathEnd(isClosePath))
+	function T:pathEnd(isClosePath, style)
+		T.fh:write(pathEnd(isClosePath, style))
 		return T
 	end
 
@@ -158,8 +161,8 @@ local function svgPlotWholeBuffer(width, height)
 		return T
 	end
 
-	function T:pathEnd(isClosePath)
-		t_insert(T.buffer, pathEnd(isClosePath))
+	function T:pathEnd(isClosePath, style)
+		t_insert(T.buffer, pathEnd(isClosePath, style))
 		return T
 	end
 
@@ -275,8 +278,8 @@ local function svgPlotWithBuffer(width, height)
 		return T
 	end
 
-	function T:pathEnd(isClosePath)
-		T.buffer:writer(T.fh, pathEnd(isClosePath))
+	function T:pathEnd(isClosePath, style)
+		T.buffer:writer(T.fh, pathEnd(isClosePath, style))
 		return T
 	end
 
@@ -303,6 +306,81 @@ local function svgPlotWithBuffer(width, height)
 	return mustBeSvgPlotWithBuffer(T)
 end
 
+--
+
+local function styleMaker()
+	local T = { buf = {}; attr = {} }
+
+	function T:fill(sv)
+		if T.attr.fill ~= true then
+			T.attr.fill = true
+			t_insert(
+				T.buf,
+				([[fill="%s"]]):format(mustBeStr(sv()))
+			)
+		end
+		return T
+	end
+
+	function T:paintOrder(sv)
+		if T.attr.paintOrder ~= true then
+			T.attr.paintOrder = true
+			t_insert(
+				T.buf,
+				([[paint-order="%s"]]):format(mustBeStr(sv()))
+			)
+		end
+		return T
+	end
+
+	function T:stroke(sv)
+		if T.attr.stroke ~= true then
+			T.attr.stroke = true
+			t_insert(
+				T.buf,
+				([[stroke="%s"]]):format(mustBeStr(sv()))
+			)
+		end
+		return T
+	end
+
+	function T:strokeWidth(n)
+		if T.attr.strokeWidth ~= true then
+			T.attr.strokeWidth = true
+			t_insert(
+				T.buf,
+				([[stroke-width="%d"]]):format(mustBeNum(n))
+			)
+		end
+		return T
+	end
+
+	function T:get()
+		return t_concat(T.buf, " ")
+	end
+
+	return T
+end
+--
+-- ref:
+-- https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
+--
+
+local StyleValue = {}
+
+StyleValue.None = function () return "none" end
+StyleValue.Transparent = function () return "transparent" end
+StyleValue.Black = function () return "black" end
+StyleValue.White = function () return "white" end
+StyleValue.Raw = function (s) return function () return s end end
+
+local m_floor, m_random = math.floor, math.random
+
+StyleValue.RandomRGB = function ()
+	local n = m_floor(m_random() * 0xffffff)
+	return ("rgb(%d %d %d)"):format(n >> 16, (n >> 8) & 0xff, n & 0xff)
+end
+
 return {
 	mustBePlotter = mustBePlotter,
 	mustBeSvgPlot = mustBeSvgPlot,
@@ -310,5 +388,7 @@ return {
 	mustBeSvgPlotWithBuffer = mustBeSvgPlotWithBuffer,
 	svgPlot = svgPlot,
 	svgPlotWholeBuffer = svgPlotWholeBuffer,
-	svgPlotWithBuffer = svgPlotWithBuffer
+	svgPlotWithBuffer = svgPlotWithBuffer,
+	styleMaker = styleMaker,
+	StyleValue = StyleValue
 }

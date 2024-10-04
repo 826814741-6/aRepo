@@ -3,8 +3,6 @@
 --
 
 local isStr = require '_helper'.isStr
-local mustBeNum = require '_helper'.mustBeNum
-local mustBeStr = require '_helper'.mustBeStr
 
 local mustBeSvgPlot = require 'svgplot'.mustBeSvgPlot
 local mustBeSvgPlotWholeBuffer = require 'svgplot'.mustBeSvgPlotWholeBuffer
@@ -125,67 +123,8 @@ local function extensionForWith(T)
 	return mustBeBSPlotter(T)
 end
 
-local function makeStyle()
-	local T = { buf = {}; attr = {} }
-
-	function T:fill(s)
-		if T.attr.fill ~= true then
-			T.attr.fill = true
-			t_insert(
-				T.buf,
-				([[fill="%s"]]):format(mustBeStr(s))
-			)
-		end
-		return T
-	end
-
-	function T:paintOrder(s)
-		if T.attr.paintOrder ~= true then
-			T.attr.paintOrder = true
-			t_insert(
-				T.buf,
-				([[paint-order="%s"]]):format(mustBeStr(s))
-			)
-		end
-		return T
-	end
-
-	function T:stroke(s)
-		if T.attr.stroke ~= true then
-			T.attr.stroke = true
-			t_insert(
-				T.buf,
-				([[stroke="%s"]]):format(mustBeStr(s))
-			)
-		end
-		return T
-	end
-
-	function T:strokeWidth(n)
-		if T.attr.strokeWidth ~= true then
-			T.attr.strokeWidth = true
-			t_insert(
-				T.buf,
-				([[stroke-width="%d"]]):format(mustBeNum(n))
-			)
-		end
-		return T
-	end
-
-	function T:get()
-		return t_concat(T.buf, " ")
-	end
-
-	return T
-end
---
--- ref:
--- https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
---
-
 return {
 	extensionForSvgPlot = extension,
 	extensionForSvgPlotWholeBuffer = extensionForWhole,
-	extensionForSvgPlotWithBuffer = extensionForWith,
-	makeStyle = makeStyle
+	extensionForSvgPlotWithBuffer = extensionForWith
 }

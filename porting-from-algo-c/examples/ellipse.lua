@@ -11,11 +11,12 @@ local makeColor = require 'grBMP'.makeColor
 local svgPlot = require 'svgplot'.svgPlot
 local svgPlotWholeBuffer = require 'svgplot'.svgPlotWholeBuffer
 local svgPlotWithBuffer = require 'svgplot'.svgPlotWithBuffer
+local styleMaker = require 'svgplot'.styleMaker
+local SV = require 'svgplot'.StyleValue
 
 local ext = require 'basicshapes'.extensionForSvgPlot
 local extForWhole = require 'basicshapes'.extensionForSvgPlotWholeBuffer
 local extForWith = require 'basicshapes'.extensionForSvgPlotWithBuffer
-local makeStyle = require 'basicshapes'.makeStyle
 
 local RAND = require 'rand'.RAND
 local with = require '_helper'.with
@@ -65,12 +66,12 @@ do
 	local n, x, y = 100, 640, 400
 
 	local styleR, styleE =
-		makeStyle()
-			:fill("black")
+		styleMaker()
+			:fill(SV.Black)
 			:get(),
-		makeStyle()
-			:fill("transparent")
-			:stroke("rgb(%d %d %d)")
+		styleMaker()
+			:fill(SV.Transparent)
+			:stroke(SV.Raw("rgb(%d %d %d)"))
 			:strokeWidth(1)
 			:get()
 
