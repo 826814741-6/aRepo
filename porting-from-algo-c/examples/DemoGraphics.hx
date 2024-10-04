@@ -12,18 +12,22 @@ using src.SvgPlot;
 using src.CCurve;
 
 private function demo() {
-	demoA("results/ccurve-hx");
-	demoB("results/ccurve-hx-WB-A");
-	demoC("results/ccurve-hx-WB-B");
+	final style = new StyleMaker()
+		.add(Fill(None))
+		.add(Stroke(Black));
+
+	demoA("results/ccurve-hx", style);
+	demoB("results/ccurve-hx-WB-A", style);
+	demoC("results/ccurve-hx-WB-B", style);
 }
 
-private function demoA(prefix, n=10) {
+private function demoA(prefix, n=10, style) {
 	'${prefix}.svg'.withSvgPlot(400, 250, (plotter) -> {
 		plotter
 			.pathStart()
 			.move(100, 200)
 			.cCurve(n, 200, 0)
-			.pathEnd(false);
+			.pathEnd(false, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotE(400, 250, (plotter) -> {
@@ -31,11 +35,11 @@ private function demoA(prefix, n=10) {
 			.plot(PathStart)
 			.plot(Move(100, 200))
 			.cCurveE(n, 200, 0)
-			.plot(PathEnd(false));
+			.plot(PathEnd(false, style));
 	});
 }
 
-private function demoB(prefix, n=10) {
+private function demoB(prefix, n=10, style) {
 	final plotter = new SvgPlotWholeBuffer(400, 250);
 	final plotterE = new SvgPlotWholeBufferE(400, 250);
 
@@ -43,25 +47,25 @@ private function demoB(prefix, n=10) {
 		.pathStart()
 		.move(100, 200)
 		.cCurve(n, 200, 0)
-		.pathEnd(false);
+		.pathEnd(false, style);
 
 	plotterE
 		.plot(PathStart)
 		.plot(Move(100, 200))
 		.cCurveE(n, 200, 0)
-		.plot(PathEnd(false));
+		.plot(PathEnd(false, style));
 
 	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
 	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
-private function demoC(prefix, n=10) {
+private function demoC(prefix, n=10, style) {
 	'${prefix}.svg'.withSvgPlotWithBuffer(400, 250, 30, (plotter) -> {
 		plotter
 			.pathStart()
 			.move(100, 200)
 			.cCurve(n, 200, 0)
-			.pathEnd(false);
+			.pathEnd(false, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotWithBufferE(400, 250, 30, (plotter) -> {
@@ -69,7 +73,7 @@ private function demoC(prefix, n=10) {
 			.plot(PathStart)
 			.plot(Move(100, 200))
 			.cCurveE(n, 200, 0)
-			.plot(PathEnd(false));
+			.plot(PathEnd(false, style));
 	});
 }
 #end
@@ -236,31 +240,34 @@ using src.LissajousCurve;
 private function demo() {
 	final n = 300;
 	final offset = 10;
+	final style = new StyleMaker()
+		.add(Fill(None))
+		.add(Stroke(Black));
 
-	demoA("results/lissajouscurve-hx", n, offset);
-	demoB("results/lissajouscurve-hx-WB-A", n, offset);
-	demoC("results/lissajouscurve-hx-WB-B", n, offset);
+	demoA("results/lissajouscurve-hx", n, offset, style);
+	demoB("results/lissajouscurve-hx-WB-A", n, offset, style);
+	demoC("results/lissajouscurve-hx-WB-B", n, offset, style);
 }
 
-private function demoA(prefix, n, offset) {
+private function demoA(prefix, n, offset, style) {
 	final size = (n + offset) * 2;
 
 	'${prefix}.svg'.withSvgPlot(size, size, (plotter) -> {
 		plotter
 			.pathStart()
 			.lissajousCurve(n, offset)
-			.pathEnd(true);
+			.pathEnd(true, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotE(size, size, (plotter) -> {
 		plotter
 			.plot(PathStart)
 			.lissajousCurveE(n, offset)
-			.plot(PathEnd(true));
+			.plot(PathEnd(true, style));
 	});
 }
 
-private function demoB(prefix, n, offset) {
+private function demoB(prefix, n, offset, style) {
 	final size = (n + offset) * 2;
 
 	final plotter = new SvgPlotWholeBuffer(size, size);
@@ -269,32 +276,32 @@ private function demoB(prefix, n, offset) {
 	plotter
 		.pathStart()
 		.lissajousCurve(n, offset)
-		.pathEnd(true);
+		.pathEnd(true, style);
 
 	plotterE
 		.plot(PathStart)
 		.lissajousCurveE(n, offset)
-		.plot(PathEnd(true));
+		.plot(PathEnd(true, style));
 
 	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
 	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
-private function demoC(prefix, n, offset) {
+private function demoC(prefix, n, offset, style) {
 	final size = (n + offset) * 2;
 
 	'${prefix}.svg'.withSvgPlotWithBuffer(size, size, 30, (plotter) -> {
 		plotter
 			.pathStart()
 			.lissajousCurve(n, offset)
-			.pathEnd(true);
+			.pathEnd(true, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotWithBufferE(size, size, 30, (plotter) -> {
 		plotter
 			.plot(PathStart)
 			.lissajousCurveE(n, offset)
-			.plot(PathEnd(true));
+			.plot(PathEnd(true, style));
 	});
 }
 #end
@@ -304,58 +311,70 @@ private function demo() {
 	final size = 300;
 	final offset = 10;
 
-	demoA("results/svgplot-hx", size, offset);
-	demoB("results/svgplot-hx-WB-A", size, offset);
-	demoC("results/svgplot-hx-WB-B", size, offset);
+	final styleA = new StyleMaker()
+		.add(Fill(None))
+		.add(Stroke(Black));
+	final styleB = new StyleMaker()
+		.add(Fill(None))
+		.add(Stroke(RandomRGB))
+		.add(StrokeWidth(5));
+	final styleC = new StyleMaker()
+		.add(Fill(RandomRGB))
+		.add(Stroke(RandomRGB))
+		.add(StrokeWidth(10));
+
+	demoA("results/svgplot-hx", size, offset, styleA);
+	demoB("results/svgplot-hx-WB-A", size, offset, styleB);
+	demoC("results/svgplot-hx-WB-B", size, offset, styleC);
 }
 
-private function demoA(prefix, n, offset) {
+private function demoA(prefix, n, offset, style) {
 	'${prefix}.svg'.withSvgPlot(n, n, (plotter) -> {
 		plotter
 			.pathStart()
 			.sample(n, offset)
-			.pathEnd(true);
+			.pathEnd(true, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotE(n, n, (plotter) -> {
 		plotter
 			.plot(PathStart)
 			.sampleE(n, offset)
-			.plot(PathEnd(true));
+			.plot(PathEnd(true, style));
 	});
 }
 
-private function demoB(prefix, n, offset) {
+private function demoB(prefix, n, offset, style) {
 	final plotter = new SvgPlotWholeBuffer(n, n);
 	final plotterE = new SvgPlotWholeBufferE(n, n);
 
 	plotter
 		.pathStart()
 		.sample(n, offset)
-		.pathEnd(true);
+		.pathEnd(true, style);
 
 	plotterE
 		.plot(PathStart)
 		.sampleE(n, offset)
-		.plot(PathEnd(true));
+		.plot(PathEnd(true, style));
 
 	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
 	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
-private function demoC(prefix, n, offset) {
+private function demoC(prefix, n, offset, style) {
 	'${prefix}.svg'.withSvgPlotWithBuffer(n, n, 2, (plotter) -> {
 		plotter
 			.pathStart()
 			.sample(n, offset)
-			.pathEnd(true);
+			.pathEnd(true, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotWithBufferE(n, n, 2, (plotter) -> {
 		plotter
 			.plot(PathStart)
 			.sampleE(n, offset)
-			.plot(PathEnd(true));
+			.plot(PathEnd(true, style));
 	});
 }
 #end
@@ -364,18 +383,22 @@ private function demoC(prefix, n, offset) {
 using src.TreeCurve;
 
 private function demo() {
-	demoA("results/treecurve-hx");
-	demoB("results/treecurve-hx-WB-A");
-	demoC("results/treecurve-hx-WB-B");
+	final style = new StyleMaker()
+		.add(Fill(None))
+		.add(Stroke(Black));
+
+	demoA("results/treecurve-hx", style);
+	demoB("results/treecurve-hx-WB-A", style);
+	demoC("results/treecurve-hx-WB-B", style);
 }
 
-private function demoA(prefix, n=10) {
+private function demoA(prefix, n=10, style) {
 	'${prefix}.svg'.withSvgPlot(400, 350, (plotter) -> {
 		plotter
 			.pathStart()
 			.move(200, 0)
 			.treeCurve(n, 100, 0, 0.7, 0.5)
-			.pathEnd(false);
+			.pathEnd(false, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotE(400, 350, (plotter) -> {
@@ -383,11 +406,11 @@ private function demoA(prefix, n=10) {
 			.plot(PathStart)
 			.plot(Move(200, 0))
 			.treeCurveE(n, 100, 0, 0.7, 0.5)
-			.plot(PathEnd(false));
+			.plot(PathEnd(false, style));
 	});
 }
 
-private function demoB(prefix, n=10) {
+private function demoB(prefix, n=10, style) {
 	final plotter = new SvgPlotWholeBuffer(400, 350);
 	final plotterE = new SvgPlotWholeBufferE(400, 350);
 
@@ -395,25 +418,25 @@ private function demoB(prefix, n=10) {
 		.pathStart()
 		.move(200, 0)
 		.treeCurve(n, 100, 0, 0.7, 0.5)
-		.pathEnd(false);
+		.pathEnd(false, style);
 
 	plotterE
 		.plot(PathStart)
 		.plot(Move(200, 0))
 		.treeCurveE(n, 100, 0, 0.7, 0.5)
-		.plot(PathEnd(false));
+		.plot(PathEnd(false, style));
 
 	'${prefix}.svg'.fileWrite((fh) -> { plotter.write(fh); });
 	'${prefix}-E.svg'.fileWrite((fh) -> { plotterE.write(fh); });
 }
 
-private function demoC(prefix, n=10) {
+private function demoC(prefix, n=10, style) {
 	'${prefix}.svg'.withSvgPlotWithBuffer(400, 350, 100, (plotter) -> {
 		plotter
 			.pathStart()
 			.move(200, 0)
 			.treeCurve(n, 100, 0, 0.7, 0.5)
-			.pathEnd(false);
+			.pathEnd(false, style);
 	});
 
 	'${prefix}-E.svg'.withSvgPlotWithBufferE(400, 350, 100, (plotter) -> {
@@ -421,7 +444,7 @@ private function demoC(prefix, n=10) {
 			.plot(PathStart)
 			.plot(Move(200, 0))
 			.treeCurveE(n, 100, 0, 0.7, 0.5)
-			.plot(PathEnd(false));
+			.plot(PathEnd(false, style));
 	});
 }
 #end

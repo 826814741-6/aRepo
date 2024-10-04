@@ -126,11 +126,11 @@ local function extensionForWith(T)
 end
 
 local function makeStyle()
-	local T = { buf = {}; tagged = {} }
+	local T = { buf = {}; attr = {} }
 
 	function T:fill(s)
-		if T.tagged.fill ~= true then
-			T.tagged.fill = true
+		if T.attr.fill ~= true then
+			T.attr.fill = true
 			t_insert(
 				T.buf,
 				([[fill="%s"]]):format(mustBeStr(s))
@@ -140,8 +140,8 @@ local function makeStyle()
 	end
 
 	function T:paintOrder(s)
-		if T.tagged.paintOrder ~= true then
-			T.tagged.paintOrder = true
+		if T.attr.paintOrder ~= true then
+			T.attr.paintOrder = true
 			t_insert(
 				T.buf,
 				([[paint-order="%s"]]):format(mustBeStr(s))
@@ -151,8 +151,8 @@ local function makeStyle()
 	end
 
 	function T:stroke(s)
-		if T.tagged.stroke ~= true then
-			T.tagged.stroke = true
+		if T.attr.stroke ~= true then
+			T.attr.stroke = true
 			t_insert(
 				T.buf,
 				([[stroke="%s"]]):format(mustBeStr(s))
@@ -162,8 +162,8 @@ local function makeStyle()
 	end
 
 	function T:strokeWidth(n)
-		if T.tagged.strokeWidth ~= true then
-			T.tagged.strokeWidth = true
+		if T.attr.strokeWidth ~= true then
+			T.attr.strokeWidth = true
 			t_insert(
 				T.buf,
 				([[stroke-width="%d"]]):format(mustBeNum(n))

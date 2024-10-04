@@ -20,7 +20,7 @@ package src;
 
 interface Plotter {
 	public function pathStart():Plotter;
-	public function pathEnd(isClosePath:Bool):Plotter;
+	public function pathEnd(isClosePath:Bool, style:StyleMaker):Plotter;
 	public function move(x:Float, y:Float):Plotter;
 	public function moveRel(x:Float, y:Float):Plotter;
 	public function draw(x:Float, y:Float):Plotter;
@@ -38,7 +38,7 @@ interface PlotterE {
 
 enum Method {
 	PathStart;
-	PathEnd(isClosePath:Bool);
+	PathEnd(isClosePath:Bool, style:StyleMaker);
 	Move(x:Float, y:Float);
 	MoveRel(x:Float, y:Float);
 	Draw(x:Float, y:Float);
@@ -58,6 +58,7 @@ enum Style {
 }
 
 enum Color {
+	None;
 	Transparent;
 	Black;
 	White;
@@ -152,8 +153,8 @@ class SvgPlot extends Writer implements Plotter {
 		return this;
 	}
 
-	public function pathEnd(isClosePath:Bool) {
-		fh.writeString(fmtPathEnd(isClosePath));
+	public function pathEnd(isClosePath:Bool, style:StyleMaker) {
+		fh.writeString(fmtPathEnd(isClosePath, style));
 		return this;
 	}
 
@@ -203,8 +204,8 @@ class SvgPlotE extends Writer implements PlotterE {
 		fh.writeString(switch (method) {
 			case PathStart:
 				fmtPathStart();
-			case PathEnd(isClosePath):
-				fmtPathEnd(isClosePath);
+			case PathEnd(isClosePath, style):
+				fmtPathEnd(isClosePath, style);
 			case Move(x, y):
 				fmtMove(x, height - y);
 			case MoveRel(x, y):
@@ -232,8 +233,8 @@ class SvgPlotWholeBuffer extends WriterWholeBuffer implements Plotter {
 		return this;
 	}
 
-	public function pathEnd(isClosePath:Bool) {
-		buf.add(fmtPathEnd(isClosePath));
+	public function pathEnd(isClosePath:Bool, style:StyleMaker) {
+		buf.add(fmtPathEnd(isClosePath, style));
 		return this;
 	}
 
@@ -283,8 +284,8 @@ class SvgPlotWholeBufferE extends WriterWholeBuffer implements PlotterE {
 		buf.add(switch (method) {
 			case PathStart:
 				fmtPathStart();
-			case PathEnd(isClosePath):
-				fmtPathEnd(isClosePath);
+			case PathEnd(isClosePath, style):
+				fmtPathEnd(isClosePath, style);
 			case Move(x, y):
 				fmtMove(x, height - y);
 			case MoveRel(x, y):
@@ -312,8 +313,8 @@ class SvgPlotWithBuffer extends WriterWithBuffer implements Plotter {
 		return this;
 	}
 
-	public function pathEnd(isClosePath:Bool) {
-		writer(fmtPathEnd(isClosePath));
+	public function pathEnd(isClosePath:Bool, style:StyleMaker) {
+		writer(fmtPathEnd(isClosePath, style));
 		return this;
 	}
 
@@ -363,8 +364,8 @@ class SvgPlotWithBufferE extends WriterWithBuffer implements PlotterE {
 		writer(switch (method) {
 			case PathStart:
 				fmtPathStart();
-			case PathEnd(isClosePath):
-				fmtPathEnd(isClosePath);
+			case PathEnd(isClosePath, style):
+				fmtPathEnd(isClosePath, style);
 			case Move(x, y):
 				fmtMove(x, height - y);
 			case MoveRel(x, y):
@@ -390,11 +391,11 @@ class SvgPlotWithBufferE extends WriterWithBuffer implements PlotterE {
 
 class StyleMaker {
 	final buf:List<() -> String>;
-	final tagged:Map<String, Bool>;
+	final attr:Map<Int, Bool>;
 
 	public function new() {
 		buf = new List<() -> String>();
-		tagged = new Map<String, Bool>();
+		attr = new Map<Int, Bool>();
 	}
 
 	public function get():String
@@ -402,24 +403,15 @@ class StyleMaker {
 
 	public function add(style:Style):StyleMaker {
 		final k = getKey(style);
-		if (!tagged.exists(k)) {
-			tagged[k] = true;
+		if (!attr.exists(k)) {
+			attr[k] = true;
 			buf.add(fmtStyle(style));
 		}
 		return this;
 	}
 
-	function getKey(style:Style):String
-		return switch(style) {
-			case Fill(c):
-				'Fill';
-			case PaintOrder(s):
-				'PaintOrder';
-			case Stroke(c):
-				'Stroke';
-			case StrokeWidth(n):
-				'StrokeWidth';
-		};
+	function getKey(style:Style):Int
+		return Type.enumIndex(style);
 }
 
 //
@@ -435,23 +427,23 @@ private function fmtFooter():String
 private function fmtPathStart():String
 	return '<path d="';
 
-private function fmtPathEnd(isClosePath:Bool):String
-	return '${if (isClosePath) "Z" else ""}" fill="none" stroke="black" />
+private function fmtPathEnd(isClosePath:Bool, style:StyleMaker):String
+	return '${if (isClosePath) "Z" else ""}" ${style.get()}/>
 ';
 
-private function fmtCircle(cx:Float, cy:Float, r:Float, style:StyleMaker)
+private function fmtCircle(cx:Float, cy:Float, r:Float, style:StyleMaker):String
 	return '<circle cx="$cx" cy="$cy" r="$r" ${style.get()}/>
 ';
 
-private function fmtEllipse(cx:Float, cy:Float, rx:Float, ry:Float, style:StyleMaker)
+private function fmtEllipse(cx:Float, cy:Float, rx:Float, ry:Float, style:StyleMaker):String
 	return '<ellipse cx="$cx" cy="$cy" rx="$rx" ry="$ry" ${style.get()}/>
 ';
 
-private function fmtLine(x1:Float, y1:Float, x2:Float, y2:Float, style:StyleMaker)
+private function fmtLine(x1:Float, y1:Float, x2:Float, y2:Float, style:StyleMaker):String
 	return '<line x1="$x1" y1="$y1" x2="$x2" y2="$y2" ${style.get()}/>
 ';
 
-private function fmtRect(x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float, style:StyleMaker)
+private function fmtRect(x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float, style:StyleMaker):String
 	return '<rect x="$x" y="$y" width="$w" height="$h" rx="$rx" ry="$rx" ${style.get()}/>
 ';
 
@@ -487,6 +479,8 @@ private function fmtStyle(style:Style):() -> String
 
 private function fmtColor(c:Color):String
 	return switch (c) {
+		case None:
+			'none';
 		case Transparent:
 			'transparent';
 		case Black:
