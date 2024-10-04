@@ -372,7 +372,7 @@ StyleValue.None = function () return "none" end
 StyleValue.Transparent = function () return "transparent" end
 StyleValue.Black = function () return "black" end
 StyleValue.White = function () return "white" end
-StyleValue.Raw = function (s) return function () return s end end
+StyleValue.Raw = function (v) return function () return v end end
 
 local m_floor, m_random = math.floor, math.random
 
