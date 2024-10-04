@@ -75,6 +75,18 @@ do
 	with("results/lissajouscurve-lj-WB-A-B.svg", "w", function (fh)
 		plotter:write(fh)
 	end)
+
+	plotter:reset()
+
+	withPlotter(
+		"results/lissajouscurve-lj-WB-A-C.svg",
+		plotter
+	)(function (plotter)
+		plotter
+			:pathStart()
+			:lissajousCurve(n, offset)
+			:pathEnd(false, style)
+	end)
 end
 
 do

@@ -14,7 +14,10 @@
 --							:reset
 --							:write, :writeOneByOne
 --
+--	and some extensions for basic shapes	are	:circle, :ellipse, :line, :rect
+--
 
+local isStr = require '_helper'.isStr
 local mustBeNum = require '_helper'.mustBeNum
 local mustBeStr = require '_helper'.mustBeStr
 
@@ -54,6 +57,26 @@ local function drawRel(x, y)
 	return ("l %g %g "):format(x, y)
 end
 
+local function circle(cx, cy, r, style)
+	return ([[<circle cx="%g" cy="%g" r="%g" %s/>
+]]):format(cx, cy, r, isStr(style) and style or "")
+end
+
+local function ellipse(cx, cy, rx, ry, style)
+	return ([[<ellipse cx="%g" cy="%g" rx="%g" ry="%g" %s/>
+]]):format(cx, cy, rx, ry, isStr(style) and style or "")
+end
+
+local function line(x1, y1, x2, y2, style)
+	return ([[<line x1="%g" y1="%g" x2="%g" y2="%g" %s/>
+]]):format(x1, y1, x2, y2, isStr(style) and style or "")
+end
+
+local function rect(x, y, w, h, rx, ry, style)
+	return ([[<rect x="%g" y="%g" width="%g" height="%g" rx="%g" ry="%g" %s/>
+]]):format(x, y, w, h, rx, ry, isStr(style) and style or "")
+end
+
 --
 
 local function mustBePlotter(T)
@@ -65,12 +88,19 @@ local function mustBePlotter(T)
 		and type(T.draw) == "function"
 		and type(T.drawRel) == "function"
 	)
+	assert(
+		type(T.circle) == "function"
+		and type(T.ellipse) == "function"
+		and type(T.line) == "function"
+		and type(T.rect) == "function"
+	)
 	return T
 end
 
 local function mustBeSvgPlot(T)
 	assert(
 		type(T.buffer) == "nil"
+		--
 		and type(T.plotStart) == "function"
 		and type(T.plotEnd) == "function"
 	)
@@ -81,6 +111,7 @@ local function mustBeSvgPlotWholeBuffer(T)
 	assert(
 		type(T.buffer) == "table"
 		and type(T.buffer.buffer) == "nil"
+		--
 		and type(T.reset) == "function"
 		and type(T.write) == "function"
 		and type(T.writeOneByOne) == "function"
@@ -92,6 +123,7 @@ local function mustBeSvgPlotWithBuffer(T)
 	assert(
 		type(T.buffer) == "table"
 		and type(T.buffer.buffer) == "table"
+		--
 		and type(T.plotStart) == "function"
 		and type(T.plotEnd) == "function"
 	)
@@ -114,6 +146,8 @@ local function svgPlot(width, height)
 		T.fh = nil
 		return T
 	end
+
+	--
 
 	function T:pathStart()
 		T.fh:write(pathStart())
@@ -145,6 +179,26 @@ local function svgPlot(width, height)
 		return T
 	end
 
+	function T:circle(cx, cy, r, style)
+		T.fh:write(circle(cx, cy, r, style))
+		return T
+	end
+
+	function T:ellipse(cx, cy, rx, ry, style)
+		T.fh:write(ellipse(cx, cy, rx, ry, style))
+		return T
+	end
+
+	function T:line(x1, y1, x2, y2, style)
+		T.fh:write(line(x1, y1, x2, y2, style))
+		return T
+	end
+
+	function T:rect(x, y, w, h, rx, ry, style)
+		T.fh:write(rect(x, y, w, h, rx, ry, style))
+		return T
+	end
+
 	return mustBeSvgPlot(T)
 end
 
@@ -155,6 +209,35 @@ local function svgPlotWholeBuffer(width, height)
 	local T = {
 		buffer = {}
 	}
+
+	function T:reset()
+		T.buffer = {}
+		return T
+	end
+
+	function T:write(fh)
+		fh = fh ~= nil and fh or io.stdout
+
+		fh:write(header(width, height))
+		fh:write(t_concat(T.buffer))
+		fh:write(footer())
+
+		return T
+	end
+
+	function T:writeOneByOne(fh)
+		fh = fh ~= nil and fh or io.stdout
+
+		fh:write(header(width, height))
+		for _,v in ipairs(T.buffer) do
+			fh:write(v)
+		end
+		fh:write(footer())
+
+		return T
+	end
+
+	--
 
 	function T:pathStart()
 		t_insert(T.buffer, pathStart())
@@ -186,30 +269,23 @@ local function svgPlotWholeBuffer(width, height)
 		return T
 	end
 
-	function T:reset()
-		T.buffer = {}
+	function T:circle(cx, cy, r, style)
+		t_insert(T.buffer, circle(cx, cy, r, style))
 		return T
 	end
 
-	function T:write(fh)
-		fh = fh ~= nil and fh or io.stdout
-
-		fh:write(header(width, height))
-		fh:write(t_concat(T.buffer))
-		fh:write(footer())
-
+	function T:ellipse(cx, cy, rx, ry, style)
+		t_insert(T.buffer, ellipse(cx, cy, rx, ry, style))
 		return T
 	end
 
-	function T:writeOneByOne(fh)
-		fh = fh ~= nil and fh or io.stdout
+	function T:line(x1, y1, x2, y2, style)
+		t_insert(T.buffer, line(x1, y1, x2, y2, style))
+		return T
+	end
 
-		fh:write(header(width, height))
-		for _,v in ipairs(T.buffer) do
-			fh:write(v)
-		end
-		fh:write(footer())
-
+	function T:rect(x, y, w, h, rx, ry, style)
+		t_insert(T.buffer, rect(x, y, w, h, rx, ry, style))
 		return T
 	end
 
@@ -273,6 +349,8 @@ local function svgPlotWithBuffer(width, height)
 		return T
 	end
 
+	--
+
 	function T:pathStart()
 		T.buffer:writer(T.fh, pathStart())
 		return T
@@ -300,6 +378,26 @@ local function svgPlotWithBuffer(width, height)
 
 	function T:drawRel(x, y)
 		T.buffer:writer(T.fh, drawRel(x, -y))
+		return T
+	end
+
+	function T:circle(cx, cy, r, style)
+		T.buffer:writer(T.fh, circle(cx, cy, r, style))
+		return T
+	end
+
+	function T:ellipse(cx, cy, rx, ry, style)
+		T.buffer:writer(T.fh, ellipse(cx, cy, rx, ry, style))
+		return T
+	end
+
+	function T:line(x1, y1, x2, y2, style)
+		T.buffer:writer(T.fh, line(x1, y1, x2, y2, style))
+		return T
+	end
+
+	function T:rect(x, y, w, h, rx, ry, style)
+		T.buffer:writer(T.fh, rect(x, y, w, h, rx, ry, style))
 		return T
 	end
 
@@ -373,6 +471,7 @@ StyleValue.Transparent = function () return "transparent" end
 StyleValue.Black = function () return "black" end
 StyleValue.White = function () return "white" end
 StyleValue.Raw = function (v) return function () return v end end
+StyleValue.RawRGB = function () return "rgb(%d %d %d)" end
 
 local m_floor, m_random = math.floor, math.random
 
@@ -383,9 +482,6 @@ end
 
 return {
 	mustBePlotter = mustBePlotter,
-	mustBeSvgPlot = mustBeSvgPlot,
-	mustBeSvgPlotWholeBuffer = mustBeSvgPlotWholeBuffer,
-	mustBeSvgPlotWithBuffer = mustBeSvgPlotWithBuffer,
 	svgPlot = svgPlot,
 	svgPlotWholeBuffer = svgPlotWholeBuffer,
 	svgPlotWithBuffer = svgPlotWithBuffer,

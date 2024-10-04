@@ -117,6 +117,18 @@ do
 	with("results/svgplot-WB-A-B.svg", "w", function (fh)
 		plotter:writeOneByOne(fh)
 	end)
+
+	plotter:reset()
+
+	withPlotter(
+		"results/svgplot-WB-A-C.svg",
+		plotter
+	)(function (plotter)
+		plotter
+			:pathStart()
+			:sample(size, offset)
+			:pathEnd(true, styleC)
+	end)
 end
 
 do
