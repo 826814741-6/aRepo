@@ -122,7 +122,8 @@ do
 
 	withPlotter(
 		"results/svgplot-WB-A-C.svg",
-		plotter
+		plotter,
+		true
 	)(function (plotter)
 		plotter
 			:pathStart()

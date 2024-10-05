@@ -488,8 +488,8 @@ private function fmtColor(c:Color):String
 		case White:
 			'white';
 		case RandomRGB:
-			final i = Math.floor(Math.random() * 0xFFFFFF);
-			'rgb(${i >> 16} ${(i >> 8) & 0xFF} ${i & 0xFF})';
+			final i = Math.floor(Math.random() * 0xffffff);
+			'rgb(${i >> 16} ${(i >> 8) & 0xff} ${i & 0xff})';
 		case Raw(s):
 			s;
 	};

@@ -50,7 +50,7 @@ do
 	local pltA, pltB, pltC =
 		withPlotter("results/circle-lj-A.svg", svgPlotA(x, y)),
 		withPlotter("results/circle-lj-B.svg", svgPlotB(x, y)),
-		withPlotter("results/circle-lj-C.svg", svgPlotC(x, y))
+		withPlotter("results/circle-lj-C.svg", svgPlotC(x, y), 100)
 	local styleR, styleC =
 		styleMaker()
 			:fill(SV.Black)

@@ -18,12 +18,32 @@ local function id(x) return x end
 
 local function increment(x) return x + 1 end
 
+local function isBool(v)
+	return type(v) == "boolean"
+end
+
 local function isNum(v)
 	return type(v) == "number"
 end
 
 local function isStr(v)
 	return type(v) == "string"
+end
+
+local function getValueOrNil(predicate, v)
+	if predicate(v) then
+		return v
+	else
+		return nil
+	end
+end
+
+local function getValueOrInit(v, initialValue)
+	if v ~= nil then
+		return v
+	else
+		return initialValue
+	end
 end
 
 local function mustBeNum(v)
@@ -95,24 +115,31 @@ local function with(path, mode, f)
 	assert(ret == true)
 end
 
-local function withPlotter(path, plotter, n)
+local function withPlotter(path, plotter, param)
+	local limit, isOneByOne =
+		getValueOrNil(isNum, param),
+		getValueOrNil(isBool, param)
+
 	if type(plotter.plotStart) == "function"
 		and type(plotter.plotEnd) == "function" then
 		return function (aFunc)
 			with(path, "w", function (fh)
-				plotter:plotStart(fh, n)
+				plotter:plotStart(fh, limit)
 				aFunc(plotter)
 				plotter:plotEnd()
 			end)
 		end
 	elseif type(plotter.write) == "function"
 		and type(plotter.writeOneByOne) == "function" then
+		local body = isOneByOne ~= true
+			and function (fh) plotter:write(fh) end
+			or function (fh) plotter:writeOneByOne(fh) end
 		return function (aFunc)
 			aFunc(plotter)
-			with(path, "w", function (fh) plotter:write(fh) end)
+			with(path, "w", body)
 		end
 	else
-		error("withPlotter: 'plotter' must be an instance of svgPlot{,WholeBuffer,WithBuffer}")
+		error("withPlotter: 'plotter' must be an instance of svgPlot{,WholeBuffer,WithBuffer}.")
 	end
 end
 
@@ -123,6 +150,7 @@ return {
 	decrement = decrement,
 	id = id,
 	increment = increment,
+	isBool = isBool,
 	isNum = isNum,
 	isStr = isStr,
 	mustBeNum = mustBeNum,
