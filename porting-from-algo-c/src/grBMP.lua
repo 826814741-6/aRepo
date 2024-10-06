@@ -25,8 +25,9 @@
 --	void gr_wline(double, double, double, double, long)	to	BMP; :wline
 --
 
--- local H = require '_helper'
--- local readOnlyTable = H.readOnlyTable
+local getValueOrInit = require '_helper'.getValueOrInit
+local isBool = require '_helper'.isBool
+-- local readOnlyTable = require '_helper'.readOnlyTable
 
 local unpack = table.unpack
 local abs = math.abs
@@ -186,7 +187,7 @@ local function BMP(X, Y)
 	function adjustY(y) return floor(T.yfac * y + T.yconst) end
 
 	function T:setWindow(left, right, top, bottom, isSquareWindow)
-		isSquareWindow = isSquareWindow ~= nil and isSquareWindow or false
+		isSquareWindow = getValueOrInit(isBool, isSquareWindow, false)
 
 		T.xfac, T.yfac = X / (right - left), Y / (top - bottom)
 		if isSquareWindow then

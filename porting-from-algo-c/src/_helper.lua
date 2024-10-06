@@ -38,8 +38,8 @@ local function getValueOrNil(predicate, v)
 	end
 end
 
-local function getValueOrInit(v, initialValue)
-	if v ~= nil then
+local function getValueOrInit(predicate, v, initialValue)
+	if predicate(v) then
 		return v
 	else
 		return initialValue
@@ -153,6 +153,7 @@ return {
 	isBool = isBool,
 	isNum = isNum,
 	isStr = isStr,
+	getValueOrInit = getValueOrInit,
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,

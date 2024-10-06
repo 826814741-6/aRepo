@@ -6,6 +6,9 @@
 --	int fft(int, double [], double [])	to	cooleyTukey
 --
 
+local getValueOrInit = require '_helper'.getValueOrInit
+local isBool = require '_helper'.isBool
+
 local PI = math.pi
 local m_sin, m_sqrt = math.sin, math.sqrt
 
@@ -57,7 +60,7 @@ local function cooleyTukey(n)
 	local sT, bT = makeSinTable(n), makeBitReverseTable(n)
 
 	return function (x, y, isInverse)
-		isInverse = isInverse ~= nil and isInverse or false
+		isInverse = getValueOrInit(isBool, isInverse, false)
 
 		for i=0,n-1 do
 			local j = bT[i]
