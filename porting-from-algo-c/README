@@ -107,7 +107,7 @@
 | hamming.c    |                                                    |
 | hanoi.c      |                                                    |
 | heapsort.c   |                                                    |
-| hilbert.c    | hilbert.lua                                        |
+| hilbert.c    | hilbert.{lua,luajit}                               |
 | horner.c     | horner.{awk,lua}                                   |
 | house.c      |                                                    |
 | huffman.c    |                                                    |

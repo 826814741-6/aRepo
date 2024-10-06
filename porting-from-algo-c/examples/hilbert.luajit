@@ -60,7 +60,7 @@ do
 		:stroke(SV.Black)
 		:get()
 
-	local writer = sampleWriter("results/hilbert", 600, 3, style)
+	local writer = sampleWriter("results/hilbert-lj", 600, 3, style)
 
 	for n=1,8 do
 		writer(n)
@@ -73,19 +73,19 @@ do
 	local pltB = extension(svgPlotWholeBuffer(size + offset, size + offset))
 	local wpA, wpB, wpC50, wpC20000 =
 		withPlotter(
-			"results/hilbert-dummy-A.svg",
+			"results/hilbert-lj-dummy-A.svg",
 			extension(svgPlot(size + offset, size + offset))
 		),
 		withPlotter(
-			"results/hilbert-dummy-B.svg",
+			"results/hilbert-lj-dummy-B.svg",
 			pltB
 		),
 		withPlotter(
-			"results/hilbert-dummy-C.svg",
+			"results/hilbert-lj-dummy-C.svg",
 			extension(svgPlotWithBuffer(size + offset, size + offset))
 		),
 		withPlotter(
-			"results/hilbert-dummy-D.svg",
+			"results/hilbert-lj-dummy-D.svg",
 			extension(svgPlotWithBuffer(size + offset, size + offset)),
 			20000
 		)
@@ -115,7 +115,7 @@ end
 --
 -- Note:
 --
--- > ("%d %g"):format(-0, -0)
--- 0 0
+-- > = ("%d %g"):format(-0, -0)
+-- 0 -0
 -- >
 --

@@ -301,11 +301,13 @@ local function svgPlotWholeBuffer(width, height)
 	return mustBeSvgPlotWholeBuffer(T)
 end
 
+local DefaultLimit = 50
+
 local function makeBuffer()
 	local T = {
 		buffer = {},
 		counter = 0,
-		limit = 1
+		limit = DefaultLimit
 	}
 
 	function T:writer(fh, s)
@@ -323,7 +325,7 @@ local function makeBuffer()
 	end
 
 	function T:setLimit(limit)
-		T.limit = isNum(limit) and limit or 1
+		T.limit = isNum(limit) and limit or DefaultLimit
 	end
 
 	function T:tailStep(fh)
