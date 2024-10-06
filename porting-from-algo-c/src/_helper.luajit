@@ -93,7 +93,7 @@ local function withPlotter(path, plotter, param)
 	if isFun(plotter.plotStart) and isFun(plotter.plotEnd) then
 		return function (aFunc)
 			with(path, "w", function (fh)
-				plotter:plotStart(fh, n)
+				plotter:plotStart(fh, limit)
 				aFunc(plotter)
 				plotter:plotEnd()
 			end)
