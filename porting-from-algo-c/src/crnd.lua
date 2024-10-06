@@ -8,6 +8,17 @@
 
 local isNum = require '_helper'.isNum
 
+local function mustBeSeed(v)
+	assert(
+		isNum(v) and math.type(v) == "integer",
+		[['seed' must be an integer.
+(ref: https://www.lua.org/manual/5.4/manual.html#pdf-math.type)]]
+	)
+	return v
+end
+
+--
+
 local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1; see below
 
 --
@@ -36,10 +47,10 @@ local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1; see below
 --
 
 local function crnd(x)
-	local T = { seed = isNum(x) and x or 1 }
+	local T = { seed = x ~= nil and mustBeSeed(x) or 1 }
 
 	function T:init(x)
-		T.seed = x
+		T.seed = mustBeSeed(x)
 	end
 
 	function T:irnd() -- see below

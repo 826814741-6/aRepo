@@ -21,4 +21,14 @@ do
 	local c = crnd(12345)
 
 	p(8, 20, c)
+
+	assert(954228167081776094ULL == c:irnd())
+	c:init(1ULL)
+	assert(1566083942ULL == c:irnd())
+	c:init(12345ULL)
+	assert(19333306251646ULL == c:irnd())
+	c:init(1)
+	assert(1566083942ULL == c:irnd())
+	c:init(12345)
+	assert(19333306251646ULL == c:irnd())
 end

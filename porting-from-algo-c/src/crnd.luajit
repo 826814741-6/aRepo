@@ -6,15 +6,26 @@
 --	double rnd(void)			to	crnd; :rnd
 --
 
+local ffi_istype = require 'ffi'.istype
 local isNum = require '_helper'.isNum
+
+local function mustBeSeed(seed)
+	assert(
+		ffi_istype(0ULL, seed) or isNum(seed),
+		"'seed' must be a cdata of ctype<uint64_t> (or a number)."
+	)
+	return isNum(seed) and seed * 1ULL or seed
+end
+
+--
 
 local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1
 
 local function crnd(x)
-	local T = { seed = isNum(x) and x or 1 }
+	local T = { seed = x ~= nil and mustBeSeed(x) or 1ULL }
 
 	function T:init(x)
-		T.seed = x
+		T.seed = mustBeSeed(x)
 	end
 
 	function T:irnd()

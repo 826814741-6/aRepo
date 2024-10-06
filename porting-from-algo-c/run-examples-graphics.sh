@@ -80,7 +80,7 @@ run dragoncurveR LUA
 run ellipse HAXE LUA LUAJIT
 run gasket LUA
 run grBMP LUA LUAJIT PY
-run hilbert LUA
+run hilbert LUA LUAJIT
 run julia LUA
 run koch LUA
 run line HAXE LUA LUAJIT
