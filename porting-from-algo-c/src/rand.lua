@@ -6,6 +6,8 @@
 --	rand, srand		to	RAND
 --
 
+local isNum = require '_helper'.isNum
+
 local next = 1
 
 local function rand()
@@ -18,7 +20,7 @@ local function srand(seed)
 end
 
 local function RAND(seed)
-	local T = { next = seed ~= nil and seed or 1 }
+	local T = { next = isNum(seed) and seed or 1 }
 
 	function T:rand()
 		T.next = T.next * 1103515245 + 12345

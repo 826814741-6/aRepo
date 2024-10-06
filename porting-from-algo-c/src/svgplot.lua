@@ -17,14 +17,15 @@
 --	and some extensions for basic shapes	are	:circle, :ellipse, :line, :rect
 --
 
-local isStr = require '_helper'.isStr
-local mustBeNum = require '_helper'.mustBeNum
-local mustBeStr = require '_helper'.mustBeStr
+local H = require '_helper'
+
+local isFh, isFun, isNum, isStr, isTbl = H.isFh, H.isFun, H.isNum, H.isStr, H.isTbl
+local mustBeBool, mustBeNum, mustBeStr = H.mustBeBool, H.mustBeNum, H.mustBeStr
 
 local function header(w, h)
 	return ([[
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="%d" height="%d">
-]]):format(mustBeNum(w), mustBeNum(h))
+]]):format(w, h)
 end
 
 local function footer()
@@ -38,7 +39,7 @@ end
 
 local function pathEnd(isClosePath, style)
 	return ([[%s" %s />
-]]):format(isClosePath and "Z" or "", mustBeStr(style))
+]]):format(mustBeBool(isClosePath) and "Z" or "", mustBeStr(style))
 end
 
 local function move(x, y)
@@ -81,62 +82,68 @@ end
 
 local function mustBePlotter(T)
 	assert(
-		type(T.pathStart) == "function"
-		and type(T.pathEnd) == "function"
-		and type(T.move) == "function"
-		and type(T.moveRel) == "function"
-		and type(T.draw) == "function"
-		and type(T.drawRel) == "function"
-	)
-	assert(
-		type(T.circle) == "function"
-		and type(T.ellipse) == "function"
-		and type(T.line) == "function"
-		and type(T.rect) == "function"
+		isFun(T.pathStart)
+		and isFun(T.pathEnd)
+		and isFun(T.move)
+		and isFun(T.moveRel)
+		and isFun(T.draw)
+		and isFun(T.drawRel)
+		--
+		and isFun(T.circle)
+		and isFun(T.ellipse)
+		and isFun(T.line)
+		and isFun(T.rect)
 	)
 	return T
 end
 
 local function mustBeSvgPlot(T)
 	assert(
-		type(T.buffer) == "nil"
+		T.buffer == nil
 		--
-		and type(T.plotStart) == "function"
-		and type(T.plotEnd) == "function"
+		and isFun(T.plotStart)
+		and isFun(T.plotEnd)
 	)
 	return mustBePlotter(T)
 end
 
 local function mustBeSvgPlotWholeBuffer(T)
 	assert(
-		type(T.buffer) == "table"
-		and type(T.buffer.buffer) == "nil"
+		isTbl(T.buffer)
+		and T.buffer.buffer == nil
 		--
-		and type(T.reset) == "function"
-		and type(T.write) == "function"
-		and type(T.writeOneByOne) == "function"
+		and isFun(T.reset)
+		and isFun(T.write)
+		and isFun(T.writeOneByOne)
 	)
 	return mustBePlotter(T)
 end
 
 local function mustBeSvgPlotWithBuffer(T)
 	assert(
-		type(T.buffer) == "table"
-		and type(T.buffer.buffer) == "table"
+		isTbl(T.buffer)
+		and isTbl(T.buffer.buffer)
 		--
-		and type(T.plotStart) == "function"
-		and type(T.plotEnd) == "function"
+		and isFun(T.plotStart)
+		and isFun(T.plotEnd)
 	)
 	return mustBePlotter(T)
+end
+
+local function assertInitialValue(w, h)
+	assert(type(w) == "number", "'width' must be a number.")
+	assert(type(h) == "number", "'height' must be a number.")
 end
 
 --
 
 local function svgPlot(width, height)
+	assertInitialValue(width, height)
+
 	local T = { fh = nil }
 
 	function T:plotStart(fh)
-		T.fh = fh ~= nil and fh or io.stdout
+		T.fh = isFh(fh) and fh or io.stdout
 		T.fh:write(header(width, height))
 		return T
 	end
@@ -206,6 +213,8 @@ local t_concat = table.concat
 local t_insert = table.insert
 
 local function svgPlotWholeBuffer(width, height)
+	assertInitialValue(width, height)
+
 	local T = {
 		buffer = {}
 	}
@@ -216,7 +225,7 @@ local function svgPlotWholeBuffer(width, height)
 	end
 
 	function T:write(fh)
-		fh = fh ~= nil and fh or io.stdout
+		fh = isFh(fh) and fh or io.stdout
 
 		fh:write(header(width, height))
 		fh:write(t_concat(T.buffer))
@@ -226,7 +235,7 @@ local function svgPlotWholeBuffer(width, height)
 	end
 
 	function T:writeOneByOne(fh)
-		fh = fh ~= nil and fh or io.stdout
+		fh = isFh(fh) and fh or io.stdout
 
 		fh:write(header(width, height))
 		for _,v in ipairs(T.buffer) do
@@ -314,7 +323,7 @@ local function makeBuffer()
 	end
 
 	function T:setLimit(limit)
-		T.limit = limit ~= nil and limit or 1
+		T.limit = isNum(limit) and limit or 1
 	end
 
 	function T:tailStep(fh)
@@ -327,6 +336,8 @@ local function makeBuffer()
 end
 
 local function svgPlotWithBuffer(width, height)
+	assertInitialValue(width, height)
+
 	local T = {
 		fh = nil,
 		buffer = makeBuffer()
@@ -335,7 +346,7 @@ local function svgPlotWithBuffer(width, height)
 	function T:plotStart(fh, limit)
 		T.buffer:reset()
 		T.buffer:setLimit(limit)
-		T.fh = fh ~= nil and fh or io.stdout
+		T.fh = isFh(fh) and fh or io.stdout
 		T.fh:write(header(width, height))
 		return T
 	end

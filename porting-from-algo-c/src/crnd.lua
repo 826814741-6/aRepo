@@ -6,6 +6,8 @@
 --	double rnd(void)			to	crnd; :rnd
 --
 
+local isNum = require '_helper'.isNum
+
 local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1; see below
 
 --
@@ -34,7 +36,7 @@ local N = 18446744073709551616 -- ULONG_MAX of C (limits.h) + 1; see below
 --
 
 local function crnd(x)
-	local T = { seed = x ~= nil and x or 1 }
+	local T = { seed = isNum(x) and x or 1 }
 
 	function T:init(x)
 		T.seed = x

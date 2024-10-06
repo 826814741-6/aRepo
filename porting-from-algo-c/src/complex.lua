@@ -28,6 +28,8 @@
 --							/ overrideWithInplaceMethods
 --
 
+local isNum = require '_helper'.isNum
+
 local m_abs = math.abs
 local m_atan = math.atan
 local m_cos = math.cos
@@ -40,8 +42,8 @@ local SQRT05 = m_sqrt(0.5)
 
 local function complexNumber(real, imaginary)
 	local T = {
-		r = real ~= nil and real or 0,
-		i = imaginary ~= nil and imaginary or 0
+		r = isNum(real) and real or 0,
+		i = isNum(imaginary) and imaginary or 0
 	}
 
 	setmetatable(T, {
@@ -211,8 +213,8 @@ end
 
 local function complexNumberS(real, imaginary)
 	local T = {
-		r = real ~= nil and real or 0,
-		i = imaginary ~= nil and imaginary or 0
+		r = isNum(real) and real or 0,
+		i = isNum(imaginary) and imaginary or 0
 	}
 
 	setmetatable(T, {

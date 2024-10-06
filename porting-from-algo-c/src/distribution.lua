@@ -18,6 +18,8 @@
 --	double q_t(int, double)		to	qT
 --
 
+local isNum = require '_helper'.isNum
+
 local PI = math.pi
 
 local m_atan = math.atan
@@ -25,7 +27,7 @@ local m_exp = math.exp
 local m_sqrt = math.sqrt
 
 local function pNormal(z, n)
-	n = n ~= nil and n or 200
+	n = isNum(n) and n or 200
 
 	local t = z * m_exp(-0.5 * z * z) / m_sqrt(2 * PI)
 	local p = t

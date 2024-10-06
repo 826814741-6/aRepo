@@ -15,6 +15,9 @@
 //						.reset
 //						.write
 //
+//	and some extensions for basic shapes	.circle / Circle, .ellipse / Ellipse,
+//						.line / Line, .rect / Rect
+//
 
 package src;
 

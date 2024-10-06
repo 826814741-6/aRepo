@@ -4,10 +4,12 @@
 --	void koch(void)		to	koch
 --
 
+local isNum = require '_helper'.isNum
+
 local m_sin, m_cos, PI = math.sin, math.cos, math.pi
 
 local function koch(plotter, d, a, dmax)
-	dmax = dmax ~= nil and dmax or 3
+	dmax = isNum(dmax) and dmax or 3
 
 	function rec()
 		if d > dmax then

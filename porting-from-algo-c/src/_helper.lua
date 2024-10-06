@@ -22,12 +22,24 @@ local function isBool(v)
 	return type(v) == "boolean"
 end
 
+local function isFh(v)
+	return io.type(v) == "file"
+end
+
+local function isFun(v)
+	return type(v) == "function"
+end
+
 local function isNum(v)
 	return type(v) == "number"
 end
 
 local function isStr(v)
 	return type(v) == "string"
+end
+
+local function isTbl(v)
+	return type(v) == "table"
 end
 
 local function getValueOrNil(predicate, v)
@@ -44,6 +56,11 @@ local function getValueOrInit(predicate, v, initialValue)
 	else
 		return initialValue
 	end
+end
+
+local function mustBeBool(v)
+	assert(type(v) == "boolean", "Must be a boolean.")
+	return v
 end
 
 local function mustBeNum(v)
@@ -92,7 +109,7 @@ local function tableWriter(x, y, w, f, vFmt)
 	local isL = x[4] == "L"
 
 	return function (fh)
-		fh = fh ~= nil and fh or io.stdout
+		fh = isFh(fh) and fh or io.stdout
 
 		-- header
 		fh:write(padding)
@@ -120,8 +137,7 @@ local function withPlotter(path, plotter, param)
 		getValueOrNil(isNum, param),
 		getValueOrNil(isBool, param)
 
-	if type(plotter.plotStart) == "function"
-		and type(plotter.plotEnd) == "function" then
+	if isFun(plotter.plotStart) and isFun(plotter.plotEnd) then
 		return function (aFunc)
 			with(path, "w", function (fh)
 				plotter:plotStart(fh, limit)
@@ -129,8 +145,7 @@ local function withPlotter(path, plotter, param)
 				plotter:plotEnd()
 			end)
 		end
-	elseif type(plotter.write) == "function"
-		and type(plotter.writeOneByOne) == "function" then
+	elseif isFun(plotter.write) and isFun(plotter.writeOneByOne) then
 		local body = isOneByOne ~= true
 			and function (fh) plotter:write(fh) end
 			or function (fh) plotter:writeOneByOne(fh) end
@@ -151,9 +166,13 @@ return {
 	id = id,
 	increment = increment,
 	isBool = isBool,
+	isFh = isFh,
+	isFun = isFun,
 	isNum = isNum,
 	isStr = isStr,
+	isTbl = isTbl,
 	getValueOrInit = getValueOrInit,
+	mustBeBool = mustBeBool,
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,

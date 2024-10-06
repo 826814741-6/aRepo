@@ -10,6 +10,7 @@ local H = require '_helper'
 local m_floor = math.floor
 local decrement = H.decrement
 local increment = H.increment
+local isFun = H.isFun
 
 local function shuffle(a, rand) -- see below
 	for i=#a,1,-1 do
@@ -39,7 +40,7 @@ end
 --
 
 local function randPerm(n, rand, f)
-	f = f ~= nil and f or increment
+	f = isFun(f) and f or increment
 
 	local a = {}
 	for i=0,decrement(n) do a[i] = f(i) end

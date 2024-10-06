@@ -4,6 +4,7 @@
 --	double zeta(double)	to	riemannZeta
 --
 
+local isNum = require '_helper'.isNum
 -- local readOnlyTable = require '_helper'.readOnlyTable
 
 -- local coef = readOnlyTable({
@@ -32,7 +33,7 @@ local coef = {
 -- })
 
 local function riemannZeta(n)
-	n = n ~= nil and n or 8
+	n = isNum(n) and n or 8
 	return function (x)
 		local r = 1
 		for i=2,n-1 do
