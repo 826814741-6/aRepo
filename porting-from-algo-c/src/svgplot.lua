@@ -22,6 +22,9 @@ local H = require '_helper'
 local isFh, isFun, isNum, isStr, isTbl = H.isFh, H.isFun, H.isNum, H.isStr, H.isTbl
 local mustBeBool, mustBeNum, mustBeStr = H.mustBeBool, H.mustBeNum, H.mustBeStr
 
+local t_concat = table.concat
+local t_insert = table.insert
+
 local function header(w, h)
 	return ([[
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="%d" height="%d">
@@ -42,20 +45,24 @@ local function pathEnd(isClosePath, style)
 ]]):format(mustBeBool(isClosePath) and "Z" or "", mustBeStr(style))
 end
 
-local function move(x, y)
-	return ("M %g %g "):format(x, y)
+local function gMove(height)
+	return function (x, y)
+		return ("M %g %g "):format(x, height - y)
+	end
 end
 
 local function moveRel(x, y)
-	return ("m %g %g "):format(x, y)
+	return ("m %g %g "):format(x, -y)
 end
 
-local function draw(x, y)
-	return ("L %g %g "):format(x, y)
+local function gDraw(height)
+	return function (x, y)
+		return ("L %g %g "):format(x, height - y)
+	end
 end
 
 local function drawRel(x, y)
-	return ("l %g %g "):format(x, y)
+	return ("l %g %g "):format(x, -y)
 end
 
 local function circle(cx, cy, r, style)
@@ -131,8 +138,31 @@ local function mustBeSvgPlotWithBuffer(T)
 end
 
 local function assertInitialValue(w, h)
-	assert(type(w) == "number", "'width' must be a number.")
-	assert(type(h) == "number", "'height' must be a number.")
+	assert(isNum(w), "'width' must be a number.")
+	assert(isNum(h), "'height' must be a number.")
+end
+
+--
+
+local function makeMethod(fmt)
+	return function (self, ...)
+		self.fh:write(fmt(...))
+		return self
+	end
+end
+
+local function makeMethodForWhole(fmt)
+	return function (self, ...)
+		t_insert(self.buffer, fmt(...))
+		return self
+	end
+end
+
+local function makeMethodForWith(fmt)
+	return function (self, ...)
+		self.buffer:writer(self.fh, fmt(...))
+		return self
+	end
 end
 
 --
@@ -154,63 +184,20 @@ local function svgPlot(width, height)
 		return T
 	end
 
-	--
+	T.pathStart = makeMethod(pathStart)
+	T.pathEnd = makeMethod(pathEnd)
+	T.move = makeMethod(gMove(height))
+	T.moveRel = makeMethod(moveRel)
+	T.draw = makeMethod(gDraw(height))
+	T.drawRel = makeMethod(drawRel)
 
-	function T:pathStart()
-		T.fh:write(pathStart())
-		return T
-	end
-
-	function T:pathEnd(isClosePath, style)
-		T.fh:write(pathEnd(isClosePath, style))
-		return T
-	end
-
-	function T:move(x, y)
-		T.fh:write(move(x, height - y))
-		return T
-	end
-
-	function T:moveRel(x, y)
-		T.fh:write(moveRel(x, -y))
-		return T
-	end
-
-	function T:draw(x, y)
-		T.fh:write(draw(x, height - y))
-		return T
-	end
-
-	function T:drawRel(x, y)
-		T.fh:write(drawRel(x, -y))
-		return T
-	end
-
-	function T:circle(cx, cy, r, style)
-		T.fh:write(circle(cx, cy, r, style))
-		return T
-	end
-
-	function T:ellipse(cx, cy, rx, ry, style)
-		T.fh:write(ellipse(cx, cy, rx, ry, style))
-		return T
-	end
-
-	function T:line(x1, y1, x2, y2, style)
-		T.fh:write(line(x1, y1, x2, y2, style))
-		return T
-	end
-
-	function T:rect(x, y, w, h, rx, ry, style)
-		T.fh:write(rect(x, y, w, h, rx, ry, style))
-		return T
-	end
+	T.circle = makeMethod(circle)
+	T.ellipse = makeMethod(ellipse)
+	T.line = makeMethod(line)
+	T.rect = makeMethod(rect)
 
 	return mustBeSvgPlot(T)
 end
-
-local t_concat = table.concat
-local t_insert = table.insert
 
 local function svgPlotWholeBuffer(width, height)
 	assertInitialValue(width, height)
@@ -246,57 +233,17 @@ local function svgPlotWholeBuffer(width, height)
 		return T
 	end
 
-	--
+	T.pathStart = makeMethodForWhole(pathStart)
+	T.pathEnd = makeMethodForWhole(pathEnd)
+	T.move = makeMethodForWhole(gMove(height))
+	T.moveRel = makeMethodForWhole(moveRel)
+	T.draw = makeMethodForWhole(gDraw(height))
+	T.drawRel = makeMethodForWhole(drawRel)
 
-	function T:pathStart()
-		t_insert(T.buffer, pathStart())
-		return T
-	end
-
-	function T:pathEnd(isClosePath, style)
-		t_insert(T.buffer, pathEnd(isClosePath, style))
-		return T
-	end
-
-	function T:move(x, y)
-		t_insert(T.buffer, move(x, height - y))
-		return T
-	end
-
-	function T:moveRel(x, y)
-		t_insert(T.buffer, moveRel(x, -y))
-		return T
-	end
-
-	function T:draw(x, y)
-		t_insert(T.buffer, draw(x, height - y))
-		return T
-	end
-
-	function T:drawRel(x, y)
-		t_insert(T.buffer, drawRel(x, -y))
-		return T
-	end
-
-	function T:circle(cx, cy, r, style)
-		t_insert(T.buffer, circle(cx, cy, r, style))
-		return T
-	end
-
-	function T:ellipse(cx, cy, rx, ry, style)
-		t_insert(T.buffer, ellipse(cx, cy, rx, ry, style))
-		return T
-	end
-
-	function T:line(x1, y1, x2, y2, style)
-		t_insert(T.buffer, line(x1, y1, x2, y2, style))
-		return T
-	end
-
-	function T:rect(x, y, w, h, rx, ry, style)
-		t_insert(T.buffer, rect(x, y, w, h, rx, ry, style))
-		return T
-	end
+	T.circle = makeMethodForWhole(circle)
+	T.ellipse = makeMethodForWhole(ellipse)
+	T.line = makeMethodForWhole(line)
+	T.rect = makeMethodForWhole(rect)
 
 	return mustBeSvgPlotWholeBuffer(T)
 end
@@ -362,57 +309,17 @@ local function svgPlotWithBuffer(width, height)
 		return T
 	end
 
-	--
+	T.pathStart = makeMethodForWith(pathStart)
+	T.pathEnd = makeMethodForWith(pathEnd)
+	T.move = makeMethodForWith(gMove(height))
+	T.moveRel = makeMethodForWith(moveRel)
+	T.draw = makeMethodForWith(gDraw(height))
+	T.drawRel = makeMethodForWith(drawRel)
 
-	function T:pathStart()
-		T.buffer:writer(T.fh, pathStart())
-		return T
-	end
-
-	function T:pathEnd(isClosePath, style)
-		T.buffer:writer(T.fh, pathEnd(isClosePath, style))
-		return T
-	end
-
-	function T:move(x, y)
-		T.buffer:writer(T.fh, move(x, height - y))
-		return T
-	end
-
-	function T:moveRel(x, y)
-		T.buffer:writer(T.fh, moveRel(x, -y))
-		return T
-	end
-
-	function T:draw(x, y)
-		T.buffer:writer(T.fh, draw(x, height - y))
-		return T
-	end
-
-	function T:drawRel(x, y)
-		T.buffer:writer(T.fh, drawRel(x, -y))
-		return T
-	end
-
-	function T:circle(cx, cy, r, style)
-		T.buffer:writer(T.fh, circle(cx, cy, r, style))
-		return T
-	end
-
-	function T:ellipse(cx, cy, rx, ry, style)
-		T.buffer:writer(T.fh, ellipse(cx, cy, rx, ry, style))
-		return T
-	end
-
-	function T:line(x1, y1, x2, y2, style)
-		T.buffer:writer(T.fh, line(x1, y1, x2, y2, style))
-		return T
-	end
-
-	function T:rect(x, y, w, h, rx, ry, style)
-		T.buffer:writer(T.fh, rect(x, y, w, h, rx, ry, style))
-		return T
-	end
+	T.circle = makeMethodForWith(circle)
+	T.ellipse = makeMethodForWith(ellipse)
+	T.line = makeMethodForWith(line)
+	T.rect = makeMethodForWith(rect)
 
 	return mustBeSvgPlotWithBuffer(T)
 end

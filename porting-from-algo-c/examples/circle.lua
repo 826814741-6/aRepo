@@ -22,11 +22,10 @@ function toRGB(n)
 	return n >> 16, (n >> 8) & 0xff, n & 0xff
 end
 
-function loop(circleMethod, n, x, y, formatFunction)
+function loop(instance, n, x, y, formatFunction)
 	local r = RAND()
 	for _=1,n do
-		circleMethod(
-			self,
+		instance:circle(
 			r:rand() % x,
 			r:rand() % y,
 			r:rand() % 100,
@@ -40,7 +39,7 @@ do
 	local bmp = BMP(x, y)
 
 	bmp:clear(BLACK)
-	loop(bmp.circle, n, x, y, makeColor)
+	loop(bmp, n, x, y, makeColor)
 
 	with("results/circle.bmp", "wb", function (fh)
 		bmp:write(fh)
@@ -63,7 +62,7 @@ do
 
 	function body(plotter)
 		plotter:rect(0, 0, x, y, 0, 0, styleR)
-		loop(plotter.circle, n, x, y, fmtC)
+		loop(plotter, n, x, y, fmtC)
 	end
 
 	pltA(body)

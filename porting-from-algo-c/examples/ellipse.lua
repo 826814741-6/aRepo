@@ -22,11 +22,10 @@ function toRGB(n)
 	return n >> 16, (n >> 8) & 0xff, n & 0xff
 end
 
-function loop(ellipseMethod, n, x, y, formatFunction)
+function loop(instance, n, x, y, formatFunction)
 	local r = RAND()
 	for _=1,n do
-		ellipseMethod(
-			self,
+		instance:ellipse(
 			r:rand() % x,
 			r:rand() % y,
 			r:rand() % 100,
@@ -41,7 +40,7 @@ do
 	local bmp = BMP(x, y)
 
 	bmp:clear(BLACK)
-	loop(bmp.ellipse, n, x, y, makeColor)
+	loop(bmp, n, x, y, makeColor)
 
 	with("results/ellipse.bmp", "wb", function (fh)
 		bmp:write(fh)
@@ -64,7 +63,7 @@ do
 
 	function body(plotter)
 		plotter:rect(0, 0, x, y, 0, 0, styleR)
-		loop(plotter.ellipse, n, x, y, fmtE)
+		loop(plotter, n, x, y, fmtE)
 	end
 
 	pltA(body)

@@ -204,28 +204,7 @@ class SvgPlot extends Writer implements Plotter {
 
 class SvgPlotE extends Writer implements PlotterE {
 	public function plot(method:Method):PlotterE {
-		fh.writeString(switch (method) {
-			case PathStart:
-				fmtPathStart();
-			case PathEnd(isClosePath, style):
-				fmtPathEnd(isClosePath, style);
-			case Move(x, y):
-				fmtMove(x, height - y);
-			case MoveRel(x, y):
-				fmtMoveRel(x, -y);
-			case Draw(x, y):
-				fmtDraw(x, height - y);
-			case DrawRel(x, y):
-				fmtDrawRel(x, -y);
-			case Circle(cx, cy, r, style):
-				fmtCircle(cx, cy, r, style);
-			case Ellipse(cx, cy, rx, ry, style):
-				fmtEllipse(cx, cy, rx, ry, style);
-			case Line(x1, y1, x2, y2, style):
-				fmtLine(x1, y1, x2, y2, style);
-			case Rect(x, y, w, h, rx, ry, style):
-				fmtRect(x, y, w, h, rx, ry, style);
-		});
+		fh.writeString(fmtMethod(method, height));
 		return this;
 	}
 }
@@ -284,28 +263,7 @@ class SvgPlotWholeBuffer extends WriterWholeBuffer implements Plotter {
 
 class SvgPlotWholeBufferE extends WriterWholeBuffer implements PlotterE {
 	public function plot(method:Method):PlotterE {
-		buf.add(switch (method) {
-			case PathStart:
-				fmtPathStart();
-			case PathEnd(isClosePath, style):
-				fmtPathEnd(isClosePath, style);
-			case Move(x, y):
-				fmtMove(x, height - y);
-			case MoveRel(x, y):
-				fmtMoveRel(x, -y);
-			case Draw(x, y):
-				fmtDraw(x, height - y);
-			case DrawRel(x, y):
-				fmtDrawRel(x, -y);
-			case Circle(cx, cy, r, style):
-				fmtCircle(cx, cy, r, style);
-			case Ellipse(cx, cy, rx, ry, style):
-				fmtEllipse(cx, cy, rx, ry, style);
-			case Line(x1, y1, x2, y2, style):
-				fmtLine(x1, y1, x2, y2, style);
-			case Rect(x, y, w, h, rx, ry, style):
-				fmtRect(x, y, w, h, rx, ry, style);
-		});
+		buf.add(fmtMethod(method, height));
 		return this;
 	}
 }
@@ -364,60 +322,36 @@ class SvgPlotWithBuffer extends WriterWithBuffer implements Plotter {
 
 class SvgPlotWithBufferE extends WriterWithBuffer implements PlotterE {
 	public function plot(method:Method):PlotterE {
-		writer(switch (method) {
-			case PathStart:
-				fmtPathStart();
-			case PathEnd(isClosePath, style):
-				fmtPathEnd(isClosePath, style);
-			case Move(x, y):
-				fmtMove(x, height - y);
-			case MoveRel(x, y):
-				fmtMoveRel(x, -y);
-			case Draw(x, y):
-				fmtDraw(x, height - y);
-			case DrawRel(x, y):
-				fmtDrawRel(x, -y);
-			case Circle(cx, cy, r, style):
-				fmtCircle(cx, cy, r, style);
-			case Ellipse(cx, cy, rx, ry, style):
-				fmtEllipse(cx, cy, rx, ry, style);
-			case Line(x1, y1, x2, y2, style):
-				fmtLine(x1, y1, x2, y2, style);
-			case Rect(x, y, w, h, rx, ry, style):
-				fmtRect(x, y, w, h, rx, ry, style);
-		});
+		writer(fmtMethod(method, height));
 		return this;
 	}
 }
 
 //
 
-class StyleMaker {
-	final buf:List<() -> String>;
-	final attr:Map<Int, Bool>;
-
-	public function new() {
-		buf = new List<() -> String>();
-		attr = new Map<Int, Bool>();
-	}
-
-	public function get():String
-		return buf.map(e -> e()).join(' ');
-
-	public function add(style:Style):StyleMaker {
-		final k = getKey(style);
-		if (!attr.exists(k)) {
-			attr[k] = true;
-			buf.add(fmtStyle(style));
-		}
-		return this;
-	}
-
-	function getKey(style:Style):Int
-		return Type.enumIndex(style);
-}
-
-//
+private function fmtMethod(method:Method, height:Int):String
+	return switch (method) {
+		case PathStart:
+			fmtPathStart();
+		case PathEnd(isClosePath, style):
+			fmtPathEnd(isClosePath, style);
+		case Move(x, y):
+			fmtMove(x, height - y);
+		case MoveRel(x, y):
+			fmtMoveRel(x, -y);
+		case Draw(x, y):
+			fmtDraw(x, height - y);
+		case DrawRel(x, y):
+			fmtDrawRel(x, -y);
+		case Circle(cx, cy, r, style):
+			fmtCircle(cx, cy, r, style);
+		case Ellipse(cx, cy, rx, ry, style):
+			fmtEllipse(cx, cy, rx, ry, style);
+		case Line(x1, y1, x2, y2, style):
+			fmtLine(x1, y1, x2, y2, style);
+		case Rect(x, y, w, h, rx, ry, style):
+			fmtRect(x, y, w, h, rx, ry, style);
+	};
 
 private function fmtHeader(w:Int, h:Int):String
 	return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$w" height="$h">
@@ -467,6 +401,33 @@ private function fmtDraw(x:Float, y:Float):String
 
 private function fmtDrawRel(x:Float, y:Float):String
 	return 'l ${workaround(x)} ${workaround(y)} ';
+
+//
+
+class StyleMaker {
+	final buf:List<() -> String>;
+	final attr:Map<Int, Bool>;
+
+	public function new() {
+		buf = new List<() -> String>();
+		attr = new Map<Int, Bool>();
+	}
+
+	public function get():String
+		return buf.map(e -> e()).join(' ');
+
+	public function add(style:Style):StyleMaker {
+		final k = getKey(style);
+		if (!attr.exists(k)) {
+			attr[k] = true;
+			buf.add(fmtStyle(style));
+		}
+		return this;
+	}
+
+	function getKey(style:Style):Int
+		return Type.enumIndex(style);
+}
 
 private function fmtStyle(style:Style):() -> String
 	return switch (style) {

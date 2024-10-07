@@ -22,11 +22,10 @@ function toRGB(n)
 	return n >> 16, (n >> 8) & 0xff, n & 0xff
 end
 
-function loop(lineMethod, n, x, y, formatFunction)
+function loop(instance, n, x, y, formatFunction)
 	local r = RAND()
 	for _=1,n do
-		lineMethod(
-			self,
+		instance:line(
 			r:rand() % x,
 			r:rand() % y,
 			r:rand() % x,
@@ -41,7 +40,7 @@ do
 	local bmp = BMP(x, y)
 
 	bmp:clear(BLACK)
-	loop(bmp.line, n, x, y, makeColor)
+	loop(bmp, n, x, y, makeColor)
 
 	with("results/line.bmp", "wb", function (fh)
 		bmp:write(fh)
@@ -64,7 +63,7 @@ do
 
 	function body(plotter)
 		plotter:rect(0, 0, x, y, 0, 0, styleR)
-		loop(plotter.line, n, x, y, fmtL)
+		loop(plotter, n, x, y, fmtL)
 	end
 
 	pltA(body)
