@@ -160,7 +160,7 @@ end
 
 local function makeMethodForWith(fmt)
 	return function (self, ...)
-		self.buffer:writer(self.fh, fmt(...))
+		self.buffer:writer(fmt(...))
 		return self
 	end
 end
@@ -254,15 +254,16 @@ local function makeBuffer()
 	local T = {
 		buffer = {},
 		counter = 0,
+		fh = nil,
 		limit = DefaultLimit
 	}
 
-	function T:writer(fh, s)
+	function T:writer(s)
 		t_insert(T.buffer, s)
 
 		T.counter = T.counter + 1
 		if T.counter >= T.limit then
-			fh:write(t_concat(T.buffer))
+			T.fh:write(t_concat(T.buffer))
 			T:reset()
 		end
 	end
@@ -271,14 +272,18 @@ local function makeBuffer()
 		T.buffer, T.counter = {}, 0
 	end
 
-	function T:setLimit(limit)
+	function T:startStep(fh, limit)
+		T:reset()
+		T.fh = isFh(fh) and fh or io.stdout
 		T.limit = isNum(limit) and limit or DefaultLimit
 	end
 
-	function T:tailStep(fh)
+	function T:endStep()
 		if #T.buffer > 0 then
-			fh:write(t_concat(T.buffer))
+			T.fh:write(t_concat(T.buffer))
 		end
+		T.fh = nil
+		T:reset()
 	end
 
 	return T
@@ -288,24 +293,18 @@ local function svgPlotWithBuffer(width, height)
 	assertInitialValue(width, height)
 
 	local T = {
-		fh = nil,
 		buffer = makeBuffer()
 	}
 
 	function T:plotStart(fh, limit)
-		T.buffer:reset()
-		T.buffer:setLimit(limit)
-		T.fh = isFh(fh) and fh or io.stdout
-		T.fh:write(header(width, height))
+		T.buffer:startStep(fh, limit)
+		T.buffer:writer(header(width, height))
 		return T
 	end
 
 	function T:plotEnd()
-		T.buffer:tailStep(T.fh)
-		T.fh:write(footer())
-		T.fh = nil
-		T.buffer:setLimit()
-		T.buffer:reset()
+		T.buffer:writer(footer())
+		T.buffer:endStep()
 		return T
 	end
 
