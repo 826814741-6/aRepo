@@ -333,56 +333,45 @@ end
 local t_concat = table.concat
 local t_insert = table.insert
 
+local function makeSVMethod(s)
+	local fmt = ([[%s="%%s"]]):format(mustBeStr(s))
+	return function (self, sv)
+		if self.attr[s] ~= true then
+			self.attr[s] = true
+			t_insert(
+				self.buf,
+				fmt:format(mustBeStr(sv()))
+			)
+		end
+		return self
+	end
+end
+
+local function makeRawNumMethod(s)
+	local fmt = ([[%s="%%g"]]):format(mustBeStr(s))
+	return function (self, v)
+		if self.attr[s] ~= true then
+			self.attr[s] = true
+			t_insert(
+				self.buf,
+				fmt:format(mustBeNum(v))
+			)
+		end
+		return self
+	end
+end
+
 local function styleMaker()
 	local T = { buf = {}; attr = {} }
-
-	function T:fill(sv)
-		if T.attr.fill ~= true then
-			T.attr.fill = true
-			t_insert(
-				T.buf,
-				([[fill="%s"]]):format(mustBeStr(sv()))
-			)
-		end
-		return T
-	end
-
-	function T:paintOrder(sv)
-		if T.attr.paintOrder ~= true then
-			T.attr.paintOrder = true
-			t_insert(
-				T.buf,
-				([[paint-order="%s"]]):format(mustBeStr(sv()))
-			)
-		end
-		return T
-	end
-
-	function T:stroke(sv)
-		if T.attr.stroke ~= true then
-			T.attr.stroke = true
-			t_insert(
-				T.buf,
-				([[stroke="%s"]]):format(mustBeStr(sv()))
-			)
-		end
-		return T
-	end
-
-	function T:strokeWidth(n)
-		if T.attr.strokeWidth ~= true then
-			T.attr.strokeWidth = true
-			t_insert(
-				T.buf,
-				([[stroke-width="%d"]]):format(mustBeNum(n))
-			)
-		end
-		return T
-	end
 
 	function T:get()
 		return t_concat(T.buf, " ")
 	end
+
+	T.fill = makeSVMethod("fill")
+	T.paintOrder = makeSVMethod("paint-order")
+	T.stroke = makeSVMethod("stroke")
+	T.strokeWidth = makeRawNumMethod("stroke-width")
 
 	return T
 end
