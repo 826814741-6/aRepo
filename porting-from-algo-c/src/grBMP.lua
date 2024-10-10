@@ -29,9 +29,9 @@ local getValueOrInit = require '_helper'.getValueOrInit
 local isBool = require '_helper'.isBool
 -- local readOnlyTable = require '_helper'.readOnlyTable
 
-local unpack = table.unpack
-local abs = math.abs
-local floor = math.floor
+local t_unpack = table.unpack
+local m_abs = math.abs
+local m_floor = math.floor
 
 local function BMP(X, Y)
 	local T = {
@@ -70,7 +70,7 @@ local function BMP(X, Y)
 
 	function body(fh)
 		for y=1,Y do
-			fh:write(unpack(T.data[y]))
+			fh:write(t_unpack(T.data[y]))
 		end
 	end
 
@@ -173,7 +173,7 @@ local function BMP(X, Y)
 	end
 
 	function T:line(x1, y1, x2, y2, color)
-		local dX, dY = abs(x2 - x1), abs(y2 - y1)
+		local dX, dY = m_abs(x2 - x1), m_abs(y2 - y1)
 		if dX > dY then
 			loopL(x1, x2, y1, y2, dX, dY,
 			      function (a, b) T:dot(a, b, color) end)
@@ -183,18 +183,18 @@ local function BMP(X, Y)
 		end
 	end
 
-	function adjustX(x) return floor(T.xfac * x + T.xconst) end
-	function adjustY(y) return floor(T.yfac * y + T.yconst) end
+	function adjustX(x) return m_floor(T.xfac * x + T.xconst) end
+	function adjustY(y) return m_floor(T.yfac * y + T.yconst) end
 
 	function T:setWindow(left, right, top, bottom, isSquareWindow)
 		isSquareWindow = getValueOrInit(isBool, isSquareWindow, false)
 
 		T.xfac, T.yfac = X / (right - left), Y / (top - bottom)
 		if isSquareWindow then
-			if abs(T.xfac) > abs(T.yfac) then
-				T.xfac = T.xfac * abs(T.yfac / T.xfac)
+			if m_abs(T.xfac) > m_abs(T.yfac) then
+				T.xfac = T.xfac * m_abs(T.yfac / T.xfac)
 			else
-				T.yfac = T.yfac * abs(T.xfac / T.yfac)
+				T.yfac = T.yfac * m_abs(T.xfac / T.yfac)
 			end
 		end
 		T.xconst, T.yconst = 0.5 - T.xfac * left, 0.5 - T.yfac * bottom

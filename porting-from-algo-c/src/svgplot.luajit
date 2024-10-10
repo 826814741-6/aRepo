@@ -9,6 +9,7 @@
 --	void draw_rel(double, double)		to	:drawRel
 --
 --	svgPlot,svgPlotWithBuffer		to	svgPlotWholeBuffer
+--
 --	:plotStart
 --	:plotEnd
 --							:reset
@@ -287,54 +288,54 @@ local function svgPlotWholeBuffer(width, height)
 	--
 
 	function T:pathStart()
-		self.buffer:put(pathStart())
+		T.buffer:put(pathStart())
 		return T
 	end
 
 	function T:pathEnd(isClosePath, style)
-		self.buffer:put(pathEnd(isClosePath, style))
+		T.buffer:put(pathEnd(isClosePath, style))
 		return T
 	end
 
 	local move, draw = gMove(height), gDraw(height)
 
 	function T:move(x, y)
-		self.buffer:put(move(x, y))
+		T.buffer:put(move(x, y))
 		return T
 	end
 
 	function T:moveRel(x, y)
-		self.buffer:put(moveRel(x, y))
+		T.buffer:put(moveRel(x, y))
 		return T
 	end
 
 	function T:draw(x, y)
-		self.buffer:put(draw(x, y))
+		T.buffer:put(draw(x, y))
 		return T
 	end
 
 	function T:drawRel(x, y)
-		self.buffer:put(drawRel(x, y))
+		T.buffer:put(drawRel(x, y))
 		return T
 	end
 
 	function T:circle(cx, cy, r, style)
-		self.buffer:put(circle(cx, cy, r, style))
+		T.buffer:put(circle(cx, cy, r, style))
 		return T
 	end
 
 	function T:ellipse(cx, cy, rx, ry, style)
-		self.buffer:put(ellipse(cx, cy, rx, ry, style))
+		T.buffer:put(ellipse(cx, cy, rx, ry, style))
 		return T
 	end
 
 	function T:line(x1, y1, x2, y2, style)
-		self.buffer:put(line(x1, y1, x2, y2, style))
+		T.buffer:put(line(x1, y1, x2, y2, style))
 		return T
 	end
 
 	function T:rect(x, y, w, h, rx, ry, style)
-		self.buffer:put(rect(x, y, w, h, rx, ry, style))
+		T.buffer:put(rect(x, y, w, h, rx, ry, style))
 		return T
 	end
 

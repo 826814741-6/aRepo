@@ -26,7 +26,7 @@ local withPlotter = H.withPlotter
 
 local PI, m_cos, m_sin = math.pi, math.cos, math.sin
 
-function sample(plotter, n, offset)
+local function sample(plotter, n, offset)
 	for i=0,4 do
 		local theta = 2 * PI * i / 5
 		local x, y =
