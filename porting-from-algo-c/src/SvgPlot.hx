@@ -162,22 +162,22 @@ class SvgPlot extends Writer implements Plotter {
 	}
 
 	public function move(x:Float, y:Float) {
-		fh.writeString(fmtMove(x, height - y));
+		fh.writeString(fmtMove(x, y, height));
 		return this;
 	}
 
 	public function moveRel(x:Float, y:Float) {
-		fh.writeString(fmtMoveRel(x, -y));
+		fh.writeString(fmtMoveRel(x, y));
 		return this;
 	}
 
 	public function draw(x:Float, y:Float) {
-		fh.writeString(fmtDraw(x, height - y));
+		fh.writeString(fmtDraw(x, y, height));
 		return this;
 	}
 
 	public function drawRel(x:Float, y:Float) {
-		fh.writeString(fmtDrawRel(x, -y));
+		fh.writeString(fmtDrawRel(x, y));
 		return this;
 	}
 
@@ -221,22 +221,22 @@ class SvgPlotWholeBuffer extends WriterWholeBuffer implements Plotter {
 	}
 
 	public function move(x:Float, y:Float) {
-		buf.add(fmtMove(x, height - y));
+		buf.add(fmtMove(x, y, height));
 		return this;
 	}
 
 	public function moveRel(x:Float, y:Float) {
-		buf.add(fmtMoveRel(x, -y));
+		buf.add(fmtMoveRel(x, y));
 		return this;
 	}
 
 	public function draw(x:Float, y:Float) {
-		buf.add(fmtDraw(x, height - y));
+		buf.add(fmtDraw(x, y, height));
 		return this;
 	}
 
 	public function drawRel(x:Float, y:Float) {
-		buf.add(fmtDrawRel(x, -y));
+		buf.add(fmtDrawRel(x, y));
 		return this;
 	}
 
@@ -280,22 +280,22 @@ class SvgPlotWithBuffer extends WriterWithBuffer implements Plotter {
 	}
 
 	public function move(x:Float, y:Float) {
-		writer(fmtMove(x, height - y));
+		writer(fmtMove(x, y, height));
 		return this;
 	}
 
 	public function moveRel(x:Float, y:Float) {
-		writer(fmtMoveRel(x, -y));
+		writer(fmtMoveRel(x, y));
 		return this;
 	}
 
 	public function draw(x:Float, y:Float) {
-		writer(fmtDraw(x, height - y));
+		writer(fmtDraw(x, y, height));
 		return this;
 	}
 
 	public function drawRel(x:Float, y:Float) {
-		writer(fmtDrawRel(x, -y));
+		writer(fmtDrawRel(x, y));
 		return this;
 	}
 
@@ -336,13 +336,13 @@ private function fmtMethod(method:Method, height:Int):String
 		case PathEnd(isClosePath, style):
 			fmtPathEnd(isClosePath, style);
 		case Move(x, y):
-			fmtMove(x, height - y);
+			fmtMove(x, y, height);
 		case MoveRel(x, y):
-			fmtMoveRel(x, -y);
+			fmtMoveRel(x, y);
 		case Draw(x, y):
-			fmtDraw(x, height - y);
+			fmtDraw(x, y, height);
 		case DrawRel(x, y):
-			fmtDrawRel(x, -y);
+			fmtDrawRel(x, y);
 		case Circle(cx, cy, r, style):
 			fmtCircle(cx, cy, r, style);
 		case Ellipse(cx, cy, rx, ry, style):
@@ -390,17 +390,17 @@ private function workaround(n:Float):String {
 	return Std.string(Math.round(n * d) / d);
 }
 
-private function fmtMove(x:Float, y:Float):String
-	return 'M ${workaround(x)} ${workaround(y)} ';
+private function fmtMove(x:Float, y:Float, height:Int):String
+	return 'M ${workaround(x)} ${workaround(height - y)} ';
 
 private function fmtMoveRel(x:Float, y:Float):String
-	return 'm ${workaround(x)} ${workaround(y)} ';
+	return 'm ${workaround(x)} ${workaround(-y)} ';
 
-private function fmtDraw(x:Float, y:Float):String
-	return 'L ${workaround(x)} ${workaround(y)} ';
+private function fmtDraw(x:Float, y:Float, height:Int):String
+	return 'L ${workaround(x)} ${workaround(height - y)} ';
 
 private function fmtDrawRel(x:Float, y:Float):String
-	return 'l ${workaround(x)} ${workaround(y)} ';
+	return 'l ${workaround(x)} ${workaround(-y)} ';
 
 //
 
