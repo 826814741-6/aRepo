@@ -7,6 +7,8 @@
 --	ngcdL				to	ngcdR
 --
 
+local isTbl = require '_helper'.isTbl
+
 local function gcdR(x, y)
 	if y == 0 then
 		return x
@@ -24,7 +26,7 @@ local function gcdL(x0, y0)
 end
 
 local function ngcdL(a)
-	assert(type(a) == "table", "ngcdL needs a table (of numbers).")
+	assert(isTbl(a), "ngcdL needs a table (of numbers).")
 	local d = a[1]
 	for i=2,#a do
 		if d == 1 then break end
@@ -34,7 +36,7 @@ local function ngcdL(a)
 end
 
 local function ngcdR(a)
-	assert(type(a) == "table", "ngcdR needs a table (of numbers).")
+	assert(isTbl(a), "ngcdR needs a table (of numbers).")
 	function rec(i, d)
 		if i > #a or d == 1 then
 			return d

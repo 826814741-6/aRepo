@@ -22,6 +22,7 @@ local H = require '_helper'
 
 local isFh, isFun, isNum, isStr, isTbl = H.isFh, H.isFun, H.isNum, H.isStr, H.isTbl
 local mustBeBool, mustBeNum, mustBeStr = H.mustBeBool, H.mustBeNum, H.mustBeStr
+local getNumOfParams = H.getNumOfParams
 
 local t_concat = table.concat
 local t_insert = table.insert
@@ -88,54 +89,59 @@ end
 
 --
 
+local function isValidPlotterMethod(methodFunction, formatFunction)
+	return isFun(methodFunction) and isFun(formatFunction)
+		and getNumOfParams(methodFunction) == 1 + getNumOfParams(formatFunction)
+end
+
+local function isValidWriterMethod(methodFunction, targetNumOfParams)
+	return isFun(methodFunction)
+		and getNumOfParams(methodFunction) == 1 + targetNumOfParams
+end
+
 local function mustBePlotter(T)
 	assert(
-		isFun(T.pathStart)
-		and isFun(T.pathEnd)
-		and isFun(T.move)
-		and isFun(T.moveRel)
-		and isFun(T.draw)
-		and isFun(T.drawRel)
+		isValidPlotterMethod(T.pathStart, pathStart)
+		and isValidPlotterMethod(T.pathEnd, pathEnd)
+		and isValidPlotterMethod(T.move, gMove(0))
+		and isValidPlotterMethod(T.moveRel, moveRel)
+		and isValidPlotterMethod(T.draw, gDraw(0))
+		and isValidPlotterMethod(T.drawRel, drawRel)
 		--
-		and isFun(T.circle)
-		and isFun(T.ellipse)
-		and isFun(T.line)
-		and isFun(T.rect)
+		and isValidPlotterMethod(T.circle, circle)
+		and isValidPlotterMethod(T.ellipse, ellipse)
+		and isValidPlotterMethod(T.line, line)
+		and isValidPlotterMethod(T.rect, rect)
 	)
 	return T
 end
 
-local function mustBeSvgPlot(T)
+local function mustBeWriter(T)
+	assert(T.buffer == nil)
 	assert(
-		T.buffer == nil
-		--
-		and isFun(T.plotStart)
-		and isFun(T.plotEnd)
+		isValidWriterMethod(T.plotStart, 1)
+		and isValidWriterMethod(T.plotEnd, 0)
 	)
-	return mustBePlotter(T)
+	return T
 end
 
-local function mustBeSvgPlotWholeBuffer(T)
+local function mustBeWriterWholeBuffer(T)
+	assert(isTbl(T.buffer) and T.buffer.buffer == nil)
 	assert(
-		isTbl(T.buffer)
-		and T.buffer.buffer == nil
-		--
-		and isFun(T.reset)
-		and isFun(T.write)
-		and isFun(T.writeOneByOne)
+		isValidWriterMethod(T.reset, 0)
+		and isValidWriterMethod(T.write, 1)
+		and isValidWriterMethod(T.writeOneByOne, 1)
 	)
-	return mustBePlotter(T)
+	return T
 end
 
-local function mustBeSvgPlotWithBuffer(T)
+local function mustBeWriterWithBuffer(T)
+	assert(isTbl(T.buffer) and isTbl(T.buffer.buffer))
 	assert(
-		isTbl(T.buffer)
-		and isTbl(T.buffer.buffer)
-		--
-		and isFun(T.plotStart)
-		and isFun(T.plotEnd)
+		isValidWriterMethod(T.plotStart, 2)
+		and isValidWriterMethod(T.plotEnd, 0)
 	)
-	return mustBePlotter(T)
+	return T
 end
 
 local function assertInitialValue(w, h)
@@ -173,14 +179,12 @@ end
 
 --
 
-local function svgPlot(width, height)
-	assertInitialValue(width, height)
-
+local function writer(w, h)
 	local T = { fh = nil }
 
 	function T:plotStart(fh)
 		T.fh = isFh(fh) and fh or io.stdout
-		T.fh:write(header(width, height))
+		T.fh:write(header(w, h))
 		return T
 	end
 
@@ -190,7 +194,107 @@ local function svgPlot(width, height)
 		return T
 	end
 
-	--
+	return mustBeWriter(T)
+end
+
+local function writerWholeBuffer(w, h)
+	local T = { buffer = {} }
+
+	function T:reset()
+		T.buffer = {}
+		return T
+	end
+
+	function T:write(fh)
+		fh = isFh(fh) and fh or io.stdout
+
+		fh:write(header(w, h))
+		fh:write(t_concat(T.buffer))
+		fh:write(footer())
+
+		return T
+	end
+
+	function T:writeOneByOne(fh)
+		fh = isFh(fh) and fh or io.stdout
+
+		fh:write(header(w, h))
+		for _,v in ipairs(T.buffer) do
+			fh:write(v)
+		end
+		fh:write(footer())
+
+		return T
+	end
+
+	return mustBeWriterWholeBuffer(T)
+end
+
+local DefaultLimit = 50
+
+local function makeBuffer()
+	local T = {
+		buffer = {},
+		counter = 0,
+		fh = nil,
+		limit = DefaultLimit
+	}
+
+	function T:writer(s)
+		t_insert(T.buffer, s)
+
+		T.counter = T.counter + 1
+		if T.counter >= T.limit then
+			T.fh:write(t_concat(T.buffer))
+			T:reset()
+		end
+	end
+
+	function T:reset()
+		T.buffer, T.counter = {}, 0
+	end
+
+	function T:startStep(fh, limit)
+		T:reset()
+		T.fh = isFh(fh) and fh or io.stdout
+		T.limit = isNum(limit) and limit or DefaultLimit
+	end
+
+	function T:endStep()
+		if #T.buffer > 0 then
+			T.fh:write(t_concat(T.buffer))
+		end
+		T.fh = nil
+		T:reset()
+	end
+
+	return T
+end
+
+local function writerWithBuffer(w, h)
+	local T = { buffer = makeBuffer() }
+
+	function T:plotStart(fh, limit)
+		T.buffer:startStep(fh, limit)
+		T.buffer:writer(header(w, h))
+		return T
+	end
+
+	function T:plotEnd()
+		T.buffer:writer(footer())
+		T.buffer:endStep()
+		return T
+	end
+
+	return mustBeWriterWithBuffer(T)
+end
+
+--
+
+local function svgPlot(width, height)
+	assertInitialValue(width, height)
+
+	local T = writer(width, height)
 
 	function T:pathStart()
 		T.fh:write(pathStart())
@@ -244,44 +348,13 @@ local function svgPlot(width, height)
 		return T
 	end
 
-	return mustBeSvgPlot(T)
+	return mustBePlotter(T)
 end
 
 local function svgPlotWholeBuffer(width, height)
 	assertInitialValue(width, height)
 
-	local T = {
-		buffer = {}
-	}
-
-	function T:reset()
-		T.buffer = {}
-		return T
-	end
-
-	function T:write(fh)
-		fh = isFh(fh) and fh or io.stdout
-
-		fh:write(header(width, height))
-		fh:write(t_concat(T.buffer))
-		fh:write(footer())
-
-		return T
-	end
-
-	function T:writeOneByOne(fh)
-		fh = isFh(fh) and fh or io.stdout
-
-		fh:write(header(width, height))
-		for _,v in ipairs(T.buffer) do
-			fh:write(v)
-		end
-		fh:write(footer())
-
-		return T
-	end
-
-	--
+	local T = writerWholeBuffer(width, height)
 
 	function T:pathStart()
 		t_insert(T.buffer, pathStart())
@@ -335,70 +408,13 @@ local function svgPlotWholeBuffer(width, height)
 		return T
 	end
 
-	return mustBeSvgPlotWholeBuffer(T)
-end
-
-local DefaultLimit = 50
-
-local function makeBuffer()
-	local T = {
-		buffer = {},
-		counter = 0,
-		fh = nil,
-		limit = DefaultLimit
-	}
-
-	function T:writer(s)
-		t_insert(T.buffer, s)
-
-		T.counter = T.counter + 1
-		if T.counter >= T.limit then
-			T.fh:write(t_concat(T.buffer))
-			T:reset()
-		end
-	end
-
-	function T:reset()
-		T.buffer, T.counter = {}, 0
-	end
-
-	function T:startStep(fh, limit)
-		T:reset()
-		T.fh = isFh(fh) and fh or io.stdout
-		T.limit = isNum(limit) and limit or DefaultLimit
-	end
-
-	function T:endStep()
-		if #T.buffer > 0 then
-			T.fh:write(t_concat(T.buffer))
-		end
-		T.fh = nil
-		T:reset()
-	end
-
-	return T
+	return mustBePlotter(T)
 end
 
 local function svgPlotWithBuffer(width, height)
 	assertInitialValue(width, height)
 
-	local T = {
-		buffer = makeBuffer()
-	}
-
-	function T:plotStart(fh, limit)
-		T.buffer:startStep(fh, limit)
-		T.buffer:writer(header(width, height))
-		return T
-	end
-
-	function T:plotEnd()
-		T.buffer:writer(footer())
-		T.buffer:endStep()
-		return T
-	end
-
-	--
+	local T = writerWithBuffer(width, height)
 
 	function T:pathStart()
 		T.buffer:writer(pathStart())
@@ -452,7 +468,7 @@ local function svgPlotWithBuffer(width, height)
 		return T
 	end
 
-	return mustBeSvgPlotWithBuffer(T)
+	return mustBePlotter(T)
 end
 
 --

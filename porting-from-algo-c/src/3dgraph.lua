@@ -4,22 +4,24 @@
 --	a part of main		to	tdGraph
 --
 
+local isNum = require '_helper'.isNum
+local isTbl = require '_helper'.isTbl
 -- local readOnlyTable = require '_helper'.readOnlyTable
 
 local MAX_VALUE = math.huge
 
 local function checkParameters(parameters)
-	assert(type(parameters) == "table")
-	assert(type(parameters.m) == "number")
-	assert(type(parameters.n) == "number")
-	assert(type(parameters.t) == "number")
-	assert(type(parameters.u) == "number")
-	assert(type(parameters.minX) == "number")
-	assert(type(parameters.minY) == "number")
-	assert(type(parameters.minZ) == "number")
-	assert(type(parameters.maxX) == "number")
-	assert(type(parameters.maxY) == "number")
-	assert(type(parameters.maxZ) == "number")
+	assert(isTbl(parameters))
+	assert(isNum(parameters.m))
+	assert(isNum(parameters.n))
+	assert(isNum(parameters.t))
+	assert(isNum(parameters.u))
+	assert(isNum(parameters.minX))
+	assert(isNum(parameters.minY))
+	assert(isNum(parameters.minZ))
+	assert(isNum(parameters.maxX))
+	assert(isNum(parameters.maxY))
+	assert(isNum(parameters.maxZ))
 
 	-- return readOnlyTable(parameters)
 	return parameters

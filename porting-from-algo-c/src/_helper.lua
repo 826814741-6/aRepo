@@ -2,13 +2,13 @@ local function abs(n) return n<0 and -n or n end
 
 local function atLeastOne(n) return n>1 and n or 1 end
 
-local sethook = debug.sethook
+local d_sethook = debug.sethook
 
 local function count(f, ...)
 	local c = 0
-	sethook(function() c = c + 1 end, "c")
+	d_sethook(function() c = c + 1 end, "c")
 	f(...)
-	sethook()
+	d_sethook()
 	return c
 end
 
@@ -40,6 +40,12 @@ end
 
 local function isTbl(v)
 	return type(v) == "table"
+end
+
+local d_getinfo = debug.getinfo
+
+local function getNumOfParams(f)
+	return d_getinfo(f).nparams
 end
 
 local function getValueOrNil(predicate, v)
@@ -171,6 +177,7 @@ return {
 	isNum = isNum,
 	isStr = isStr,
 	isTbl = isTbl,
+	getNumOfParams = getNumOfParams,
 	getValueOrInit = getValueOrInit,
 	mustBeBool = mustBeBool,
 	mustBeNum = mustBeNum,

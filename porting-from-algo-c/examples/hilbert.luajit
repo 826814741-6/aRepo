@@ -54,20 +54,20 @@ function sampleWriter(pathPrefix, size, offset, style)
 	end
 end
 
-do
-	local style = styleMaker()
-		:fill(SV.None)
-		:stroke(SV.Black)
-		:get()
+local style = styleMaker()
+	:fill(SV.None)
+	:stroke(SV.Black)
+	:get()
 
+do
 	local writer = sampleWriter("results/hilbert-lj", 600, 3, style)
 
 	for n=1,8 do
 		writer(n)
 	end
+end
 
-	--
-
+do
 	local size, offset = 1000, 3
 
 	local pltB = extension(svgPlotWholeBuffer(size + offset, size + offset))

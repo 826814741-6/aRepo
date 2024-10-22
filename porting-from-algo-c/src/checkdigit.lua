@@ -12,11 +12,14 @@
 --	a part of main		to	isLuhn
 --
 
+local isNum = require '_helper'.isNum
+local isStr = require '_helper'.isStr
+
 local function slicer(s)
 	return function (i)
 		local r = tonumber(s:sub(i,i))
 		assert(
-			type(r) == "number",
+			isNum(r),
 			("ERROR: can't convert '%s' to number."):format(s:sub(i,i))
 		)
 		return r
@@ -25,7 +28,7 @@ end
 
 local function isISBN10(s)
 	assert(
-		type(s) == "string" and #s == 10,
+		isStr(s) and #s == 10,
 		"ERROR: ISBN-10 must be just 10 digits."
 	)
 
@@ -42,7 +45,7 @@ end
 
 local function isISBN13(s)
 	assert(
-		type(s) == "string" and #s == 13,
+		isStr(s) and #s == 13,
 		"ERROR: ISBN-13 must be just 13 digits."
 	)
 
@@ -56,7 +59,7 @@ local function isISBN13(s)
 end
 
 local function isLuhn(s)
-	assert(type(s) == "string")
+	assert(isStr(s))
 
 	local t, w, f = 0, 1, slicer(s)
 
