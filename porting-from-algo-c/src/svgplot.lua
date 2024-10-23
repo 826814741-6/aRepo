@@ -93,19 +93,26 @@ local function isValidPlotterMethod(methodFunction, formatFunction)
 	return isFun(methodFunction) and isFun(formatFunction)
 		and getNumOfParams(methodFunction) == 1 + getNumOfParams(formatFunction)
 end
-
+--
 local function isValidWriterMethod(methodFunction, targetNumOfParams)
 	return isFun(methodFunction)
 		and getNumOfParams(methodFunction) == 1 + targetNumOfParams
 end
+--
+-- Note:
+-- The magic number '1' above comes from the implicit extra parameter 'self'.
+-- (ref: the last part of https://www.lua.org/manual/5.4/manual.html#3.4.11)
+--
+
+local moveDummy, drawDummy = gMove(0), gDraw(0)
 
 local function mustBePlotter(T)
 	assert(
 		isValidPlotterMethod(T.pathStart, pathStart)
 		and isValidPlotterMethod(T.pathEnd, pathEnd)
-		and isValidPlotterMethod(T.move, gMove(0))
+		and isValidPlotterMethod(T.move, moveDummy)
 		and isValidPlotterMethod(T.moveRel, moveRel)
-		and isValidPlotterMethod(T.draw, gDraw(0))
+		and isValidPlotterMethod(T.draw, drawDummy)
 		and isValidPlotterMethod(T.drawRel, drawRel)
 		--
 		and isValidPlotterMethod(T.circle, circle)
@@ -119,8 +126,8 @@ end
 local function mustBeWriter(T)
 	assert(T.buffer == nil)
 	assert(
-		isValidWriterMethod(T.plotStart, 1)
-		and isValidWriterMethod(T.plotEnd, 0)
+		isValidWriterMethod(T.plotStart, 1)		-- fh
+		and isValidWriterMethod(T.plotEnd, 0)		--
 	)
 	return T
 end
@@ -128,9 +135,9 @@ end
 local function mustBeWriterWholeBuffer(T)
 	assert(isTbl(T.buffer) and T.buffer.buffer == nil)
 	assert(
-		isValidWriterMethod(T.reset, 0)
-		and isValidWriterMethod(T.write, 1)
-		and isValidWriterMethod(T.writeOneByOne, 1)
+		isValidWriterMethod(T.reset, 0)			--
+		and isValidWriterMethod(T.write, 1)		-- fh
+		and isValidWriterMethod(T.writeOneByOne, 1)	-- fh
 	)
 	return T
 end
@@ -138,8 +145,8 @@ end
 local function mustBeWriterWithBuffer(T)
 	assert(isTbl(T.buffer) and isTbl(T.buffer.buffer))
 	assert(
-		isValidWriterMethod(T.plotStart, 2)
-		and isValidWriterMethod(T.plotEnd, 0)
+		isValidWriterMethod(T.plotStart, 2)		-- fh, limit
+		and isValidWriterMethod(T.plotEnd, 0)		--
 	)
 	return T
 end
@@ -174,7 +181,7 @@ end
 -- Note:
 -- Although variadic functions have some overhead compared to non-variadic
 -- functions, the three utility functions above can be useful in implementing
--- each method during prototyping.
+-- each plotter method during prototyping.
 --
 
 --

@@ -131,11 +131,11 @@ local function tableWriter(x, y, w, f, vFmt)
 	end
 end
 
-local function with(path, mode, f)
+local function with(path, mode, body)
 	local fh = io.open(path, mode)
-	local ret = pcall(f, fh)
+	local ret, err = pcall(body, fh)
 	fh:close()
-	assert(ret == true)
+	assert(ret == true, err)
 end
 
 local function withPlotter(path, plotter, param)

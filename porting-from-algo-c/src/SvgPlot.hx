@@ -156,27 +156,27 @@ class SvgPlot extends Writer implements Plotter {
 		return this;
 	}
 
-	public function pathEnd(isClosePath:Bool, style:StyleMaker) {
+	public function pathEnd(isClosePath, style) {
 		fh.writeString(fmtPathEnd(isClosePath, style));
 		return this;
 	}
 
-	public function move(x:Float, y:Float) {
+	public function move(x, y) {
 		fh.writeString(fmtMove(x, y, height));
 		return this;
 	}
 
-	public function moveRel(x:Float, y:Float) {
+	public function moveRel(x, y) {
 		fh.writeString(fmtMoveRel(x, y));
 		return this;
 	}
 
-	public function draw(x:Float, y:Float) {
+	public function draw(x, y) {
 		fh.writeString(fmtDraw(x, y, height));
 		return this;
 	}
 
-	public function drawRel(x:Float, y:Float) {
+	public function drawRel(x, y) {
 		fh.writeString(fmtDrawRel(x, y));
 		return this;
 	}
@@ -203,7 +203,7 @@ class SvgPlot extends Writer implements Plotter {
 }
 
 class SvgPlotE extends Writer implements PlotterE {
-	public function plot(method:Method):PlotterE {
+	public function plot(method) {
 		fh.writeString(fmtMethod(method, height));
 		return this;
 	}
@@ -215,27 +215,27 @@ class SvgPlotWholeBuffer extends WriterWholeBuffer implements Plotter {
 		return this;
 	}
 
-	public function pathEnd(isClosePath:Bool, style:StyleMaker) {
+	public function pathEnd(isClosePath, style) {
 		buf.add(fmtPathEnd(isClosePath, style));
 		return this;
 	}
 
-	public function move(x:Float, y:Float) {
+	public function move(x, y) {
 		buf.add(fmtMove(x, y, height));
 		return this;
 	}
 
-	public function moveRel(x:Float, y:Float) {
+	public function moveRel(x, y) {
 		buf.add(fmtMoveRel(x, y));
 		return this;
 	}
 
-	public function draw(x:Float, y:Float) {
+	public function draw(x, y) {
 		buf.add(fmtDraw(x, y, height));
 		return this;
 	}
 
-	public function drawRel(x:Float, y:Float) {
+	public function drawRel(x, y) {
 		buf.add(fmtDrawRel(x, y));
 		return this;
 	}
@@ -262,7 +262,7 @@ class SvgPlotWholeBuffer extends WriterWholeBuffer implements Plotter {
 }
 
 class SvgPlotWholeBufferE extends WriterWholeBuffer implements PlotterE {
-	public function plot(method:Method):PlotterE {
+	public function plot(method) {
 		buf.add(fmtMethod(method, height));
 		return this;
 	}
@@ -274,27 +274,27 @@ class SvgPlotWithBuffer extends WriterWithBuffer implements Plotter {
 		return this;
 	}
 
-	public function pathEnd(isClosePath:Bool, style:StyleMaker) {
+	public function pathEnd(isClosePath, style) {
 		writer(fmtPathEnd(isClosePath, style));
 		return this;
 	}
 
-	public function move(x:Float, y:Float) {
+	public function move(x, y) {
 		writer(fmtMove(x, y, height));
 		return this;
 	}
 
-	public function moveRel(x:Float, y:Float) {
+	public function moveRel(x, y) {
 		writer(fmtMoveRel(x, y));
 		return this;
 	}
 
-	public function draw(x:Float, y:Float) {
+	public function draw(x, y) {
 		writer(fmtDraw(x, y, height));
 		return this;
 	}
 
-	public function drawRel(x:Float, y:Float) {
+	public function drawRel(x, y) {
 		writer(fmtDrawRel(x, y));
 		return this;
 	}
@@ -321,7 +321,7 @@ class SvgPlotWithBuffer extends WriterWithBuffer implements Plotter {
 }
 
 class SvgPlotWithBufferE extends WriterWithBuffer implements PlotterE {
-	public function plot(method:Method):PlotterE {
+	public function plot(method) {
 		writer(fmtMethod(method, height));
 		return this;
 	}
