@@ -94,7 +94,8 @@ local function isValidPlotterMethod(methodFunction, formatFunction)
 		and getNumOfParams(methodFunction) == 1 + getNumOfParams(formatFunction)
 end
 --
-local function isValidWriterMethod(methodFunction, targetNumOfParams)
+local function isValidWriterMethod(methodFunction, ...)
+	local targetNumOfParams = #{...}
 	return isFun(methodFunction)
 		and getNumOfParams(methodFunction) == 1 + targetNumOfParams
 end
@@ -126,8 +127,8 @@ end
 local function mustBeWriter(T)
 	assert(T.buffer == nil)
 	assert(
-		isValidWriterMethod(T.plotStart, 1)		-- fh
-		and isValidWriterMethod(T.plotEnd, 0)		--
+		isValidWriterMethod(T.plotStart, isFh)
+		and isValidWriterMethod(T.plotEnd)
 	)
 	return T
 end
@@ -135,9 +136,9 @@ end
 local function mustBeWriterWholeBuffer(T)
 	assert(isTbl(T.buffer) and T.buffer.buffer == nil)
 	assert(
-		isValidWriterMethod(T.reset, 0)			--
-		and isValidWriterMethod(T.write, 1)		-- fh
-		and isValidWriterMethod(T.writeOneByOne, 1)	-- fh
+		isValidWriterMethod(T.reset)
+		and isValidWriterMethod(T.write, isFh)
+		and isValidWriterMethod(T.writeOneByOne, isFh)
 	)
 	return T
 end
@@ -145,8 +146,8 @@ end
 local function mustBeWriterWithBuffer(T)
 	assert(isTbl(T.buffer) and isTbl(T.buffer.buffer))
 	assert(
-		isValidWriterMethod(T.plotStart, 2)		-- fh, limit
-		and isValidWriterMethod(T.plotEnd, 0)		--
+		isValidWriterMethod(T.plotStart, isFh, isNum)
+		and isValidWriterMethod(T.plotEnd)
 	)
 	return T
 end
