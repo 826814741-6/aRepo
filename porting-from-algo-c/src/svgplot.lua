@@ -89,12 +89,12 @@ end
 
 --
 
-local function isValidPlotterMethod(methodFunction, formatFunction)
-	return isFun(methodFunction) and isFun(formatFunction)
-		and getNumOfParams(methodFunction) == 1 + getNumOfParams(formatFunction)
+local function checkNumOfParamsDyad(methodFunction, targetFunction)
+	return isFun(methodFunction) and isFun(targetFunction)
+		and getNumOfParams(methodFunction) == 1 + getNumOfParams(targetFunction)
 end
 --
-local function isValidWriterMethod(methodFunction, ...)
+local function checkNumOfParams(methodFunction, ...)
 	local targetNumOfParams = #{...}
 	return isFun(methodFunction)
 		and getNumOfParams(methodFunction) == 1 + targetNumOfParams
@@ -109,17 +109,17 @@ local moveDummy, drawDummy = gMove(0), gDraw(0)
 
 local function mustBePlotter(T)
 	assert(
-		isValidPlotterMethod(T.pathStart, pathStart)
-		and isValidPlotterMethod(T.pathEnd, pathEnd)
-		and isValidPlotterMethod(T.move, moveDummy)
-		and isValidPlotterMethod(T.moveRel, moveRel)
-		and isValidPlotterMethod(T.draw, drawDummy)
-		and isValidPlotterMethod(T.drawRel, drawRel)
+		checkNumOfParamsDyad(T.pathStart, pathStart)
+		and checkNumOfParamsDyad(T.pathEnd, pathEnd)
+		and checkNumOfParamsDyad(T.move, moveDummy)
+		and checkNumOfParamsDyad(T.moveRel, moveRel)
+		and checkNumOfParamsDyad(T.draw, drawDummy)
+		and checkNumOfParamsDyad(T.drawRel, drawRel)
 		--
-		and isValidPlotterMethod(T.circle, circle)
-		and isValidPlotterMethod(T.ellipse, ellipse)
-		and isValidPlotterMethod(T.line, line)
-		and isValidPlotterMethod(T.rect, rect)
+		and checkNumOfParamsDyad(T.circle, circle)
+		and checkNumOfParamsDyad(T.ellipse, ellipse)
+		and checkNumOfParamsDyad(T.line, line)
+		and checkNumOfParamsDyad(T.rect, rect)
 	)
 	return T
 end
@@ -127,8 +127,8 @@ end
 local function mustBeWriter(T)
 	assert(T.buffer == nil)
 	assert(
-		isValidWriterMethod(T.plotStart, isFh)
-		and isValidWriterMethod(T.plotEnd)
+		checkNumOfParams(T.plotStart, isFh)
+		and checkNumOfParams(T.plotEnd)
 	)
 	return T
 end
@@ -136,9 +136,9 @@ end
 local function mustBeWriterWholeBuffer(T)
 	assert(isTbl(T.buffer) and T.buffer.buffer == nil)
 	assert(
-		isValidWriterMethod(T.reset)
-		and isValidWriterMethod(T.write, isFh)
-		and isValidWriterMethod(T.writeOneByOne, isFh)
+		checkNumOfParams(T.reset)
+		and checkNumOfParams(T.write, isFh)
+		and checkNumOfParams(T.writeOneByOne, isFh)
 	)
 	return T
 end
@@ -146,8 +146,8 @@ end
 local function mustBeWriterWithBuffer(T)
 	assert(isTbl(T.buffer) and isTbl(T.buffer.buffer))
 	assert(
-		isValidWriterMethod(T.plotStart, isFh, isNum)
-		and isValidWriterMethod(T.plotEnd)
+		checkNumOfParams(T.plotStart, isFh, isNum)
+		and checkNumOfParams(T.plotEnd)
 	)
 	return T
 end
@@ -165,14 +165,14 @@ end
 -- 	end
 -- end
 --
--- local function makeMethodForWhole(fmt)
+-- local function makeMethodForWholeBuffer(fmt)
 -- 	return function (self, ...)
 -- 		t_insert(self.buffer, fmt(...))
 -- 		return self
 -- 	end
 -- end
 --
--- local function makeMethodForWith(fmt)
+-- local function makeMethodForWithBuffer(fmt)
 -- 	return function (self, ...)
 -- 		self.buffer:writer(fmt(...))
 -- 		return self

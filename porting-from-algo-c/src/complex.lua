@@ -25,7 +25,7 @@
 --	complex c_cosh(complex)			to	:cosh, cnCosh / .cosh
 --	complex c_tanh(complex)			to	:tanh, cnTanh / .tanh
 --
---							/ overrideWithInplaceMethods
+--							/ overrideWithInplaceMethod
 --
 
 local isNum = require '_helper'.isNum
@@ -378,7 +378,7 @@ end
 
 --
 
-local function overrideWithInplaceMethods(c)
+local function overrideWithInplaceMethod(c)
 	c.conjugate = function ()
 		c.i = -c.i
 		return c
@@ -550,7 +550,7 @@ return {
 	cnSinh = cnSinh,
 	cnCosh = cnCosh,
 	cnTanh = cnTanh,
-	overrideWithInplaceMethods = overrideWithInplaceMethods,
+	overrideWithInplaceMethod = overrideWithInplaceMethod,
 	cnAbs = cnAbs,
 	cnArg = cnArg
 }
