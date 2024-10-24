@@ -40,7 +40,7 @@
 | collatz.c    |                                                    |
 | combinat.c   | combination.{awk,lua}                              |
 | common.c     |                                                    |
-| complex.c    | complex.lua, Complex.hx                            |
+| complex.c    | complex.lua                                        |
 | condnum.c    |                                                    |
 | contain.c    |                                                    |
 | contfrac.c   |                                                    |
