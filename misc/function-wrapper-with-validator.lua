@@ -26,14 +26,14 @@ function wrapWithValidator(body, paramValidators, returnValidators)
 	})
 end
 
-local function isBool(v) return type(v) == "boolean" end
-local function isFh(v) return io.type(v) == "file" end
-local function isFun(v) return type(v) == "function" end
-local function isNum(v) return type(v) == "number" end
-local function isStr(v) return type(v) == "string" end
-local function isTbl(v) return type(v) == "table" end
-
 do
+	function isBool(v) return type(v) == "boolean" end
+	function isFh(v) return io.type(v) == "file" end
+	function isFun(v) return type(v) == "function" end
+	function isNum(v) return type(v) == "number" end
+	function isStr(v) return type(v) == "string" end
+	function isTbl(v) return type(v) == "table" end
+
 	function f1(n, s, t) return n end
 	function f2() return true end
 	function f3(fh) end

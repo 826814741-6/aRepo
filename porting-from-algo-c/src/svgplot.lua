@@ -20,12 +20,17 @@
 
 local H = require '_helper'
 
-local isFh, isFun, isNum, isStr, isTbl = H.isFh, H.isFun, H.isNum, H.isStr, H.isTbl
+local isBool, isFh, isFun, isNum, isStr, isTbl =
+	H.isBool, H.isFh, H.isFun, H.isNum, H.isStr, H.isTbl
 local mustBeBool, mustBeNum, mustBeStr = H.mustBeBool, H.mustBeNum, H.mustBeStr
-local getNumOfParams = H.getNumOfParams
+local getNumOfParams, wrapWithValidator = H.getNumOfParams, H.wrapWithValidator
 
 local t_concat = table.concat
 local t_insert = table.insert
+
+--
+
+local isWrapWithValidator = false
 
 local function header(w, h)
 	return ([[
@@ -48,9 +53,12 @@ local function pathEnd(isClosePath, style)
 end
 
 local function gMove(height)
-	return function (x, y)
+	function move (x, y)
 		return ("M %g %g "):format(x, height - y)
 	end
+	return isWrapWithValidator
+		and wrapWithValidator(move, {isNum, isNum}, {isStr})
+		or move
 end
 
 local function moveRel(x, y)
@@ -58,9 +66,12 @@ local function moveRel(x, y)
 end
 
 local function gDraw(height)
-	return function (x, y)
+	function draw (x, y)
 		return ("L %g %g "):format(x, height - y)
 	end
+	return isWrapWithValidator
+		and wrapWithValidator(draw, {isNum, isNum}, {isStr})
+		or draw
 end
 
 local function drawRel(x, y)
@@ -87,12 +98,30 @@ local function rect(x, y, w, h, rx, ry, style)
 ]]):format(x, y, w, h, rx, ry, isStr(style) and style or "")
 end
 
+if isWrapWithValidator then
+	header = wrapWithValidator(header, {isNum, isNum}, {isStr})
+	footer = wrapWithValidator(footer, {}, {isStr})
+	pathStart = wrapWithValidator(pathStart, {}, {isStr})
+	pathEnd = wrapWithValidator(pathEnd, {isBool, isStr}, {isStr})
+	moveRel = wrapWithValidator(moveRel, {isNum, isNum}, {isStr})
+	drawRel = wrapWithValidator(drawRel, {isNum, isNum}, {isStr})
+	circle = wrapWithValidator(circle, {isNum, isNum, isNum, isStr}, {isStr})
+	ellipse = wrapWithValidator(ellipse, {isNum, isNum, isNum, isNum, isStr}, {isStr})
+	line = wrapWithValidator(line, {isNum, isNum, isNum, isNum, isStr}, {isStr})
+	rect = wrapWithValidator(rect, {isNum, isNum, isNum, isNum, isNum, isNum, isStr}, {isStr})
+end
+
 --
 
-local function checkNumOfParamsDyad(methodFunction, targetFunction)
-	return isFun(methodFunction) and isFun(targetFunction)
-		and getNumOfParams(methodFunction) == 1 + getNumOfParams(targetFunction)
-end
+local checkNumOfParamsDyad = isWrapWithValidator
+	and function (methodFunction, target)
+		return isFun(methodFunction) and isTbl(target)
+			and getNumOfParams(methodFunction) == 1 + target.numOfParams
+	end
+	or function (methodFunction, target)
+		return isFun(methodFunction) and isFun(target)
+			and getNumOfParams(methodFunction) == 1 + getNumOfParams(target)
+	end
 --
 local function checkNumOfParams(methodFunction, ...)
 	local targetNumOfParams = #{...}

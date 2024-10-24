@@ -164,6 +164,28 @@ local function withPlotter(path, plotter, param)
 	end
 end
 
+local function check(target, validators)
+	for i,v in ipairs(target) do
+		assert(validators[i](v), i)
+	end
+end
+
+local t_unpack = table.unpack ~= nil and table.unpack or unpack
+
+local function wrapWithValidator(body, paramValidators, returnValidators)
+	return setmetatable({ numOfParams = #paramValidators }, {
+		__call = function (self, ...)
+			local arg = {...}
+			check(arg, paramValidators)
+
+			local ret = {body(...)}
+			check(ret, returnValidators)
+
+			return t_unpack(ret)
+		end
+	})
+end
+
 return {
 	abs = abs,
 	atLeastOne = atLeastOne,
@@ -184,5 +206,6 @@ return {
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,
 	with = with,
-	withPlotter = withPlotter
+	withPlotter = withPlotter,
+	wrapWithValidator = wrapWithValidator
 }
