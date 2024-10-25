@@ -125,7 +125,8 @@ end
 
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
-local function wrapWithValidator(body, paramValidators, returnValidators)
+local function wrapWithValidator(body, paramValidators, returnValidators, unpacker)
+	unpacker = unpacker ~= nil and unpacker or t_unpack
 	return setmetatable({ numOfParams = #paramValidators }, {
 		__call = function (self, ...)
 			local arg = {...}
@@ -134,7 +135,7 @@ local function wrapWithValidator(body, paramValidators, returnValidators)
 			local ret = {body(...)}
 			check(returnValidators, ret)
 
-			return t_unpack(ret)
+			return unpacker(ret)
 		end
 	})
 end
