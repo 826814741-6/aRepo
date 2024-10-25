@@ -35,12 +35,12 @@ do
 	function isTbl(v) return type(v) == "table" end
 
 	function f1(n, s, t) return n end
-	function f2() return true end
+	function f2() return true, false end
 	function f3(fh) end
 	function f4(n) return function (x, y) return "valid?" end end
 
 	local w1 = wrapWithValidator(f1, {isNum, isStr, isTbl}, {isNum})
-	local w2 = wrapWithValidator(f2, {}, {isBool})
+	local w2 = wrapWithValidator(f2, {}, {isBool, isBool})
 	local w3 = wrapWithValidator(f3, {isFh}, {})
 	local w4 = wrapWithValidator(f4, {isNum}, {isFun})
 	local w5 = wrapWithValidator(w4(0), {isNum, isNum}, {isStr})

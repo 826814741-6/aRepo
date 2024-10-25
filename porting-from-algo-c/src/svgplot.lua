@@ -31,6 +31,17 @@ local t_insert = table.insert
 --
 
 local isWrapWithValidator = false
+--
+-- When you toggle the value 'isWrapWithValidator' above, the following format
+-- functions:
+--   header, footer, pathStart, pathEnd, move, moveRel, draw, drawRel,
+--   circle, ellipse, line, rect
+-- are wrapped with several validators.
+--
+-- Since each plotter method is implemented in a thin wrapper around a format
+-- function, this trick helps reduce the accidental use of each plotter method
+-- when drawing something, at the cost of some overhead.
+--
 
 local function header(w, h)
 	return ([[
@@ -53,6 +64,7 @@ local function pathEnd(isClosePath, style)
 end
 
 local function gMove(height)
+	mustBeNum(height)
 	function move (x, y)
 		return ("M %g %g "):format(x, height - y)
 	end
@@ -66,6 +78,7 @@ local function moveRel(x, y)
 end
 
 local function gDraw(height)
+	mustBeNum(height)
 	function draw (x, y)
 		return ("L %g %g "):format(x, height - y)
 	end
