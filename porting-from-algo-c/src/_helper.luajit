@@ -117,9 +117,9 @@ local function withPlotter(path, plotter, param)
 	end
 end
 
-local function check(target, validators)
-	for i,v in ipairs(target) do
-		assert(validators[i](v), i)
+local function check(validators, target)
+	for i,v in ipairs(validators) do
+		assert(v(target[i]), i)
 	end
 end
 
@@ -129,10 +129,10 @@ local function wrapWithValidator(body, paramValidators, returnValidators)
 	return setmetatable({ numOfParams = #paramValidators }, {
 		__call = function (self, ...)
 			local arg = {...}
-			check(arg, paramValidators)
+			check(paramValidators, arg)
 
 			local ret = {body(...)}
-			check(ret, returnValidators)
+			check(returnValidators, ret)
 
 			return t_unpack(ret)
 		end
