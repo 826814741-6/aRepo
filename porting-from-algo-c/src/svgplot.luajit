@@ -35,9 +35,9 @@ local isWrapWithValidator = false
 --   circle, ellipse, line, rect
 -- are wrapped with several validators.
 --
--- Since each plotter method is implemented in a thin wrapper around a format
--- function, this trick helps reduce the accidental use of each plotter method
--- when drawing something, at the cost of some overhead.
+-- The format functions are not called directly by the user. However, since
+-- each plotter method is implemented as a thin wrapper around a format
+-- function, this trick can be useful for prototyping or debugging.
 --
 
 local function header(w, h)
