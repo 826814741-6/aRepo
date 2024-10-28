@@ -169,8 +169,8 @@ local function mustBeWriter(T)
 	assert(T.buffer == nil)
 
 	if isWrapWithValidator then
-		T.plotStart = wrapWithValidator(T.plotStart, {isTbl, isFhOrNil}, {})
-		T.plotEnd = wrapWithValidator(T.plotEnd, {isTbl}, {})
+		T.plotStart = wrapWithValidator(T.plotStart, {isTbl, isFhOrNil}, {isTbl})
+		T.plotEnd = wrapWithValidator(T.plotEnd, {isTbl}, {isTbl})
 	end
 
 	return T
@@ -180,9 +180,9 @@ local function mustBeWriterWholeBuffer(T)
 	assert(isTbl(T.buffer) and T.buffer.buffer == nil)
 
 	if isWrapWithValidator then
-		T.reset = wrapWithValidator(T.reset, {isTbl}, {})
-		T.write = wrapWithValidator(T.write, {isTbl, isFhOrNil}, {})
-		T.writeOneByOne = wrapWithValidator(T.writeOneByOne, {isTbl, isFhOrNil}, {})
+		T.reset = wrapWithValidator(T.reset, {isTbl}, {isTbl})
+		T.write = wrapWithValidator(T.write, {isTbl, isFhOrNil}, {isTbl})
+		T.writeOneByOne = wrapWithValidator(T.writeOneByOne, {isTbl, isFhOrNil}, {isTbl})
 	end
 
 	return T
@@ -192,8 +192,8 @@ local function mustBeWriterWithBuffer(T)
 	assert(isTbl(T.buffer) and isTbl(T.buffer.buffer))
 
 	if isWrapWithValidator then
-		T.plotStart = wrapWithValidator(T.plotStart, {isTbl, isFhOrNil, isNumOrNil}, {})
-		T.plotEnd = wrapWithValidator(T.plotEnd, {isTbl}, {})
+		T.plotStart = wrapWithValidator(T.plotStart, {isTbl, isFhOrNil, isNumOrNil}, {isTbl})
+		T.plotEnd = wrapWithValidator(T.plotEnd, {isTbl}, {isTbl})
 	end
 
 	return T
