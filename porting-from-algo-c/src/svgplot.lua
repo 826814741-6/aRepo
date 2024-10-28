@@ -22,6 +22,7 @@ local H = require '_helper'
 
 local isBool, isFh, isFun, isNum, isStr, isTbl =
 	H.isBool, H.isFh, H.isFun, H.isNum, H.isStr, H.isTbl
+local isFhOrNil, isNumOrNil = H.isFhOrNil, H.isNumOrNil
 local mustBeNum, mustBeStr = H.mustBeNum, H.mustBeStr
 local getNumOfParams, wrapWithValidator = H.getNumOfParams, H.wrapWithValidator
 
@@ -36,8 +37,12 @@ local isWrapWithValidator = false
 -- functions:
 --   header, footer, pathStart, pathEnd, move, moveRel, draw, drawRel,
 --   circle, ellipse, line, rect
+-- and the following writer method functions:
+--   plotStart, plotEnd           (in writer or writerWithBuffer)
+--   reset, write, writeOneByOne  (in writerWholeBuffer)
 -- are wrapped with several validators.
 --
+-- Note:
 -- The format functions are not called directly by the user. However, since
 -- each plotter method is implemented as a thin wrapper around a format
 -- function, this trick can be useful for prototyping or debugging.
@@ -111,6 +116,8 @@ local function rect(x, y, w, h, rx, ry, style)
 ]]):format(x, y, w, h, rx, ry, style)
 end
 
+--
+
 if isWrapWithValidator then
 	header = wrapWithValidator(header, {isNum, isNum}, {isStr})
 	footer = wrapWithValidator(footer, {}, {isStr})
@@ -124,8 +131,6 @@ if isWrapWithValidator then
 	rect = wrapWithValidator(rect, {isNum, isNum, isNum, isNum, isNum, isNum, isStr}, {isStr})
 end
 
---
-
 local checkNumOfParamsDyad = isWrapWithValidator
 	and function (methodFunction, target)
 		return isFun(methodFunction) and isTbl(target)
@@ -135,12 +140,6 @@ local checkNumOfParamsDyad = isWrapWithValidator
 		return isFun(methodFunction) and isFun(target)
 			and getNumOfParams(methodFunction) == 1 + getNumOfParams(target)
 	end
---
-local function checkNumOfParams(methodFunction, ...)
-	local targetNumOfParams = #{...}
-	return isFun(methodFunction)
-		and getNumOfParams(methodFunction) == 1 + targetNumOfParams
-end
 --
 -- Note:
 -- The magic number '1' above comes from the implicit extra parameter 'self'.
@@ -168,29 +167,35 @@ end
 
 local function mustBeWriter(T)
 	assert(T.buffer == nil)
-	assert(
-		checkNumOfParams(T.plotStart, isFh)
-		and checkNumOfParams(T.plotEnd)
-	)
+
+	if isWrapWithValidator then
+		T.plotStart = wrapWithValidator(T.plotStart, {isTbl, isFhOrNil}, {})
+		T.plotEnd = wrapWithValidator(T.plotEnd, {isTbl}, {})
+	end
+
 	return T
 end
 
 local function mustBeWriterWholeBuffer(T)
 	assert(isTbl(T.buffer) and T.buffer.buffer == nil)
-	assert(
-		checkNumOfParams(T.reset)
-		and checkNumOfParams(T.write, isFh)
-		and checkNumOfParams(T.writeOneByOne, isFh)
-	)
+
+	if isWrapWithValidator then
+		T.reset = wrapWithValidator(T.reset, {isTbl}, {})
+		T.write = wrapWithValidator(T.write, {isTbl, isFhOrNil}, {})
+		T.writeOneByOne = wrapWithValidator(T.writeOneByOne, {isTbl, isFhOrNil}, {})
+	end
+
 	return T
 end
 
 local function mustBeWriterWithBuffer(T)
 	assert(isTbl(T.buffer) and isTbl(T.buffer.buffer))
-	assert(
-		checkNumOfParams(T.plotStart, isFh, isNum)
-		and checkNumOfParams(T.plotEnd)
-	)
+
+	if isWrapWithValidator then
+		T.plotStart = wrapWithValidator(T.plotStart, {isTbl, isFhOrNil, isNumOrNil}, {})
+		T.plotEnd = wrapWithValidator(T.plotEnd, {isTbl}, {})
+	end
+
 	return T
 end
 

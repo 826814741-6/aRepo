@@ -42,6 +42,14 @@ local function isTbl(v)
 	return type(v) == "table"
 end
 
+local function isFhOrNil(v)
+	return io.type(v) == "file" or v == nil
+end
+
+local function isNumOrNil(v)
+	return type(v) == "number" or v == nil
+end
+
 local d_getinfo = debug.getinfo
 
 local function getNumOfParams(f)
@@ -138,12 +146,22 @@ local function with(path, mode, body)
 	assert(ret == true, err)
 end
 
+local function isPlotterA(v) -- target: svgPlot or svgPlotWithBuffer
+	return (isTbl(v) and isFun(v.plotStart) and isFun(v.plotEnd))
+		or (isTbl(v) and isTbl(v.plotStart) and isTbl(v.plotEnd))
+end
+
+local function isPlotterB(v) -- target: svgPlotWholeBuffer
+	return (isTbl(v) and isFun(v.write) and isFun(v.writeOneByOne))
+		or (isTbl(v) and isTbl(v.write) and isTbl(v.writeOneByOne))
+end
+
 local function withPlotter(path, plotter, param)
 	local limit, isOneByOne =
 		getValueOrNil(isNum, param),
 		getValueOrNil(isBool, param)
 
-	if isFun(plotter.plotStart) and isFun(plotter.plotEnd) then
+	if isPlotterA(plotter) then
 		return function (aFunc)
 			with(path, "w", function (fh)
 				plotter:plotStart(fh, limit)
@@ -151,7 +169,7 @@ local function withPlotter(path, plotter, param)
 				plotter:plotEnd()
 			end)
 		end
-	elseif isFun(plotter.write) and isFun(plotter.writeOneByOne) then
+	elseif isPlotterB(plotter) then
 		local body = isOneByOne ~= true
 			and function (fh) plotter:write(fh) end
 			or function (fh) plotter:writeOneByOne(fh) end
@@ -200,6 +218,8 @@ return {
 	isNum = isNum,
 	isStr = isStr,
 	isTbl = isTbl,
+	isFhOrNil = isFhOrNil,
+	isNumOrNil = isNumOrNil,
 	getNumOfParams = getNumOfParams,
 	getValueOrInit = getValueOrInit,
 	mustBeBool = mustBeBool,
