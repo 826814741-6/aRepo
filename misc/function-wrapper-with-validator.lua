@@ -79,3 +79,58 @@ do
 	local ret, err = pcall(w1, 1, 2, {})
 	assert(ret, err)
 end
+
+--
+-- If you want to use a different checker instead of the function 'check'
+-- above, or if you want to use a different checker for each validator in
+-- param and return, the following approach might suit you:
+--
+
+function makeValidator(validators, checker)
+	local T = { validators = validators }
+
+	T.check = checker ~= nil
+		and checker
+		or function (self, target)
+			for i,v in ipairs(self.validators) do
+				assert(v(target[i]), i)
+			end
+		end
+
+	return T
+end
+
+function wrapWithValidator(body, paramValidator, returnValidator, unpacker)
+	unpacker = unpacker ~= nil and unpacker or t_unpack
+	return setmetatable({}, {
+		__call = function (self, ...)
+			local arg = {...}
+			paramValidator:check(arg)
+
+			local ret = {body(...)}
+			returnValidator:check(ret)
+
+			return unpacker(ret)
+		end
+	})
+end
+
+-- do
+-- 	...
+--
+-- 	local vEmpty = makeValidator({})
+-- 	local vFh = makeValidator({isFh})
+-- 	local vNum = makeValidator({isNum})
+-- 	local vNumStrTbl = makeValidator({isNum, isStr, isTbl})
+-- 	local vBool2 = makeValidator({isBool, isBool})
+--
+-- 	local w1 = wrapWithValidator(f1, vNumStrTbl, vNum)
+-- 	local w2 = wrapWithValidator(f2, vEmpty, vBool2)
+-- 	local w3 = wrapWithValidator(f3, vFh, vEmpty)
+--
+-- 	print(w1(os.clock(), "1", {2}))
+-- 	print(w2())
+-- 	print(w3(io.stdout))
+--
+-- 	...
+-- end
