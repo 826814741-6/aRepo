@@ -41,6 +41,7 @@ do
 	function isNum(v) return type(v) == "number" end
 	function isStr(v) return type(v) == "string" end
 	function isTbl(v) return type(v) == "table" end
+	function isFunOrNum(v) return isFun(v) or isNum(v) end
 	function isNumOrNil(v) return isNum(v) or v == nil end
 
 	function f1(n, s, t) return n end
@@ -73,6 +74,53 @@ do
 	print("user unpacker:", w4B())
 	print(w5(0))
 	print(w6(1, 2))
+
+	local unpackerWithCounter = (function ()
+		local T = { c = 0 }
+		function T:get() return T.c end
+		function T:reset() T.c = 0 end
+		return setmetatable(T, {
+			__call = function (self, r)
+				T.c = T.c + 1
+				return r[1]
+			end
+		})
+	end)()
+
+	function fw1(f)
+		return wrapWithValidator(
+			f, {isNum}, {isFunOrNum}, unpackerWithCounter
+		)
+	end
+	function fw2(f)
+		return wrapWithValidator(
+			f, {isNum, isNum}, {isFunOrNum}, unpackerWithCounter
+		)
+	end
+
+	function fac1(n)
+		if n > 0 then return n * fw1(fac1)(n - 1) else return 1 end
+	end
+	function fac2(n)
+		function rec(n, acc)
+			if n > 0 then
+				return fw2(rec)(n - 1, acc * n)
+			else
+				return acc
+			end
+		end
+		return fw2(rec)(n, 1)
+	end
+
+	assert(
+		3628800 == fw1(fac1)(10)
+		and 11 == unpackerWithCounter:get() -- 11: 10...0
+	)
+	unpackerWithCounter:reset()
+	assert(
+		3628800 == fac2(10)
+		and 11 == unpackerWithCounter:get() -- 11: 10...0
+	)
 
 	print("^-- ok / raise an error --v")
 
