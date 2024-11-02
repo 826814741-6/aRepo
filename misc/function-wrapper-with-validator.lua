@@ -43,12 +43,14 @@ do
 	function isTbl(v) return type(v) == "table" end
 	function isFunOrNum(v) return isFun(v) or isNum(v) end
 	function isNumOrNil(v) return isNum(v) or v == nil end
+	function isNumAndNonNeg(v) return isNum(v) and v >= 0 end
 
 	function f1(n, s, t) return n end
 	function f2() return true, false end
 	function f3(fh) end
 	function f4(n) return 0, nil, 1 end
-	function f5(n) return function (x, y) return "valid?" end end
+	function f5(n) return n < 0 and -n or n end
+	function f6(n) return function (x, y) return "valid?" end end
 
 	local w1 = wrapWithValidator(f1, {isNum, isStr, isTbl}, {isNum})
 	local w2 = wrapWithValidator(f2, {}, {isBool, isBool})
@@ -64,16 +66,18 @@ do
 		{isNumOrNil, isNumOrNil, isNumOrNil},
 		function (r) return r[1], r[2], r[3] end
 	)
-	local w5 = wrapWithValidator(f5, {isNum}, {isFun})
-	local w6 = wrapWithValidator(w5(0), {isNum, isNum}, {isStr})
+	local w5 = wrapWithValidator(f5, {isNum}, {isNumAndNonNeg})
+	local w6 = wrapWithValidator(f6, {isNum}, {isFun})
+	local w7 = wrapWithValidator(w6(0), {isNum, isNum}, {isStr})
 
 	print(w1(os.clock(), "1", {2}))
 	print(w2())
 	print(w3(io.stdout))
 	print("t_unpack:", w4A())
 	print("user unpacker:", w4B())
-	print(w5(0))
-	print(w6(1, 2))
+	print(w5(-1), w5(-0.1), w5(0), w5(0.1), w5(1))
+	print(w6(0))
+	print(w7(1, 2))
 
 	local unpackerWithCounter = (function ()
 		local T = { c = 0 }
