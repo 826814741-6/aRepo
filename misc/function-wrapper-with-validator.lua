@@ -41,7 +41,6 @@ do
 	function isNum(v) return type(v) == "number" end
 	function isStr(v) return type(v) == "string" end
 	function isTbl(v) return type(v) == "table" end
-	function isFunOrNum(v) return isFun(v) or isNum(v) end
 	function isNumOrNil(v) return isNum(v) or v == nil end
 	function isNumAndNonNeg(v) return isNum(v) and v >= 0 end
 
@@ -93,12 +92,12 @@ do
 
 	function fw1(f)
 		return wrapWithValidator(
-			f, {isNum}, {isFunOrNum}, unpackerWithCounter
+			f, {isNum}, {isNum}, unpackerWithCounter
 		)
 	end
 	function fw2(f)
 		return wrapWithValidator(
-			f, {isNum, isNum}, {isFunOrNum}, unpackerWithCounter
+			f, {isNum, isNum}, {isNum}, unpackerWithCounter
 		)
 	end
 
