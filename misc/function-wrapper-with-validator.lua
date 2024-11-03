@@ -34,16 +34,16 @@ end
 -- (see w4A and w4B below)
 --
 
-do
-	function isBool(v) return type(v) == "boolean" end
-	function isFh(v) return io.type(v) == "file" end
-	function isFun(v) return type(v) == "function" end
-	function isNum(v) return type(v) == "number" end
-	function isStr(v) return type(v) == "string" end
-	function isTbl(v) return type(v) == "table" end
-	function isNumOrNil(v) return isNum(v) or v == nil end
-	function isNumAndNonNeg(v) return isNum(v) and v >= 0 end
+function isBool(v) return type(v) == "boolean" end
+function isFh(v) return io.type(v) == "file" end
+function isFun(v) return type(v) == "function" end
+function isNum(v) return type(v) == "number" end
+function isStr(v) return type(v) == "string" end
+function isTbl(v) return type(v) == "table" end
+function isNumOrNil(v) return isNum(v) or v == nil end
+function isNumAndNonNeg(v) return isNum(v) and v >= 0 end
 
+do
 	function f1(n, s, t) return n end
 	function f2() return true, false end
 	function f3(fh) end
@@ -78,57 +78,10 @@ do
 	print(w6(0))
 	print(w7(1, 2))
 
-	local unpackerWithCounter = (function ()
-		local T = { c = 0 }
-		function T:get() return T.c end
-		function T:reset() T.c = 0 end
-		return setmetatable(T, {
-			__call = function (self, r)
-				T.c = T.c + 1
-				return r[1]
-			end
-		})
-	end)()
-
-	function fw1(f)
-		return wrapWithValidator(
-			f, {isNum}, {isNum}, unpackerWithCounter
-		)
-	end
-	function fw2(f)
-		return wrapWithValidator(
-			f, {isNum, isNum}, {isNum}, unpackerWithCounter
-		)
-	end
-
-	function fac1(n)
-		if n > 0 then return n * fw1(fac1)(n - 1) else return 1 end
-	end
-	function fac2(n)
-		function rec(n, acc)
-			if n > 0 then
-				return fw2(rec)(n - 1, acc * n)
-			else
-				return acc
-			end
-		end
-		return fw2(rec)(n, 1)
-	end
-
-	assert(
-		3628800 == fw1(fac1)(10)
-		and 11 == unpackerWithCounter:get() -- 11: 10...0
-	)
-	unpackerWithCounter:reset()
-	assert(
-		3628800 == fac2(10)
-		and 11 == unpackerWithCounter:get() -- 11: 10...0
-	)
-
 	print("^-- ok / raise an error --v")
 
 	local ret, err = pcall(w1, 1, 2, {})
-	assert(ret, err)
+	assert(ret, err) -- (see bottom)
 end
 
 --
@@ -166,22 +119,72 @@ function wrapWithValidator(body, paramValidator, returnValidator, unpacker)
 	})
 end
 
--- do
--- 	...
---
--- 	local vEmpty = makeValidator({})
--- 	local vFh = makeValidator({isFh})
--- 	local vNum = makeValidator({isNum})
--- 	local vNumStrTbl = makeValidator({isNum, isStr, isTbl})
--- 	local vBool2 = makeValidator({isBool, isBool})
---
--- 	local w1 = wrapWithValidator(f1, vNumStrTbl, vNum)
--- 	local w2 = wrapWithValidator(f2, vEmpty, vBool2)
--- 	local w3 = wrapWithValidator(f3, vFh, vEmpty)
---
--- 	print(w1(os.clock(), "1", {2}))
--- 	print(w2())
--- 	print(w3(io.stdout))
---
--- 	...
--- end
+local i_write = io.write
+
+function gCheckVerbose(header)
+	return function (self, target)
+		i_write(header)
+		for i,v in ipairs(self.validators) do
+			i_write(" ", i, ":", target[i])
+			assert(v(target[i]), i)
+		end
+		i_write("\n")
+	end
+end
+
+function gUnpackerWithCounter()
+	local T = { c = 0 }
+	function T:get() return T.c end
+	function T:reset() T.c = 0 end
+	return setmetatable(T, {
+		__call = function (self, r)
+			T.c = T.c + 1
+			return r[1]
+		end
+	})
+end
+
+do
+	--
+	-- If you want to see the results below, please comment out the 'assert'
+	-- line above (line number: 84).
+	--
+
+	local checkP, checkR = gCheckVerbose("[param]"), gCheckVerbose("[return]")
+	local unpacker = gUnpackerWithCounter()
+
+	local vP1 = makeValidator({isNum}, checkP)
+	local vP2 = makeValidator({isNum, isNum}, checkP)
+	local vR = makeValidator({isNum}, checkR)
+
+	function fw1(f) return wrapWithValidator(f, vP1, vR, unpacker) end
+	function fw2(f) return wrapWithValidator(f, vP2, vR, unpacker) end
+
+	function fac1(n)
+		if n > 0 then
+			return n * fw1(fac1)(n - 1)
+		else
+			return 1
+		end
+	end
+	function fac2(n)
+		function rec(n, acc)
+			if n > 0 then
+				return fw2(rec)(n - 1, acc * n)
+			else
+				return acc
+			end
+		end
+		return fw2(rec)(n, 1)
+	end
+
+	assert(
+		3628800 == fw1(fac1)(10)
+		and 11 == unpacker:get() -- 11: 10...0
+	)
+	unpacker:reset()
+	assert(
+		3628800 == fac2(10)
+		and 11 == unpacker:get() -- 11: 10...0
+	)
+end
