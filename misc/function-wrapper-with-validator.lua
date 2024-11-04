@@ -123,9 +123,9 @@ local i_write = io.write
 
 function gCheckVerbose(header)
 	return function (self, target)
-		i_write(header)
+		i_write(header, "(", os.clock(), ") ")
 		for i,v in ipairs(self.validators) do
-			i_write(" ", i, ":", target[i])
+			i_write(" ", i, ":", tostring(target[i]))
 			assert(v(target[i]), i)
 		end
 		i_write("\n")
@@ -155,10 +155,15 @@ do
 
 	local vP1 = makeValidator({isNum}, checkP)
 	local vP2 = makeValidator({isNum, isNum}, checkP)
+	local vP3 = makeValidator({isNum, isNum, isNum}, checkP)
+	local vP4 = makeValidator({isNum, isFun}, checkP)
 	local vR = makeValidator({isNum}, checkR)
+	local vEmpty = makeValidator({})
 
 	function fw1(f) return wrapWithValidator(f, vP1, vR, unpacker) end
 	function fw2(f) return wrapWithValidator(f, vP2, vR, unpacker) end
+	function fw3(f) return wrapWithValidator(f, vP3, vR, unpacker) end
+	function fw4(f) return wrapWithValidator(f, vP4, vEmpty, unpacker) end
 
 	function fac1(n)
 		if n > 0 then
@@ -177,6 +182,28 @@ do
 		end
 		return fw2(rec)(n, 1)
 	end
+	function fib(n)
+		function rec(a, b, c)
+			if c > 0 then
+				return fw3(rec)(b, a + b, c - 1)
+			else
+				return a
+			end
+		end
+		return fw3(rec)(0, 1, n)
+	end
+	function fac4(n)
+		function rec(n, c)
+			if n > 0 then
+				fw4(rec)(n - 1, function (x) c(x * n) end)
+			else
+				c(1)
+			end
+		end
+		local ret
+		fw4(rec)(n, function (x) ret = x end)
+		return ret
+	end
 
 	assert(
 		3628800 == fw1(fac1)(10)
@@ -185,6 +212,16 @@ do
 	unpacker:reset()
 	assert(
 		3628800 == fac2(10)
+		and 11 == unpacker:get() -- 11: 10...0
+	)
+	unpacker:reset()
+	assert(
+		55 == fib(10)
+		and 11 == unpacker:get() -- 11: 10...0
+	)
+	unpacker:reset()
+	assert(
+		3628800 == fac4(10)
 		and 11 == unpacker:get() -- 11: 10...0
 	)
 end
