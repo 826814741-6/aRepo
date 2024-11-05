@@ -157,6 +157,7 @@ do
 	local vP2 = makeValidator({isNum, isNum}, checkP)
 	local vP3 = makeValidator({isNum, isNum, isNum}, checkP)
 	local vP4 = makeValidator({isNum, isFun}, checkP)
+	local vP5 = makeValidator({isNum, isTbl}, checkP)
 	local vR = makeValidator({isNum}, checkR)
 	local vEmpty = makeValidator({})
 
@@ -164,6 +165,8 @@ do
 	function fw2(f) return wrapWithValidator(f, vP2, vR, unpacker) end
 	function fw3(f) return wrapWithValidator(f, vP3, vR, unpacker) end
 	function fw4(f) return wrapWithValidator(f, vP4, vEmpty, unpacker) end
+	function fw5A(f) return wrapWithValidator(f, vP5, vEmpty, unpacker) end
+	function fw5B(f) return wrapWithValidator(f, vP1, vEmpty, unpacker) end
 
 	function fac1(n)
 		if n > 0 then
@@ -204,6 +207,18 @@ do
 		fw4(rec)(n, function (x) ret = x end)
 		return ret
 	end
+	function fac5(n)
+		function rec(n, c)
+			if n > 0 then
+				fw5A(rec)(n - 1, fw5B(function (x) c(x * n) end))
+			else
+				c(1)
+			end
+		end
+		local ret
+		fw5A(rec)(n, fw5B(function (x) ret = x end))
+		return ret
+	end
 
 	assert(
 		3628800 == fw1(fac1)(10)
@@ -223,5 +238,10 @@ do
 	assert(
 		3628800 == fac4(10)
 		and 11 == unpacker:get() -- 11: 10...0
+	)
+	unpacker:reset()
+	assert(
+		3628800 == fac5(10)
+		and 22 == unpacker:get() -- 11: 10...0 x 2 (fw5A and fw5B)
 	)
 end
