@@ -12,6 +12,7 @@ function fib1(n) {
 }
 
 function fib2(n,	a, b, c, x, y, p, q, r) {
+	if (n <= 0) return 0
 	a = 1; b = 1; c = 0; x = 1; y = 0; n--
 	while (n > 0) {
 		if (n % 2 != 0) {
@@ -28,33 +29,35 @@ function fib2(n,	a, b, c, x, y, p, q, r) {
 }
 
 function fib3(n,	a, b, c, t) {
-	a = 1; b = 0; c = 1
-	while (c < n) {
-		t = a + b; b = a; a = t; c++
+	a = 0; b = 1; c = 1
+	while (c <= n) {
+		t = a + b; a = b; b = t; c++
 	}
 	return a
 }
 
 function _rec(n, a, b, c) {
-	if (c < n)
-		return _rec(n, a + b, a, c + 1)
+	if (c <= n)
+		return _rec(n, b, a + b, c + 1)
 	else
 		return a
 }
 
 function fib4(n) {
-	return _rec(n, 1, 0, 1)
+	return _rec(n, 0, 1, 1)
 }
 
 #
 
 BEGIN {
-	for (i=1; i<=11; i++) printf " %d", fib1(i)
+	for (i=0; i<=10; i++) printf "%4d", i
 	print
-	for (i=1; i<=11; i++) printf " %d", fib2(i)
+	for (i=0; i<=10; i++) printf "%4d", fib1(i)
 	print
-	for (i=1; i<=11; i++) printf " %d", fib3(i)
+	for (i=0; i<=10; i++) printf "%4d", fib2(i)
 	print
-	for (i=1; i<=11; i++) printf " %d", fib4(i)
+	for (i=0; i<=10; i++) printf "%4d", fib3(i)
+	print
+	for (i=0; i<=10; i++) printf "%4d", fib4(i)
 	print
 }

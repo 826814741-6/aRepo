@@ -12,12 +12,14 @@ local M = require 'fib'
 local fib1, fib2, fib3, fib4 = M.fib1, M.fib2, M.fib3, M.fib4
 
 do
-	for i=1,11 do io.write(" ", fib1(i)) end
+	for i=0,10 do io.write(("%4d"):format(i)) end
 	print()
-	for i=1,11 do io.write(" ", fib2(i)) end
+	for i=0,10 do io.write(("%4d"):format(fib1(i))) end
 	print()
-	for i=1,11 do io.write(" ", fib3(i)) end
+	for i=0,10 do io.write(("%4d"):format(fib2(i))) end
 	print()
-	for i=1,11 do io.write(" ", fib4(i)) end
+	for i=0,10 do io.write(("%4d"):format(fib3(i))) end
+	print()
+	for i=0,10 do io.write(("%4d"):format(fib4(i))) end
 	print()
 end

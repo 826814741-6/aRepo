@@ -14,6 +14,7 @@ local function fib1(n)
 end
 
 local function fib2(n)
+	if n <= 0 then return 0 end
 	local a, b, c, x, y = 1, 1, 0, 1, 0
 	n = n - 1
 	while n > 0 do
@@ -27,22 +28,22 @@ local function fib2(n)
 end
 
 local function fib3(n)
-	local a, b, c = 1, 0, 1
-	while c < n do
-		a, b, c = a + b, a, c + 1
+	local a, b, c = 0, 1, 1
+	while c <= n do
+		a, b, c = b, a + b, c + 1
 	end
 	return a
 end
 
 local function fib4(n)
 	function rec(a, b, c)
-		if c < n then
-			return rec(a + b, a, c + 1)
+		if c <= n then
+			return rec(b, a + b, c + 1)
 		else
 			return a
 		end
 	end
-	return rec(1, 0, 1)
+	return rec(0, 1, 1)
 end
 
 return {
