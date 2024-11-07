@@ -138,7 +138,7 @@ function gUnpackerWithCounter()
 	function T:reset() T.c = 0 end
 	return setmetatable(T, {
 		__call = function (self, r)
-			T.c = T.c + 1
+			self.c = self.c + 1
 			return r[1]
 		end
 	})

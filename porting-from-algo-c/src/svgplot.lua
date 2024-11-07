@@ -70,7 +70,7 @@ end
 
 local function gMove(height)
 	mustBeNum(height)
-	function move (x, y)
+	function move(x, y)
 		return ("M %g %g "):format(x, height - y)
 	end
 	return isWrapWithValidator
@@ -84,7 +84,7 @@ end
 
 local function gDraw(height)
 	mustBeNum(height)
-	function draw (x, y)
+	function draw(x, y)
 		return ("L %g %g "):format(x, height - y)
 	end
 	return isWrapWithValidator
