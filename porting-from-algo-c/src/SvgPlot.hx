@@ -21,6 +21,8 @@
 
 package src;
 
+import src.Helper.rndUInt24;
+
 interface Plotter {
 	public function pathStart():Plotter;
 	public function pathEnd(isClosePath:Bool, style:StyleMaker):Plotter;
@@ -452,7 +454,7 @@ private function fmtColor(c:Color):String
 		case White:
 			'white';
 		case RandomRGB:
-			final i = Math.floor(Math.random() * 0xffffff);
+			final i = rndUInt24();
 			'rgb(${i >> 16} ${(i >> 8) & 0xff} ${i & 0xff})';
 		case Raw(s):
 			s;

@@ -84,3 +84,11 @@ function rightAlignWithSpace<T>(buf:StringBuf, length:Int, src:T) {
 	buf.add(StringTools.rpad("", " ", n));
 	buf.add(src);
 }
+
+private function gRandomUnsignedInteger(i:UInt):() -> UInt
+	return () -> Math.floor(Math.random() * i);
+
+final rndUInt8 = gRandomUnsignedInteger(0xff);
+final rndUInt16 = gRandomUnsignedInteger(0xffff);
+final rndUInt24 = gRandomUnsignedInteger(0xffffff);
+final rndUInt32 = gRandomUnsignedInteger(0xffffffff);
