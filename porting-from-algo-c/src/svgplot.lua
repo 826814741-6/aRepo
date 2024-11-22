@@ -528,33 +528,25 @@ end
 
 --
 
-local function makeSVMethod(s)
-	local fmt = ([[%s="%%s"]]):format(mustBeStr(s))
-	return function (self, sv)
-		if self.attr[s] ~= true then
-			self.attr[s] = true
-			t_insert(
-				self.buf,
-				fmt:format(mustBeStr(sv()))
-			)
+local function gMakeMethod(specifier, filter)
+	return function (s)
+		local fmt = ([[%s="%%%s"]]):format(mustBeStr(s), specifier)
+		return function (self, v)
+			if self.attr[s] ~= true then
+				self.attr[s] = true
+				t_insert(
+					self.buf,
+					fmt:format(filter(v))
+				)
+			end
+			return self
 		end
-		return self
 	end
 end
 
-local function makeRawNumMethod(s)
-	local fmt = ([[%s="%%g"]]):format(mustBeStr(s))
-	return function (self, v)
-		if self.attr[s] ~= true then
-			self.attr[s] = true
-			t_insert(
-				self.buf,
-				fmt:format(mustBeNum(v))
-			)
-		end
-		return self
-	end
-end
+local makeSVMethod, makeRawNumMethod =
+	gMakeMethod("s", function (v) return mustBeStr(v()) end),
+	gMakeMethod("g", function (v) return mustBeNum(v) end)
 
 local function styleMaker()
 	local T = { buf = {}; attr = {} }
