@@ -397,71 +397,34 @@ end
 
 --
 
-local function svgPlot(width, height)
-	assertInitialValue(width, height)
+local function gSvgPlot(writer, methodMaker)
+	return function (width, height)
+		assertInitialValue(width, height)
 
-	local T = writer(width, height)
+		local T = writer(width, height)
 
-	T.pathStart = makeMethod("pathStart", pathStart)
-	T.pathEnd = makeMethod("pathEnd", pathEnd)
+		T.pathStart = methodMaker("pathStart", pathStart)
+		T.pathEnd = methodMaker("pathEnd", pathEnd)
 
-	local move, draw = gMove(height), gDraw(height)
+		local move, draw = gMove(height), gDraw(height)
 
-	T.move = makeMethod("move", move)
-	T.moveRel = makeMethod("moveRel", moveRel)
-	T.draw = makeMethod("draw", draw)
-	T.drawRel = makeMethod("drawRel", drawRel)
-	T.circle = makeMethod("circle", circle)
-	T.ellipse = makeMethod("ellipse", ellipse)
-	T.line = makeMethod("line", line)
-	T.rect = makeMethod("rect", rect)
+		T.move = methodMaker("move", move)
+		T.moveRel = methodMaker("moveRel", moveRel)
+		T.draw = methodMaker("draw", draw)
+		T.drawRel = methodMaker("drawRel", drawRel)
+		T.circle = methodMaker("circle", circle)
+		T.ellipse = methodMaker("ellipse", ellipse)
+		T.line = methodMaker("line", line)
+		T.rect = methodMaker("rect", rect)
 
-	return mustBePlotter(T)
+		return mustBePlotter(T)
+	end
 end
 
-local function svgPlotWholeBuffer(width, height)
-	assertInitialValue(width, height)
-
-	local T = writerWholeBuffer(width, height)
-
-	T.pathStart = makeMethodForWholeBuffer("pathStart", pathStart)
-	T.pathEnd = makeMethodForWholeBuffer("pathEnd", pathEnd)
-
-	local move, draw = gMove(height), gDraw(height)
-
-	T.move = makeMethodForWholeBuffer("move", move)
-	T.moveRel = makeMethodForWholeBuffer("moveRel", moveRel)
-	T.draw = makeMethodForWholeBuffer("draw", draw)
-	T.drawRel = makeMethodForWholeBuffer("drawRel", drawRel)
-	T.circle = makeMethodForWholeBuffer("circle", circle)
-	T.ellipse = makeMethodForWholeBuffer("ellipse", ellipse)
-	T.line = makeMethodForWholeBuffer("line", line)
-	T.rect = makeMethodForWholeBuffer("rect", rect)
-
-	return mustBePlotter(T)
-end
-
-local function svgPlotWithBuffer(width, height)
-	assertInitialValue(width, height)
-
-	local T = writerWithBuffer(width, height)
-
-	T.pathStart = makeMethodForWithBuffer("pathStart", pathStart)
-	T.pathEnd = makeMethodForWithBuffer("pathEnd", pathEnd)
-
-	local move, draw = gMove(height), gDraw(height)
-
-	T.move = makeMethodForWithBuffer("move", move)
-	T.moveRel = makeMethodForWithBuffer("moveRel", moveRel)
-	T.draw = makeMethodForWithBuffer("draw", draw)
-	T.drawRel = makeMethodForWithBuffer("drawRel", drawRel)
-	T.circle = makeMethodForWithBuffer("circle", circle)
-	T.ellipse = makeMethodForWithBuffer("ellipse", ellipse)
-	T.line = makeMethodForWithBuffer("line", line)
-	T.rect = makeMethodForWithBuffer("rect", rect)
-
-	return mustBePlotter(T)
-end
+local svgPlot, svgPlotWholeBuffer, svgPlotWithBuffer =
+	gSvgPlot(writer, makeMethod),
+	gSvgPlot(writerWholeBuffer, makeMethodForWholeBuffer),
+	gSvgPlot(writerWithBuffer, makeMethodForWithBuffer)
 
 --
 
