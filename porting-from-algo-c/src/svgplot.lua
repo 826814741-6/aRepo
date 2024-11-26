@@ -528,7 +528,7 @@ end
 
 --
 
-local function gMakeMethod(specifier, filter)
+local function gMakeStyleMethod(specifier, filter)
 	return function (s)
 		local fmt = ([[%s="%%%s"]]):format(mustBeStr(s), specifier)
 		return function (self, v)
@@ -545,8 +545,8 @@ local function gMakeMethod(specifier, filter)
 end
 
 local makeSVMethod, makeRawNumMethod =
-	gMakeMethod("s", function (v) return mustBeStr(v()) end),
-	gMakeMethod("g", function (v) return mustBeNum(v) end)
+	gMakeStyleMethod("s", function (v) return mustBeStr(v()) end),
+	gMakeStyleMethod("g", function (v) return mustBeNum(v) end)
 
 local function styleMaker()
 	local T = { buf = {}; attr = {} }
