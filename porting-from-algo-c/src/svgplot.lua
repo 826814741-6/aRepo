@@ -232,6 +232,49 @@ end
 -- each plotter method during prototyping.
 --
 
+local getNum = isWrapWithValidator
+	and function (v) return v.numOfParams end
+	or getNumOfParams
+
+local s_char = string.char
+
+local function initP(v)
+	local r = {}
+	for i=1,getNum(v) do
+		r[i] = s_char(96 + i)
+	end
+	return r
+end
+
+local function initE(name, target, prelude)
+	local r = { [name] = target }
+	if isTbl(prelude) then
+		for k,v in pairs(prelude) do
+			r[k] = v
+		end
+	end
+	return r
+end
+
+local function gMakeMethod(template, prelude)
+	return function (name, target)
+		local param = t_concat(initP(target), ", ")
+		return load(([[return function (self%s%s)
+			%s
+			return self
+		end]]):format(
+			param ~= "" and ", " or "",
+			param,
+			template:format(name, param)
+		), "", "t", initE(name, target, prelude))()
+	end
+end
+
+local makeMethod, makeMethodForWholeBuffer, makeMethodForWithBuffer =
+	gMakeMethod([[self.fh:write(%s(%s))]]),
+	gMakeMethod([[t_insert(self.buffer, %s(%s))]], {t_insert = t_insert}),
+	gMakeMethod([[self.buffer:writer(%s(%s))]])
+
 --
 
 local function writer(w, h)
@@ -351,57 +394,19 @@ local function svgPlot(width, height)
 
 	local T = writer(width, height)
 
-	function T:pathStart()
-		T.fh:write(pathStart())
-		return T
-	end
-
-	function T:pathEnd(isClosePath, style)
-		T.fh:write(pathEnd(isClosePath, style))
-		return T
-	end
+	T.pathStart = makeMethod("pathStart", pathStart)
+	T.pathEnd = makeMethod("pathEnd", pathEnd)
 
 	local move, draw = gMove(height), gDraw(height)
 
-	function T:move(x, y)
-		T.fh:write(move(x, y))
-		return T
-	end
-
-	function T:moveRel(x, y)
-		T.fh:write(moveRel(x, y))
-		return T
-	end
-
-	function T:draw(x, y)
-		T.fh:write(draw(x, y))
-		return T
-	end
-
-	function T:drawRel(x, y)
-		T.fh:write(drawRel(x, y))
-		return T
-	end
-
-	function T:circle(cx, cy, r, style)
-		T.fh:write(circle(cx, cy, r, style))
-		return T
-	end
-
-	function T:ellipse(cx, cy, rx, ry, style)
-		T.fh:write(ellipse(cx, cy, rx, ry, style))
-		return T
-	end
-
-	function T:line(x1, y1, x2, y2, style)
-		T.fh:write(line(x1, y1, x2, y2, style))
-		return T
-	end
-
-	function T:rect(x, y, w, h, rx, ry, style)
-		T.fh:write(rect(x, y, w, h, rx, ry, style))
-		return T
-	end
+	T.move = makeMethod("move", move)
+	T.moveRel = makeMethod("moveRel", moveRel)
+	T.draw = makeMethod("draw", draw)
+	T.drawRel = makeMethod("drawRel", drawRel)
+	T.circle = makeMethod("circle", circle)
+	T.ellipse = makeMethod("ellipse", ellipse)
+	T.line = makeMethod("line", line)
+	T.rect = makeMethod("rect", rect)
 
 	return mustBePlotter(T)
 end
@@ -411,57 +416,19 @@ local function svgPlotWholeBuffer(width, height)
 
 	local T = writerWholeBuffer(width, height)
 
-	function T:pathStart()
-		t_insert(T.buffer, pathStart())
-		return T
-	end
-
-	function T:pathEnd(isClosePath, style)
-		t_insert(T.buffer, pathEnd(isClosePath, style))
-		return T
-	end
+	T.pathStart = makeMethodForWholeBuffer("pathStart", pathStart)
+	T.pathEnd = makeMethodForWholeBuffer("pathEnd", pathEnd)
 
 	local move, draw = gMove(height), gDraw(height)
 
-	function T:move(x, y)
-		t_insert(T.buffer, move(x, y))
-		return T
-	end
-
-	function T:moveRel(x, y)
-		t_insert(T.buffer, moveRel(x, y))
-		return T
-	end
-
-	function T:draw(x, y)
-		t_insert(T.buffer, draw(x, y))
-		return T
-	end
-
-	function T:drawRel(x, y)
-		t_insert(T.buffer, drawRel(x, y))
-		return T
-	end
-
-	function T:circle(cx, cy, r, style)
-		t_insert(T.buffer, circle(cx, cy, r, style))
-		return T
-	end
-
-	function T:ellipse(cx, cy, rx, ry, style)
-		t_insert(T.buffer, ellipse(cx, cy, rx, ry, style))
-		return T
-	end
-
-	function T:line(x1, y1, x2, y2, style)
-		t_insert(T.buffer, line(x1, y1, x2, y2, style))
-		return T
-	end
-
-	function T:rect(x, y, w, h, rx, ry, style)
-		t_insert(T.buffer, rect(x, y, w, h, rx, ry, style))
-		return T
-	end
+	T.move = makeMethodForWholeBuffer("move", move)
+	T.moveRel = makeMethodForWholeBuffer("moveRel", moveRel)
+	T.draw = makeMethodForWholeBuffer("draw", draw)
+	T.drawRel = makeMethodForWholeBuffer("drawRel", drawRel)
+	T.circle = makeMethodForWholeBuffer("circle", circle)
+	T.ellipse = makeMethodForWholeBuffer("ellipse", ellipse)
+	T.line = makeMethodForWholeBuffer("line", line)
+	T.rect = makeMethodForWholeBuffer("rect", rect)
 
 	return mustBePlotter(T)
 end
@@ -471,57 +438,19 @@ local function svgPlotWithBuffer(width, height)
 
 	local T = writerWithBuffer(width, height)
 
-	function T:pathStart()
-		T.buffer:writer(pathStart())
-		return T
-	end
-
-	function T:pathEnd(isClosePath, style)
-		T.buffer:writer(pathEnd(isClosePath, style))
-		return T
-	end
+	T.pathStart = makeMethodForWithBuffer("pathStart", pathStart)
+	T.pathEnd = makeMethodForWithBuffer("pathEnd", pathEnd)
 
 	local move, draw = gMove(height), gDraw(height)
 
-	function T:move(x, y)
-		T.buffer:writer(move(x, y))
-		return T
-	end
-
-	function T:moveRel(x, y)
-		T.buffer:writer(moveRel(x, y))
-		return T
-	end
-
-	function T:draw(x, y)
-		T.buffer:writer(draw(x, y))
-		return T
-	end
-
-	function T:drawRel(x, y)
-		T.buffer:writer(drawRel(x, y))
-		return T
-	end
-
-	function T:circle(cx, cy, r, style)
-		T.buffer:writer(circle(cx, cy, r, style))
-		return T
-	end
-
-	function T:ellipse(cx, cy, rx, ry, style)
-		T.buffer:writer(ellipse(cx, cy, rx, ry, style))
-		return T
-	end
-
-	function T:line(x1, y1, x2, y2, style)
-		T.buffer:writer(line(x1, y1, x2, y2, style))
-		return T
-	end
-
-	function T:rect(x, y, w, h, rx, ry, style)
-		T.buffer:writer(rect(x, y, w, h, rx, ry, style))
-		return T
-	end
+	T.move = makeMethodForWithBuffer("move", move)
+	T.moveRel = makeMethodForWithBuffer("moveRel", moveRel)
+	T.draw = makeMethodForWithBuffer("draw", draw)
+	T.drawRel = makeMethodForWithBuffer("drawRel", drawRel)
+	T.circle = makeMethodForWithBuffer("circle", circle)
+	T.ellipse = makeMethodForWithBuffer("ellipse", ellipse)
+	T.line = makeMethodForWithBuffer("line", line)
+	T.rect = makeMethodForWithBuffer("rect", rect)
 
 	return mustBePlotter(T)
 end
