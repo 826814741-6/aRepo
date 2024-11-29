@@ -85,10 +85,10 @@ function rightAlignWithSpace<T>(buf:StringBuf, length:Int, src:T) {
 	buf.add(src);
 }
 
-private function gRandomUnsignedInteger(i:UInt):() -> UInt
-	return () -> Math.floor(Math.random() * i);
-
-final rndUInt8 = gRandomUnsignedInteger(0xff);
-final rndUInt16 = gRandomUnsignedInteger(0xffff);
-final rndUInt24 = gRandomUnsignedInteger(0xffffff);
-final rndUInt32 = gRandomUnsignedInteger(0xffffffff);
+inline function rndUInt24():UInt
+	return Std.random(0xffffff + 1);
+//
+// ref:
+// https://api.haxe.org/Std.html#random
+// https://haxe.org/manual/types-overflow.html
+//
