@@ -17,7 +17,7 @@ def _demo():
     DBL_EPSILON = 2.2204460492503131e-16  # from src/float.ie3
 
     def fmt(e):
-        print(" {0: <14g} {1: <14g} {2: <14g}".format(e, 1 + e, (1 + e) - 1))
+        print(f" {e: <14g} {e + 1: <14g} {(1 + e) - 1: <14g}")
 
     print(" e              1 + e          (1 + e) - 1")
     print("-------------- -------------- --------------")

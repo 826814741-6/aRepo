@@ -12,15 +12,15 @@
 import sys
 
 def _header(x, y):
-    return """<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="{0}" height="{1}">
-""".format(x, y)
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="{x}" height="{y}">
+"""
 
 def _pathStart():
     return """<path d=\""""
 
 def _pathEnd(isClosePath):
-    return """{0}" fill="none" stroke="black" />
-""".format("Z" if isClosePath else "")
+    return f"""{"Z" if isClosePath else ""}" fill="none" stroke="black" />
+"""
 
 def _footer():
     return """</svg>
@@ -47,16 +47,16 @@ class svgPlot:
         self.fh.write(_pathEnd(isClosePath))
 
     def move(self, x, y):
-        self.fh.write("M {0:g} {1:g} ".format(x, self.H - y))
+        self.fh.write(f"M {x:g} {self.H - y:g} ")
 
     def moveRel(self, x, y):
-        self.fh.write("m {0:g} {1:g} ".format(x, -y))
+        self.fh.write(f"m {x:g} {-y:g} ")
 
     def draw(self, x, y):
-        self.fh.write("L {0:g} {1:g} ".format(x, self.H - y))
+        self.fh.write(f"L {x:g} {self.H - y:g} ")
 
     def drawRel(self, x, y):
-        self.fh.write("l {0:g} {1:g} ".format(x, -y))
+        self.fh.write(f"l {x:g} {-y:g} ")
 
 def _demo(path):
     import math

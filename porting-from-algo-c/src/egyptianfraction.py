@@ -34,8 +34,8 @@ def egyptianFractionL(n0, d0, fmt=lambda t: t):
 #
 
 def _demo():
-    fmt0 = lambda n, d: "{0}/{1} = ".format(n, d)
-    fmt = lambda t: "1/{0}".format(t)
+    fmt0 = lambda n, d: f"{n}/{d} = "
+    fmt = lambda t: f"1/{t}"
 
     print("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...")
     n = int(input("numerator is > "))

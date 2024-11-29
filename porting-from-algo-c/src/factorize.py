@@ -16,13 +16,13 @@ def factorize(x0):
     q = x // d
     while q >= d:
         if x % d == 0:
-            print("{0} * ".format(d), end="")
+            print(f"{d} * ", end="")
             x = q
         else:
             d = d + 2
         q = x // d
 
-    print("{0}".format(x))
+    print(f"{x}")
 
 def factorizeG(x0):
     x = x0
@@ -67,13 +67,13 @@ def factorizeL(x0, fmt=lambda x: x):
 
 def _demo1(n, start=1):
     for i in range(start, n+1):
-        print("{0:5d} = ".format(i), end="")
+        print(f"{i:5d} = ", end="")
         factorize(i)
 
-        print("{0:5d} = ".format(i), end="")
+        print(f"{i:5d} = ", end="")
         print(" * ".join(map(str, factorizeG(i))))
 
-        print("{0:5d} = ".format(i), end="")
+        print(f"{i:5d} = ", end="")
         print(" * ".join(factorizeL(i, fmt=str)))
 
 def _demo2(n):
@@ -83,7 +83,7 @@ def _demo2(n):
     i = 1
     while i <= n:
         v = g.__next__()
-        assert v == 2, "ERROR: {0}th is not 2. ({1})".format(i, v)
+        assert v == 2, f"ERROR: {i}th is not 2. ({v})"
         i += 1
     assert g.__next__() == 997
     assert g.__next__() == 10007
