@@ -9,110 +9,108 @@
 --	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
+local id = require '_helper'.id
+
+local function chain1(init, ...)
+	local t = ({...})[1](init)
+	for _,v in ipairs({select(2, ...)}) do
+		t = v(t)
+	end
+	return t
+end
+
+local function gStep(div, isZero, initB, fnA, fnB)
+	function recA(n)
+		if isZero(n % 2) and 4 <= n then
+			fnA(n)
+			return recA(div(n, 2))
+		else
+			return n
+		end
+	end
+
+	function recB(n)
+		function rec(n, d)
+			local q = div(n, d)
+			if q >= d then
+				if isZero(n % d) then
+					fnB(d)
+					return rec(q, d)
+				else
+					return rec(n, d + 2)
+				end
+			else
+				return n
+			end
+		end
+		return rec(n, initB(3))
+	end
+
+	return recA, recB
+end
+
 local i_write = io.write
 
 local function factorize(x)
-	local n = x
-	while n >= 4 and n % 2 == 0 do
-		i_write("2 * ")
-		n = n // 2
-	end
+	function div(n, d) return n // d end
+	function isZero(v) return v == 0 end
 
-	local d = 3
-	local q = n // d
-	while q >= d do
-		if n % d == 0 then
-			i_write(("%d * "):format(d))
-			n = q
-		else
-			d = d + 2
-		end
-		q = n // d
-	end
+	function fA(_) i_write("2 * ") end
+	function fB(n) i_write(("%d * "):format(n)) end
+	function fC(n) i_write(("%d\n"):format(n)) end
 
-	i_write(("%d\n"):format(n))
+	local a, b = gStep(div, isZero, id, fA, fB)
+
+	chain1(x, a, b, fC)
 end
 
 local hasBC, bc = pcall(require, 'bc')
-local isZero = hasBC and bc.iszero or nil
-local bc_new = hasBC and bc.new or nil
-local bn2 = hasBC and bc_new(2) or nil
-local bn4 = hasBC and bc_new(4) or nil
 
 local factorizeM = hasBC and function (x)
-	local bn = bc_new(x)
-	while bn >= bn4 and isZero(bn % bn2) do
-		i_write("2 * ")
-		bn = bn / bn2
-	end
+	function div(n, d) return n / d end
 
-	local d = bc_new(3)
-	local q = bn / d
-	while q >= d do
-		if isZero(bn % d) then
-			i_write(("%s * "):format(d))
-			bn = q
-		else
-			d = d + bn2
-		end
-		q = bn / d
-	end
+	function fA(_) i_write("2 * ") end
+	function fB(n) i_write(("%s * "):format(n)) end
+	function fC(n) i_write(("%s\n"):format(n)) end
 
-	i_write(("%s\n"):format(bn))
+	local a, b = gStep(div, bc.iszero, bc.new, fA, fB)
+
+	chain1(x, bc.new, a, b, fC)
 end or nil
 
 local t_insert = table.insert
 
 local factorizeT = hasBC and function (x)
-	local bn, t = bc_new(x), {}
-	while bn >= bn4 and isZero(bn % bn2) do
-		t_insert(t, "2")
-		bn = bn / bn2
-	end
+	function div(n, d) return n / d end
 
-	local d = bc_new(3)
-	local q = bn / d
-	while q >= d do
-		if isZero(bn % d) then
-			t_insert(t, tostring(d))
-			bn = q
-		else
-			d = d + bn2
-		end
-		q = bn / d
-	end
+	local r = {}
 
-	t_insert(t, tostring(bn))
+	function fA(_) t_insert(r, "2") end
+	function fB(n) t_insert(r, tostring(n)) end
 
-	return t
+	local a, b = gStep(div, bc.iszero, bc.new, fA, fB)
+
+	chain1(x, bc.new, a, b, fB)
+
+	return r
+end or nil
+
+local co_yield = coroutine.yield
+local bn2 = hasBC and bc.new(2) or nil
+
+local bodyM = hasBC and function (x)
+	function div(n, d) return n / d end
+
+	function fA(_) co_yield(bn2) end
+	function fB(n) co_yield(n) end
+
+	local a, b = gStep(div, bc.iszero, bc.new, fA, fB)
+
+	return chain1(x, bc.new, a, b)
 end or nil
 
 local co_create = coroutine.create
 local co_resume = coroutine.resume
-local co_yield = coroutine.yield
-
-local bodyM = hasBC and function (x)
-	local bn = bc_new(x)
-
-	while bn >= bn4 and isZero(bn % bn2) do
-		co_yield(bn2)
-		bn = bn / bn2
-	end
-
-	local d = bc_new(3)
-	local q = bn / d
-	while q >= d do
-		if isZero(bn % d) then
-			co_yield(d)
-			bn = q
-		else
-			d = d + bn2
-		end
-		q = bn / d
-	end
-
-	return bn
-end or nil
 
 local demo = hasBC and function (n)
 	local co = co_create(bodyM)
@@ -122,7 +120,7 @@ local demo = hasBC and function (n)
 
 	for i=2,n do
 		_, v = co_resume(co)
-		assert(v == bn2)
+		assert(v == bn2, i)
 	end
 
 	_, v = co_resume(co)
