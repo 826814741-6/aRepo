@@ -6,7 +6,6 @@
 
 local isNum = require '_helper'.isNum
 local isTbl = require '_helper'.isTbl
--- local readOnlyTable = require '_helper'.readOnlyTable
 
 local MAX_VALUE = math.huge
 
@@ -22,8 +21,6 @@ local function checkParameters(parameters)
 	assert(isNum(parameters.maxX))
 	assert(isNum(parameters.maxY))
 	assert(isNum(parameters.maxZ))
-
-	-- return readOnlyTable(parameters)
 	return parameters
 end
 

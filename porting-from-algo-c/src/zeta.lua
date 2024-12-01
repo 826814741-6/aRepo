@@ -5,9 +5,7 @@
 --
 
 local isNum = require '_helper'.isNum
--- local readOnlyTable = require '_helper'.readOnlyTable
 
--- local coef = readOnlyTable({
 local coef = {
 	[0] = 8.333333333333333333333333333e-2,
 	-1.388888888888888888888888889e-3,
@@ -30,7 +28,6 @@ local coef = {
 	9.336734257095044668660153106e-31,
 	-2.365022415700629886484029550e-32
 }
--- })
 
 local function riemannZeta(n)
 	n = isNum(n) and n or 8

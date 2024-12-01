@@ -28,7 +28,6 @@ function _rec(x, n, r, t) {
 	} else {
 		return n<0 ? 1/r : r
 	}
-	#return t!=0 ? _rec(x*x, n, t%2==1?r*x:r, int(t/2)) : (n<0?1/r:r)
 }
 
 # in GAWK
@@ -43,7 +42,6 @@ function _rec(x, n, r, t) {
 #	} else {
 #		return n<0 ? 1/r : r
 #	}
-#	#return t!=0 ? _rec(x*x, n, and(t,1)==1?r*x:r, rshift(t,1)) : (n<0?1/r:r)
 #}
 
 function iPowR(x, n) {

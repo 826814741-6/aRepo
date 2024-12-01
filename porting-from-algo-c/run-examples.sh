@@ -13,7 +13,6 @@
 
 AWK=
 DC=
-HAXE=
 LUA=
 LUAJIT=
 PY=
@@ -27,7 +26,6 @@ error() {
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
 [ "$(command -v $DC)" = "" ] && error "DC"
-[ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
 [ "$(command -v $PY)" = "" ] && error "PY"
@@ -40,10 +38,6 @@ runAWK() {
 
 runDC() {
 	DC_LINE_LENGTH=0 $DC src/${1}.dc
-}
-
-runHAXE() {
-	$HAXE --interp -p examples --main Demo -D ${1}
 }
 
 runLUA() {
@@ -80,7 +74,7 @@ run complex LUA
 run crnd LUA LUAJIT
 run cuberoot AWK LUA LUAJIT
 run dayweek AWK LUA
-run e AWK DC HAXE LUA
+run e AWK DC LUA
 run eulerian AWK LUA
 run factorize LUA PY
 run fdist LUA
@@ -94,13 +88,13 @@ run isbn LUA
 run isbn13 LUA
 run komachi LUA
 run luhn LUA
-run machineepsilon HAXE LUA PY
+run machineepsilon LUA PY
 run mccarthy AWK LUA
 run montecarlo LUA
 run moveblock AWK LUA
 run multiply AWK LUA LUAJIT
 run normal AWK LUA
-run pi AWK DC HAXE LUA
+run pi AWK DC LUA
 run power AWK LUA LUAJIT
 run rand DC LUA LUAJIT
 run randperm LUA

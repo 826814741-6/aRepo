@@ -27,7 +27,6 @@
 
 local getValueOrInit = require '_helper'.getValueOrInit
 local isBool = require '_helper'.isBool
--- local readOnlyTable = require '_helper'.readOnlyTable
 
 local t_unpack = table.unpack
 local m_abs = math.abs
@@ -220,7 +219,6 @@ local function makeColor(rgb)
 	return ("<I"):pack(rgb)
 end
 
--- local PRESET_COLORS = readOnlyTable({
 local PRESET_COLORS = {
 	BLACK = ("<I"):pack(0x000000),
 	WHITE = ("<I"):pack(0xffffff),
@@ -228,7 +226,6 @@ local PRESET_COLORS = {
 	GREEN = ("<I"):pack(0x00ff00),
 	BLUE  = ("<I"):pack(0x0000ff)
 }
--- })
 
 return {
 	BMP = BMP,

@@ -12,7 +12,6 @@
 #
 
 AWK=
-HAXE=
 LUA=
 LUAJIT=
 PY=
@@ -25,7 +24,6 @@ error() {
 }
 
 [ "$(command -v $AWK)" = "" ] && error "AWK"
-[ "$(command -v $HAXE)" = "" ] && error "HAXE"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
 [ "$(command -v $PY)" = "" ] && error "PY"
@@ -41,10 +39,6 @@ runAWK() {
 	fi
 
 	$AWK $HELPER -f src/${1}.awk -f examples/${1}.awk
-}
-
-runHAXE() {
-	$HAXE --interp -p examples --main DemoGraphics -D ${1}
 }
 
 runLUA() {
@@ -73,19 +67,19 @@ run() {
 run 3dgraph LUA
 run bifur LUA
 run binormalG LUA
-run ccurve AWK HAXE LUA
-run circle HAXE LUA LUAJIT
+run ccurve AWK LUA
+run circle LUA LUAJIT
 run dragoncurve LUA
 run dragoncurveR LUA
-run ellipse HAXE LUA LUAJIT
+run ellipse LUA LUAJIT
 run gasket LUA
 run grBMP LUA LUAJIT PY
 run hilbert LUA LUAJIT
 run julia LUA
 run koch LUA
-run line HAXE LUA LUAJIT
-run lissajouscurve AWK HAXE LUA LUAJIT
+run line LUA LUAJIT
+run lissajouscurve AWK LUA LUAJIT
 run lorenz LUA
 run sierpinski LUA
-run svgplot AWK HAXE LUA LUAJIT PY
-run treecurve AWK HAXE LUA
+run svgplot AWK LUA LUAJIT PY
+run treecurve AWK LUA
