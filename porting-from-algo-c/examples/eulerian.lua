@@ -4,7 +4,7 @@
 --	Eulerian	to	eulerianNumber
 --
 
-local M = require 'eulerian'
+local M = require 'something-recursive'
 local H = require '_helper'
 
 local eulerianNumber = M.eulerianNumber

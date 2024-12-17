@@ -16,13 +16,11 @@ local EULER = 0.577215664901532860606512090082 -- from src/ci.c; see below
 local PI = math.pi
 
 --
--- In my environment(*), this numeric string is treated as:
+-- In my environment, this numeric string is treated as:
 --
 -- > function fmt(n) return ("%.20f %.20g %q"):format(n, n, n) end
 -- > fmt(0.577215664901532860606512090082)
 -- 0.57721566490153286555 0.57721566490153286555 0x1.2788cfc6fb619p-1
---
--- *) I do not touch the value of LUA_32BITS in luaconf.h. (see manual 2.1)
 --
 
 local m_sin, m_cos, m_log = math.sin, math.cos, math.log

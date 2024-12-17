@@ -205,6 +205,18 @@ local function wrapWithValidator(body, paramValidators, returnValidators, unpack
 	})
 end
 
+local function gUnpackerWithCounter()
+	local T = { c = 0 }
+	function T:get() return T.c end
+	function T:reset() T.c = 0 end
+	return setmetatable(T, {
+		__call = function (self, r)
+			self.c = self.c + 1
+			return r[1]
+		end
+	})
+end
+
 return {
 	abs = abs,
 	atLeastOne = atLeastOne,
@@ -228,5 +240,6 @@ return {
 	tableWriter = tableWriter,
 	with = with,
 	withPlotter = withPlotter,
-	wrapWithValidator = wrapWithValidator
+	wrapWithValidator = wrapWithValidator,
+	gUnpackerWithCounter = gUnpackerWithCounter
 }

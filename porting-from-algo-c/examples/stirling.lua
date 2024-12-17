@@ -5,7 +5,7 @@
 --	int Stirling2(int, int)		to	stirling2
 --
 
-local M = require 'stirling'
+local M = require 'something-recursive'
 local H = require '_helper'
 
 local stirling1, stirling2 = M.stirling1, M.stirling2

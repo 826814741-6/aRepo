@@ -2,46 +2,106 @@
 --	from src/tarai.c
 --
 --	int tarai(int, int, int)	to	tarai
+--	tarai				to	taraiC
 --	tarai				to	tak(*)
 --
 --	*) https://en.wikipedia.org/wiki/Tak_(function)
 --
 
-local M = require 'tarai'
+local M = require 'something-recursive'
 local H = require '_helper'
 
-local tarai, tak, count = M.tarai, M.tak, H.count
+local tarai, taraiC, tak, count = M.tarai, M.taraiC, M.tak, H.count
+local count, isFun, isNum, wrapWithValidator, gUnpackerWithCounter =
+	H.count, H.isFun, H.isNum, H.wrapWithValidator, H.gUnpackerWithCounter
 
-function taraiC(x, y, z)
-	local _C = 0
-	function t(x, y, z)
-		_C = _C + 1
-		if x() <= y() then return y() end
-		return t(
-			function() return t(function() return x()-1 end, y, z) end,
-			function() return t(function() return y()-1 end, z, x) end,
-			function() return t(function() return z()-1 end, x, y) end
-		)
-	end
-	return t(
-		function() return x end,
-		function() return y end,
-		function() return z end
-	), _C
+local unpacker, unpackerC = gUnpackerWithCounter(), gUnpackerWithCounter()
+
+local function fw(f)
+	return wrapWithValidator(f, {isNum, isNum, isNum}, {isNum}, unpacker)
+end
+local function fwC(f)
+	return wrapWithValidator(f, {isFun, isFun, isFun}, {isNum}, unpackerC)
 end
 
 do
-	print(("%s = %d (%d)"):format(
-		"tarai(10, 5, 0)", tarai(10, 5, 0), count(tarai, 10, 5, 0)))
+	function cnt(x, y, z)
+		local C = 0
+		function rec(x, y, z)
+			C = C + 1
+			if x <= y then return y end
+			return rec(rec(x-1, y, z), rec(y-1, z, x), rec(z-1, x, y))
+		end
+		rec(x, y, z)
+		return C
+	end
+	function cntC(x, y, z)
+		local C = 0
+		function rec(x, y, z)
+			C = C + 1
+			if x() <= y() then return y() end
+			return rec(
+				function() return rec(function() return x()-1 end, y, z) end,
+				function() return rec(function() return y()-1 end, z, x) end,
+				function() return rec(function() return z()-1 end, x, y) end
+			)
+		end
+		rec(
+			function() return x end,
+			function() return y end,
+			function() return z end
+		)
+		return C
+	end
 
-	print(("%s = %d (%d)"):format(
-		"tak(10, 5, 0)", tak(10, 5, 0), count(tak, 10, 5, 0)))
+	function taraiW(x, y, z)
+		function rec(x, y, z)
+			if x <= y then return y end
+			return fw(rec)(
+				fw(rec)(x-1, y, z),
+				fw(rec)(y-1, z, x),
+				fw(rec)(z-1, x, y)
+			)
+		end
+		return fw(rec)(x, y, z)
+	end
+	function taraiCW(x, y, z)
+		function rec(x, y, z)
+			if x() <= y() then return y() end
+			return fwC(rec)(
+				function() return fwC(rec)(function() return x()-1 end, y, z) end,
+				function() return fwC(rec)(function() return y()-1 end, z, x) end,
+				function() return fwC(rec)(function() return z()-1 end, x, y) end
+			)
+		end
+		return fwC(rec)(
+			function() return x end,
+			function() return y end,
+			function() return z end
+		)
+	end
 
-	local r, c = taraiC(10, 5, 0)
-	print(("%s = %d (%d) (%d)"):format(
-		"taraiC(10, 5, 0)", r, count(taraiC, 10, 5, 0), c))
+	io.write(
+		"tarai(10, 5, 0), taraiC(10, 5, 0), taraiW(10, 5, 0), taraiCW(10, 5, 0) = ",
+		tarai(10, 5, 0), ", ", taraiC(10, 5, 0), ", ", taraiW(10, 5, 0), ", ", taraiCW(10, 5, 0), "\n",
 
-	r, c = taraiC(100, 50, 0)
-	print(("%s = %d (%d) (%d)"):format(
-		"taraiC(100, 50, 0)", r, count(taraiC, 100, 50, 0), c))
+		"cnt(10, 5, 0), count(tarai, 10, 5, 0), unpacker:get() = ",
+		cnt(10, 5, 0), ", ", count(tarai, 10, 5, 0), ", ", unpacker:get(), "\n",
+
+		"cntC(10, 5, 0), count(taraiC, 10, 5, 0), unpackerC:get() = ",
+		cntC(10, 5, 0), ", ", count(taraiC, 10, 5, 0), ", ", unpackerC:get(), "\n--\n"
+	)
+
+	unpackerC:reset()
+
+	io.write(
+		"taraiC(100, 50, 0), taraiCW(100, 50, 0) = ",
+		taraiC(100, 50, 0), ", ", taraiCW(100, 50, 0), "\n",
+
+		"cntC(100, 50, 0), count(taraiC, 100, 50, 0), unpackerC:get() = ",
+		cntC(100, 50, 0), ", ", count(taraiC, 100, 50, 0), ", ", unpackerC:get(), "\n--\n",
+
+		"tak(10, 5, 0), count(tak, 10, 5, 0) = ",
+		tak(10, 5, 0), ", ", count(tak, 10, 5, 0), "\n"
+	)
 end
