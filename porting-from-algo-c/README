@@ -9,7 +9,6 @@
 
 	*.awk:     AWK
 	*.dc:      GNU dc
-	*.hx:      Haxe
 	*.lua:     Lua (5.3-)
 	*.luajit:  LuaJIT
 	*.py:      CPython3/MicroPython

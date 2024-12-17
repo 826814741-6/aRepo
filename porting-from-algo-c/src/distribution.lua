@@ -33,7 +33,7 @@ local function pNormal(z, n)
 	local p = t
 
 	for i=3,n,2 do
-		t = t * ((z*z) / i)
+		t = t * ((z * z) / i)
 		local prev = p
 		p = p + t
 		if p == prev then return 0.5 + p end

@@ -46,7 +46,7 @@ local egyptianFractionM = hasBC and function (n0, d0)
 		n, d = n * t - d, d * t
 	end
 	i_write(("1/%s\n"):format(d / n))      -- %s and tostring; see below
-end
+end or nil
 
 --
 --	> The specifier 's' expects a string; if its argument is not a string,

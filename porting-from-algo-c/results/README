@@ -1,23 +1,23 @@
-#
-#	A. all at once
-#
-#	$ cd /path/to/porting-from-algo-c
-#	$ sh run-examples-graphics.sh
-#
-#		or
-#
-#	(> cd \path\to\porting-from-algo-c)
-#	(> busybox.exe sh run-examples-graphics.sh)
-#
+
+	A. all at once
+
+	$ cd /path/to/porting-from-algo-c
+	$ sh run-examples-graphics.sh
+
+		or
+
+	> cd \path\to\porting-from-algo-c
+	> busybox.exe sh run-examples-graphics.sh
 
 #
-#	B. one by one
-#
-#	$ cd /path/to/porting-from-algo-c
-#	$ LUA_PATH=src/?.lua [/path/to]lua examples/grBMP.lua
-#
-#		or
-#
-#	(> cd \path\to\porting-from-algo-c)
-#	(> busybox.exe sh -c "LUA_PATH=src/?.lua [/path/to]lua.exe examples/grBMP.lua")
-#
+
+	B. one by one
+
+	$ cd /path/to/porting-from-algo-c
+	$ LUA_PATH='src/?.lua' [/path/to]lua examples/grBMP.lua
+
+		or
+
+	> cd \path\to\porting-from-algo-c
+	> busybox.exe sh -c "LUA_PATH=src/?.lua [/path/to]lua.exe examples/grBMP.lua"
+
