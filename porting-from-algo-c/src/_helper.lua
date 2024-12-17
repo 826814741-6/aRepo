@@ -205,14 +205,15 @@ local function wrapWithValidator(body, paramValidators, returnValidators, unpack
 	})
 end
 
-local function gUnpackerWithCounter()
+local function gUnpackerWithCounter(unpacker)
+	unpacker = unpacker ~= nil and unpacker or function (r) return r[1] end
 	local T = { c = 0 }
 	function T:get() return T.c end
 	function T:reset() T.c = 0 end
 	return setmetatable(T, {
 		__call = function (self, r)
 			self.c = self.c + 1
-			return r[1]
+			return unpacker(r)
 		end
 	})
 end
