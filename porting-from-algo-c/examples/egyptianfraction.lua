@@ -19,14 +19,14 @@ local egyptianFractionCO = M.egyptianFractionCO
 
 local i_read, i_write = io.read, io.write
 
-do
+local function demo_interactive()
 	i_write("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...\n")
 
-	i_write("e.g. 2/5 = ")
+	i_write("2/5 = ")
 	egyptianFraction(2, 5)
-	i_write("e.g. 3/5 = ")
+	i_write("3/5 = ")
 	i_write(table.concat(egyptianFractionT(3, 5), " + "), "\n")
-	i_write("e.g. 20/30 = ")
+	i_write("20/30 = ")
 	egyptianFractionCO(20, 30)
 
 	i_write("numerator is > ")
@@ -40,6 +40,33 @@ do
 	else
 		egyptianFractionT(tonumber(n), tonumber(d))
 	end
+end
+
+local function demo()
+	function run(n, d)
+		i_write(("%s/%s = "):format(n, d))
+		egyptianFraction(n, d)
+
+		i_write(("%s/%s = "):format(n, d))
+		i_write(table.concat(egyptianFractionT(n, d), " + "), "\n")
+
+		i_write(("%s/%s = "):format(n, d))
+		egyptianFractionCO(n, d)
+
+		if egyptianFractionM ~= nil then
+			i_write(("%s/%s = "):format(n, d))
+			egyptianFractionM(n, d)
+		end
+	end
+
+	i_write("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...\n")
+	run(2, 5)
+	run(3, 5)
+	run(10, 122)
+end
+
+do
+	demo()
 
 --
 --	Note:

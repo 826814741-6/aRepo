@@ -33,22 +33,39 @@ def egyptianFractionL(n0, d0, fmt=lambda t: t):
 
 #
 
-def _demo():
-    fmt0 = lambda n, d: f"{n}/{d} = "
+def _demo_interactive():
     fmt = lambda t: f"1/{t}"
 
     print("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...")
     n = int(input("numerator is > "))
     d = int(input("denominator is > "))
 
-    print(fmt0(n, d), end="")
+    print(f"{n}/{d} = ", end="")
     egyptianFraction(n, d)
 
-    print(fmt0(n, d), end="")
+    print(f"{n}/{d} = ", end="")
     print(" + ".join(map(fmt, egyptianFractionG(n, d))))
 
-    print(fmt0(n, d), end="")
+    print(f"{n}/{d} = ", end="")
     print(" + ".join(egyptianFractionL(n, d, fmt=fmt)))
+
+def _demo():
+    def run(n, d):
+        fmt = lambda t: f"1/{t}"
+
+        print(f"{n}/{d} = ", end="")
+        egyptianFraction(n, d)
+
+        print(f"{n}/{d} = ", end="")
+        print(" + ".join(map(fmt, egyptianFractionG(n, d))))
+
+        print(f"{n}/{d} = ", end="")
+        print(" + ".join(egyptianFractionL(n, d, fmt=fmt)))
+
+    print("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...")
+    run(2, 5)
+    run(3, 5)
+    run(10, 122)
 
 if __name__ == '__main__':
     _demo()

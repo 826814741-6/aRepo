@@ -11,7 +11,7 @@
 local M = require 'something-recursive'
 local H = require '_helper'
 
-local tarai, taraiC, tak, count = M.tarai, M.taraiC, M.tak, H.count
+local tarai, taraiC, tak = M.tarai, M.taraiC, M.tak
 local count, isFun, isNum, wrapWithValidator, gUnpackerWithCounter =
 	H.count, H.isFun, H.isNum, H.wrapWithValidator, H.gUnpackerWithCounter
 
