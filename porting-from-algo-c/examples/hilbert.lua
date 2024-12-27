@@ -70,25 +70,15 @@ end
 do
 	local size, offset = 1000, 3
 
-	local pltB = extension(svgPlotWholeBuffer(size + offset, size + offset))
+	local pltA, pltB, pltC =
+		extension(svgPlot(size + offset, size + offset)),
+		extension(svgPlotWholeBuffer(size + offset, size + offset)),
+		extension(svgPlotWithBuffer(size + offset, size + offset))
 	local wpA, wpB, wpC50, wpC20000 =
-		withPlotter(
-			"results/hilbert-dummy-A.svg",
-			extension(svgPlot(size + offset, size + offset))
-		),
-		withPlotter(
-			"results/hilbert-dummy-B.svg",
-			pltB
-		),
-		withPlotter(
-			"results/hilbert-dummy-C.svg",
-			extension(svgPlotWithBuffer(size + offset, size + offset))
-		),
-		withPlotter(
-			"results/hilbert-dummy-D.svg",
-			extension(svgPlotWithBuffer(size + offset, size + offset)),
-			20000
-		)
+		withPlotter("results/hilbert-dummy-A.svg", pltA),
+		withPlotter("results/hilbert-dummy-B.svg", pltB),
+		withPlotter("results/hilbert-dummy-C.svg", pltC),
+		withPlotter("results/hilbert-dummy-D.svg", pltC, 20000)
 
 	function body(plotter)
 		plotter

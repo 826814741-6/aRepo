@@ -70,11 +70,9 @@ def _demo1(n, start=1):
         print(f"{i:5d} = ", end="")
         factorize(i)
 
-        print(f"{i:5d} = ", end="")
-        print(" * ".join(map(str, factorizeG(i))))
+        print(f"{i:5d} = {' * '.join(map(str, factorizeG(i)))}")
 
-        print(f"{i:5d} = ", end="")
-        print(" * ".join(factorizeL(i, fmt=str)))
+        print(f"{i:5d} = {' * '.join(factorizeL(i, fmt=str))}")
 
 def _demo2(n):
     t = (1 << n) * 997 * 10007

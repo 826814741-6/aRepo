@@ -43,11 +43,9 @@ def _demo_interactive():
     print(f"{n}/{d} = ", end="")
     egyptianFraction(n, d)
 
-    print(f"{n}/{d} = ", end="")
-    print(" + ".join(map(fmt, egyptianFractionG(n, d))))
+    print(f"{n}/{d} = {' + '.join(map(fmt, egyptianFractionG(n, d)))}")
 
-    print(f"{n}/{d} = ", end="")
-    print(" + ".join(egyptianFractionL(n, d, fmt=fmt)))
+    print(f"{n}/{d} = {' + '.join(egyptianFractionL(n, d, fmt=fmt))}")
 
 def _demo():
     def run(n, d):
@@ -56,11 +54,9 @@ def _demo():
         print(f"{n}/{d} = ", end="")
         egyptianFraction(n, d)
 
-        print(f"{n}/{d} = ", end="")
-        print(" + ".join(map(fmt, egyptianFractionG(n, d))))
+        print(f"{n}/{d} = {' + '.join(map(fmt, egyptianFractionG(n, d)))}")
 
-        print(f"{n}/{d} = ", end="")
-        print(" + ".join(egyptianFractionL(n, d, fmt=fmt)))
+        print(f"{n}/{d} = {' + '.join(egyptianFractionL(n, d, fmt=fmt))}")
 
     print("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...")
     run(2, 5)

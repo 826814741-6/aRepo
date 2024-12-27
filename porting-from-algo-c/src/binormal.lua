@@ -4,9 +4,9 @@
 --	void binormal_rnd(double, double *, double *)	to	binormalRnd
 --
 
-local floor = math.floor
-local log = math.log
-local sqrt = math.sqrt
+local m_floor = math.floor
+local m_log = math.log
+local m_sqrt = math.sqrt
 
 local function binormalRnd(n, crnd)
 	local r1, r2, t
@@ -16,8 +16,8 @@ local function binormalRnd(n, crnd)
 		t = r1 * r1 + r2 * r2
 	until t <= 1 and t ~= 0
 
-	t = -log(t) / t
-	r1, r2 = sqrt((1 + n) * t) * r1, sqrt((1 - n) * t) * r2
+	t = -m_log(t) / t
+	r1, r2 = m_sqrt((1 + n) * t) * r1, m_sqrt((1 - n) * t) * r2
 
 	return r1 + r2, r1 - r2
 end
@@ -27,7 +27,7 @@ local function samplePlotter(x, y, m, fgColor, bgColor)
 		bmp:clear(bgColor)
 		for _=1,n do
 			local a, b = binormalRnd(r, crnd)
-			bmp:dot(floor(x//2 + a*m), floor(y//2 + b*m), fgColor)
+			bmp:dot(m_floor(x//2 + a*m), m_floor(y//2 + b*m), fgColor)
 		end
 	end
 end
