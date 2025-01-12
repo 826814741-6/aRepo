@@ -251,7 +251,7 @@ do
 	p(clGen(iota):take(10))
 	p(clGen(iota, 50, -1):drop(50):take(10))
 	p(clGen(iota):take(10, function (v) return v*v*v end))
-	p(clGen(iota):filter(10, function (_,v) if v%2==0 then return v end end))
+	p(clGen(iota):filter(10, function (_,v) return v%2==0 end))
 
 	print("--")
 
@@ -268,13 +268,13 @@ do
 		:drop(5) -- 0, 1, 2, 3, 4
 		:filter(
 			5,
-			function (_,v) if v%2==0 then return v end end,
+			function (_, v) return v % 2 == 0 end,
 			function (v) buf:insert(v) end
 		)        -- 6, 8, 10, 12, 14
 		:drop(3) -- 15, 16, 17
 		:filter(
 			5,
-			function (_,v) if v%3==0 then return v end end,
+			function (_, v) return v % 3 == 0 end,
 			function (v) buf:insert(v) end
 		)        -- 18, 21, 24, 27, 30
 	p(buf:get())
