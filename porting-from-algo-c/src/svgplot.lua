@@ -551,7 +551,7 @@ end
 
 local makeSVMethod, makeRawNumMethod =
 	gMakeStyleMethod("s", function (v) return mustBeStr(v()) end),
-	gMakeStyleMethod("g", function (v) return mustBeNum(v) end)
+	gMakeStyleMethod("g", mustBeNum)
 
 local function styleMaker()
 	local T = { buf = {}; attr = {} }

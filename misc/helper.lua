@@ -6,6 +6,7 @@ local t_insert = table.insert
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
 local function aintNil(v, defaultValue)
+	assert(defaultValue ~= nil, "'defaultValue' must be a non-nil value.")
 	return v ~= nil and v or defaultValue
 end
 

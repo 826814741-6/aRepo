@@ -24,78 +24,76 @@ local function gMethod(v)
 	end
 end
 
+local function dropCL(self, n)
+	n = n ~= nil and n or 0
+	for _=1,n do
+		self.c()
+	end
+	return self, {}
+end
+local function dropCO(self, n)
+	n = n ~= nil and n or 0
+	for _=1,n do
+		co_resume(self.c)
+	end
+	return self, {}
+end
+
+local function takeCL(self, n, f)
+	n = n ~= nil and n or 0
+	f = f ~= nil and f or id
+	local r = {}
+	for i=1,n do
+		r[i] = f(self.c())
+	end
+	return self, r
+end
+local function takeCO(self, n, f)
+	n = n ~= nil and n or 0
+	f = f ~= nil and f or id
+	local r = {}
+	for i=1,n do
+		local _, v = co_resume(self.c)
+		r[i] = f(v)
+	end
+	return self, r
+end
+
+local function filterCL(self, n, f, g)
+	n = n ~= nil and n or 0
+	f = f ~= nil and f or alwaysTrue
+	g = g ~= nil and g or id
+	local r, i = {}, 1
+	while i <= n do
+		local v = self.c()
+		if f(i, v) then
+			r[i], i = g(v), i + 1
+		end
+	end
+	return self, r
+end
+local function filterCO(self, n, f, g)
+	n = n ~= nil and n or 0
+	f = f ~= nil and f or alwaysTrue
+	g = g ~= nil and g or id
+	local r, i = {}, 1
+	while i <= n do
+		local _, v = co_resume(self.c)
+		if f(i, v) then
+			r[i], i = g(v), i + 1
+		end
+	end
+	return self, r
+end
+
 local function beGen(v, ...)
 	local T = { c = v(...) }
 
 	local method = gMethod(T.c)
 
-	T.drop = method(
-		function (self, n)
-			n = n ~= nil and n or 0
-			for _=1,n do
-				self.c()
-			end
-			return self, {}
-		end,
-		function (self, n)
-			n = n ~= nil and n or 0
-			for _=1,n do
-				co_resume(self.c)
-			end
-			return self, {}
-		end
-	)
-
-	T.take = method(
-		function (self, n, f)
-			n = n ~= nil and n or 0
-			f = f ~= nil and f or id
-			local r = {}
-			for i=1,n do
-				r[i] = f(self.c())
-			end
-			return self, r
-		end,
-		function (self, n, f)
-			n = n ~= nil and n or 0
-			f = f ~= nil and f or id
-			local r = {}
-			for i=1,n do
-				local _, v = co_resume(self.c)
-				r[i] = f(v)
-			end
-			return self, r
-		end
-	)
-
-	T.filter = method(
-		function (self, n, f, g)
-			n = n ~= nil and n or 0
-			f = f ~= nil and f or alwaysTrue
-			g = g ~= nil and g or id
-			local r, i = {}, 1
-			while i <= n do
-				local v = self.c()
-				if f(i, v) then
-					r[i], i = g(v), i + 1
-				end
-			end
-			return self, r
-		end,
-		function (self, n, f, g)
-			n = n ~= nil and n or 0
-			f = f ~= nil and f or alwaysTrue
-			g = g ~= nil and g or id
-			local r, i = {}, 1
-			while i <= n do
-				local _, v = co_resume(self.c)
-				if f(i, v) then
-					r[i], i = g(v), i + 1
-				end
-			end
-			return self, r
-		end
-	)
+	T.drop = method(dropCL, dropCO)
+	T.take = method(takeCL, takeCO)
+	T.filter = method(filterCL, filterCO)
 
 	return T
 end
