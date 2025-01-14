@@ -67,7 +67,7 @@ run() {
 run 3dgraph LUA
 run bifur LUA
 run binormalG LUA
-run ccurve AWK LUA
+run ccurve AWK LUA PY
 run circle LUA LUAJIT
 run dragoncurve LUA
 run dragoncurveR LUA
@@ -78,8 +78,8 @@ run hilbert LUA LUAJIT
 run julia LUA
 run koch LUA
 run line LUA LUAJIT
-run lissajouscurve AWK LUA LUAJIT
+run lissajouscurve AWK LUA LUAJIT PY
 run lorenz LUA
 run sierpinski LUA
 run svgplot AWK LUA LUAJIT PY
-run treecurve AWK LUA
+run treecurve AWK LUA PY
