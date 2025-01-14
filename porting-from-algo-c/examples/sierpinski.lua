@@ -7,47 +7,35 @@
 --	void rdl(int)		to	sierpinski; rdl
 --
 
-local M0 = require 'svgplot'
-local M1 = require 'sierpinski'
-local H = require '_helper'
+local M = require 'svgplot'
 
-local svgPlot = M0.svgPlot
-local styleMaker = M0.styleMaker
-local SV = M0.StyleValue
-local sierpinski = M1.sierpinski
-local extension = M1.extension
-local with = H.with
-local withPlotter = H.withPlotter
+local svgPlot = M.svgPlot
+local svgPlotWholeBuffer = M.svgPlotWholeBuffer
+local svgPlotWithBuffer = M.svgPlotWithBuffer
+local styleMaker = M.styleMaker
+local SV = M.StyleValue
+local sierpinski = require 'sierpinski'.sierpinski
+local with = require '_helper'.with
 
-function sampleWriter(pathPrefix, size, offset, style)
-	local plotter = extension(svgPlot(size + offset, size + offset))
-
+local function sampleWriter(pathPrefix, size, offset, style)
+	local m = size + offset
 	return function (n)
-		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			plotter:plotStart(fh)
+		function body(plotter)
 			plotter:pathStart()
 			sierpinski(plotter, n, size)
 			plotter:pathEnd(true, style)
-			plotter:plotEnd()
+		end
+
+		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			svgPlot(m, m):write(fh, body)
 		end)
 
 		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			plotter
-				:plotStart(fh)
-				:pathStart()
-				:sierpinski(n, size)
-				:pathEnd(true, style)
-				:plotEnd()
+			svgPlotWholeBuffer(m, m):write(fh, body):reset()
 		end)
 
-		withPlotter(
-			("%s-C-%d.svg"):format(pathPrefix, n),
-			plotter
-		)(function (plotter)
-			plotter
-				:pathStart()
-				:sierpinski(n, size)
-				:pathEnd(true, style)
+		with(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			svgPlotWithBuffer(m, m):write(fh, body)
 		end)
 	end
 end

@@ -16,7 +16,6 @@ local SV = require 'svgplot'.StyleValue
 
 local RAND = require 'rand'.RAND
 local with = require '_helper'.with
-local withPlotter = require '_helper'.withPlotter
 
 function toRGB(n)
 	return n >> 16, (n >> 8) & 0xff, n & 0xff
@@ -46,10 +45,6 @@ do
 		bmp:write(fh)
 	end)
 
-	local pltA, pltB, pltC =
-		withPlotter("results/line-A.svg", svgPlotA(x, y)),
-		withPlotter("results/line-B.svg", svgPlotB(x, y)),
-		withPlotter("results/line-C.svg", svgPlotC(x, y))
 	local styleR, styleL =
 		styleMaker()
 			:fill(SV.Black)
@@ -66,7 +61,13 @@ do
 		loop(plotter, n, x, y, fmtL)
 	end
 
-	pltA(body)
-	pltB(body)
-	pltC(body)
+	with("results/line-A.svg", "w", function (fh)
+		svgPlotA(x, y):write(fh, body)
+	end)
+	with("results/line-B.svg", "w", function (fh)
+		svgPlotB(x, y):write(fh, body):reset()
+	end)
+	with("results/line-C.svg", "w", function (fh)
+		svgPlotC(x, y):write(fh, body)
+	end)
 end

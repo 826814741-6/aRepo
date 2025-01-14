@@ -30,7 +30,8 @@ local function dragonCurve(plotter, order, x0, y0)
 
 	local fold, p = {}, 0
 	for _=1,order do
-		fold[p], q = true, 2 * p
+		local q = p * 2
+		fold[p] = true
 		for i=p,q do
 			local dx1, dy1
 
@@ -50,22 +51,16 @@ local function dragonCurve(plotter, order, x0, y0)
 	end
 end
 
-local mustBePlotter = require 'svgplot'.mustBePlotter
-
 local function extension(T)
-	mustBePlotter(T)
-
 	function T:dragonCurveR(order, dx, dy, sign, x0, y0)
 		T:move(x0, y0)
 		rec(T, order, dx, dy, sign)
 		return T
 	end
-
 	function T:dragonCurve(order, x0, y0)
 		dragonCurve(T, order, x0, y0)
 		return T
 	end
-
 	return T
 end
 

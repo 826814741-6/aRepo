@@ -4,17 +4,15 @@
 --	a part of main		to	lorenzAttractor
 --
 
-local M0 = require 'svgplot'
-local M1 = require 'lorenz'
-local H = require '_helper'
+local M = require 'svgplot'
 
-local svgPlot = M0.svgPlot
-local styleMaker = M0.styleMaker
-local SV = M0.StyleValue
-local lorenzAttractor = M1.lorenzAttractor
-local extension = M1.extension
-local with = H.with
-local withPlotter = H.withPlotter
+local svgPlot = M.svgPlot
+local svgPlotWholeBuffer = M.svgPlotWholeBuffer
+local svgPlotWithBuffer = M.svgPlotWithBuffer
+local styleMaker = M.styleMaker
+local SV = M.StyleValue
+local lorenzAttractor = require 'lorenz'.lorenzAttractor
+local with = require '_helper'.with
 
 do
 	local sigma, rho, beta, n = 10, 28, 8 / 3, 4000
@@ -24,31 +22,21 @@ do
 		:stroke(SV.Black)
 		:get()
 
-	with("results/lorenz-A.svg", "w", function (fh)
-		local plotter = svgPlot(x, y)
-		plotter:plotStart(fh)
+	function body(plotter)
 		plotter:pathStart()
 		lorenzAttractor(plotter, sigma, rho, beta, n, a1, a2, a3, a4)
 		plotter:pathEnd(false, style)
-		plotter:plotEnd()
+	end
+
+	with("results/lorenz-A.svg", "w", function (fh)
+		svgPlot(x, y):write(fh, body)
 	end)
 
 	with("results/lorenz-B.svg", "w", function (fh)
-		extension(svgPlot(x, y))
-			:plotStart(fh)
-			:pathStart()
-			:lorenzAttractor(sigma, rho, beta, n, a1, a2, a3, a4)
-			:pathEnd(false, style)
-			:plotEnd()
+		svgPlotWholeBuffer(x, y):write(fh, body):reset()
 	end)
 
-	withPlotter(
-		"results/lorenz-C.svg",
-		extension(svgPlot(x, y))
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:lorenzAttractor(sigma, rho, beta, n, a1, a2, a3, a4)
-			:pathEnd(false, style)
+	with("results/lorenz-C.svg", "w", function (fh)
+		svgPlotWithBuffer(x, y):write(fh, body)
 	end)
 end

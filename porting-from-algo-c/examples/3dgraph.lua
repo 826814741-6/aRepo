@@ -4,50 +4,38 @@
 --	a part of main		to	tdGraph
 --
 
-local M0 = require 'svgplot'
-local M1 = require '3dgraph'
-local H = require '_helper'
+local M = require 'svgplot'
 
-local svgPlot = M0.svgPlot
-local styleMaker = M0.styleMaker
-local SV = M0.StyleValue
-local tdGraph = M1.tdGraph
-local extension = M1.extension
-local with = H.with
-local withPlotter = H.withPlotter
+local svgPlot = M.svgPlot
+local svgPlotWholeBuffer = M.svgPlotWholeBuffer
+local svgPlotWithBuffer = M.svgPlotWithBuffer
+local styleMaker = M.styleMaker
+local SV = M.StyleValue
+local tdGraph = require '3dgraph'.tdGraph
+local with = require '_helper'.with
 
-function sampleFunction(x, z)
+local function sampleFunction(x, z)
 	local t = x * x + z * z
 	return math.exp(-t) * math.cos(10 * math.sqrt(t))
 end
 
-function sampleWriter(pathPrefix, x, y, parameters, style)
-	with(("%s-A.svg"):format(pathPrefix), "w", function (fh)
-		local plotter = svgPlot(x, y)
-		plotter:plotStart(fh)
+local function sampleWriter(pathPrefix, x, y, parameters, style)
+	function body(plotter)
 		plotter:pathStart()
 		tdGraph(plotter, sampleFunction, parameters)
 		plotter:pathEnd(false, style)
-		plotter:plotEnd()
+	end
+
+	with(("%s-A.svg"):format(pathPrefix), "w", function (fh)
+		svgPlot(x, y):write(fh, body)
 	end)
 
 	with(("%s-B.svg"):format(pathPrefix), "w", function (fh)
-		extension(svgPlot(x, y))
-			:plotStart(fh)
-			:pathStart()
-			:tdGraph(sampleFunction, parameters)
-			:pathEnd(false, style)
-			:plotEnd()
+		svgPlotWholeBuffer(x, y):write(fh, body):reset()
 	end)
 
-	withPlotter(
-		("%s-C.svg"):format(pathPrefix),
-		extension(svgPlot(x, y))
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:tdGraph(sampleFunction, parameters)
-			:pathEnd(false, style)
+	with(("%s-C.svg"):format(pathPrefix), "w", function (fh)
+		svgPlotWithBuffer(x, y):write(fh, body)
 	end)
 end
 

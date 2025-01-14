@@ -4,19 +4,15 @@
 --	a part of main		to	lissajousCurve
 --
 
-local M0 = require 'svgplot'
-local M1 = require 'lissajouscurve'
-local H = require '_helper'
+local M = require 'svgplot'
 
-local svgPlot = M0.svgPlot
-local svgPlotWholeBuffer = M0.svgPlotWholeBuffer
-local svgPlotWithBuffer = M0.svgPlotWithBuffer
-local styleMaker = M0.styleMaker
-local SV = M0.StyleValue
-local lissajousCurve = M1.lissajousCurve
-local extension = M1.extension
-local with = H.with
-local withPlotter = H.withPlotter
+local svgPlot = M.svgPlot
+local svgPlotWholeBuffer = M.svgPlotWholeBuffer
+local svgPlotWithBuffer = M.svgPlotWithBuffer
+local styleMaker = M.styleMaker
+local SV = M.StyleValue
+local lissajousCurve = require 'lissajouscurve'.lissajousCurve
+local with = require '_helper'.with
 
 local n, offset = 300, 10
 local style = styleMaker()
@@ -25,97 +21,23 @@ local style = styleMaker()
 	:get()
 
 do
-	with("results/lissajouscurve-lj-A.svg", "w", function (fh)
-		local plotter = svgPlot((n + offset) * 2, (n + offset) * 2)
-		plotter:plotStart(fh)
+	function body(plotter)
 		plotter:pathStart()
 		lissajousCurve(plotter, n, offset)
 		plotter:pathEnd(false, style)
-		plotter:plotEnd()
+	end
+
+	local m = (n + offset) * 2
+
+	with("results/lissajouscurve-A.svg", "w", function (fh)
+		svgPlot(m, m):write(fh, body)
 	end)
 
-	with("results/lissajouscurve-lj-B.svg", "w", function (fh)
-		extension(svgPlot((n + offset) * 2, (n + offset) * 2))
-			:plotStart(fh)
-			:pathStart()
-			:lissajousCurve(n, offset)
-			:pathEnd(false, style)
-			:plotEnd()
+	with("results/lissajouscurve-B.svg", "w", function (fh)
+		svgPlotWholeBuffer(m, m):write(fh, body):reset()
 	end)
 
-	withPlotter(
-		"results/lissajouscurve-lj-C.svg",
-		extension(svgPlot((n + offset) * 2, (n + offset) * 2))
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:lissajousCurve(n, offset)
-			:pathEnd(false, style)
-	end)
-end
-
-do
-	local plotter = svgPlotWholeBuffer((n + offset) * 2, (n + offset) * 2)
-
-	plotter:pathStart()
-	lissajousCurve(plotter, n, offset)
-	plotter:pathEnd(false, style)
-
-	with("results/lissajouscurve-lj-WB-A-A.svg", "w", function (fh)
-		plotter:write(fh)
-	end)
-
-	plotter:reset()
-
-	extension(plotter)
-		:pathStart()
-		:lissajousCurve(n, offset)
-		:pathEnd(false, style)
-
-	with("results/lissajouscurve-lj-WB-A-B.svg", "w", function (fh)
-		plotter:write(fh)
-	end)
-
-	plotter:reset()
-
-	withPlotter(
-		"results/lissajouscurve-lj-WB-A-C.svg",
-		plotter
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:lissajousCurve(n, offset)
-			:pathEnd(false, style)
-	end)
-end
-
-do
-	with("results/lissajouscurve-lj-WB-B-A.svg", "w", function (fh)
-		local plotter = svgPlotWithBuffer((n + offset) * 2, (n + offset) * 2)
-		plotter:plotStart(fh, 30)
-		plotter:pathStart()
-		lissajousCurve(plotter, n, offset)
-		plotter:pathEnd(false, style)
-		plotter:plotEnd()
-	end)
-
-	with("results/lissajouscurve-lj-WB-B-B.svg", "w", function (fh)
-		extension(svgPlotWithBuffer((n + offset) * 2, (n + offset) * 2))
-			:plotStart(fh, 30)
-			:pathStart()
-			:lissajousCurve(n, offset)
-			:pathEnd(false, style)
-			:plotEnd()
-	end)
-
-	withPlotter(
-		"results/lissajouscurve-lj-WB-B-C.svg",
-		extension(svgPlotWithBuffer((n + offset) * 2, (n + offset) * 2)),
-		30
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:lissajousCurve(n, offset)
-			:pathEnd(false, style)
+	with("results/lissajouscurve-C.svg", "w", function (fh)
+		svgPlotWithBuffer(m, m):write(fh, body, 30)
 	end)
 end

@@ -63,10 +63,7 @@ local function hilbert(plotter, order, n, offset)
 	rul(order)
 end
 
-local mustBePlotter = require 'svgplot'.mustBePlotter
-
 local function extension(T)
-	mustBePlotter(T)
 	function T:hilbert(order, n, offset)
 		hilbert(T, order, n, offset)
 		return T

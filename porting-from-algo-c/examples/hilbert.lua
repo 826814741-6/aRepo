@@ -7,49 +7,35 @@
 --	void urd(int)		to	hilbert; urd
 --
 
-local M0 = require 'svgplot'
-local M1 = require 'hilbert'
-local H = require '_helper'
+local M = require 'svgplot'
 
-local svgPlot = M0.svgPlot
-local svgPlotWholeBuffer = M0.svgPlotWholeBuffer
-local svgPlotWithBuffer = M0.svgPlotWithBuffer
-local styleMaker = M0.styleMaker
-local SV = M0.StyleValue
-local hilbert = M1.hilbert
-local extension = M1.extension
-local with = H.with
-local withPlotter = H.withPlotter
+local svgPlot = M.svgPlot
+local svgPlotWholeBuffer = M.svgPlotWholeBuffer
+local svgPlotWithBuffer = M.svgPlotWithBuffer
+local styleMaker = M.styleMaker
+local SV = M.StyleValue
+local hilbert = require 'hilbert'.hilbert
+local with = require '_helper'.with
 
-function sampleWriter(pathPrefix, size, offset, style)
-	local plotter = extension(svgPlot(size + offset, size + offset))
-
+local function sampleWriter(pathPrefix, size, offset, style)
+	local m = size + offset
 	return function (n)
-		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			plotter:plotStart(fh)
+		function body(plotter)
 			plotter:pathStart()
 			hilbert(plotter, n, size, offset)
 			plotter:pathEnd(false, style)
-			plotter:plotEnd()
+		end
+
+		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			svgPlot(m, m):write(fh, body)
 		end)
 
 		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			plotter
-				:plotStart(fh)
-				:pathStart()
-				:hilbert(n, size, offset)
-				:pathEnd(false, style)
-				:plotEnd()
+			svgPlotWholeBuffer(m, m):write(fh, body):reset()
 		end)
 
-		withPlotter(
-			("%s-C-%d.svg"):format(pathPrefix, n),
-			plotter
-		)(function (plotter)
-			plotter
-				:pathStart()
-				:hilbert(n, size, offset)
-				:pathEnd(false, style)
+		with(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			svgPlotWithBuffer(m, m):write(fh, body)
 		end)
 	end
 end
@@ -69,37 +55,32 @@ end
 
 do
 	local size, offset = 1000, 3
+	local n = size + offset
 
-	local pltA, pltB, pltC =
-		extension(svgPlot(size + offset, size + offset)),
-		extension(svgPlotWholeBuffer(size + offset, size + offset)),
-		extension(svgPlotWithBuffer(size + offset, size + offset))
-	local wpA, wpB, wpC50, wpC20000 =
-		withPlotter("results/hilbert-dummy-A.svg", pltA),
-		withPlotter("results/hilbert-dummy-B.svg", pltB),
-		withPlotter("results/hilbert-dummy-C.svg", pltC),
-		withPlotter("results/hilbert-dummy-D.svg", pltC, 20000)
+	local A, B, C =
+		svgPlot(n, n), svgPlotWholeBuffer(n, n), svgPlotWithBuffer(n, n)
 
 	function body(plotter)
-		plotter
-			:pathStart()
-			:hilbert(9, size, offset)
-			:pathEnd(false, style)
+		plotter:pathStart()
+		hilbert(plotter, 9, size, offset)
+		plotter:pathEnd(false, style)
 	end
 
-	function getElapsedTime(wp) -- in a naive way
+	function getElapsedTime(path, plotter, limit) -- in a naive way
 		local start = os.clock()
-		wp(body)
+		with(path, "w", function (fh)
+			plotter:write(fh, body, limit)
+		end)
 		return os.clock() - start
 	end
 
 	for _=1,3 do
-		print("A:", getElapsedTime(wpA))
-		print("B:", getElapsedTime(wpB))
-		print("C50:", getElapsedTime(wpC50))
-		print("C20000:", getElapsedTime(wpC20000))
+		print("A:", getElapsedTime("results/hilbert-dummy-A.svg", A))
+		print("B:", getElapsedTime("results/hilbert-dummy-B.svg", B))
+		print("C50:", getElapsedTime("results/hilbert-dummy-C.svg", C))
+		print("C20000:", getElapsedTime("results/hilbert-dummy-D.svg", C, 20000))
 		--
-		pltB:reset()
+		B:reset()
 	end
 end
 --

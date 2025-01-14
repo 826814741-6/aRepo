@@ -6,23 +6,12 @@
 
 local H = require 'helper'
 
-local alwaysTrue, beCircular, bePrintablePair, id, mustBeNonNil, unpackerR =
-	H.alwaysTrue, H.beCircular, H.bePrintablePair, H.id, H.mustBeNonNil, H.unpackerR
+local alwaysTrue, beCircular, bePrintablePair, id, unpackerR =
+	H.alwaysTrue, H.beCircular, H.bePrintablePair, H.id, H.unpackerR
 
 local co_create = coroutine.create
 local co_resume = coroutine.resume
 local co_yield = coroutine.yield
-
-local function gMethod(v)
-	local ty = type(v)
-	return function (l, r)
-		return mustBeNonNil(
-			ty == "function" and l or
-			ty == "thread" and r or
-			nil
-		)
-	end
-end
 
 local function dropCL(self, n)
 	n = n ~= nil and n or 0
@@ -86,14 +75,21 @@ local function filterCO(self, n, f, g)
 	return self, r
 end
 
+local function makeMethod(v)
+	local ty = type(v)
+	if ty == "function" then
+		return dropCL, takeCL, filterCL
+	elseif ty == "thread" then
+		return dropCO, takeCO, filterCO
+	else
+		error("'v' must be a function or a thread.")
+	end
+end
+
 local function beGen(v, ...)
 	local T = { c = v(...) }
 
-	local method = gMethod(T.c)
-
-	T.drop = method(dropCL, dropCO)
-	T.take = method(takeCL, takeCO)
-	T.filter = method(filterCL, filterCO)
+	T.drop, T.take, T.filter = makeMethod(T.c)
 
 	return T
 end

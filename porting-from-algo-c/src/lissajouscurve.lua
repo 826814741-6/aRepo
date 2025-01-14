@@ -20,10 +20,7 @@ local function lissajousCurve(plotter, n, offset)
 	end
 end
 
-local mustBePlotter = require 'svgplot'.mustBePlotter
-
 local function extension(T)
-	mustBePlotter(T)
 	function T:lissajousCurve(n, offset)
 		lissajousCurve(T, n, offset)
 		return T

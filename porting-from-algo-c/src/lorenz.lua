@@ -22,10 +22,7 @@ local function lorenzAttractor(plotter, S, R, B, n, a1, a2, a3, a4)
 	end
 end
 
-local mustBePlotter = require 'svgplot'.mustBePlotter
-
 local function extension(T)
-	mustBePlotter(T)
 	function T:lorenzAttractor(S, R, B, n, a1, a2, a3, a4)
 		lorenzAttractor(T, S, R, B, n, a1, a2, a3, a4)
 		return T

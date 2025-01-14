@@ -4,50 +4,35 @@
 --	void c(int, double, double)	to	cCurve
 --
 
-local M0 = require 'svgplot'
-local M1 = require 'ccurve'
-local H = require '_helper'
+local M = require 'svgplot'
 
-local svgPlot = M0.svgPlot
-local styleMaker = M0.styleMaker
-local SV = M0.StyleValue
-local cCurve = M1.cCurve
-local extension = M1.extension
-local with = H.with
-local withPlotter = H.withPlotter
+local svgPlot = M.svgPlot
+local svgPlotWholeBuffer = M.svgPlotWholeBuffer
+local svgPlotWithBuffer = M.svgPlotWithBuffer
+local styleMaker = M.styleMaker
+local SV = M.StyleValue
+local cCurve = require 'ccurve'.cCurve
+local with = require '_helper'.with
 
-function sampleWriter(pathPrefix, style)
-	local plotter = extension(svgPlot(400, 250))
-
+local function sampleWriter(pathPrefix, style)
 	return function (n)
-		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			plotter:plotStart(fh)
+		function body(plotter)
 			plotter:pathStart()
 			plotter:move(100, 200)
 			cCurve(plotter, n, 200, 0)
 			plotter:pathEnd(false, style)
-			plotter:plotEnd()
+		end
+
+		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			svgPlot(400, 250):write(fh, body)
 		end)
 
 		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			plotter
-				:plotStart(fh)
-				:pathStart()
-				:move(100, 200)
-				:cCurve(n, 200, 0)
-				:pathEnd(false, style)
-				:plotEnd()
+			svgPlotWholeBuffer(400, 250):write(fh, body):reset()
 		end)
 
-		withPlotter(
-			("%s-C-%d.svg"):format(pathPrefix, n),
-			plotter
-		)(function (plotter)
-			plotter
-				:pathStart()
-				:move(100, 200)
-				:cCurve(n, 200, 0)
-				:pathEnd(false, style)
+		with(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
+			svgPlotWithBuffer(400, 250):write(fh, body)
 		end)
 	end
 end

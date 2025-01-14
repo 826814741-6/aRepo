@@ -32,185 +32,201 @@ local t_unpack = table.unpack
 local m_abs = math.abs
 local m_floor = math.floor
 
-local function BMP(X, Y)
+local function init(width, height)
 	local T = {
-		data = {},
+		w = width,
+		h = height,
 		--
+		data = {},
 		xfac = 1,
 		yfac = 1,
 		xconst = 0,
 		yconst = 0
 	}
 
-	for i=1,Y do
+	for i=1,height do
 		T.data[i] = {}
 	end
 
-	function header(fh)
-		fh:write(("<BBIIIIIIHHIIIIII"):pack(
-			66, -- "B"
-			77, -- "M"
-			X * Y * 4 + 54,
-			0,
-			54,
-			40,
-			X,
-			Y,
-			1,
-			32,
-			0,
-			X * Y * 4,
-			3780,
-			3780,
-			0,
-			0
-		))
-	end
+	return T
+end
 
-	function body(fh)
-		for y=1,Y do
-			fh:write(t_unpack(T.data[y]))
+local function write(bmp, fh)
+	-- header
+	fh:write(("<BBIIIIIIHHIIIIII"):pack(
+		66, -- "B"
+		77, -- "M"
+		bmp.w * bmp.h * 4 + 54,
+		0,
+		54,
+		40,
+		bmp.w,
+		bmp.h,
+		1,
+		32,
+		0,
+		bmp.w * bmp.h * 4,
+		3780,
+		3780,
+		0,
+		0
+	))
+	-- body
+	for j=1,bmp.h do
+		fh:write(t_unpack(bmp.data[j]))
+	end
+end
+
+local function dot(bmp, x, y, color)
+	if x >= 1 and x <= bmp.w and y >= 1 and y <= bmp.h then
+		bmp.data[y][x] = color
+	end
+end
+
+local function rect(bmp, lX, rX, lY, rY, color)
+	for x=lX,rX do
+		for y=lY,rY do
+			dot(bmp, x, y, color)
 		end
 	end
+end
 
-	function inRange(x, y)
-		return x >= 1 and x <= X and y >= 1 and y <= Y
-	end
+local function clear(bmp, color)
+	rect(bmp, 1, bmp.w, 1, bmp.h, color)
+end
 
-	function T:dot(x, y, color)
-		if inRange(x, y) then
-			T.data[y][x] = color
+local function stepC(bmp, cX, cY, color, a, b, c, d)
+	dot(bmp, cX + a, cY + b, color)
+	dot(bmp, cX + a, cY - b, color)
+	dot(bmp, cX - a, cY + b, color)
+	dot(bmp, cX - a, cY - b, color)
+	dot(bmp, cX + c, cY + d, color)
+	dot(bmp, cX + c, cY - d, color)
+	dot(bmp, cX - c, cY + d, color)
+	dot(bmp, cX - c, cY - d, color)
+end
+
+local function circle(bmp, cX, cY, r, color)
+	local x, y = r, 0
+	while x >= y do
+		stepC(bmp, cX, cY, color, x, y, y, x)
+		r, y = r - ((y << 1) + 1), y + 1
+		if r <= 0 then
+			x = x - 1
+			r = r + (x << 1)
 		end
 	end
+end
 
-	function T:rect(lX, rX, lY, rY, color)
-		for x=lX,rX do
-			for y=lY,rY do
-				T:dot(x, y, color)
-			end
+local function initE(bmp, cX, cY, rX, rY, color)
+	if rX > rY then
+		return rX, function (x, y)
+			stepC(bmp, cX, cY, color,
+			      x, y * rY // rX, y, x * rY // rX)
+		end
+	else
+		return rY, function (x, y)
+			stepC(bmp, cX, cY, color,
+			      x * rX // rY, y, y * rX // rY, x)
 		end
 	end
+end
 
-	function T:clear(color)
-		T:rect(1, X, 1, Y, color)
-	end
-
-	function stepC(cX, cY, color, a, b, c, d)
-		T:dot(cX + a, cY + b, color)
-		T:dot(cX + a, cY - b, color)
-		T:dot(cX - a, cY + b, color)
-		T:dot(cX - a, cY - b, color)
-		T:dot(cX + c, cY + d, color)
-		T:dot(cX + c, cY - d, color)
-		T:dot(cX - c, cY + d, color)
-		T:dot(cX - c, cY - d, color)
-	end
-
-	function T:circle(cX, cY, r, color)
-		local x, y = r, 0
-		while x >= y do
-			stepC(cX, cY, color, x, y, y, x)
-			r, y = r - ((y << 1) + 1), y + 1
-			if r <= 0 then
-				x = x - 1
-				r = r + (x << 1)
-			end
+local function ellipse(bmp, cX, cY, rX, rY, color)
+	local x, step = initE(bmp, cX, cY, rX, rY, color)
+	local r, y = x, 0
+	while x >= y do
+		step(x, y)
+		r, y = r - ((y << 1) + 1), y + 1
+		if r <= 0 then
+			x = x - 1
+			r = r + (x << 1)
 		end
 	end
+end
 
-	function initE(cX, cY, rX, rY, color)
-		if rX > rY then
-			return rX, function (x, y)
-				stepC(cX, cY, color,
-				      x, y * rY // rX, y, x * rY // rX)
-			end
+local function initL(x1, x2, y1, y2)
+	local step
+	if x1 > x2 then
+		step = y1 > y2 and 1 or -1
+		x1, x2, y1 = x2, x1, y2
+	else
+		step = y1 < y2 and 1 or -1
+	end
+	return step, x1, x2, y1
+end
+
+local function loopL(x1, x2, y1, y2, dX, dY, dotter)
+	local step, a1, a2, b1 = initL(x1, x2, y1, y2)
+
+	dotter(a1, b1)
+
+	local t = dX >> 1
+	for a=a1+1,a2 do
+		t = t - dY
+		if t < 0 then
+			t, b1 = t + dX, b1 + step
+		end
+		dotter(a, b1)
+	end
+end
+
+local function line(bmp, x1, y1, x2, y2, color)
+	local dX, dY = m_abs(x2 - x1), m_abs(y2 - y1)
+	if dX > dY then
+		loopL(x1, x2, y1, y2, dX, dY,
+		      function (a, b) dot(bmp, a, b, color) end)
+	else
+		loopL(y1, y2, x1, x2, dY, dX,
+		      function (a, b) dot(bmp, b, a, color) end)
+	end
+end
+
+local function adjustX(bmp, x) return m_floor(bmp.xfac * x + bmp.xconst) end
+local function adjustY(bmp, y) return m_floor(bmp.yfac * y + bmp.yconst) end
+
+local function setWindow(bmp, left, right, top, bottom, isSquareWindow)
+	isSquareWindow = getValueOrInit(isBool, isSquareWindow, false)
+
+	bmp.xfac, bmp.yfac = bmp.w / (right - left), bmp.h / (top - bottom)
+	if isSquareWindow then
+		if m_abs(bmp.xfac) > m_abs(bmp.yfac) then
+			bmp.xfac = bmp.xfac * m_abs(bmp.yfac / bmp.xfac)
 		else
-			return rY, function (x, y)
-				stepC(cX, cY, color,
-				      x * rX // rY, y, y * rX // rY, x)
-			end
+			bmp.yfac = bmp.yfac * m_abs(bmp.xfac / bmp.yfac)
 		end
 	end
+	bmp.xconst, bmp.yconst = 0.5 - bmp.xfac * left, 0.5 - bmp.yfac * bottom
+end
 
-	function T:ellipse(cX, cY, rX, rY, color)
-		local x, step = initE(cX, cY, rX, rY, color)
-		local r, y = x, 0
-		while x >= y do
-			step(x, y)
-			r, y = r - ((y << 1) + 1), y + 1
-			if r <= 0 then
-				x = x - 1
-				r = r + (x << 1)
-			end
-		end
-	end
+local function wDot(bmp, x, y, color)
+	dot(bmp, adjustX(bmp, x), adjustY(bmp, y), color)
+end
 
-	function initL(x1, x2, y1, y2)
-		local step
-		if x1 > x2 then
-			step = y1 > y2 and 1 or -1
-			x1, x2, y1 = x2, x1, y2
-		else
-			step = y1 < y2 and 1 or -1
-		end
-		return step, x1, x2, y1
-	end
+local function wLine(bmp, x1, y1, x2, y2, color)
+	line(
+		bmp,
+		adjustX(bmp, x1), adjustY(bmp, y1),
+		adjustX(bmp, x2), adjustY(bmp, y2),
+		color
+	)
+end
 
-	function loopL(x1, x2, y1, y2, dX, dY, dotter)
-		local step, a1, a2, b1 = initL(x1, x2, y1, y2)
+local function BMP(width, height)
+	local T = init(width, height)
 
-		dotter(a1, b1)
+	T.dot = dot
+	T.rect = rect
+	T.clear = clear
+	T.circle = circle
+	T.ellipse = ellipse
+	T.line = line
 
-		local t = dX >> 1
-		for a=a1+1,a2 do
-			t = t - dY
-			if t < 0 then
-				t, b1 = t + dX, b1 + step
-			end
-			dotter(a, b1)
-		end
-	end
+	T.setWindow = setWindow
+	T.wDot = wDot
+	T.wLine = wLine
 
-	function T:line(x1, y1, x2, y2, color)
-		local dX, dY = m_abs(x2 - x1), m_abs(y2 - y1)
-		if dX > dY then
-			loopL(x1, x2, y1, y2, dX, dY,
-			      function (a, b) T:dot(a, b, color) end)
-		else
-			loopL(y1, y2, x1, x2, dY, dX,
-			      function (a, b) T:dot(b, a, color) end)
-		end
-	end
-
-	function adjustX(x) return m_floor(T.xfac * x + T.xconst) end
-	function adjustY(y) return m_floor(T.yfac * y + T.yconst) end
-
-	function T:setWindow(left, right, top, bottom, isSquareWindow)
-		isSquareWindow = getValueOrInit(isBool, isSquareWindow, false)
-
-		T.xfac, T.yfac = X / (right - left), Y / (top - bottom)
-		if isSquareWindow then
-			if m_abs(T.xfac) > m_abs(T.yfac) then
-				T.xfac = T.xfac * m_abs(T.yfac / T.xfac)
-			else
-				T.yfac = T.yfac * m_abs(T.xfac / T.yfac)
-			end
-		end
-		T.xconst, T.yconst = 0.5 - T.xfac * left, 0.5 - T.yfac * bottom
-	end
-
-	function T:wDot(x, y, color)
-		T:dot(adjustX(x), adjustY(y), color)
-	end
-
-	function T:wLine(x1, y1, x2, y2, color)
-		T:line(adjustX(x1), adjustY(y1), adjustX(x2), adjustY(y2), color)
-	end
-
-	function T:write(fh)
-		header(fh)
-		body(fh)
-	end
+	T.write = write
 
 	return T
 end

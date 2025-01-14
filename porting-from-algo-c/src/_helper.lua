@@ -42,12 +42,21 @@ local function isTbl(v)
 	return type(v) == "table"
 end
 
+local function isBoolOrNil(v)
+	return type(v) == "boolean" or v == nil
+end
+
 local function isFhOrNil(v)
 	return io.type(v) == "file" or v == nil
 end
 
 local function isNumOrNil(v)
 	return type(v) == "number" or v == nil
+end
+
+local function assertInitialValue(width, height)
+	assert(type(width) == "number", "'width' must be a number.")
+	assert(type(height) == "number", "'height' must be a number.")
 end
 
 local d_getinfo = debug.getinfo
@@ -146,42 +155,6 @@ local function with(path, mode, body)
 	assert(ret == true, err)
 end
 
-local function isPlotterA(v) -- target: svgPlot or svgPlotWithBuffer
-	return (isTbl(v) and isFun(v.plotStart) and isFun(v.plotEnd))
-		or (isTbl(v) and isTbl(v.plotStart) and isTbl(v.plotEnd))
-end
-
-local function isPlotterB(v) -- target: svgPlotWholeBuffer
-	return (isTbl(v) and isFun(v.write) and isFun(v.writeOneByOne))
-		or (isTbl(v) and isTbl(v.write) and isTbl(v.writeOneByOne))
-end
-
-local function withPlotter(path, plotter, param)
-	local limit, isOneByOne =
-		getValueOrNil(isNum, param),
-		getValueOrNil(isBool, param)
-
-	if isPlotterA(plotter) then
-		return function (aFunc)
-			with(path, "w", function (fh)
-				plotter:plotStart(fh, limit)
-				aFunc(plotter)
-				plotter:plotEnd()
-			end)
-		end
-	elseif isPlotterB(plotter) then
-		local body = isOneByOne ~= true
-			and function (fh) plotter:write(fh) end
-			or function (fh) plotter:writeOneByOne(fh) end
-		return function (aFunc)
-			aFunc(plotter)
-			with(path, "w", body)
-		end
-	else
-		error("withPlotter: 'plotter' must be an instance of svgPlot{,WholeBuffer,WithBuffer}.")
-	end
-end
-
 local function check(validators, target)
 	for i,v in ipairs(validators) do
 		assert(v(target[i]), i)
@@ -231,8 +204,10 @@ return {
 	isNum = isNum,
 	isStr = isStr,
 	isTbl = isTbl,
+	isBoolOrNil = isBoolOrNil,
 	isFhOrNil = isFhOrNil,
 	isNumOrNil = isNumOrNil,
+	assertInitialValue = assertInitialValue,
 	getNumOfParams = getNumOfParams,
 	getValueOrInit = getValueOrInit,
 	mustBeBool = mustBeBool,
@@ -240,7 +215,6 @@ return {
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,
 	with = with,
-	withPlotter = withPlotter,
 	wrapWithValidator = wrapWithValidator,
 	gUnpackerWithCounter = gUnpackerWithCounter
 }

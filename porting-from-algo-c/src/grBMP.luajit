@@ -38,155 +38,163 @@ local write1B = NBLEWriter(1)
 local write2B = NBLEWriter(2)
 local write4B = NBLEWriter(4)
 
-local function BMP(X, Y)
+local function init(width, height)
 	local T = {
-		data = t_new(Y, 0)
+		w = width,
+		h = height,
+		--
+		data = t_new(height, 0)
 	}
 
-	for i=1,Y do
-		T.data[i] = t_new(X, 0)
+	for i=1,height do
+		T.data[i] = t_new(width, 0)
 	end
 
-	function header(fh)
-		write1B(fh, 66) -- "B"
-		write1B(fh, 77) -- "M"
-		write4B(fh, X * Y * 4 + 54)
-		write4B(fh, 0)
-		write4B(fh, 54)
-		write4B(fh, 40)
-		write4B(fh, X)
-		write4B(fh, Y)
-		write2B(fh, 1)
-		write2B(fh, 32)
-		write4B(fh, 0)
-		write4B(fh, X * Y * 4)
-		write4B(fh, 3780)
-		write4B(fh, 3780)
-		write4B(fh, 0)
-		write4B(fh, 0)
-	end
+	return T
+end
 
-	function body(fh)
-		for y=1,Y do
-			for x=1,X do
-				write4B(fh, T.data[y][x])
-			end
+local function write(bmp, fh)
+	-- header
+	write1B(fh, 66) -- "B"
+	write1B(fh, 77) -- "M"
+	write4B(fh, bmp.w * bmp.h * 4 + 54)
+	write4B(fh, 0)
+	write4B(fh, 54)
+	write4B(fh, 40)
+	write4B(fh, bmp.w)
+	write4B(fh, bmp.h)
+	write2B(fh, 1)
+	write2B(fh, 32)
+	write4B(fh, 0)
+	write4B(fh, bmp.w * bmp.h * 4)
+	write4B(fh, 3780)
+	write4B(fh, 3780)
+	write4B(fh, 0)
+	write4B(fh, 0)
+	-- body
+	for y=1,bmp.h do
+		for x=1,bmp.w do
+			write4B(fh, bmp.data[y][x])
 		end
 	end
+end
 
-	function inRange(x, y)
-		return x >= 1 and x <= X and y >= 1 and y <= Y
+local function dot(bmp, x, y, color)
+	if x >= 1 and x <= bmp.w and y >= 1 and y <= bmp.h then
+		bmp.data[y][x] = color
 	end
+end
 
-	function T:dot(x, y, color)
-		if inRange(x, y) then
-			T.data[y][x] = color
+local function rect(bmp, lX, rX, lY, rY, color)
+	for x=lX,rX do
+		for y=lY,rY do
+			dot(bmp, x, y, color)
 		end
 	end
+end
 
-	function T:rect(lX, rX, lY, rY, color)
-		for x=lX,rX do
-			for y=lY,rY do
-				T:dot(x, y, color)
-			end
+local function clear(bmp, color)
+	rect(bmp, 1, bmp.w, 1, bmp.h, color)
+end
+
+local function stepC(bmp, cX, cY, color, a, b, c, d)
+	dot(bmp, cX + a, cY + b, color)
+	dot(bmp, cX + a, cY - b, color)
+	dot(bmp, cX - a, cY + b, color)
+	dot(bmp, cX - a, cY - b, color)
+	dot(bmp, cX + c, cY + d, color)
+	dot(bmp, cX + c, cY - d, color)
+	dot(bmp, cX - c, cY + d, color)
+	dot(bmp, cX - c, cY - d, color)
+end
+
+local function circle(bmp, cX, cY, r, color)
+	local x, y = r, 0
+	while x >= y do
+		stepC(bmp, cX, cY, color, x, y, y, x)
+		r, y = r - (b_lshift(y, 1) + 1), y + 1
+		if r <= 0 then
+			x = x - 1
+			r = r + b_lshift(x, 1)
 		end
 	end
+end
 
-	function T:clear(color)
-		T:rect(1, X, 1, Y, color)
-	end
-
-	function stepC(cX, cY, color, a, b, c, d)
-		T:dot(cX + a, cY + b, color)
-		T:dot(cX + a, cY - b, color)
-		T:dot(cX - a, cY + b, color)
-		T:dot(cX - a, cY - b, color)
-		T:dot(cX + c, cY + d, color)
-		T:dot(cX + c, cY - d, color)
-		T:dot(cX - c, cY + d, color)
-		T:dot(cX - c, cY - d, color)
-	end
-
-	function T:circle(cX, cY, r, color)
-		local x, y = r, 0
-		while x >= y do
-			stepC(cX, cY, color, x, y, y, x)
-			r, y = r - (b_lshift(y, 1) + 1), y + 1
-			if r <= 0 then
-				x = x - 1
-				r = r + b_lshift(x, 1)
-			end
+local function initE(bmp, cX, cY, rX, rY, color)
+	if rX > rY then
+		return rX, function (x, y)
+			stepC(bmp, cX, cY, color,
+			      x, m_floor(y * rY / rX), y, m_floor(x * rY / rX))
+		end
+	else
+		return rY, function (x, y)
+			stepC(bmp, cX, cY, color,
+			      m_floor(x * rX / rY), y, m_floor(y * rX / rY), x)
 		end
 	end
+end
 
-	function initE(cX, cY, rX, rY, color)
-		if rX > rY then
-			return rX, function (x, y)
-				stepC(cX, cY, color,
-				      x, m_floor(y * rY / rX), y, m_floor(x * rY / rX))
-			end
-		else
-			return rY, function (x, y)
-				stepC(cX, cY, color,
-				      m_floor(x * rX / rY), y, m_floor(y * rX / rY), x)
-			end
+local function ellipse(bmp, cX, cY, rX, rY, color)
+	local x, step = initE(bmp, cX, cY, rX, rY, color)
+	local r, y = x, 0
+	while x >= y do
+		step(x, y)
+		r, y = r - (b_lshift(y, 1) + 1), y + 1
+		if r <= 0 then
+			x = x - 1
+			r = r + b_lshift(x, 1)
 		end
 	end
+end
 
-	function T:ellipse(cX, cY, rX, rY, color)
-		local x, step = initE(cX, cY, rX, rY, color)
-		local r, y = x, 0
-		while x >= y do
-			step(x, y)
-			r, y = r - (b_lshift(y, 1) + 1), y + 1
-			if r <= 0 then
-				x = x - 1
-				r = r + b_lshift(x, 1)
-			end
+local function initL(x1, x2, y1, y2)
+	local step
+	if x1 > x2 then
+		step = y1 > y2 and 1 or -1
+		x1, x2, y1 = x2, x1, y2
+	else
+		step = y1 < y2 and 1 or -1
+	end
+	return step, x1, x2, y1
+end
+
+local function loopL(x1, x2, y1, y2, dX, dY, dotter)
+	local step, a1, a2, b1 = initL(x1, x2, y1, y2)
+
+	dotter(a1, b1)
+
+	local t = b_rshift(dX, 1)
+	for a=a1+1,a2 do
+		t = t - dY
+		if t < 0 then
+			t, b1 = t + dX, b1 + step
 		end
+		dotter(a, b1)
 	end
+end
 
-	function initL(x1, x2, y1, y2)
-		local step
-		if x1 > x2 then
-			step = y1 > y2 and 1 or -1
-			x1, x2, y1 = x2, x1, y2
-		else
-			step = y1 < y2 and 1 or -1
-		end
-		return step, x1, x2, y1
+local function line(bmp, x1, y1, x2, y2, color)
+	local dX, dY = m_abs(x2 - x1), m_abs(y2 - y1)
+	if dX > dY then
+		loopL(x1, x2, y1, y2, dX, dY,
+		      function (a, b) dot(bmp, a, b, color) end)
+	else
+		loopL(y1, y2, x1, x2, dY, dX,
+		      function (a, b) dot(bmp, b, a, color) end)
 	end
+end
 
-	function loopL(x1, x2, y1, y2, dX, dY, dotter)
-		local step, a1, a2, b1 = initL(x1, x2, y1, y2)
+local function BMP(width, height)
+	local T = init(width, height)
 
-		dotter(a1, b1)
+	T.dot = dot
+	T.rect = rect
+	T.clear = clear
+	T.circle = circle
+	T.ellipse = ellipse
+	T.line = line
 
-		local t = b_rshift(dX, 1)
-		for a=a1+1,a2 do
-			t = t - dY
-			if t < 0 then
-				t, b1 = t + dX, b1 + step
-			end
-			dotter(a, b1)
-		end
-	end
-
-	function T:line(x1, y1, x2, y2, color)
-		local dX, dY = m_abs(x2 - x1), m_abs(y2 - y1)
-		if dX > dY then
-			loopL(x1, x2, y1, y2, dX, dY,
-			       function (a, b) T:dot(a, b, color) end)
-		else
-			loopL(y1, y2, x1, x2, dY, dX,
-			       function (a, b) T:dot(b, a, color) end)
-		end
-	end
-
-	function T:write(fh)
-		header(fh)
-		body(fh)
-	end
+	T.write = write
 
 	return T
 end

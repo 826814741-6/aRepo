@@ -1,28 +1,26 @@
 --
 --	from src/svgplot.c
 --
---	void plot_start(int, int)		to	svgPlot; :plotStart, :pathStart
---	void plot_end(int)			to	svgPlot; :plotEnd, :pathEnd
---	void move(double, double)		to	svgPlot; :move
---	void move_rel(double, double)		to	svgPlot; :moveRel
---	void draw(double, double)		to	svgPlot; :draw
---	void draw_rel(double, double)		to	svgPlot; :drawRel
+--	void plot_start(int, int)		to	:pathStart
+--	void plot_end(int)			to	:pathEnd
+--	void move(double, double)		to	:move
+--	void move_rel(double, double)		to	:moveRel
+--	void draw(double, double)		to	:draw
+--	void draw_rel(double, double)		to	:drawRel
 --
---						to	svgPlotWholeBuffer
---						to	svgPlotWithBuffer
+--							:write(, :reset)
+--
+--	and some extensions for basic shapes	are	:circle, :ellipse, :line, :rect
 --
 
 local M = require 'svgplot'
-local H = require '_helper'
 
-local mustBePlotter = M.mustBePlotter
 local svgPlot = M.svgPlot
 local svgPlotWholeBuffer = M.svgPlotWholeBuffer
 local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
-local with = H.with
-local withPlotter = H.withPlotter
+local with = require '_helper'.with
 
 local PI, m_cos, m_sin = math.pi, math.cos, math.sin
 
@@ -42,125 +40,71 @@ local function sample(plotter, n, offset)
 	end
 end
 
-local function extension(T)
-	mustBePlotter(T)
-	function T:sample(n, offset)
-		sample(T, n, offset)
-		return T
+local size, offset = 300, 10
+
+local function gBody(style)
+	return function (plotter)
+		plotter:pathStart()
+		sample(plotter, size, offset)
+		plotter:pathEnd(true, style)
 	end
-	return T
 end
 
-local size, offset = 300, 10
-local styleA, styleB, styleC =
-	styleMaker()
+local bodyA, bodyB, bodyC =
+	gBody(styleMaker()
 		:fill(SV.None)
 		:stroke(SV.Black)
-		:get(),
-	styleMaker()
+		:get()
+	),
+	gBody(styleMaker()
 		:fill(SV.None)
 		:stroke(SV.RandomRGB)
 		:strokeWidth(5)
-		:get(),
-	styleMaker()
+		:get()
+	),
+	gBody(styleMaker()
 		:fill(SV.RandomRGB)
 		:stroke(SV.RandomRGB)
 		:strokeWidth(10)
 		:get()
+	)
 
 do
-	with("results/svgplot-lj-A.svg", "w", function (fh)
-		local plotter = svgPlot(size, size)
-		plotter:plotStart(fh)
-		plotter:pathStart()
-		sample(plotter, size, offset)
-		plotter:pathEnd(true, styleA)
-		plotter:plotEnd()
+	with("results/svgplot-lj-A-A.svg", "w", function (fh)
+		svgPlot(size, size):write(fh, bodyA)
 	end)
 
-	with("results/svgplot-lj-B.svg", "w", function (fh)
-		extension(svgPlot(size, size))
-			:plotStart(fh)
-			:pathStart()
-			:sample(size, offset)
-			:pathEnd(true, styleB)
-			:plotEnd()
+	with("results/svgplot-lj-A-B.svg", "w", function (fh)
+		svgPlot(size, size):write(fh, bodyB)
 	end)
 
-	withPlotter(
-		"results/svgplot-lj-C.svg",
-		extension(svgPlot(size, size))
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:sample(size, offset)
-			:pathEnd(true, styleC)
+	with("results/svgplot-lj-A-C.svg", "w", function (fh)
+		svgPlot(size, size):write(fh, bodyC)
 	end)
-end
 
-do
 	local plotter = svgPlotWholeBuffer(size, size)
 
-	plotter:pathStart()
-	sample(plotter, size, offset)
-	plotter:pathEnd(true, styleA)
-
-	with("results/svgplot-lj-WB-A-A.svg", "w", function (fh)
-		plotter:writeOneByOne(fh)
+	with("results/svgplot-lj-B-A.svg", "w", function (fh)
+		plotter:write(fh, bodyA, true):reset()
 	end)
 
-	plotter:reset()
-
-	extension(plotter)
-		:pathStart()
-		:sample(size, offset)
-		:pathEnd(true, styleB)
-
-	with("results/svgplot-lj-WB-A-B.svg", "w", function (fh)
-		plotter:writeOneByOne(fh)
+	with("results/svgplot-lj-B-B.svg", "w", function (fh)
+		plotter:write(fh, bodyB, true):reset()
 	end)
 
-	plotter:reset()
-
-	withPlotter(
-		"results/svgplot-lj-WB-A-C.svg",
-		plotter,
-		true
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:sample(size, offset)
-			:pathEnd(true, styleC)
-	end)
-end
-
-do
-	with("results/svgplot-lj-WB-B-A.svg", "w", function (fh)
-		local plotter = svgPlotWithBuffer(size, size)
-		plotter:plotStart(fh, 2)
-		plotter:pathStart()
-		sample(plotter, size, offset)
-		plotter:pathEnd(true, styleA)
-		plotter:plotEnd()
+	with("results/svgplot-lj-B-C.svg", "w", function (fh)
+		plotter:write(fh, bodyC, true):reset()
 	end)
 
-	with("results/svgplot-lj-WB-B-B.svg", "w", function (fh)
-		extension(svgPlotWithBuffer(size, size))
-			:plotStart(fh, 2)
-			:pathStart()
-			:sample(size, offset)
-			:pathEnd(true, styleB)
-			:plotEnd()
+	with("results/svgplot-lj-C-A.svg", "w", function (fh)
+		svgPlotWithBuffer(size, size):write(fh, bodyA, 2)
 	end)
 
-	withPlotter(
-		"results/svgplot-lj-WB-B-C.svg",
-		extension(svgPlotWithBuffer(size, size)),
-		2
-	)(function (plotter)
-		plotter
-			:pathStart()
-			:sample(size, offset)
-			:pathEnd(true, styleC)
+	with("results/svgplot-lj-C-B.svg", "w", function (fh)
+		svgPlotWithBuffer(size, size):write(fh, bodyB, 2)
+	end)
+
+	with("results/svgplot-lj-C-C.svg", "w", function (fh)
+		svgPlotWithBuffer(size, size):write(fh, bodyC, 2)
 	end)
 end
