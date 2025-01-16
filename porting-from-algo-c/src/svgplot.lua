@@ -434,21 +434,25 @@ local function gMakeStyleMethod(specifier, filter)
 	end
 end
 
-local makeSVMethod, makeRawNumMethod =
+local makeMethodSV, makeMethodN =
 	gMakeStyleMethod("s", function (v) return mustBeStr(v()) end),
 	gMakeStyleMethod("g", mustBeNum)
+
+local stFill, stPaintOrder, stStroke, stStrokeWidth =
+	makeMethodSV("fill"), makeMethodSV("paint-order"), makeMethodSV("stroke"),
+	makeMethodN("stroke-width")
+
+local stGet = function (self) return t_concat(self.buf, " ") end
 
 local function styleMaker()
 	local T = { buf = {}; attr = {} }
 
-	function T:get()
-		return t_concat(T.buf, " ")
-	end
+	T.get = stGet
 
-	T.fill = makeSVMethod("fill")
-	T.paintOrder = makeSVMethod("paint-order")
-	T.stroke = makeSVMethod("stroke")
-	T.strokeWidth = makeRawNumMethod("stroke-width")
+	T.fill = stFill
+	T.paintOrder = stPaintOrder
+	T.stroke = stStroke
+	T.strokeWidth = stStrokeWidth
 
 	return T
 end
