@@ -76,9 +76,9 @@ do
 	assert(cnDiv(a, b) == c / d and cnDiv(b, a) == d / c)
 	assert(cnPow(a, b) == c ^ d and cnPow(b, a) == d ^ c)
 
-	assert(e:add(f):sub(f) == c + d - d, c + d - d == cnSub(cnAdd(a, b), b))
+	assert(e:add(f):sub(f) == c + d - d and c + d - d == cnSub(cnAdd(a, b), b))
 	e:set(n1, n2) f:set(n2, n3)
-	assert(e:mul(f):div(f) == c * d / d, c * d / d == cnDiv(cnMul(a, b), b))
+	assert(e:mul(f):div(f) == c * d / d and c * d / d == cnDiv(cnMul(a, b), b))
 	e:set(n1, n2) f:set(n2, n3)
 	assert(e:pow(f):sqrt(f) == cnSqrt(cnPow(a, b), b))
 	e:set(n1, n2) f:set(n2, n3)
