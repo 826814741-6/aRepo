@@ -4,27 +4,29 @@
 --	> lua[jit] fun-with-wrapping-assertion.lua
 --
 
+function isNum(self)
+	assert(type(self.v) == "number")
+	return self
+end
+
+function isStr(self)
+	assert(type(self.v) == "string")
+	return self
+end
+
+function filter(self, f)
+	assert(f(self.v) == true)
+	return self
+end
+
+function unwrap(self)
+	return self.v
+end
+
 function val(v)
 	local T = { v = v }
 
-	function T:isNum()
-		assert(type(T.v) == "number")
-		return T
-	end
-
-	function T:isStr()
-		assert(type(T.v) == "string")
-		return T
-	end
-
-	function T:filter(f)
-		assert(f(T.v) == true)
-		return T
-	end
-
-	function T:unwrap()
-		return T.v
-	end
+	T.isNum, T.isStr, T.filter, T.unwrap = isNum, isStr, filter, unwrap
 
 	return T
 end

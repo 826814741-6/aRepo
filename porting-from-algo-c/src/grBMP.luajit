@@ -19,6 +19,8 @@
 --	void gr_line(int, int, int, int, long)			to	BMP; :line
 --
 
+local assertInitialValue = require '_helper'.assertInitialValue
+
 local b_band, b_lshift, b_rshift = bit.band, bit.lshift, bit.rshift
 local s_char = string.char
 local m_abs, m_floor = math.abs, math.floor
@@ -39,6 +41,8 @@ local write2B = NBLEWriter(2)
 local write4B = NBLEWriter(4)
 
 local function init(width, height)
+	assertInitialValue(width, height)
+
 	local T = {
 		w = width,
 		h = height,

@@ -1,37 +1,39 @@
 --
 --	from src/complex.c
 --
---	complex c_conv(double, double)		to	complexNumber, complexNumberS
+--	complex c_conv(double, double)		to	complexNumber
+--							/ complexNumberWithInplaceMethod
 --	char * c_string(complex)		to	__tostring
 --
 --	double c_abs(complex)			to	:abs(, cnAbs)
 --	double c_arg(complex)			to	:arg(, cnArg)
 --
---	complex c_conj(complex)			to	:conjugate / .conjugate
---	complex c_add(complex, complex)		to	__add, cnAdd / .add
---	complex c_sub(complex, complex)		to	__sub, cnSub / .sub
---	complex c_mul(complex, complex)		to	__mul, cnMul / .mul
---	complex c_div(complex, complex)		to	__div, cnDiv / .div
---	complex c_pow(complex, complex)		to	__pow, cnPow / .pow
+--	complex c_conj(complex)			to	cnConjugate / :conjugate
+--	complex c_add(complex, complex)		to	__add, cnAdd / :add
+--	complex c_sub(complex, complex)		to	__sub, cnSub / :sub
+--	complex c_mul(complex, complex)		to	__mul, cnMul / :mul
+--	complex c_div(complex, complex)		to	__div, cnDiv / :div
+--	complex c_pow(complex, complex)		to	__pow, cnPow / :pow
 --
---	complex c_exp(complex)			to	:exp, cnExp / .exp
---	complex c_log(complex)			to	:log, cnLog / .log
---	complex c_sqrt(complex)			to	:sqrt, cnSqrt / .sqrt
+--							overloadOperator /
 --
---	complex c_sin(complex)			to	:sin, cnSin / .sin
---	complex c_cos(complex)			to	:cos, cnCos / .cos
---	complex c_tan(complex)			to	:tan, cnTan / .tan
---	complex c_sinh(complex)			to	:sinh, cnSinh / .sinh
---	complex c_cosh(complex)			to	:cosh, cnCosh / .cosh
---	complex c_tanh(complex)			to	:tanh, cnTanh / .tanh
+--	complex c_exp(complex)			to	cnExp / :exp
+--	complex c_log(complex)			to	cnLog / :log
+--	complex c_sqrt(complex)			to	cnSqrt / :sqrt
 --
---							/ overrideWithInplaceMethod
+--	complex c_sin(complex)			to	cnSin / :sin
+--	complex c_cos(complex)			to	cnCos / :cos
+--	complex c_tan(complex)			to	cnTan / :tan
+--	complex c_sinh(complex)			to	cnSinh / :sinh
+--	complex c_cosh(complex)			to	cnCosh / :cosh
+--	complex c_tanh(complex)			to	cnTanh / :tanh
 --
 
 local M = require 'complex'
 
-local complexNumber = M.complexNumber
-local complexNumberS = M.complexNumberS
+local cnAbs = M.cnAbs
+local cnArg = M.cnArg
+local cnConjugate = M.cnConjugate
 local cnAdd = M.cnAdd
 local cnSub = M.cnSub
 local cnMul = M.cnMul
@@ -46,208 +48,100 @@ local cnTan = M.cnTan
 local cnSinh = M.cnSinh
 local cnCosh = M.cnCosh
 local cnTanh = M.cnTanh
-local overrideWithInplaceMethod = M.overrideWithInplaceMethod
-local cnAbs = M.cnAbs
-local cnArg = M.cnArg
+local complexNumber = M.complexNumber
+local complexNumberWIM = M.complexNumberWithInplaceMethod
+local overloadOperator = M.overloadOperator
 
 do
-	local a, b = complexNumber(1, -2), complexNumber(-2, 3)
-	local c, d = complexNumberS(1, -2), complexNumberS(-2, 3)
+	local n1, n2, n3 = 1, -2, 3
 
-	assert(a == complexNumber(1, -2))
-	assert(c == complexNumberS(1, -2))
-	assert(a == c and b == d)
+	local a, b = complexNumber(n1, n2), complexNumber(n2, n3)
+	local c, d = overloadOperator(a), overloadOperator(b)
+	local e, f = complexNumberWIM(n1, n2), complexNumberWIM(n2, n3)
 
-	assert(a:abs() == c:abs())
-	assert(a:abs() == cnAbs(a))
-	assert(a:arg() == c:arg())
-	assert(a:arg() == cnArg(a))
-	assert(a:conjugate():conjugate() == a)
-	assert(a:conjugate() == c:conjugate())
+	assert("1-2i" == tostring(a) and "1-2i" == tostring(c) and "1-2i" == tostring(e))
+	assert("-2+3i" == tostring(b) and "-2+3i" == tostring(d) and "-2+3i" == tostring(f))
 
-	assert(a + b == cnAdd(c, d))
-	assert(a - b == cnSub(c, d))
-	assert(a * b == cnMul(c, d))
-	assert(a / b == cnDiv(c, d))
-	assert(a ^ b == cnPow(c, d))
+	assert(a == c and b == d and c == e and d == f)
+	assert(a:abs() == c:abs() and cnAbs(a) == cnAbs(c) and
+		c:abs() == e:abs() and cnAbs(c) == cnAbs(e))
+	assert(b:arg() == d:arg() and cnArg(b) == cnArg(d) and
+		d:arg() == f:arg() and cnArg(d) == cnArg(f))
+	assert(cnConjugate(a) == cnConjugate(c) and c == e:conjugate():conjugate())
+	assert(cnConjugate(b) == cnConjugate(d) and d == f:conjugate():conjugate())
 
-	assert(a:exp() == cnExp(c))
-	assert(a:log() == cnLog(c))
-	assert(a:sqrt() == cnSqrt(c))
+	assert(cnAdd(a, b) == c + d and cnAdd(b, a) == d + c)
+	assert(cnSub(a, b) == c - d and cnSub(b, a) == d - c)
+	assert(cnMul(a, b) == c * d and cnMul(b, a) == d * c)
+	assert(cnDiv(a, b) == c / d and cnDiv(b, a) == d / c)
+	assert(cnPow(a, b) == c ^ d and cnPow(b, a) == d ^ c)
 
-	assert(a:exp():log():exp() == cnExp(cnLog(cnExp(c))))
-	assert(a:log():exp():log() == cnLog(cnExp(cnLog(c))))
+	assert(e:add(f):sub(f) == c + d - d, c + d - d == cnSub(cnAdd(a, b), b))
+	e:set(n1, n2) f:set(n2, n3)
+	assert(e:mul(f):div(f) == c * d / d, c * d / d == cnDiv(cnMul(a, b), b))
+	e:set(n1, n2) f:set(n2, n3)
+	assert(e:pow(f):sqrt(f) == cnSqrt(cnPow(a, b), b))
+	e:set(n1, n2) f:set(n2, n3)
+	assert(e:exp():log():exp() == cnExp(cnLog(cnExp(a))) and
+		f:log():exp():log() == cnLog(cnExp(cnLog(b))))
+	e:set(n1, n2) f:set(n2, n3)
 
-	assert(a:sin() == cnSin(c))
-	assert(a:cos() == cnCos(c))
-	assert(a:tan() == cnTan(c))
-	assert(a:sinh() == cnSinh(c))
-	assert(a:cosh() == cnCosh(c))
-	assert(a:tanh() == cnTanh(c))
+	assert(e:sin() == cnSin(a) and f:cos() == cnCos(b))
+	e:set(n1, n2) f:set(n2, n3)
+	assert(e:tan() == cnTan(a) and f:sinh() == cnSinh(b))
+	e:set(n1, n2) f:set(n2, n3)
+	assert(e:cosh() == cnCosh(a) and f:tanh() == cnTanh(b))
 
-	assert(a == c and b == d)
-	local r, i = a:get()
-	overrideWithInplaceMethod(a)
-	overrideWithInplaceMethod(c)
-	--
-	local t = complexNumberS(r, i):conjugate()
-	a.conjugate()
-	c.conjugate()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = a + b
-	a.add(b)
-	c.add(d)
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = a - b
-	a.sub(b)
-	c.sub(d)
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = a * b
-	a.mul(b)
-	c.mul(d)
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = a / b
-	a.div(b)
-	c.div(d)
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = a ^ b
-	a.pow(b)
-	c.pow(d)
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnExp(a)
-	a.exp()
-	c.exp()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnLog(a)
-	a.log()
-	c.log()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnSqrt(a)
-	a.sqrt()
-	c.sqrt()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnSin(a)
-	a.sin()
-	c.sin()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnCos(a)
-	a.cos()
-	c.cos()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnTan(a)
-	a.tan()
-	c.tan()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnSinh(a)
-	a.sinh()
-	c.sinh()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnCosh(a)
-	a.cosh()
-	c.cosh()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	t = cnTanh(a)
-	a.tanh()
-	c.tanh()
-	assert(t == a and t == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	a.conjugate().conjugate()
-	c.conjugate().conjugate()
-	assert(complexNumber(r, i) == a)
-	assert(complexNumber(r, i) == c)
-	--
-	a:set(r, i)
-	c:set(r, i)
-	a.log().exp()
-	c.log().exp()
-	assert(complexNumber(r, i):log():exp() == a)
-	assert(complexNumber(r, i):log():exp() == c)
+	e:set(-n2, n1) f:set(-n2, n1)
+
+	print(("a, b, c, d, e, f : %s, %s, %s, %s, %s, %s"):format(a, b, c, d, e, f))
+	print(("cnSub(a, cnExp(cnLog(a))), c - cnExp(cnLog(c)) = %s, %s")
+		:format(cnSub(a, cnExp(cnLog(a))), c - cnExp(cnLog(c))))
+	print(("cnSub(b, cnExp(cnLog(b))), d - cnExp(cnLog(d)) = %s, %s")
+		:format(cnSub(b, cnExp(cnLog(b))), d - cnExp(cnLog(d))))
+	print(("e:sub(f:log():exp()) = %s"):format(e:sub(f:log():exp())))
 end
 
-function toPolarForm(c)
-	return ("%gxCis(%g(rad)) (%g(deg))"):format(c:abs(), c:arg(), math.deg(c:arg()))
-end
+print("--")
 
-function getReciprocal(c, init)
-	init = init ~= nil and init or complexNumber
-
-	local r, i = c:get()
-	if r == 0 and i == 0 then
-		io.stderr:write("Error: can't get the reciprocal of 0+0i\n")
-		return
+do
+	function toPolarForm(v)
+		return ("%gxCis(%g(rad)) (%g(deg))")
+			:format(v:abs(), v:arg(), math.deg(v:arg()))
 	end
 
-	local t = c:abs()
-	return init(r / (t * t), -i / (t * t))
+	function p(a, b, c, d)
+		print(("%12s : %s"):format(a, toPolarForm(a)))
+		print(("%12s : %s"):format(b, toPolarForm(b)))
+		print(("%12s : %s"):format(c, toPolarForm(c)))
+		print(("%12s : %s"):format(d, toPolarForm(d)))
+	end
+
+	local a, b = complexNumber(1, 1), complexNumber(-1, 1)
+	local c, d = complexNumber(1, math.sqrt(3)), complexNumber(-1, math.sqrt(3))
+
+	p(a, b, cnConjugate(b), cnConjugate(a))
+	p(c, d, cnConjugate(d), cnConjugate(c))
 end
 
+print("--")
+
 do
-	local a, b = complexNumber(1, 1), complexNumber(-1, 1)
-	local c, d = b:conjugate(), a:conjugate()
+	function init(r, i) return overloadOperator(complexNumber(r, i)) end
 
-	print(("%5s : %s"):format(a, toPolarForm(a)))
-	print(("%5s : %s"):format(b, toPolarForm(b)))
-	print(("%5s : %s"):format(c, toPolarForm(c)))
-	print(("%5s : %s"):format(d, toPolarForm(d)))
+	function getReciprocal(v)
+		local r, i = v:get()
+		if r == 0 and i == 0 then
+			error("can't get the reciprocal of 0+0i")
+		end
+		local t = v:abs()
+		return init(r / (t * t), -i / (t * t))
+	end
 
-	print("--")
+	local a, b, c, d = init(2, 1), init(-1, 1), init(23, 45), init(1, 0)
 
-	print(("a, b, c, d : %s, %s, %s, %s"):format(a, b, c, d))
-	print(("a - a:log():exp() : %s"):format(a - a:log():exp()))
-	print(("b - b:log():exp() : %s"):format(b - b:log():exp()))
-	print(("c - c:log():exp() : %s"):format(c - c:log():exp()))
-	print(("d - d:log():exp() : %s"):format(d - d:log():exp()))
-
-	print("--")
-
-	c, d = complexNumberS(23, 45), complexNumberS(1, 0)
 	print(("a, b, c, d : %s, %s, %s, %s"):format(a, b, c, d))
 	print(("d - a * getReciprocal(a) : %s"):format(d - a * getReciprocal(a)))
 	print(("d - b * getReciprocal(b) : %s"):format(d - b * getReciprocal(b)))
 	print(("d - c * getReciprocal(c) : %s"):format(d - c * getReciprocal(c)))
-	print(("(getReciprocal(c), c * getReciprocal(c) : %s, %s)"):format(getReciprocal(c), c * getReciprocal(c)))
 end

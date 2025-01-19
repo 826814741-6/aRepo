@@ -25,14 +25,18 @@
 --	void gr_wline(double, double, double, double, long)	to	BMP; :wline
 --
 
-local getValueOrInit = require '_helper'.getValueOrInit
-local isBool = require '_helper'.isBool
+local H = require '_helper'
+
+local assertInitialValue, getValueOrInit, isBool =
+	H.assertInitialValue, H.getValueOrInit, H.isBool
 
 local t_unpack = table.unpack
 local m_abs = math.abs
 local m_floor = math.floor
 
 local function init(width, height)
+	assertInitialValue(width, height)
+
 	local T = {
 		w = width,
 		h = height,

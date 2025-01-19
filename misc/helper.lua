@@ -66,12 +66,14 @@ end
 
 local function id(v) return v end
 
+local function bufInsert(self, v) t_insert(self.buf, v) end
+local function bufGet(self) return self.buf end
+local function bufReset(self) self.buf = {} end
+
 local function makeBuffer()
 	local T = { buf = {} }
 
-	function T:insert(r) t_insert(T.buf, r) end
-	function T:get() return T.buf end
-	function T:reset() T.buf = {} end
+	T.insert, T.get, T.reset = bufInsert, bufGet, bufReset
 
 	return T
 end
