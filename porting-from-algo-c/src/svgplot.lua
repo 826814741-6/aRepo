@@ -312,16 +312,32 @@ local function resetB(self)
 	return self
 end
 
+--
+
+local function detect(v)
+	if v == nil then
+		return "A"
+	elseif isTbl(v) and v.buf == nil then
+		return "B"
+	elseif isTbl(v) and isTbl(v.buf) then
+		return "C"
+	else
+		error("'v' must be a value above.")
+		-- Please see the arguments for the function 'gSvgPlot' below.
+	end
+end
+
 local function makeMethod(v)
-	if v.t == "A" then
+	local t = detect(v)
+	if t == "A" then
 		return pathStartA, pathEndA, moveA, moveRelA, drawA, drawRelA,
 			circleA, ellipseA, lineA, rectA,
 			writeA
-	elseif v.t == "B" then
+	elseif t == "B" then
 		return pathStartB, pathEndB, moveB, moveRelB, drawB, drawRelB,
 			circleB, ellipseB, lineB, rectB,
 			writeB, resetB
-	elseif v.t == "C" then
+	elseif t == "C" then
 		return pathStartC, pathEndC, moveC, moveRelC, drawC, drawRelC,
 			circleC, ellipseC, lineC, rectC,
 			writeC
@@ -377,27 +393,13 @@ end
 
 --
 
-local function detect(v)
-	if v == nil then
-		return "A"
-	elseif isTbl(v) and v.buf == nil then
-		return "B"
-	elseif isTbl(v) and isTbl(v.buf) then
-		return "C"
-	else
-		error("'v' must be a value above.")
-	end
-end
-
 local function init(width, height, initializer)
 	assertInitialValue(width, height)
-	local opaqueValue = initializer()
 	return {
 		w = width,
 		h = height,
 		--
-		o = opaqueValue,
-		t = detect(opaqueValue)
+		o = initializer()
 	}
 end
 
@@ -407,7 +409,7 @@ local function gSvgPlot(initializer)
 
 		T.pathStart, T.pathEnd, T.move, T.moveRel, T.draw, T.drawRel,
 		T.circle, T.ellipse, T.line, T.rect,
-		T.write, T.reset = makeMethod(T)
+		T.write, T.reset = makeMethod(T.o)
 
 		return T
 	end
