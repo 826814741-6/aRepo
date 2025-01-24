@@ -344,7 +344,7 @@ local function overloadOperator(v)
 	})
 end
 
-function complexNumberWithInplaceMethod(real, imaginary)
+local function complexNumberWithInplaceMethod(real, imaginary)
 	local T = init(real, imaginary)
 
 	T.conjugate = cnConjugateB
