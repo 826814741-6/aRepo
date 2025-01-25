@@ -393,19 +393,16 @@ end
 
 --
 
-local function init(width, height, initializer)
-	assertInitialValue(width, height)
-	return {
-		w = width,
-		h = height,
-		--
-		o = initializer()
-	}
-end
-
 local function gSvgPlot(initializer)
 	return function (width, height)
-		local T = init(width, height, initializer)
+		assertInitialValue(width, height)
+
+		local T = {
+			w = width,
+			h = height,
+			--
+			o = initializer()
+		}
 
 		T.pathStart, T.pathEnd, T.move, T.moveRel, T.draw, T.drawRel,
 		T.circle, T.ellipse, T.line, T.rect,

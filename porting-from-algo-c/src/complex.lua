@@ -327,9 +327,7 @@ end
 
 --
 
-local function complexNumber(real, imaginary)
-	return init(real, imaginary)
-end
+local complexNumber = init
 
 local function overloadOperator(v)
 	return setmetatable(init(v.r, v.i), {
