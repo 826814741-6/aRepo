@@ -51,21 +51,7 @@ local function dragonCurve(plotter, order, x0, y0)
 	end
 end
 
-local function extension(T)
-	function T:dragonCurveR(order, dx, dy, sign, x0, y0)
-		T:move(x0, y0)
-		rec(T, order, dx, dy, sign)
-		return T
-	end
-	function T:dragonCurve(order, x0, y0)
-		dragonCurve(T, order, x0, y0)
-		return T
-	end
-	return T
-end
-
 return {
 	dragonCurveR = dragonCurveR,
-	dragonCurve = dragonCurve,
-	extension = extension
+	dragonCurve = dragonCurve
 }

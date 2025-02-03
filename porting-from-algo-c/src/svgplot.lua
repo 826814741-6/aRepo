@@ -477,7 +477,6 @@ StyleValue.RandomRGB = function ()
 end
 
 return {
-	mustBePlotter = mustBePlotter,
 	svgPlot = svgPlot,
 	svgPlotWholeBuffer = svgPlotWholeBuffer,
 	svgPlotWithBuffer = svgPlotWithBuffer,

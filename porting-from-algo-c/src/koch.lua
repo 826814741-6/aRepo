@@ -33,15 +33,6 @@ local function koch(plotter, d, a, dmax)
 	rec()
 end
 
-local function extension(T)
-	function T:koch(d, a, dmax)
-		koch(T, d, a, dmax)
-		return T
-	end
-	return T
-end
-
 return {
-	koch = koch,
-	extension = extension
+	koch = koch
 }

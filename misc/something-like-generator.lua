@@ -295,6 +295,7 @@ do
 		                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
 		beGen(gCircularCL, 0, 1, 2)
 
+	dropGens(84 * 3, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3)
 	p(takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3))
 	dropGens(7, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3)
 	monthsOfTheYear:drop(1) remaindersDividedBy3:drop(1)

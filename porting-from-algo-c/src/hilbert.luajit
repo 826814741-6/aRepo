@@ -65,15 +65,6 @@ local function hilbert(plotter, order, n, offset)
 	rul(order)
 end
 
-local function extension(T)
-	function T:hilbert(order, n, offset)
-		hilbert(T, order, n, offset)
-		return T
-	end
-	return T
-end
-
 return {
-	hilbert = hilbert,
-	extension = extension
+	hilbert = hilbert
 }

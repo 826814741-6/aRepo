@@ -75,14 +75,6 @@ local function sierpinski(plotter, order, n)
 	plotter:drawRel(h, -h)
 end
 
-local function extension(T)
-	function T:sierpinski(order, n)
-		sierpinski(T, order, n)
-		return T
-	end
-	return T
-end
-
 local function sierpinskiGasket(bmp, n, fgColor, bgColor)
 	function triangle(i, j)
 		bmp:wLine(i, j+1, i-1, j, fgColor)
@@ -114,6 +106,5 @@ end
 
 return {
 	sierpinski = sierpinski,
-	extension = extension,
 	sierpinskiGasket = sierpinskiGasket
 }
