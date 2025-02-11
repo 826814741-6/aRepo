@@ -319,35 +319,26 @@ end
 
 --
 
-local function detect(v)
-	if v == nil then
-		return "A"
-	elseif isUd(v) then
-		return "B"
-	elseif isTbl(v) and isUd(v.buf) then
-		return "C"
-	else
-		error("'v' must be a value above.")
-		-- Please see the arguments for the function 'gSvgPlot' below.
-	end
-end
+local function isA(v) return v == nil end
+local function isB(v) return isUd(v) end
+local function isC(v) return isTbl(v) and isUd(v.buf) end
 
 local function makeMethod(v)
-	local t = detect(v)
-	if t == "A" then
+	if isA(v) then
 		return pathStartA, pathEndA, moveA, moveRelA, drawA, drawRelA,
 			circleA, ellipseA, lineA, rectA,
 			writeA
-	elseif t == "B" then
+	elseif isB(v) then
 		return pathStartB, pathEndB, moveB, moveRelB, drawB, drawRelB,
 			circleB, ellipseB, lineB, rectB,
 			writeB, resetB
-	elseif t == "C" then
+	elseif isC(v) then
 		return pathStartC, pathEndC, moveC, moveRelC, drawC, drawRelC,
 			circleC, ellipseC, lineC, rectC,
 			writeC
 	else
-		error("'v' must be a valid value.")
+		error("'v' must be a value above.")
+		-- Please see the arguments for the function 'gSvgPlot' below.
 	end
 end
 
