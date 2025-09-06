@@ -41,7 +41,8 @@ local isWrapWithValidator = false
 -- Note:
 -- The format functions are not called directly by the user. However, since
 -- each plotter method is implemented as a thin wrapper around a format
--- function, this trick can be useful for prototyping or debugging.
+-- function, these little safety bars might be a bit useful for prototyping
+-- or debugging.
 --
 
 local function header(w, h)
@@ -417,8 +418,12 @@ local svgPlot, svgPlotWholeBuffer, svgPlotWithBuffer =
 --
 
 local function gMakeStyleMethod(specifier, filter)
+	mustBeStr(specifier)
 	return function (s)
-		local fmt = ([[%s="%%%s"]]):format(mustBeStr(s), specifier)
+		mustBeStr(s)
+		local fmt, errStr =
+			([[%s="%%%s"]]):format(s, specifier),
+			([[Attribute '%s' already exists.]]):format(s)
 		return function (self, v)
 			if self.attr[s] ~= true then
 				self.attr[s] = true
@@ -426,6 +431,8 @@ local function gMakeStyleMethod(specifier, filter)
 					self.buf,
 					fmt:format(filter(v))
 				)
+			else
+				error(errStr)
 			end
 			return self
 		end

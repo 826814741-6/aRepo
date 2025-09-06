@@ -29,8 +29,8 @@ end
 --
 -- Note:
 -- If the return value contains nil, 't_unpack' may not be able to retrieve
--- the result properly, depending on the version of Lua. Therefore, in such
--- cases, please pass your own 'unpacker' as an argument.
+-- the result properly depending on your build of Lua/LuaJIT. In this case,
+-- please pass your own 'unpacker' as an argument.
 -- (see w4A and w4B below)
 --
 
