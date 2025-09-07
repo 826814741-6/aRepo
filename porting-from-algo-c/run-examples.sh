@@ -66,6 +66,7 @@ run() {
 run acker AWK LUA
 run binormal LUA
 run change AWK LUA
+run checkdigit LUA
 run chisqdist AWK LUA
 run ci LUA
 run combination AWK LUA
@@ -82,10 +83,7 @@ run fib AWK LUA
 run gcd AWK LUA
 run horner AWK LUA
 run hypot AWK LUA
-run isbn LUA
-run isbn13 LUA
 run komachi LUA
-run luhn LUA
 run machineepsilon LUA PY
 run mccarthy AWK LUA
 run montecarlo LUA

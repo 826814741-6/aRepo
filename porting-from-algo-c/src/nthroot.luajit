@@ -20,21 +20,43 @@
 local H = require '_helper'
 
 local abs, atLeastOne = H.abs, H.atLeastOne
+local b_lshift, b_rshift, m_floor = bit.lshift, bit.rshift, math.floor
 
-local function loopF(x, step)
-	local prev, t = atLeastOne(x), step(x, atLeastOne(x))
-	while t < prev do
-		prev, t = t, step(x, t)
+local function gLoop(step)
+	return function (x)
+		local prev, t = atLeastOne(x), step(x, atLeastOne(x))
+		while t < prev do
+			prev, t = t, step(x, t)
+		end
+		return prev
 	end
-	return prev
 end
+
+local loopS, loopC1, loopC2 =
+	gLoop(function (x, t) return (x/t + t) / 2 end),
+	gLoop(function (x, t) return (x / (t*t) + 2*t) / 3 end),
+	gLoop(function (x, t) return t + (x - t*t*t) / (2*t*t + x/t) end)
+
+local function initC(loop)
+	return function (x)
+		if x == 0 then
+			return 0
+		elseif x > 0 then
+			return loop(x)
+		else
+			return -loop(abs(x))
+		end
+	end
+end
+
+--
 
 local function fSqrt(x)
 	if x <= 0 then return 0 end
-	return loopF(x, function (x,t) return (x/t + t) / 2 end)
+	return loopS(x)
 end
 
-local b_lshift, b_rshift, m_floor = bit.lshift, bit.rshift, math.floor
+local fCbrt, fCbrt2 = initC(loopC1), initC(loopC2)
 
 local function iSqrt(x)
 	if x <= 0 then return 0 end
@@ -50,24 +72,7 @@ local function iSqrt(x)
 	return r
 end
 
-local function _f(step)
-	return function (x)
-		if x == 0 then
-			return 0
-		elseif x > 0 then
-			return loopF(x, step)
-		else
-			return -loopF(abs(x), step)
-		end
-	end
-end
-
-local fCbrt = _f(function (x,t) return (x / (t*t) + 2*t) / 3 end)
-local fCbrt2 = _f(function (x,t) return t + (x - t*t*t) / (2*t*t + x/t) end)
-
-local function iCbrt(x)
-	if x <= 0 then return 0 end
-
+local function loopI(x)
 	local r, t = x, 1
 	while t < r do
 		r, t = b_rshift(r, 2), b_lshift(t, 1)
@@ -75,9 +80,10 @@ local function iCbrt(x)
 	repeat
 		r, t = t, m_floor((m_floor(x / (t * t)) + 2 * t) / 3)
 	until t >= r
-
 	return r
 end
+
+local iCbrt = initC(loopI)
 
 return {
 	fSqrt = fSqrt,
