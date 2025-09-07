@@ -1,10 +1,10 @@
 --
---	from src/fib.c
+--  from src/fib.c
 --
---	int fib1(int)		to	fib1
---	int fib2(int)		to	fib2
---	a part of main		to	fib3
---	fib3			to	fib4
+--    int fib1(int)   to  fib1
+--    int fib2(int)   to  fib2
+--    a part of main  to  fib3
+--    fib3            to  fib4
 --
 
 local floor, sqrt = math.floor, math.sqrt

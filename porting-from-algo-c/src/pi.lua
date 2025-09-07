@@ -1,20 +1,20 @@
 --
---	from src/pi1.c
+--  from src/pi1.c
 --
---	long double pi(void)	to	machinLike
---	machinLike		to	machinLikeM (depends on lbc(*))
+--    long double pi(void)  to  machinLike
+--    machinLike            to  machinLikeM (depends on lbc(*))
 --
---	from src/pi2.c
+--  from src/pi2.c
 --
---	a part of main		to	gaussLegendre
---	gaussLegendre		to	gaussLegendreM (depends on lbc(*))
+--    a part of main        to  gaussLegendre
+--    gaussLegendre         to  gaussLegendreM (depends on lbc(*))
 --
---	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+--  from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
 --
---	a part of article	to	leibniz
+--    a part of article     to  leibniz
 --
---	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
---	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
+--  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
+--  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
 local hasBC, bc = pcall(require, "bc")

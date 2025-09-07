@@ -1,15 +1,15 @@
 #
-#	from src/pi1.c
+#  from src/pi1.c
 #
-#	long double pi(void)	to	register m
+#    long double pi(void)  to  register m
 #
-#	from src/pi2.c
+#  from src/pi2.c
 #
-#	a part of main		to	register g
+#    a part of main        to  register g
 #
-#	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+#  from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
 #
-#	a part of article	to	register l
+#    a part of article     to  register l
 #
 
 [

@@ -1,7 +1,7 @@
 --
---	from src/dayweek.c
+--  from src/dayweek.c
 --
---	a part of main	to	dayweek, initArray
+--    a part of main  to  dayweek, initArray
 --
 
 local function dayweek(y, m, d)

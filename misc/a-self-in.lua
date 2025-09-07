@@ -1,7 +1,7 @@
 --
---	a-self-in.lua
+--  a-self-in.lua
 --
---	> lua[jit] a-self-in.lua
+--  > lua[jit] a-self-in.lua
 --
 
 --

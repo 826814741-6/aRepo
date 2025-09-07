@@ -1,7 +1,7 @@
 --
---	from src/gasket.c
+--  from src/gasket.c
 --
---	triangle and a part of main	to	sierpinskiGasket
+--    triangle and a part of main  to  sierpinskiGasket
 --
 
 local M0 = require 'grBMP'

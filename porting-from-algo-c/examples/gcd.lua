@@ -1,10 +1,10 @@
 --
---	from src/gcd.c
+--  from src/gcd.c
 --
---	int gcd(int, int) ; recursive	to	gcdR
---	int gcd(int, int) ; loop	to	gcdL
---	int ngcd(int, int[])		to	ngcdL
---	ngcdL				to	ngcdR
+--    int gcd(int, int) ; recursive  to  gcdR
+--    int gcd(int, int) ; loop       to  gcdL
+--    int ngcd(int, int[])           to  ngcdL
+--    ngcdL                          to  ngcdR
 --
 
 local M = require 'gcd'
@@ -61,28 +61,28 @@ do
 end
 
 --
---	Some samples of nil and table (using as an array-like object)
+--  Some samples of nil and table (using as an array-like object)
 --
---	> #{}, #{nil}, #{{}}, #{nil,{}}, #{{},nil}
---	0	0	1	2	1
+--  > #{}, #{nil}, #{{}}, #{nil,{}}, #{{},nil}
+--  0  0  1  2  1
 --
---	> #{10,20,30}, #{10,20,30,nil}, #{[0]=0,10,20,30}
---	3	3	3
+--  > #{10,20,30}, #{10,20,30,nil}, #{[0]=0,10,20,30}
+--  3  3  3
 --
---	> #{nil,20,nil,nil,50}, #{nil,20,nil,nil,nil}, #{nil,nil,nil,nil,50}
---	5	2	5
+--  > #{nil,20,nil,nil,50}, #{nil,20,nil,nil,nil}, #{nil,nil,nil,nil,50}
+--  5  2  5
 --
---	> t={}
---	> t[1]=10
---	> #t
---	1
---	> t[3]=30
---	> #t
---	1
---	> t[2]=20
---	> #t
---	3
---	> t[2]=nil
---	> #t
---	1
+--  > t={}
+--  > t[1]=10
+--  > #t
+--  1
+--  > t[3]=30
+--  > #t
+--  1
+--  > t[2]=20
+--  > #t
+--  3
+--  > t[2]=nil
+--  > #t
+--  1
 --

@@ -1,8 +1,8 @@
 --
---	from src/movebloc.c
+--  from src/movebloc.c
 --
---	void reverse(int, int)		to	reverse
---	void rotate(int, int, int)	to	rotate
+--    void reverse(int, int)      to  reverse
+--    void rotate(int, int, int)  to  rotate
 --
 
 local M = require 'moveblock'

@@ -1,11 +1,11 @@
 --
---	from src/dragon.c
+--  from src/dragon.c
 --
---	void dragon(int, double, double, int)	to	dragonCurveR
+--    void dragon(int, double, double, int)  to  dragonCurveR
 --
---	from src/dragon2.c
+--  from src/dragon2.c
 --
---	a part of main				to	dragonCurve
+--    a part of main                         to  dragonCurve
 --
 
 local function rec(plotter, i, dx, dy, sign)

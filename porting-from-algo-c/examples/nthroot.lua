@@ -1,25 +1,25 @@
 --
---	from src/sqrt.c
+--  from src/sqrt.c
 --
---	double mysqrt(double)		to	fSqrt
---	fSqrt				to	fSqrtM (depends on lbc(*))
+--    double mysqrt(double)      to  fSqrt
+--    fSqrt                      to  fSqrtM (depends on lbc(*))
 --
---	from src/isqrt.c
+--  from src/isqrt.c
 --
---	unsigned isqrt(unsigned)	to	iSqrt
+--    unsigned isqrt(unsigned)   to  iSqrt
 --
---	from src/cuberoot.c
+--  from src/cuberoot.c
 --
---	double cuberoot(double)		to	fCbrt
---	double cuberoot2(double)	to	fCbrt2
---	fCbrt				to	fCbrtM (depends on lbc(*))
+--    double cuberoot(double)    to  fCbrt
+--    double cuberoot2(double)   to  fCbrt2
+--    fCbrt                      to  fCbrtM (depends on lbc(*))
 --
---	from src/icubrt.c
+--  from src/icubrt.c
 --
---	unsigned icubrt(unsigned)	to	iCbrt
+--    unsigned icubrt(unsigned)  to  iCbrt
 --
---	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
---	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
+--  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
+--  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
 local M = require 'nthroot'

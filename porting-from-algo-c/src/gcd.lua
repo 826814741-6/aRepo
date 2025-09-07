@@ -1,10 +1,10 @@
 --
---	from src/gcd.c
+--  from src/gcd.c
 --
---	int gcd(int, int) ; recursive	to	gcdR
---	int gcd(int, int) ; loop	to	gcdL
---	int ngcd(int, int[])		to	ngcdL
---	ngcdL				to	ngcdR
+--    int gcd(int, int) ; recursive  to  gcdR
+--    int gcd(int, int) ; loop       to  gcdL
+--    int ngcd(int, int[])           to  ngcdL
+--    ngcdL                          to  ngcdR
 --
 
 local isTbl = require '_helper'.isTbl

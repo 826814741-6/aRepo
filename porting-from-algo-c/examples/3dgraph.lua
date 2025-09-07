@@ -1,7 +1,7 @@
 --
---	from src/3dgraph.c
+--  from src/3dgraph.c
 --
---	a part of main		to	tdGraph
+--    a part of main  to  tdGraph
 --
 
 local M = require 'svgplot'

@@ -1,14 +1,14 @@
 --
---	from src/sierpin.c
+--  from src/sierpin.c
 --
---	void urd(int)			to	sierpinski; urd
---	void lur(int)			to	sierpinski; lur
---	void dlu(int)			to	sierpinski; dlu
---	void rdl(int)			to	sierpinski; rdl
+--    void urd(int)                to  sierpinski; urd
+--    void lur(int)                to  sierpinski; lur
+--    void dlu(int)                to  sierpinski; dlu
+--    void rdl(int)                to  sierpinski; rdl
 --
---	from src/gasket.c
+--  from src/gasket.c
 --
---	triangle and a part of main	to	sierpinskiGasket
+--    triangle and a part of main  to  sierpinskiGasket
 --
 
 local function sierpinski(plotter, order, n)

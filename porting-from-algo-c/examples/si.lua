@@ -1,9 +1,9 @@
 --
---	from src/si.c
+--  from src/si.c
 --
---	double Si_series(double)	to	seriesExpansion
---	double Si_asympt(double)	to	asymptoticExpansion
---	double Si(double)		to	Si
+--    double Si_series(double)  to  seriesExpansion
+--    double Si_asympt(double)  to  asymptoticExpansion
+--    double Si(double)         to  Si
 --
 
 local Si = require 'integral'.Si

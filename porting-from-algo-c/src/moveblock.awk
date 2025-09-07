@@ -1,12 +1,12 @@
 #
-#	from src/movebloc.c
+#  from src/movebloc.c
 #
-#	void reverse(int, int)		to	reverse
-#	void rotate(int, int, int)	to	rotate
+#    void reverse(int, int)      to  reverse
+#    void rotate(int, int, int)  to  rotate
 #
 
 #
-#	decrement(n), increment(n), swap(a, i, j) from _helper.awk
+#  decrement(n), increment(n), swap(a, i, j) from _helper.awk
 #
 
 function reverse(a, i, j) {
@@ -26,7 +26,7 @@ function rotate(a, left, mid, right) {
 #
 
 #
-#	concat(a) from _helper.awk
+#  concat(a) from _helper.awk
 #
 
 BEGIN {

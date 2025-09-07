@@ -1,8 +1,8 @@
 --
---	from src/stirling.c
+--  from src/stirling.c
 --
---	int Stirling1(int, int)		to	stirling1
---	int Stirling2(int, int)		to	stirling2
+--    int Stirling1(int, int)   to  stirling1
+--    int Stirling2(int, int)   to  stirling2
 --
 
 local M = require 'something-recursive'

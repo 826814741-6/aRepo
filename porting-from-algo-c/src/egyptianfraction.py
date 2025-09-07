@@ -1,9 +1,9 @@
 #
-#	from src/egypfrac.c
+#  from src/egypfrac.c
 #
-#	a part of main		to	egyptianFraction
-#	egyptianFraction	to	egyptianFractionG
-#	egyptianFraction	to	egyptianFractionL
+#    a part of main    to  egyptianFraction
+#    egyptianFraction  to  egyptianFractionG
+#    egyptianFraction  to  egyptianFractionL
 #
 
 def egyptianFraction(n0, d0):

@@ -1,7 +1,7 @@
 #
-#	from src/lissaj.c
+#  from src/lissaj.c
 #
-#	a part of main		to	lissajousCurve
+#    a part of main  to  lissajousCurve
 #
 
 function _stepX(n, offset, a) {

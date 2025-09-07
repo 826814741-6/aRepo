@@ -1,7 +1,7 @@
 --
---	from src/eulerian.c
+--  from src/eulerian.c
 --
---	Eulerian	to	eulerianNumber
+--    Eulerian                  to  eulerianNumber
 --
 
 local M = require 'something-recursive'

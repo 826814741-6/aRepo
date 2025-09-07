@@ -1,7 +1,7 @@
 --
---	from src/lorenz.c
+--  from src/lorenz.c
 --
---	a part of main		to	lorenzAttractor
+--    a part of main  to  lorenzAttractor
 --
 
 local function lorenzAttractor(plotter, S, R, B, n, a1, a2, a3, a4)

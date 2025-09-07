@@ -1,7 +1,7 @@
 --
---	from src/luhn.c
+--  from src/luhn.c
 --
---	a part of main		to	isLuhn
+--    a part of main  to  isLuhn
 --
 
 local isLuhn = require 'checkdigit'.isLuhn

@@ -1,7 +1,7 @@
 #
-#	from src/treecurv.c
+#  from src/treecurv.c
 #
-#	void tree(int, double, double)		to	treeCurve
+#    void tree(int, double, double)  to  treeCurve
 #
 
 function treeCurve(n, len, angle, factor, turn,	x, y) {

@@ -1,8 +1,8 @@
 #
-#	from src/gcd.c
+#  from src/gcd.c
 #
-#	int gcd(int, int) ; recursive	to	gcdR
-#	int gcd(int, int) ; loop	to	gcdL
+#    int gcd(int, int) ; recursive  to  gcdR
+#    int gcd(int, int) ; loop       to  gcdL
 #
 
 function gcdR(x, y) {

@@ -1,8 +1,8 @@
 #
-#	from src/stirling.c
+#  from src/stirling.c
 #
-#	int Stirling1(int, int)		to	stirling1
-#	int Stirling2(int, int)		to	stirling2
+#    int Stirling1(int, int)  to  stirling1
+#    int Stirling2(int, int)  to  stirling2
 #
 
 function stirling1(n, k) {
@@ -22,7 +22,7 @@ function stirling2(n, k) {
 BEGIN {
 	xl = 0; xr = 10; xlength = 11
 	yl = 0; yr = 10
-	w1 = 3;	w2 = 8
+	w1 = 3; w2 = 8
 
 	padding = rep(" ", w1 + 2)
 	border = rep(rep("-", w2), xlength)

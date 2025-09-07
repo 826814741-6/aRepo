@@ -1,9 +1,9 @@
 --
---	from src/hypot.c
+--  from src/hypot.c
 --
---	double hypot0(double, double)		to	hypot0
---	double hypot1(double, double)		to	hypot1
---	double hypot2(double, double)		to	hypot2 (Moler-Morrison)
+--    double hypot0(double, double)  to  hypot0
+--    double hypot1(double, double)  to  hypot1
+--    double hypot2(double, double)  to  hypot2 (Moler-Morrison)
 --
 
 local M = require 'hypot'
@@ -35,6 +35,6 @@ do
 end
 
 --
---	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
---	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
+--  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
+--  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --

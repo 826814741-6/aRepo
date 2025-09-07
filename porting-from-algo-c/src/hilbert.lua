@@ -1,10 +1,10 @@
 --
---	from src/hilbert.c
+--  from src/hilbert.c
 --
---	void rul(int)		to	hilbert; rul
---	void dlu(int)		to	hilbert; dlu
---	void ldr(int)		to	hilbert; ldr
---	void urd(int)		to	hilbert; urd
+--    void rul(int)  to  hilbert; rul
+--    void dlu(int)  to  hilbert; dlu
+--    void ldr(int)  to  hilbert; ldr
+--    void urd(int)  to  hilbert; urd
 --
 
 local function hilbert(plotter, order, n, offset)

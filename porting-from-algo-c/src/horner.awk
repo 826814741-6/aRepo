@@ -1,19 +1,19 @@
 #
-#	from src/horner.c
+#  from src/horner.c
 #
-#	double horner(int, double a[], double)		to	horner
-#
-
-#
-#	a = {number, number, number, number, number, ...}
-#
-#	[1] + [2] * x + [3] * x^2 + [4] * x^3 + [5] * x^4 + ...
-#
-#	... + [5] * x^4 + [4] * x^3 + [3] * x^2 + [2] * x^1 + [1]
+#    double horner(int, double a[], double)  to  horner
 #
 
 #
-#	_length(a) from _helper.awk
+#  a = {number, number, number, number, number, ...}
+#
+#  [1] + [2] * x + [3] * x^2 + [4] * x^3 + [5] * x^4 + ...
+#
+#  ... + [5] * x^4 + [4] * x^3 + [3] * x^2 + [2] * x^1 + [1]
+#
+
+#
+#  _length(a) from _helper.awk
 #
 
 function horner(a, x,	len, p, i) {
@@ -34,7 +34,7 @@ function horner(a, x,	len, p, i) {
 #
 
 #
-#	_length(a) from _helper.awk
+#  _length(a) from _helper.awk
 #
 
 function fmt(a,		len, r, i) {

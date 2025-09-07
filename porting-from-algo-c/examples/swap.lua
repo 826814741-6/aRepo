@@ -1,7 +1,7 @@
 --
---	from src/swap.c
+--  from src/swap.c
 --
---	void swap(int *, int *)		to	swap
+--    void swap(int *, int *)  to  swap
 --
 
 local swap = require 'swap'.swap

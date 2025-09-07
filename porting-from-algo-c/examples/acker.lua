@@ -1,7 +1,7 @@
 --
---	from src/acker.c
+--  from src/acker.c
 --
---	int A(int, int)		to	ack
+--    int A(int, int)           to  ack
 --
 
 local ack = require 'something-recursive'.ack

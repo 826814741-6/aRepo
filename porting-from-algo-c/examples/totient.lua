@@ -1,7 +1,7 @@
 --
---	from src/totient.c
+--  from src/totient.c
 --
---	unsigned phi(unsigned)		to	phi
+--    unsigned phi(unsigned)  to  phi
 --
 
 local M = require 'totient'

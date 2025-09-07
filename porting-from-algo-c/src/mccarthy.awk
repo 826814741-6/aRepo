@@ -1,7 +1,7 @@
 #
-#	from src/mccarthy.c
+#  from src/mccarthy.c
 #
-#	int McCarthy(int)	to	mccarthy91
+#    int McCarthy(int)  to  mccarthy91
 #
 
 function mccarthy91(x) {

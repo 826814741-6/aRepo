@@ -1,9 +1,9 @@
 --
---	from src/fft.c
+--  from src/fft.c
 --
---	void make_sintbl(int, double [])	to	makeSinTable
---	void make_bitrev(int, int [])		to	makeBitReverseTable
---	int fft(int, double [], double [])	to	cooleyTukey
+--    void make_sintbl(int, double [])    to  makeSinTable
+--    void make_bitrev(int, int [])       to  makeBitReverseTable
+--    int fft(int, double [], double [])  to  cooleyTukey
 --
 
 local cooleyTukey = require 'fft'.cooleyTukey

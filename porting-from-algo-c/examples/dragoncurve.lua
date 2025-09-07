@@ -1,7 +1,7 @@
 --
---	from src/dragon2.c
+--  from src/dragon2.c
 --
---	a part of main				to	dragonCurve
+--    a part of main                         to  dragonCurve
 --
 
 local M = require 'svgplot'

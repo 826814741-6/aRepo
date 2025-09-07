@@ -1,8 +1,8 @@
 --
---	from src/sum.c
+--  from src/sum.c
 --
---	float sum1(int, float[])	to	sum1
---	float sum2(int, float[])	to	sum2
+--    float sum1(int, float[])  to  sum1
+--    float sum2(int, float[])  to  sum2
 --
 
 local M = require 'sum'

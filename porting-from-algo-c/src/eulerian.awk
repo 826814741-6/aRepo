@@ -1,7 +1,7 @@
 #
-#	from src/eulerian.c
+#  from src/eulerian.c
 #
-#	Eulerian	to	eulerianNumber
+#    Eulerian  to  eulerianNumber
 #
 
 function eulerianNumber(n, k) {
@@ -13,13 +13,13 @@ function eulerianNumber(n, k) {
 #
 
 #
-#	rep(s,n) from _helper.awk
+#  rep(s,n) from _helper.awk
 #
 
 BEGIN {
 	xl = 0; xr = 10; xlength = 11
 	yl = 0; yr = 10
-	w1 = 3;	w2 = 8
+	w1 = 3; w2 = 8
 
 	padding = rep(" ", w1 + 2)
 	border = rep(rep("-", w2), xlength)

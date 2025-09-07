@@ -1,7 +1,7 @@
 #
-#	from src/e.c
+#  from src/e.c
 #
-#	long double ee(void)	to	e, efmt
+#    long double ee(void)  to  e, efmt
 #
 
 function e(	r, a, n, prev) {
@@ -30,7 +30,7 @@ BEGIN {
 	printf "   %%e : %e\n", t
 	printf "   %%f : %f\n", t
 	printf "   %%g : %g\n", t
-	printf "   %%a : %a\n", t	# see bottom
+	printf "   %%a : %a\n", t  # see bottom
 	printf "%%.20e : %.20e\n", t
 	printf "%%.20f : %.20f\n", t
 	printf "%%.20g : %.20g\n", t
@@ -42,7 +42,7 @@ BEGIN {
 	printf "   %%e : %e (%d)\n", _r[1], _r[2]
 	printf "   %%f : %f\n", _r[1]
 	printf "   %%g : %g\n", _r[1]
-	printf "   %%a : %a\n", _r[1]	# see bottom
+	printf "   %%a : %a\n", _r[1]  # see bottom
 	printf "%%.20e : %.20e\n", _r[1]
 	printf "%%.20f : %.20f\n", _r[1]
 	printf "%%.20g : %.20g\n", _r[1]
@@ -54,7 +54,7 @@ BEGIN {
 	printf "   %%e : %e (%d)\n", _r[1], _r[2]
 	printf "   %%f : %f\n", _r[1]
 	printf "   %%g : %g\n", _r[1]
-	printf "   %%a : %a\n", _r[1]	# see bottom
+	printf "   %%a : %a\n", _r[1]  # see bottom
 	printf "%%.20e : %.20e\n", _r[1]
 	printf "%%.20f : %.20f\n", _r[1]
 	printf "%%.20g : %.20g\n", _r[1]

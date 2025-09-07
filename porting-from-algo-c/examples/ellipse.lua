@@ -1,7 +1,11 @@
 --
---	from src/ellipse.c
+--  from src/ellipse.c
 --
---	void gr_ellipse(int, int, int, int, long)	to	BMP; :ellipse
+--    void gr_ellipse(int, int, int, int, long)  to   BMP; :ellipse
+--
+--  from src/svgplot.c
+--
+--    ... some extensions for basic shapes       are  :circle, :ellipse, :line, :rect
 --
 
 local BMP = require 'grBMP'.BMP

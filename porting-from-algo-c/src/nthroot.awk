@@ -1,24 +1,24 @@
 #
-#	from src/sqrt.c
+#  from src/sqrt.c
 #
-#	double mysqrt(double)		to	fSqrt
+#    double mysqrt(double)      to  fSqrt
 #
-#	from src/isqrt.c
+#  from src/isqrt.c
 #
-#	unsigned isqrt(unsigned)	to	iSqrt
+#    unsigned isqrt(unsigned)   to  iSqrt
 #
-#	from src/cuberoot.c
+#  from src/cuberoot.c
 #
-#	double cuberoot(double)		to	fCbrt
-#	double cuberoot2(double)	to	fCbrt2
+#    double cuberoot(double)    to  fCbrt
+#    double cuberoot2(double)   to  fCbrt2
 #
-#	from src/icubrt.c
+#  from src/icubrt.c
 #
-#	unsigned icubrt(unsigned)	to	iCbrt
+#    unsigned icubrt(unsigned)  to  iCbrt
 #
 
 #
-#	abs(n), atLeastOne(n) from _helper.awk
+#  abs(n), atLeastOne(n) from _helper.awk
 #
 
 function fSqrt(x,	r, t) {
@@ -117,7 +117,7 @@ function iCbrt(x,	r, t) {
 #
 
 #
-#	_p(b) from _helper.awk
+#  _p(b) from _helper.awk
 #
 
 function _t_iSqrt(l, r,		i, t) {

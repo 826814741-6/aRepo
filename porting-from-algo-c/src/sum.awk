@@ -1,8 +1,8 @@
 #
-#	from src/sum.c
+#  from src/sum.c
 #
-#	float sum1(int, float[])	to	sum1
-#	float sum2(int, float[])	to	sum2
+#    float sum1(int, float[])  to  sum1
+#    float sum2(int, float[])  to  sum2
 #
 
 function sum1(a, n,	r, i) {
@@ -27,7 +27,7 @@ function sum2(a, n,	r, rest, i, t) {
 #
 
 #
-#	_p(b) from _helper.awk
+#  _p(b) from _helper.awk
 #
 
 BEGIN {

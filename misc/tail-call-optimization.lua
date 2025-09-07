@@ -1,17 +1,17 @@
 --
---	tail-call-optimization.lua
+--  tail-call-optimization.lua
 --
---	porting from:
---	https://github.com/justinethier/cyclone/blob/master/examples/tail-call-optimization.scm
---	and its license is MIT:
---	https://github.com/justinethier/cyclone#license
+--  porting from:
+--  https://github.com/justinethier/cyclone/blob/master/examples/tail-call-optimization.scm
+--  and its license is MIT:
+--  https://github.com/justinethier/cyclone#license
 --
---	> lua[jit] tail-call-optimization.lua
---	... running forever ...
+--  > lua[jit] tail-call-optimization.lua
+--  ... running forever ...
 --
---	> luac -l [-o nul or -o /dev/null] -- src
---	> luajit -bl src
---	> luajit -jdump src
+--  > luac -l [-o nul or -o /dev/null] -- src
+--  > luajit -bl src
+--  > luajit -jdump src
 --
 
 local foo

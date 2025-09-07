@@ -1,7 +1,7 @@
 --
---	something-like-generator.lua
+--  something-like-generator.lua
 --
---	> lua[jit] something-like-generator.lua
+--  > lua[jit] something-like-generator.lua
 --
 
 local H = require 'helper'

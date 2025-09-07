@@ -1,15 +1,15 @@
 #
-#	from src/pi1.c
+#  from src/pi1.c
 #
-#	long double pi(void)	to	machinLike
+#    long double pi(void)  to  machinLike
 #
-#	from src/pi2.c
+#  from src/pi2.c
 #
-#	a part of main		to	gaussLegendre
+#    a part of main        to  gaussLegendre
 #
-#	from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
+#  from https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80
 #
-#	a part of article	to	leibniz
+#    a part of article     to  leibniz
 #
 
 function machinLike(	p, k, t, prev) {

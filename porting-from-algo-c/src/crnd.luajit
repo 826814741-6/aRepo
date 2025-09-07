@@ -1,9 +1,9 @@
 --
---	from src/crnd.c
+--  from src/crnd.c
 --
---	void init_rnd(unsigned long)		to	crnd; :init
---	unsigned long irnd(void)		to	crnd; :irnd
---	double rnd(void)			to	crnd; :rnd
+--    void init_rnd(unsigned long)  to  crnd; :init
+--    unsigned long irnd(void)      to  crnd; :irnd
+--    double rnd(void)              to  crnd; :rnd
 --
 
 local ffi_istype = require 'ffi'.istype

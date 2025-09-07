@@ -1,10 +1,10 @@
 --
---	from src/rand.c
+--  from src/rand.c
 --
---	int rand(void)		to	rand
---	void srand(unsigned)	to	srand
---	rand, srand		to	RAND; :rand, :srand
---					      :randRaw
+--    int rand(void)        to  rand
+--    void srand(unsigned)  to  srand
+--    rand, srand           to  RAND; :rand, :srand
+--                                    :randRaw
 --
 
 local isNum = require '_helper'.isNum

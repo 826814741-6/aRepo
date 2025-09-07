@@ -1,8 +1,8 @@
 #
-#	from src/normal.c
+#  from src/normal.c
 #
-#	double pNormal(double)		to	pNormal
-#	double qNormal(double)		to	qNormal
+#    double pNormal(double)  to  pNormal
+#    double qNormal(double)  to  qNormal
 #
 
 BEGIN {

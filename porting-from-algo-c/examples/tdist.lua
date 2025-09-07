@@ -1,8 +1,8 @@
 --
---	from src/tdist.c
+--  from src/tdist.c
 --
---	double p_t(int, double)		to	pT
---	double q_t(int, double)		to	qT
+--    double p_t(int, double)       to  pT
+--    double q_t(int, double)       to  qT
 --
 
 local pT = require 'distribution'.pT

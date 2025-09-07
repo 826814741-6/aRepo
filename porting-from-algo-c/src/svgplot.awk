@@ -1,12 +1,12 @@
 #
-#	from src/svgplot.c
+#  from src/svgplot.c
 #
-#	void plot_start(int, int)		to	header, pathStart
-#	void plot_end(int)			to	footer, pathEnd
-#	void move(double, double)		to	move
-#	void move_rel(double, double)		to	moveRel
-#	void draw(double, double)		to	draw
-#	void draw_rel(double, double)		to	drawRel
+#    void plot_start(int, int)      to  header, pathStart
+#    void plot_end(int)             to  footer, pathEnd
+#    void move(double, double)      to  move
+#    void move_rel(double, double)  to  moveRel
+#    void draw(double, double)      to  draw
+#    void draw_rel(double, double)  to  drawRel
 #
 
 BEGIN {

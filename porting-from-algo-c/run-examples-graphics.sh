@@ -1,14 +1,14 @@
 #
-#	run-examples-graphics.sh
+#  run-examples-graphics.sh
 #
-#	Please set the path of excutable, before you run this script.
+#  Please set the path of excutable, before you run this script.
 #
-#	e.g.
-#	LUA=/path/to/lua or LUA=lua or
-#	PY='micropython -X heapsize=2wM -X emit=native' (*)
+#    e.g.
+#    LUA=/path/to/lua or LUA=lua or
+#    PY='micropython -X heapsize=2wM -X emit=native' (*)
 #
-#	*) Quick reference for the UNIX and Windows ports
-#	https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
+#  *) Quick reference for the UNIX and Windows ports
+#  https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
 #
 
 AWK=

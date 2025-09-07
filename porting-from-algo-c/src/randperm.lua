@@ -1,8 +1,8 @@
 --
---	src/randperm.c
+--  src/randperm.c
 --
---	void shuffle(int, int [])	to	shuffle
---	void randperm(int, int [])	to	randPerm
+--    void shuffle(int, int [])   to  shuffle
+--    void randperm(int, int [])  to  randPerm
 --
 
 local H = require '_helper'

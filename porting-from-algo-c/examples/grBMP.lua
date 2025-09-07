@@ -1,10 +1,10 @@
 --
---	from src/grBMP.c
+--  from src/grBMP.c
 --
---	void putbytes(FILE *, int, unsigned long)	to	(string.pack)
---	void gr_dot(int, int, long)			to	BMP; :dot
---	void gr_clear(long)				to	BMP; :rect, :clear
---	void gr_BMP(char *)				to	BMP; :write
+--    void putbytes(FILE *, int, unsigned long)            to  (string.pack)
+--    void gr_dot(int, int, long)                          to  BMP; :dot
+--    void gr_clear(long)                                  to  BMP; :clear
+--    void gr_BMP(char *)                                  to  BMP; :write
 --
 
 local M = require 'grBMP'

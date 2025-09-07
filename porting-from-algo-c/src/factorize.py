@@ -1,9 +1,9 @@
 #
-#	from src/factoriz.c
+#  from src/factoriz.c
 #
-#	void factorize(int)	to	factorize
-#	factorize		to	factorizeG
-#	factorize		to	factorizeL
+#    void factorize(int)  to  factorize
+#    factorize            to  factorizeG
+#    factorize            to  factorizeL
 #
 
 def factorize(x0):

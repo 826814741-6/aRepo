@@ -1,16 +1,16 @@
 --
---	from src/svgplot.c
+--  from src/svgplot.c
 --
---	void plot_start(int, int)		to	:pathStart
---	void plot_end(int)			to	:pathEnd
---	void move(double, double)		to	:move
---	void move_rel(double, double)		to	:moveRel
---	void draw(double, double)		to	:draw
---	void draw_rel(double, double)		to	:drawRel
+--    void plot_start(int, int)             to   :pathStart
+--    void plot_end(int)                    to   :pathEnd
+--    void move(double, double)             to   :move
+--    void move_rel(double, double)         to   :moveRel
+--    void draw(double, double)             to   :draw
+--    void draw_rel(double, double)         to   :drawRel
 --
---							:write(, :reset)
+--                                               :write(, :reset)
 --
---	and some extensions for basic shapes	are	:circle, :ellipse, :line, :rect
+--    and some extensions for basic shapes  are  :circle, :ellipse, :line, :rect
 --
 
 local H = require '_helper'

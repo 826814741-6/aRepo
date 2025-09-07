@@ -95,7 +95,7 @@ local function mustBeStr(v)
 end
 
 -- local function readOnlyTable(t)
--- 	...
+--   ...
 -- end
 -- see: http://lua-users.org/wiki/ReadOnlyTables
 --      https://www.lua.org/pil/13.4.5.html

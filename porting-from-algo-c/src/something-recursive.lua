@@ -1,28 +1,28 @@
 --
---	from src/acker.c
+--  from src/acker.c
 --
---	int A(int, int)		to	ack
+--    int A(int, int)           to  ack
 --
---	from src/eulerian.c
+--  from src/eulerian.c
 --
---	Eulerian	to	eulerianNumber
+--    Eulerian                  to  eulerianNumber
 --
---	from src/mccarthy.c
+--  from src/mccarthy.c
 --
---	int McCarthy(int)	to	mccarthy91
+--    int McCarthy(int)         to  mccarthy91
 --
---	from src/stirling.c
+--  from src/stirling.c
 --
---	int Stirling1(int, int)		to	stirling1
---	int Stirling2(int, int)		to	stirling2
+--    int Stirling1(int, int)   to  stirling1
+--    int Stirling2(int, int)   to  stirling2
 --
---	from src/tarai.c
+--  from src/tarai.c
 --
---	int tarai(int, int, int)	to	tarai
---	tarai				to	taraiC
---	tarai				to	tak(*)
+--    int tarai(int, int, int)  to  tarai
+--    tarai                     to  taraiC
+--    tarai                     to  tak(*)
 --
---	*) https://en.wikipedia.org/wiki/Tak_(function)
+--  *) https://en.wikipedia.org/wiki/Tak_(function)
 --
 
 local function ack(x, y)

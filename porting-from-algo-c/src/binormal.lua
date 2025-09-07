@@ -1,7 +1,7 @@
 --
---	from src/ binormal.c
+--  from src/binormal.c
 --
---	void binormal_rnd(double, double *, double *)	to	binormalRnd
+--    void binormal_rnd(double, double *, double *)  to  binormalRnd
 --
 
 local m_floor = math.floor

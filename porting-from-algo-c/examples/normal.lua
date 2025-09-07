@@ -1,8 +1,8 @@
 --
---	from src/normal.c
+--  from src/normal.c
 --
---	double p_nor(double)		to	pNormal
---	double q_nor(double)		to	qNormal
+--    double p_nor(double)          to  pNormal
+--    double q_nor(double)          to  qNormal
 --
 
 local pNormal = require 'distribution'.pNormal

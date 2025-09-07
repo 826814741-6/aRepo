@@ -1,15 +1,15 @@
 
-	porting-from-algo-c:
-	trying out some trivial ideas and understanding the basics of some langs
+  porting-from-algo-c:
+  trying out some trivial ideas and understanding the basics of some langs
 
-	ref: https://github.com/okumuralab/algo-c
+  ref: https://github.com/okumuralab/algo-c
 
-	Creative Commons Zero v1.0 Universal
-	https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  Creative Commons Zero v1.0 Universal
+  https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
-	*.awk:     AWK
-	*.dc:      GNU dc
-	*.lua:     Lua (5.3-)
-	*.luajit:  LuaJIT
-	*.py:      CPython3/MicroPython
+    *.awk:     AWK
+    *.dc:      GNU dc
+    *.lua:     Lua (5.3+)
+    *.luajit:  LuaJIT
+    *.py:      CPython3/MicroPython
 

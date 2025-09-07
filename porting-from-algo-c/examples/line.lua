@@ -1,7 +1,11 @@
 --
---	from src/line.c
+--  from src/line.c
 --
---	void gr_line(int, int, int, int, long)		to	BMP; :line
+--    void gr_line(int, int, int, int, long)  to   BMP; :line
+--
+--  from src/svgplot.c
+--
+--    ... some extensions for basic shapes    are  :circle, :ellipse, :line, :rect
 --
 
 local BMP = require 'grBMP'.BMP

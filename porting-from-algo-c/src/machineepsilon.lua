@@ -1,7 +1,7 @@
 --
---	from src/maceps.c
+--  from src/maceps.c
 --
---	a part of main		to	machineEpsilon
+--    a part of main  to  machineEpsilon
 --
 
 local function machineEpsilon()

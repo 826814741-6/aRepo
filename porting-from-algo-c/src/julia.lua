@@ -1,7 +1,7 @@
 --
---	from src/julia.c
+--  from src/julia.c
 --
---	a part of main		to	julia
+--    a part of main  to  julia
 --
 
 local m_sqrt = math.sqrt

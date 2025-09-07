@@ -1,8 +1,8 @@
 #
-#	from src/rand.c
+#  from src/rand.c
 #
-#	int rand(void)		to	register f
-#	void srand(unsigned)	to	register R
+#    int rand(void)        to  register f
+#    void srand(unsigned)  to  register R
 #
 
 [lR 1103515245 * 12345 + dsR 65536 / 32768 %]sf

@@ -1,11 +1,11 @@
 --
---	from src/komachi.c
+--  from src/komachi.c
 --
---	a part of main		to	komachi
+--    a part of main  to  komachi
 --
 
 --
---	_ 1 _ 2 _ 3 _ 4 _ 5 _ 6 _ 7 _ 8 _ 9 = 100
+--  _ 1 _ 2 _ 3 _ 4 _ 5 _ 6 _ 7 _ 8 _ 9 = 100
 --
 
 local function init()

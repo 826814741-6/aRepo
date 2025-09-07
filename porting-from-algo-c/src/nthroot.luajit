@@ -1,20 +1,20 @@
 --
---	from src/sqrt.c
+--  from src/sqrt.c
 --
---	double mysqrt(double)		to	fSqrt
+--    double mysqrt(double)      to  fSqrt
 --
---	from src/isqrt.c
+--  from src/isqrt.c
 --
---	unsigned isqrt(unsigned)	to	iSqrt
+--    unsigned isqrt(unsigned)   to  iSqrt
 --
---	from src/cuberoot.c
+--  from src/cuberoot.c
 --
---	double cuberoot(double)		to	fCbrt
---	double cuberoot2(double)	to	fCbrt2
+--    double cuberoot(double)    to  fCbrt
+--    double cuberoot2(double)   to  fCbrt2
 --
---	from src/icubrt.c
+--  from src/icubrt.c
 --
---	unsigned icubrt(unsigned)	to	iCbrt
+--    unsigned icubrt(unsigned)  to  iCbrt
 --
 
 local H = require '_helper'

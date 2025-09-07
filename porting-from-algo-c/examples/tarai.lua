@@ -1,11 +1,11 @@
 --
---	from src/tarai.c
+--  from src/tarai.c
 --
---	int tarai(int, int, int)	to	tarai
---	tarai				to	taraiC
---	tarai				to	tak(*)
+--    int tarai(int, int, int)  to  tarai
+--    tarai                     to  taraiC
+--    tarai                     to  tak(*)
 --
---	*) https://en.wikipedia.org/wiki/Tak_(function)
+--  *) https://en.wikipedia.org/wiki/Tak_(function)
 --
 
 local M = require 'something-recursive'

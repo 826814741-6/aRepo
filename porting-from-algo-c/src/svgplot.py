@@ -1,12 +1,12 @@
 #
-#	from src/svgplot.c
+#  from src/svgplot.c
 #
-#	void plot_start(int, int)		to	svgPlot; .plotStart, .pathStart
-#	void plot_end(int)			to	svgPlot; .plotEnd, .pathEnd
-#	void move(double, double)		to	svgPlot; .move
-#	void move_rel(double, double)		to	svgPlot; .moveRel
-#	void draw(double, double)		to	svgPlot; .draw
-#	void draw_rel(double, double)		to	svgPlot; .drawRel
+#    void plot_start(int, int)      to  svgPlot; .plotStart, .pathStart
+#    void plot_end(int)             to  svgPlot; .plotEnd, .pathEnd
+#    void move(double, double)      to  svgPlot; .move
+#    void move_rel(double, double)  to  svgPlot; .moveRel
+#    void draw(double, double)      to  svgPlot; .draw
+#    void draw_rel(double, double)  to  svgPlot; .drawRel
 #
 
 import sys

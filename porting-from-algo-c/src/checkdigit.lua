@@ -1,15 +1,15 @@
 --
---	from src/isbn.c
+--  from src/isbn.c
 --
---	a part of main		to	isISBN10
+--    a part of main  to  isISBN10
 --
---	from src/isbn13.c
+--  from src/isbn13.c
 --
---	a part of main		to	isISBN13
+--    a part of main  to  isISBN13
 --
---	from src/luhn.c
+--  from src/luhn.c
 --
---	a part of main		to	isLuhn
+--    a part of main  to  isLuhn
 --
 
 local isNum = require '_helper'.isNum

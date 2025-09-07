@@ -1,7 +1,7 @@
 --
---	fun-with-wrapping-assertion.lua
+--  fun-with-wrapping-assertion.lua
 --
---	> lua[jit] fun-with-wrapping-assertion.lua
+--  > lua[jit] fun-with-wrapping-assertion.lua
 --
 
 function isNum(self)

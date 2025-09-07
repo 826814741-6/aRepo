@@ -7,7 +7,7 @@ function decrement(n) { return n - 1 }
 function increment(n) { return n + 1 }
 
 #
-#	_length(): filling the gap of length() between mawk and others(nawk,gawk)
+#  _length(): filling the gap of length() between mawk and others(nawk,gawk)
 #
 function _length(a,	r, e) {
 	r = 0
@@ -15,20 +15,20 @@ function _length(a,	r, e) {
 	return r
 }
 #
-#	function f(a) { return length(a) }
-#	function g(a) { return _length(a) }
+#  function f(a) { return length(a) }
+#  function g(a) { return _length(a) }
 #
-#	BEGIN {
-#		s = "1 2 3 4 5"
-#		split(s, a)
+#  BEGIN {
+#      s = "1 2 3 4 5"
+#      split(s, a)
 #
-#		print length(a)	# OK(5) in nawk, mawk, gawk
-#		print f(a)	# OK(5) in nawk, gawk / ERROR in mawk(*)
-#		print g(a)	# OK(5) in nawk, mawk, gawk
-#	}
+#      print length(a)  # OK(5) in nawk, mawk, gawk
+#      print f(a)       # OK(5) in nawk, gawk / ERROR in mawk(*)
+#      print g(a)       # OK(5) in nawk, mawk, gawk
+#  }
 #
-#	*) ERROR message in mawk
-#	mawk: ... : type error in arg(1) in call to f
+#  *) ERROR message in mawk
+#  mawk: ... : type error in arg(1) in call to f
 #
 
 function concat(a,	r, i) {

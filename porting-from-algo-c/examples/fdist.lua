@@ -1,8 +1,8 @@
 --
---	from src/fdist.c
+--  from src/fdist.c
 --
---	double q_f(int, int, double)		to	qF
---	double p_f(int, int, double)		to	pF
+--    double q_f(int, int, double)  to  qF
+--    double p_f(int, int, double)  to  pF
 --
 
 local pF = require 'distribution'.pF

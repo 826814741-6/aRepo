@@ -1,7 +1,5 @@
 #
-#	Hello, World! in GNU dc
-#
-#	(salvage from my old paste)
+#  Hello, World! in GNU dc
 #
 
 dc -e "1468369091346906859060166438166794P"

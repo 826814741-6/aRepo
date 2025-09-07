@@ -1,21 +1,21 @@
 --
---	from src/chi2.c
---	from src/normal.c
+--  from src/chi2.c
+--  from src/normal.c
 --
---	double p_nor(double)		to	pNormal
---	double q_nor(double)		to	qNormal
---	double q_chi2(int, double)	to	qChiSquare
---	double p_chi2(int, double)	to	pChiSquare
+--    double p_nor(double)          to  pNormal
+--    double q_nor(double)          to  qNormal
+--    double q_chi2(int, double)    to  qChiSquare
+--    double p_chi2(int, double)    to  pChiSquare
 --
---	from src/fdist.c
+--  from src/fdist.c
 --
---	double q_f(int, int, double)	to	qF
---	double p_f(int, int, double)	to	pF
+--    double q_f(int, int, double)  to  qF
+--    double p_f(int, int, double)  to  pF
 --
---	from src/tdist.c
+--  from src/tdist.c
 --
---	double p_t(int, double)		to	pT
---	double q_t(int, double)		to	qT
+--    double p_t(int, double)       to  pT
+--    double q_t(int, double)       to  qT
 --
 
 local isNum = require '_helper'.isNum

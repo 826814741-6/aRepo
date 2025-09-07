@@ -97,20 +97,20 @@ local function mustBeStr(v)
 end
 
 -- local function readOnlyTable(t)
--- 	...
+--   ...
 -- end
 -- see: http://lua-users.org/wiki/ReadOnlyTables
 --      https://www.lua.org/pil/13.4.5.html
 --      (the last part of) https://www.lua.org/pil/13.3.html
 
 --
---	tableWriter(x, y, w, f, vFmt)
+--  tableWriter(x, y, w, f, vFmt)
 --
---	x	= { number, number, number[, "L"] }
---	y	= { number, number, number }
---	w	= { number, number }
---	f	= { function, function, function }
---	vFmt	= { string, string, string }
+--    x     =  { number, number, number[, "L"] }
+--    y     =  { number, number, number }
+--    w     =  { number, number }
+--    f     =  { function, function, function }
+--    vFmt  =  { string, string, string }
 --
 local function tableWriter(x, y, w, f, vFmt)
 	function fmt(n, s, f)

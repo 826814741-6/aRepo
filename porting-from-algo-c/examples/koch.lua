@@ -1,7 +1,7 @@
 --
---	from src/koch.c
+--  from src/koch.c
 --
---	void koch(void)		to	koch
+--    void koch(void)  to  koch
 --
 
 local M = require 'svgplot'

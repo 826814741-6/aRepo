@@ -1,9 +1,9 @@
 --
---	from src/hypot.c
+--  from src/hypot.c
 --
---	double hypot0(double, double)		to	hypot0
---	double hypot1(double, double)		to	hypot1
---	double hypot2(double, double)		to	hypot2 (Moler-Morrison)
+--    double hypot0(double, double)  to  hypot0
+--    double hypot1(double, double)  to  hypot1
+--    double hypot2(double, double)  to  hypot2 (Moler-Morrison)
 --
 
 local abs = require '_helper'.abs

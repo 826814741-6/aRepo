@@ -1,7 +1,7 @@
 #
-#	from src/totient.c
+#  from src/totient.c
 #
-#	unsigned phi(unsigned)		to	phi
+#    unsigned phi(unsigned)  to  phi
 #
 
 function phi(x,		t, d) {
@@ -34,13 +34,13 @@ function phi(x,		t, d) {
 #
 
 #
-#	rep(s,n) from _helper.awk
+#  rep(s,n) from _helper.awk
 #
 
 BEGIN {
 	xl = 1; xr = 10; xlength = 10
 	yl = 0; yr = 19
-	w1 = 4;	w2 = 4
+	w1 = 4; w2 = 4
 
 	padding = rep(" ", w1 + 2)
 	border = rep(rep("-", w2), xlength)

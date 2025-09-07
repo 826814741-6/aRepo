@@ -1,10 +1,10 @@
 --
---	from src/sierpin.c
+--  from src/sierpin.c
 --
---	void urd(int)		to	sierpinski; urd
---	void lur(int)		to	sierpinski; lur
---	void dlu(int)		to	sierpinski; dlu
---	void rdl(int)		to	sierpinski; rdl
+--    void urd(int)                to  sierpinski; urd
+--    void lur(int)                to  sierpinski; lur
+--    void dlu(int)                to  sierpinski; dlu
+--    void rdl(int)                to  sierpinski; rdl
 --
 
 local M = require 'svgplot'

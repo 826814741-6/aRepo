@@ -1,32 +1,31 @@
 --
---	from src/complex.c
+--  from src/complex.c
 --
---	complex c_conv(double, double)		to	complexNumber
---							/ complexNumberWithInplaceMethod
---	char * c_string(complex)		to	__tostring
+--    complex c_conv(double, double)   to  complexNumber
+--                                         / complexNumberWithInplaceMethod
+--    char * c_string(complex)         to  __tostring
 --
---	double c_abs(complex)			to	:abs(, cnAbs)
---	double c_arg(complex)			to	:arg(, cnArg)
+--    double c_abs(complex)            to  :abs(, cnAbs)
+--    double c_arg(complex)            to  :arg(, cnArg)
 --
---	complex c_conj(complex)			to	cnConjugate / :conjugate
---	complex c_add(complex, complex)		to	__add, cnAdd / :add
---	complex c_sub(complex, complex)		to	__sub, cnSub / :sub
---	complex c_mul(complex, complex)		to	__mul, cnMul / :mul
---	complex c_div(complex, complex)		to	__div, cnDiv / :div
---	complex c_pow(complex, complex)		to	__pow, cnPow / :pow
+--    complex c_conj(complex)          to  cnConjugate / :conjugate
+--    complex c_add(complex, complex)  to  __add, cnAdd / :add
+--    complex c_sub(complex, complex)  to  __sub, cnSub / :sub
+--    complex c_mul(complex, complex)  to  __mul, cnMul / :mul
+--    complex c_div(complex, complex)  to  __div, cnDiv / :div
+--    complex c_pow(complex, complex)  to  __pow, cnPow / :pow
 --
---							overloadOperator /
+--                                         overloadOperator /
 --
---	complex c_exp(complex)			to	cnExp / :exp
---	complex c_log(complex)			to	cnLog / :log
---	complex c_sqrt(complex)			to	cnSqrt / :sqrt
---
---	complex c_sin(complex)			to	cnSin / :sin
---	complex c_cos(complex)			to	cnCos / :cos
---	complex c_tan(complex)			to	cnTan / :tan
---	complex c_sinh(complex)			to	cnSinh / :sinh
---	complex c_cosh(complex)			to	cnCosh / :cosh
---	complex c_tanh(complex)			to	cnTanh / :tanh
+--    complex c_exp(complex)           to  cnExp / :exp
+--    complex c_log(complex)           to  cnLog / :log
+--    complex c_sqrt(complex)          to  cnSqrt / :sqrt
+--    complex c_sin(complex)           to  cnSin / :sin
+--    complex c_cos(complex)           to  cnCos / :cos
+--    complex c_tan(complex)           to  cnTan / :tan
+--    complex c_sinh(complex)          to  cnSinh / :sinh
+--    complex c_cosh(complex)          to  cnCosh / :cosh
+--    complex c_tanh(complex)          to  cnTanh / :tanh
 --
 
 local M = require 'complex'

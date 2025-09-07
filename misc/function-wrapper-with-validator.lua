@@ -1,7 +1,7 @@
 --
---	function-wrapper-with-validator.lua
+--  function-wrapper-with-validator.lua
 --
---	> lua[jit] function-wrapper-with-validator.lua
+--  > lua[jit] function-wrapper-with-validator.lua
 --
 
 local t_unpack = table.unpack ~= nil and table.unpack or unpack

@@ -1,7 +1,7 @@
 #
-#	from src/e.c
+#  from src/e.c
 #
-#	long double ee(void)	to	register f
+#    long double ee(void)  to  register f
 #
 
 [

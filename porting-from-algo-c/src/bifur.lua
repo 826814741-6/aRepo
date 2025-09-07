@@ -1,7 +1,7 @@
 --
---	from src/bifur.c
+--  from src/bifur.c
 --
---	a part of main		to	bifur
+--    a part of main  to  bifur
 --
 
 local function bifur(bmp, fgColor, bgColor, x, kmin, kmax, pmin, pmax)

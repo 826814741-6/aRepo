@@ -1,5 +1,5 @@
 --
---	helper.lua: some helper functions for toy scripts
+--  helper.lua: some helper functions for toy scripts
 --
 
 local t_insert = table.insert

@@ -1,10 +1,11 @@
 --
---	from src/chi2.c
+--  from src/chi2.c
+--  from src/normal.c
 --
---	double p_nor(double)		to	pNormal
---	double q_nor(double)		to	qNormal
---	double q_chi2(int, double)	to	qChiSquare
---	double p_chi2(int, double)	to	pChiSquare
+--    double p_nor(double)          to  pNormal
+--    double q_nor(double)          to  qNormal
+--    double q_chi2(int, double)    to  qChiSquare
+--    double p_chi2(int, double)    to  pChiSquare
 --
 
 local pChiSquare = require 'distribution'.pChiSquare

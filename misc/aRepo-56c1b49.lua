@@ -1,9 +1,9 @@
 --
---	aRepo-56c1b49.lua
+--  aRepo-56c1b49.lua
 --
---	> lua[jit] aRepo-56c1b49.lua
+--  > lua[jit] aRepo-56c1b49.lua
 --
---	(> git show 56c1b49)
+--  (> git show 56c1b49)
 --
 
 function f()

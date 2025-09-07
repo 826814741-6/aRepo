@@ -1,8 +1,8 @@
 --
---	from src/whrnd.c
+--  from src/whrnd.c
 --
---	void init_rnd(int, int, int)		to	whrnd; :init
---	double rnd(void)			to	whrnd; :rnd
+--    void init_rnd(int, int, int)  to  whrnd; :init
+--    double rnd(void)              to  whrnd; :rnd
 --
 
 local function whrnd(x, y, z)

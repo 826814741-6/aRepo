@@ -1,7 +1,7 @@
 --
---	from src/komachi.c
+--  from src/komachi.c
 --
---	a part of main		to	komachi
+--    a part of main  to  komachi
 --
 
 local komachi = require 'komachi'.komachi

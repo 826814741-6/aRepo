@@ -1,7 +1,7 @@
 --
---	from src/isbn13.c
+--  from src/isbn13.c
 --
---	a part of main		to	isIsbn13
+--    a part of main  to  isISBN13
 --
 
 local isISBN13 = require 'checkdigit'.isISBN13

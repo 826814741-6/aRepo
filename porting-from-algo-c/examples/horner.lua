@@ -1,7 +1,7 @@
 --
---	from src/horner.c
+--  from src/horner.c
 --
---	double horner(int, double a[], double)		to	horner
+--    double horner(int, double a[], double)  to  horner
 --
 
 local horner = require 'horner'.horner

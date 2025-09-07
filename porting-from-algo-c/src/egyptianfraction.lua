@@ -1,13 +1,13 @@
 --
---	from src/egypfrac.c
+--  from src/egypfrac.c
 --
---	a part of main		to	egyptianFraction
---	egyptianFraction	to	egyptianFractionT
---	egyptianFraction	to	egyptianFractionM (depends on lbc(*))
---	egyptianFraction	to	egyptianFractionCO
+--    a part of main    to  egyptianFraction
+--    egyptianFraction  to  egyptianFractionT
+--    egyptianFraction  to  egyptianFractionM (depends on lbc(*))
+--    egyptianFraction  to  egyptianFractionCO
 --
---	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
---	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
+--  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
+--  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
 local i_write = io.write
@@ -49,10 +49,10 @@ local egyptianFractionM = hasBC and function (n0, d0)
 end or nil
 
 --
---	> The specifier 's' expects a string; if its argument is not a string,
---	> it is converted to one following the same rules of 'tostring'.
+--  > The specifier 's' expects a string; if its argument is not a string,
+--  > it is converted to one following the same rules of 'tostring'.
 --
---	-- Lua 5.4 Reference manual > string.format
+--  -- Lua 5.4 Reference manual > string.format
 --
 
 local co_create = coroutine.create

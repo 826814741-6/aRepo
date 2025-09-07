@@ -1,9 +1,9 @@
 --
---	from src/monte.c
+--  from src/monte.c
 --
---	void monte1(int)	to	piA
---	void monte2(int)	to	piB
---	void monte3(int)	to	piC
+--    void monte1(int)  to  piA
+--    void monte2(int)  to  piB
+--    void monte3(int)  to  piC
 --
 
 local M0 = require 'crnd'

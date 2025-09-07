@@ -1,15 +1,15 @@
 --
---	from src/si.c
+--  from src/si.c
 --
---	double Si_series(double)	to	seriesExpansion
---	double Si_asympt(double)	to	asymptoticExpansion
---	double Si(double)		to	Si
+--    double Si_series(double)  to  seriesExpansion
+--    double Si_asympt(double)  to  asymptoticExpansion
+--    double Si(double)         to  Si
 --
---	from src/ci.c
+--  from src/ci.c
 --
---	double Ci_series(double)	to	seriesExpansion
---	double Ci_asympt(double)	to	asymptoticExpansion
---	double Ci(double)		to	Ci
+--    double Ci_series(double)  to  seriesExpansion
+--    double Ci_asympt(double)  to  asymptoticExpansion
+--    double Ci(double)         to  Ci
 --
 
 local EULER = 0.577215664901532860606512090082 -- from src/ci.c; see below

@@ -1,13 +1,13 @@
 --
---	from src/maceps.c
+--  from src/maceps.c
 --
---	a part of main		to	machineEpsilon
+--    a part of main  to  machineEpsilon
 --
 
 local machineEpsilon = require 'machineepsilon'.machineEpsilon
 
-local FLT_EPSILON = 1.19209290e-07		-- from src/float.ie3
-local DBL_EPSILON = 2.2204460492503131e-16	-- from src/float.ie3
+local FLT_EPSILON = 1.19209290e-07          -- from src/float.ie3
+local DBL_EPSILON = 2.2204460492503131e-16  -- from src/float.ie3
 
 do
 	local iterator = machineEpsilon()

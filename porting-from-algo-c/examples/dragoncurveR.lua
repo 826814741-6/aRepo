@@ -1,7 +1,7 @@
 --
---	from src/dragon.c
+--  from src/dragon.c
 --
---	void dragon(int, double, double, int)	to	dragonCurveR
+--    void dragon(int, double, double, int)  to  dragonCurveR
 --
 
 local M = require 'svgplot'

@@ -1,10 +1,10 @@
 #
-#	from src/chi2.c
+#  from src/chi2.c
 #
-#	double pNormal(double)		to	pNormal
-#	double qNormal(double)		to	qNormal
-#	double qChiSquare(int, double)	to	qChiSquare
-#	double pChiSquare(int, double)	to	pChiSquare
+#    double pNormal(double)          to  pNormal
+#    double qNormal(double)          to  qNormal
+#    double qChiSquare(int, double)  to  qChiSquare
+#    double pChiSquare(int, double)  to  pChiSquare
 #
 
 BEGIN {

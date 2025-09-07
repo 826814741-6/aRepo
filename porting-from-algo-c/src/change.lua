@@ -1,8 +1,8 @@
 --
---	from src/change.c
+--  from src/change.c
 --
---	int change(int, int)		to	changeR
---	int change1(int, int)		to	changeL
+--    int change(int, int)   to  changeR
+--    int change1(int, int)  to  changeL
 --
 
 local function changeR(n, k)

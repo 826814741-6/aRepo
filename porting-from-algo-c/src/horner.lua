@@ -1,15 +1,15 @@
 --
---	from src/horner.c
+--  from src/horner.c
 --
---	double horner(int, double a[], double)		to	horner
+--    double horner(int, double a[], double)  to  horner
 --
 
 --
---	a = {number, number, number, number, number, ...}
+--  a = {number, number, number, number, number, ...}
 --
---	[1] + [2] * x + [3] * x^2 + [4] * x^3 + [5] * x^4 + ...
+--  [1] + [2] * x + [3] * x^2 + [4] * x^3 + [5] * x^4 + ...
 --
---	... + [5] * x^4 + [4] * x^3 + [3] * x^2 + [2] * x^1 + [1]
+--  ... + [5] * x^4 + [4] * x^3 + [3] * x^2 + [2] * x^1 + [1]
 --
 
 local function horner(a, x)

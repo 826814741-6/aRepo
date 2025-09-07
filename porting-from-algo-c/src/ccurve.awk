@@ -1,7 +1,7 @@
 #
-#	from src/ccurve.c
+#  from src/ccurve.c
 #
-#	void c(int, double, double)	to	cCurve
+#    void c(int, double, double)  to  cCurve
 #
 
 function cCurve(i, x, y) {

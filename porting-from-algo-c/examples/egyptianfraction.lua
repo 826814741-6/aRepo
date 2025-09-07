@@ -1,13 +1,13 @@
 --
---	from src/egypfrac.c
+--  from src/egypfrac.c
 --
---	a part of main		to	egyptianFraction
---	egyptianFraction	to	egyptianFractionT
---	egyptianFraction	to	egyptianFractionM (depends on lbc(*))
---	egyptianFraction	to	egyptianFractionCO
+--    a part of main    to  egyptianFraction
+--    egyptianFraction  to  egyptianFractionT
+--    egyptianFraction  to  egyptianFractionM (depends on lbc(*))
+--    egyptianFraction  to  egyptianFractionCO
 --
---	*) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
---	(lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
+--  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
+--  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
 local M = require 'egyptianfraction'

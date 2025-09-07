@@ -1,28 +1,28 @@
 --
---	from src/grBMP.c
+--  from src/grBMP.c
 --
---	void putbytes(FILE *, int, unsigned long)		to	(string.pack)
---	void gr_dot(int, int, long)				to	BMP; :dot
---	void gr_clear(long)					to	BMP; :clear
---	void gr_BMP(char *)					to	BMP; :write
+--    void putbytes(FILE *, int, unsigned long)            to  (string.pack)
+--    void gr_dot(int, int, long)                          to  BMP; :dot
+--    void gr_clear(long)                                  to  BMP; :clear
+--    void gr_BMP(char *)                                  to  BMP; :write
 --
---	from src/circle.c
+--  from src/circle.c
 --
---	void gr_circle(int, int, int, long)			to	BMP; :circle
+--    void gr_circle(int, int, int, long)                  to  BMP; :circle
 --
---	from src/ellipse.c
+--  from src/ellipse.c
 --
---	void gr_ellipse(int, int, int, int, long)		to	BMP; :ellipse
+--    void gr_ellipse(int, int, int, int, long)            to  BMP; :ellipse
 --
---	from src/line.c
+--  from src/line.c
 --
---	void gr_line(int, int, int, int, long)			to	BMP; :line
+--    void gr_line(int, int, int, int, long)               to  BMP; :line
 --
---	from src/window.c
+--  from src/window.c
 --
---	void gr_window(double, double, double, double, int)	to	BMP; :setWindow
---	void gr_wdot(double, double, long)			to	BMP; :wdot
---	void gr_wline(double, double, double, double, long)	to	BMP; :wline
+--    void gr_window(double, double, double, double, int)  to  BMP; :setWindow
+--    void gr_wdot(double, double, long)                   to  BMP; :wdot
+--    void gr_wline(double, double, double, double, long)  to  BMP; :wline
 --
 
 local H = require '_helper'

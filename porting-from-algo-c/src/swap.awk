@@ -1,13 +1,13 @@
 #
-#	from src/swap.c
+#  from src/swap.c
 #
-#	void swap(int *, int *)		to	swap; in _helper.awk
-#	(void swap1(int *, int *)	to	swap1)
-#	void swap2(int *, int *)	to	swap2
+#    void swap(int *, int *)    to  swap; in _helper.awk
+#    (void swap1(int *, int *)  to  swap1)
+#    void swap2(int *, int *)   to  swap2
 #
 
 #
-#	swap(a, x, y) from _helper.awk
+#  swap(a, x, y) from _helper.awk
 #
 
 # see http://www.intex.tokyo/unix/awk-02.html
