@@ -12,7 +12,7 @@ local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
 local lorenzAttractor = require 'lorenz'.lorenzAttractor
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 do
 	local sigma, rho, beta, n = 10, 28, 8 / 3, 4000
@@ -28,15 +28,15 @@ do
 		plotter:pathEnd(false, style)
 	end
 
-	with("results/lorenz-A.svg", "w", function (fh)
+	file("results/lorenz-A.svg", "w", function (fh)
 		svgPlot(x, y):write(fh, body)
 	end)
 
-	with("results/lorenz-B.svg", "w", function (fh)
+	file("results/lorenz-B.svg", "w", function (fh)
 		svgPlotWholeBuffer(x, y):write(fh, body):reset()
 	end)
 
-	with("results/lorenz-C.svg", "w", function (fh)
+	file("results/lorenz-C.svg", "w", function (fh)
 		svgPlotWithBuffer(x, y):write(fh, body)
 	end)
 end

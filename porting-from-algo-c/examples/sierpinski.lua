@@ -15,7 +15,7 @@ local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
 local sierpinski = require 'sierpinski'.sierpinski
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 local function sampleWriter(pathPrefix, size, offset, style)
 	local m = size + offset
@@ -26,15 +26,15 @@ local function sampleWriter(pathPrefix, size, offset, style)
 			plotter:pathEnd(true, style)
 		end
 
-		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlot(m, m):write(fh, body)
 		end)
 
-		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlotWholeBuffer(m, m):write(fh, body):reset()
 		end)
 
-		with(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlotWithBuffer(m, m):write(fh, body)
 		end)
 	end

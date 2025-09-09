@@ -117,7 +117,7 @@ if isWrapWithValidator then
 end
 
 --
---	"A" for svgPlot
+--	"A" for svgPlot, svgPlotWithBuffer
 --
 --	function ___A(self, ...)
 --		self.o:write(fmt(...))
@@ -131,13 +131,6 @@ end
 --		return self
 --	end
 --
---	"C" for svgPlotWithBuffer
---
---	function ___C(self, ...)
---		self.o:writer(fmt(...))
---		return self
---	end
---
 
 local function pathStartA(self)
 	self.o:write(pathStart())
@@ -145,10 +138,6 @@ local function pathStartA(self)
 end
 local function pathStartB(self)
 	self.o:put(pathStart())
-	return self
-end
-local function pathStartC(self)
-	self.o:writer(pathStart())
 	return self
 end
 
@@ -160,10 +149,6 @@ local function pathEndB(self, isClosePath, style)
 	self.o:put(pathEnd(isClosePath, style))
 	return self
 end
-local function pathEndC(self, isClosePath, style)
-	self.o:writer(pathEnd(isClosePath, style))
-	return self
-end
 
 local function moveA(self, x, y)
 	self.o:write(move(x, y, self.h))
@@ -171,10 +156,6 @@ local function moveA(self, x, y)
 end
 local function moveB(self, x, y)
 	self.o:put(move(x, y, self.h))
-	return self
-end
-local function moveC(self, x, y)
-	self.o:writer(move(x, y, self.h))
 	return self
 end
 
@@ -186,10 +167,6 @@ local function moveRelB(self, x, y)
 	self.o:put(moveRel(x, y))
 	return self
 end
-local function moveRelC(self, x, y)
-	self.o:writer(moveRel(x, y))
-	return self
-end
 
 local function drawA(self, x, y)
 	self.o:write(draw(x, y, self.h))
@@ -197,10 +174,6 @@ local function drawA(self, x, y)
 end
 local function drawB(self, x, y)
 	self.o:put(draw(x, y, self.h))
-	return self
-end
-local function drawC(self, x, y)
-	self.o:writer(draw(x, y, self.h))
 	return self
 end
 
@@ -212,10 +185,6 @@ local function drawRelB(self, x, y)
 	self.o:put(drawRel(x, y))
 	return self
 end
-local function drawRelC(self, x, y)
-	self.o:writer(drawRel(x, y))
-	return self
-end
 
 local function circleA(self, cx, cy, r, style)
 	self.o:write(circle(cx, cy, r, style))
@@ -223,10 +192,6 @@ local function circleA(self, cx, cy, r, style)
 end
 local function circleB(self, cx, cy, r, style)
 	self.o:put(circle(cx, cy, r, style))
-	return self
-end
-local function circleC(self, cx, cy, r, style)
-	self.o:writer(circle(cx, cy, r, style))
 	return self
 end
 
@@ -238,10 +203,6 @@ local function ellipseB(self, cx, cy, rx, ry, style)
 	self.o:put(ellipse(cx, cy, rx, ry, style))
 	return self
 end
-local function ellipseC(self, cx, cy, rx, ry, style)
-	self.o:writer(ellipse(cx, cy, rx, ry, style))
-	return self
-end
 
 local function lineA(self, x1, y1, x2, y2, style)
 	self.o:write(line(x1, y1, x2, y2, style))
@@ -251,10 +212,6 @@ local function lineB(self, x1, y1, x2, y2, style)
 	self.o:put(line(x1, y1, x2, y2, style))
 	return self
 end
-local function lineC(self, x1, y1, x2, y2, style)
-	self.o:writer(line(x1, y1, x2, y2, style))
-	return self
-end
 
 local function rectA(self, x, y, w, h, rx, ry, style)
 	self.o:write(rect(x, y, w, h, rx, ry, style))
@@ -262,10 +219,6 @@ local function rectA(self, x, y, w, h, rx, ry, style)
 end
 local function rectB(self, x, y, w, h, rx, ry, style)
 	self.o:put(rect(x, y, w, h, rx, ry, style))
-	return self
-end
-local function rectC(self, x, y, w, h, rx, ry, style)
-	self.o:writer(rect(x, y, w, h, rx, ry, style))
 	return self
 end
 
@@ -299,10 +252,10 @@ end
 local function writeC(self, fh, body, limit)
 	self.o
 		:startStep(fh, limit)
-		:writer(header(self.w, self.h))
+		:write(header(self.w, self.h))
 	body(self)
 	self.o
-		:writer(footer())
+		:write(footer())
 		:endStep()
 	return self
 end
@@ -334,8 +287,8 @@ local function makeMethod(v)
 			circleB, ellipseB, lineB, rectB,
 			writeB, resetB
 	elseif isC(v) then
-		return pathStartC, pathEndC, moveC, moveRelC, drawC, drawRelC,
-			circleC, ellipseC, lineC, rectC,
+		return pathStartA, pathEndA, moveA, moveRelA, drawA, drawRelA,
+			circleA, ellipseA, lineA, rectA,
 			writeC
 	else
 		error("'v' must be a value above.")
@@ -358,7 +311,7 @@ local function bufStart(self, fh, limit)
 	return self
 end
 
-local function bufWriter(self, s)
+local function bufWrite(self, s)
 	self.buf:put(s)
 	self.cnt = self.cnt + 1
 	if self.cnt >= self.limit then
@@ -386,7 +339,7 @@ local function makeBuffer()
 		limit = DefaultLimit
 	}
 
-	T.startStep, T.writer, T.endStep = bufStart, bufWriter, bufEnd
+	T.startStep, T.write, T.endStep = bufStart, bufWrite, bufEnd
 
 	return T
 end

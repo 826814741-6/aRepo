@@ -19,7 +19,7 @@ local styleMaker = require 'svgplot'.styleMaker
 local SV = require 'svgplot'.StyleValue
 
 local RAND = require 'rand'.RAND
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 function toRGB(n)
 	return n >> 16, (n >> 8) & 0xff, n & 0xff
@@ -45,7 +45,7 @@ do
 	bmp:clear(BLACK)
 	loop(bmp, n, x, y, makeColor)
 
-	with("results/line.bmp", "wb", function (fh)
+	file("results/line.bmp", "wb", function (fh)
 		bmp:write(fh)
 	end)
 
@@ -65,13 +65,13 @@ do
 		loop(plotter, n, x, y, fmtL)
 	end
 
-	with("results/line-A.svg", "w", function (fh)
+	file("results/line-A.svg", "w", function (fh)
 		svgPlotA(x, y):write(fh, body)
 	end)
-	with("results/line-B.svg", "w", function (fh)
+	file("results/line-B.svg", "w", function (fh)
 		svgPlotB(x, y):write(fh, body):reset()
 	end)
-	with("results/line-C.svg", "w", function (fh)
+	file("results/line-C.svg", "w", function (fh)
 		svgPlotC(x, y):write(fh, body)
 	end)
 end

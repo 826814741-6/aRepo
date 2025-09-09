@@ -18,7 +18,7 @@ local styleMaker = require 'svgplot'.styleMaker
 local SV = require 'svgplot'.StyleValue
 
 local RAND = require 'rand'.RAND
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 local b_band, b_rshift = bit.band, bit.rshift
 
@@ -46,7 +46,7 @@ do
 	bmp:clear(BLACK)
 	loop(bmp, n, x, y, tonumber)
 
-	with("results/ellipse-lj.bmp", "wb", function (fh)
+	file("results/ellipse-lj.bmp", "wb", function (fh)
 		bmp:write(fh)
 	end)
 
@@ -66,13 +66,13 @@ do
 		loop(plotter, n, x, y, fmtE)
 	end
 
-	with("results/ellipse-lj-A.svg", "w", function (fh)
+	file("results/ellipse-lj-A.svg", "w", function (fh)
 		svgPlotA(x, y):write(fh, body)
 	end)
-	with("results/ellipse-lj-B.svg", "w", function (fh)
+	file("results/ellipse-lj-B.svg", "w", function (fh)
 		svgPlotB(x, y):write(fh, body):reset()
 	end)
-	with("results/ellipse-lj-C.svg", "w", function (fh)
+	file("results/ellipse-lj-C.svg", "w", function (fh)
 		svgPlotC(x, y):write(fh, body)
 	end)
 end

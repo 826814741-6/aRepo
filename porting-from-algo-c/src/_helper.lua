@@ -148,11 +148,17 @@ local function tableWriter(x, y, w, f, vFmt)
 	end
 end
 
-local function with(path, mode, body)
-	local fh = io.open(path, mode)
-	local ret, err = pcall(body, fh)
+local msg1, msg2 =
+	"file(): Something wrong with your 'path' or/and 'mode'.",
+	"file(): Something wrong with your 'body'."
+
+local function file(path, mode, body)
+	local _, fh = pcall(io.open, path, mode)
+	assert(isFh(fh), msg1)
+
+	local ret, v = pcall(body, fh)
 	fh:close()
-	assert(ret == true, err)
+	assert(ret == true, msg2)
 end
 
 local function check(validators, target)
@@ -214,7 +220,7 @@ return {
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,
-	with = with,
+	file = file,
 	wrapWithValidator = wrapWithValidator,
 	gUnpackerWithCounter = gUnpackerWithCounter
 }

@@ -12,7 +12,7 @@ local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
 local lissajousCurve = require 'lissajouscurve'.lissajousCurve
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 local n, offset = 300, 10
 local style = styleMaker()
@@ -29,15 +29,15 @@ do
 
 	local m = (n + offset) * 2
 
-	with("results/lissajouscurve-A.svg", "w", function (fh)
+	file("results/lissajouscurve-A.svg", "w", function (fh)
 		svgPlot(m, m):write(fh, body)
 	end)
 
-	with("results/lissajouscurve-B.svg", "w", function (fh)
+	file("results/lissajouscurve-B.svg", "w", function (fh)
 		svgPlotWholeBuffer(m, m):write(fh, body):reset()
 	end)
 
-	with("results/lissajouscurve-C.svg", "w", function (fh)
+	file("results/lissajouscurve-C.svg", "w", function (fh)
 		svgPlotWithBuffer(m, m):write(fh, body, 30)
 	end)
 end

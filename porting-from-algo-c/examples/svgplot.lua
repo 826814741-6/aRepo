@@ -20,7 +20,7 @@ local svgPlotWholeBuffer = M.svgPlotWholeBuffer
 local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 local PI, m_cos, m_sin = math.pi, math.cos, math.sin
 
@@ -68,41 +68,41 @@ local bodyA, bodyB, bodyC =
 	)
 
 do
-	with("results/svgplot-A-A.svg", "w", function (fh)
+	file("results/svgplot-A-A.svg", "w", function (fh)
 		svgPlot(size, size):write(fh, bodyA)
 	end)
 
-	with("results/svgplot-A-B.svg", "w", function (fh)
+	file("results/svgplot-A-B.svg", "w", function (fh)
 		svgPlot(size, size):write(fh, bodyB)
 	end)
 
-	with("results/svgplot-A-C.svg", "w", function (fh)
+	file("results/svgplot-A-C.svg", "w", function (fh)
 		svgPlot(size, size):write(fh, bodyC)
 	end)
 
 	local plotter = svgPlotWholeBuffer(size, size)
 
-	with("results/svgplot-B-A.svg", "w", function (fh)
+	file("results/svgplot-B-A.svg", "w", function (fh)
 		plotter:write(fh, bodyA, true):reset()
 	end)
 
-	with("results/svgplot-B-B.svg", "w", function (fh)
+	file("results/svgplot-B-B.svg", "w", function (fh)
 		plotter:write(fh, bodyB, true):reset()
 	end)
 
-	with("results/svgplot-B-C.svg", "w", function (fh)
+	file("results/svgplot-B-C.svg", "w", function (fh)
 		plotter:write(fh, bodyC, true):reset()
 	end)
 
-	with("results/svgplot-C-A.svg", "w", function (fh)
+	file("results/svgplot-C-A.svg", "w", function (fh)
 		svgPlotWithBuffer(size, size):write(fh, bodyA, 2)
 	end)
 
-	with("results/svgplot-C-B.svg", "w", function (fh)
+	file("results/svgplot-C-B.svg", "w", function (fh)
 		svgPlotWithBuffer(size, size):write(fh, bodyB, 2)
 	end)
 
-	with("results/svgplot-C-C.svg", "w", function (fh)
+	file("results/svgplot-C-C.svg", "w", function (fh)
 		svgPlotWithBuffer(size, size):write(fh, bodyC, 2)
 	end)
 end

@@ -12,7 +12,7 @@ local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
 local tdGraph = require '3dgraph'.tdGraph
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 local function sampleFunction(x, z)
 	local t = x * x + z * z
@@ -26,15 +26,15 @@ local function sampleWriter(pathPrefix, x, y, parameters, style)
 		plotter:pathEnd(false, style)
 	end
 
-	with(("%s-A.svg"):format(pathPrefix), "w", function (fh)
+	file(("%s-A.svg"):format(pathPrefix), "w", function (fh)
 		svgPlot(x, y):write(fh, body)
 	end)
 
-	with(("%s-B.svg"):format(pathPrefix), "w", function (fh)
+	file(("%s-B.svg"):format(pathPrefix), "w", function (fh)
 		svgPlotWholeBuffer(x, y):write(fh, body):reset()
 	end)
 
-	with(("%s-C.svg"):format(pathPrefix), "w", function (fh)
+	file(("%s-C.svg"):format(pathPrefix), "w", function (fh)
 		svgPlotWithBuffer(x, y):write(fh, body)
 	end)
 end

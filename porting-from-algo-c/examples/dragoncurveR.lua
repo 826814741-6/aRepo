@@ -12,7 +12,7 @@ local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
 local dragonCurveR = require 'dragoncurve'.dragonCurveR
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 local function sampleWriter(pathPrefix, x, y, dx, dy, sign, x0, y0, style)
 	return function (n)
@@ -22,15 +22,15 @@ local function sampleWriter(pathPrefix, x, y, dx, dy, sign, x0, y0, style)
 			plotter:pathEnd(false, style)
 		end
 
-		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlot(x, y):write(fh, body)
 		end)
 
-		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlotWholeBuffer(x, y):write(fh, body):reset()
 		end)
 
-		with(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlotWithBuffer(x, y):write(fh, body)
 		end)
 	end

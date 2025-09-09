@@ -12,7 +12,7 @@ local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
 local koch = require 'koch'.koch
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 do
 	local style = styleMaker()
@@ -27,15 +27,15 @@ do
 		plotter:pathEnd(false, style)
 	end
 
-	with("results/koch-A.svg", "w", function (fh)
+	file("results/koch-A.svg", "w", function (fh)
 		svgPlot(1200, 360):write(fh, body)
 	end)
 
-	with("results/koch-B.svg", "w", function (fh)
+	file("results/koch-B.svg", "w", function (fh)
 		svgPlotWholeBuffer(1200, 360):write(fh, body):reset()
 	end)
 
-	with("results/koch-C.svg", "w", function (fh)
+	file("results/koch-C.svg", "w", function (fh)
 		svgPlotWithBuffer(1200, 360):write(fh, body)
 	end)
 end

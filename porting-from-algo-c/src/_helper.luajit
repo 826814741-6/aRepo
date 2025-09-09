@@ -101,11 +101,17 @@ end
 --      https://www.lua.org/pil/13.4.5.html
 --      (the last part of) https://www.lua.org/pil/13.3.html
 
-local function with(path, mode, body)
-	local fh = io.open(path, mode)
-	local ret, err = pcall(body, fh)
+local msg1, msg2 =
+	"file(): Something wrong with your 'path' or/and 'mode'.",
+	"file(): Something wrong with your 'body'."
+
+local function file(path, mode, body)
+	local _, fh = pcall(io.open, path, mode)
+	assert(isFh(fh), msg1)
+
+	local ret, v = pcall(body, fh)
 	fh:close()
-	assert(ret == true, err)
+	assert(ret == true, msg2)
 end
 
 local function check(validators, target)
@@ -150,6 +156,6 @@ return {
 	mustBeBool = mustBeBool,
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
-	with = with,
+	file = file,
 	wrapWithValidator = wrapWithValidator
 }

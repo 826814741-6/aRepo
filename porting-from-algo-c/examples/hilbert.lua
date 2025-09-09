@@ -15,7 +15,7 @@ local svgPlotWithBuffer = M.svgPlotWithBuffer
 local styleMaker = M.styleMaker
 local SV = M.StyleValue
 local hilbert = require 'hilbert'.hilbert
-local with = require '_helper'.with
+local file = require '_helper'.file
 
 local function sampleWriter(pathPrefix, size, offset, style)
 	local m = size + offset
@@ -26,15 +26,15 @@ local function sampleWriter(pathPrefix, size, offset, style)
 			plotter:pathEnd(false, style)
 		end
 
-		with(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlot(m, m):write(fh, body)
 		end)
 
-		with(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlotWholeBuffer(m, m):write(fh, body):reset()
 		end)
 
-		with(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
+		file(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
 			svgPlotWithBuffer(m, m):write(fh, body)
 		end)
 	end
@@ -68,7 +68,7 @@ do
 
 	function getElapsedTime(path, plotter, limit) -- in a naive way
 		local start = os.clock()
-		with(path, "w", function (fh)
+		file(path, "w", function (fh)
 			plotter:write(fh, body, limit)
 		end)
 		return os.clock() - start
