@@ -4,11 +4,11 @@
 --    triangle and a part of main  to  sierpinskiGasket
 --
 
-local M0 = require 'grBMP'
-local M1 = require 'sierpinski'
+local M = require 'grBMP'
 
-local BMP, BLACK, WHITE = M0.BMP, M0.PRESET_COLORS.BLACK, M0.PRESET_COLORS.WHITE
-local sierpinskiGasket = M1.sierpinskiGasket
+local BMP, BLACK, WHITE = M.BMP, M.PRESET_COLORS.BLACK, M.PRESET_COLORS.WHITE
+local sierpinskiGasket = require 'sierpinski'.sierpinskiGasket
+local file = require '_helper'.file
 
 do
 	local x, y = 640, 400
@@ -17,7 +17,7 @@ do
 	local n = 65
 	sierpinskiGasket(bmp, n, BLACK, WHITE)
 
-	local fh = io.open("results/gasket.bmp", "wb")
-	bmp:write(fh)
-	fh:close()
+	file("results/gasket.bmp", "wb", function (fh)
+		bmp:write(fh)
+	end)
 end

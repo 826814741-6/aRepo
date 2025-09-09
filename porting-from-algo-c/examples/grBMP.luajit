@@ -10,6 +10,7 @@
 local M = require 'grBMP'
 
 local BMP, PRESET_COLORS = M.BMP, M.PRESET_COLORS
+local file = require '_helper'.file
 
 local m_floor = math.floor
 
@@ -22,7 +23,7 @@ do
 	bmp:rect(1, m_floor(x/2) + 1, m_floor(y/2) + 1, y, PRESET_COLORS.RED)
 	bmp:rect(m_floor(x/2) + 1, x, m_floor(y/2) + 1, y, PRESET_COLORS.WHITE)
 
-	local fh = io.open("results/grBMP-lj.bmp", "wb")
-	bmp:write(fh)
-	fh:close()
+	file("results/grBMP-lj.bmp", "wb", function (fh)
+		bmp:write(fh)
+	end)
 end

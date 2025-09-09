@@ -4,11 +4,11 @@
 --    a part of main  to  julia
 --
 
-local M0 = require 'grBMP'
-local M1 = require 'julia'
+local M = require 'grBMP'
 
-local BMP, PRESET_COLORS = M0.BMP, M0.PRESET_COLORS
-local julia = M1.julia
+local BMP, PRESET_COLORS = M.BMP, M.PRESET_COLORS
+local julia = require 'julia'.julia
+local file = require '_helper'.file
 
 do
 	local x, y = 600, 600
@@ -24,7 +24,7 @@ do
 		PRESET_COLORS.WHITE
 	)
 
-	local fh = io.open("results/julia.bmp", "wb")
-	bmp:write(fh)
-	fh:close()
+	file("results/julia.bmp", "wb", function (fh)
+		bmp:write(fh)
+	end)
 end
