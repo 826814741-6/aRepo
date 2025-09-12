@@ -22,10 +22,9 @@
 --  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local H = require '_helper'
 local hasBC, bc = pcall(require, "bc")
 
-local abs, atLeastOne = H.abs, H.atLeastOne
+local atLeastOne = require '_helper'.atLeastOne
 
 local function gLoop(step)
 	return function (x)
@@ -49,7 +48,7 @@ local function initC(isZero, loop)
 		elseif x > 0 then
 			return loop(x)
 		else
-			return -loop(abs(x))
+			return -loop(-x)
 		end
 	end
 end

@@ -17,9 +17,7 @@
 --    unsigned icubrt(unsigned)  to  iCbrt
 --
 
-local H = require '_helper'
-
-local abs, atLeastOne = H.abs, H.atLeastOne
+local atLeastOne = require '_helper'.atLeastOne
 local b_lshift, b_rshift, m_floor = bit.lshift, bit.rshift, math.floor
 
 local function gLoop(step)
@@ -44,7 +42,7 @@ local function initC(loop)
 		elseif x > 0 then
 			return loop(x)
 		else
-			return -loop(abs(x))
+			return -loop(-x)
 		end
 	end
 end

@@ -9,15 +9,17 @@
 #    void draw_rel(double, double)  to  drawRel
 #
 
-function sample(path, size, offset,	pi, theta, i, x, y) {
-	init(path, size, size)
+#
+#  init, header, footer, pathStart, pathEnd, draw, move, PI from src/svgplot.awk
+#
 
-	pi = atan2(0, -0)
+function sample(path, size, offset,	theta, i, x, y) {
+	init(path, size, size)
 
 	header()
 	pathStart()
 	for (i = 0; i < 5; i++) {
-		theta = 2 * pi * i / 5
+		theta = 2 * PI * i / 5
 		x = size / 2 + (size / 2 - offset) * cos(theta)
 		y = size / 2 + (size / 2 - offset) * sin(theta)
 		if (i == 0)

@@ -4,6 +4,10 @@
 #    void tree(int, double, double)  to  treeCurve
 #
 
+#
+#  drawRel, moveRel from src/svgplot.awk
+#
+
 function treeCurve(n, len, angle, factor, turn,	x, y) {
 	x = len * sin(angle)
 	y = len * cos(angle)

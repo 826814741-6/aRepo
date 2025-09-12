@@ -4,6 +4,10 @@
 #    void c(int, double, double)  to  cCurve
 #
 
+#
+#  init, header, footer, pathStart, pathEnd, move from src/svgplot.awk
+#
+
 function sample(path, n) {
 	init(path, 400, 250)
 

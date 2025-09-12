@@ -4,6 +4,10 @@
 #    void c(int, double, double)  to  cCurve
 #
 
+#
+#  drawRel from src/svgplot.awk
+#
+
 function cCurve(i, x, y) {
 	if (i == 0) {
 		drawRel(x, y)

@@ -12,12 +12,8 @@
 #  ... + [5] * x^4 + [4] * x^3 + [3] * x^2 + [2] * x^1 + [1]
 #
 
-#
-#  _length(a) from _helper.awk
-#
-
 function horner(a, x,	len, p, i) {
-	len = _length(a) # In nawk and gawk, you can use the built-in 'length' here; see _helper.awk
+	len = length(a)
 
 	if (len == 0) {
 		print "ERROR: 'a' must be a table that contains at least one element."
@@ -33,12 +29,8 @@ function horner(a, x,	len, p, i) {
 
 #
 
-#
-#  _length(a) from _helper.awk
-#
-
 function fmt(a,		len, r, i) {
-	len = _length(a) # In nawk and gawk, you can use the built-in 'length' here; see _helper.awk
+	len = length(a)
 
 	if (len == 0) {
 		print "ERROR: 'a' must be a table that contains at least one element."

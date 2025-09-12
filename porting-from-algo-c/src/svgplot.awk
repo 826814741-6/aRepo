@@ -13,7 +13,29 @@ BEGIN {
 	_OUTPUT_PATH = ""
 	_WIDTH = 0
 	_HEIGHT = 0
+
+	PI = atan2(0, -1)
 }
+#
+# > gawk 'BEGIN{ v = -0; printf "%f, %g, ", v, v; print v }'
+# -0.000000, -0, 0
+# > mawk 'BEGIN{ v = -0; printf "%f, %g, ", v, v; print v }'
+# -0.000000, -0, 0
+# > nawk 'BEGIN{ v = -0; printf "%f, %g, ", v, v; print v }'
+# 0.000000, 0, 0
+#
+# Note:
+# In NAWK, the value -0 seems to be treated as 0, so "atan2(0,-0)", which is
+# one of the idioms to get PI, returns 0.
+# (see: setfval() in https://github.com/onetrueawk/awk/blob/master/tran.c)
+#
+# > gawk 'BEGIN{ print atan2(0,-0), atan2(0.0,-0.0), atan2(0,-1) }'
+# 3.14159 3.14159 3.14159
+# > mawk 'BEGIN{ print atan2(0,-0), atan2(0.0,-0.0), atan2(0,-1) }'
+# 3.14159 3.14159 3.14159
+# > nawk 'BEGIN{ print atan2(0,-0), atan2(0.0,-0.0), atan2(0,-1) }'
+# 0 0 3.14159
+#
 
 function init(path, w, h) {
 	_OUTPUT_PATH = path

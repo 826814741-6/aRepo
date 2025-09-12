@@ -4,6 +4,10 @@
 #    void tree(int, double, double)  to  treeCurve
 #
 
+#
+#  init, header, footer, pathStart, pathEnd, move from src/svgplot.awk
+#
+
 function sample(path, n) {
 	init(path, 400, 350)
 

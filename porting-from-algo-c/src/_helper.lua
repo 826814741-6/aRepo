@@ -1,4 +1,17 @@
-local function abs(n) return n<0 and -n or n end
+--
+--  _helper.lua: some helper functions
+--
+
+--
+-- >> math.abs (x)
+-- >> Returns the maximum value between x and -x. (integer/float)
+-- >> -- https://www.lua.org/manual/5.4/manual.html#pdf-math.abs
+--
+-- > print(math.abs(0), math.abs(-0), math.abs(0.0), math.abs(-0.0))
+-- 0       0       0.0     0.0
+-- > print(math.type(math.abs(-0)), math.type(math.abs(-0.0)))
+-- integer float
+--
 
 local function atLeastOne(n) return n>1 and n or 1 end
 
@@ -198,7 +211,6 @@ local function gUnpackerWithCounter(unpacker)
 end
 
 return {
-	abs = abs,
 	atLeastOne = atLeastOne,
 	count = count,
 	decrement = decrement,

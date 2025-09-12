@@ -1,4 +1,26 @@
-local function abs(n) return n<0 and -n or n end
+--
+--  _helper.lua: some helper functions
+--
+
+--
+-- >> LuaJIT is fully upwards-compatible with Lua 5.1. It supports all
+-- >> standard Lua library functions and the full set of Lua/C API functions.
+-- >> -- https://luajit.org/extensions.html
+-- >>
+-- >> math.abs (x)
+-- >> Returns the absolute value of x.
+-- >> -- https://www.lua.org/manual/5.1/manual.html#pdf-math.abs
+--
+-- > print(math.abs(0), math.abs(-0), math.abs(0.0), math.abs(-0.0))
+-- 0       0       0       0
+-- > print(type(math.abs(-0)), type(math.abs(-0.0)))
+-- number  number
+--
+-- > ffi = require "ffi"
+-- > ffi.cdef "long labs(long);"
+-- > = ffi.C.labs(-0LL)
+-- 0LL
+--
 
 local function atLeastOne(n) return n>1 and n or 1 end
 
@@ -138,7 +160,6 @@ local function wrapWithValidator(body, paramValidators, returnValidators, unpack
 end
 
 return {
-	abs = abs,
 	atLeastOne = atLeastOne,
 	count = count,
 	isBool = isBool,

@@ -1,4 +1,23 @@
-function abs(n) { return n<0 ? -n : n }
+#
+#  _helper.awk: some helper functions
+#
+
+function abs(n) {
+	if (n == 0)
+		return 0
+	else if (n < 0)
+		return -n
+	else
+		return n
+}
+#
+# > gawk 'BEGIN{ v = -0; if (v == -v && v == 0.0 && v == -0.0) print "ok" }'
+# ok
+# > mawk 'BEGIN{ v = -0; if (v == -v && v == 0.0 && v == -0.0) print "ok" }'
+# ok
+# > nawk 'BEGIN{ v = -0; if (v == -v && v == 0.0 && v == -0.0) print "ok" }'
+# ok
+#
 
 function atLeastOne(n) { return n>1 ? n : 1 }
 
@@ -7,13 +26,13 @@ function decrement(n) { return n - 1 }
 function increment(n) { return n + 1 }
 
 #
-#  _length(): filling the gap of length() between mawk and others(nawk,gawk)
+#  (_length(): It appears this workaround is no longer necessary.)
 #
-function _length(a,	r, e) {
-	r = 0
-	for (e in a) r += 1
-	return r
-}
+#function _length(a,	r, e) {
+#	r = 0
+#	for (e in a) r += 1
+#	return r
+#}
 #
 #  function f(a) { return length(a) }
 #  function g(a) { return _length(a) }
@@ -22,18 +41,15 @@ function _length(a,	r, e) {
 #      s = "1 2 3 4 5"
 #      split(s, a)
 #
-#      print length(a)  # OK(5) in nawk, mawk, gawk
-#      print f(a)       # OK(5) in nawk, gawk / ERROR in mawk(*)
-#      print g(a)       # OK(5) in nawk, mawk, gawk
+#      print length(a)  # OK(5)
+#      print f(a)       # OK(5); Previously I got the error with certain AWK.
+#      print g(a)       # OK(5)
 #  }
-#
-#  *) ERROR message in mawk
-#  mawk: ... : type error in arg(1) in call to f
 #
 
 function concat(a,	r, i) {
 	r = ""
-	for (i = 1; i <= _length(a); i++)
+	for (i = 1; i <= length(a); i++)
 		r = r""a[i]
 	return r
 }
