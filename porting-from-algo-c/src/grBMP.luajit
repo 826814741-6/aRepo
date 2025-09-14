@@ -19,7 +19,7 @@
 --    void gr_line(int, int, int, int, long)     to  BMP; :line
 --
 
-local assertInitialValue = require '_helper'.assertInitialValue
+local mustBeNum = require '_helper'.mustBeNum
 
 local b_band, b_lshift, b_rshift = bit.band, bit.lshift, bit.rshift
 local s_char = string.char
@@ -41,8 +41,6 @@ local write2B = NBLEWriter(2)
 local write4B = NBLEWriter(4)
 
 local function init(width, height)
-	assertInitialValue(width, height)
-
 	local T = {
 		w = width,
 		h = height,
@@ -189,6 +187,8 @@ local function line(bmp, x1, y1, x2, y2, color)
 end
 
 local function BMP(width, height)
+	mustBeNum(width) mustBeNum(height)
+
 	local T = init(width, height)
 
 	T.dot = dot

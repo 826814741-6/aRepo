@@ -67,11 +67,6 @@ local function isNumOrNil(v)
 	return type(v) == "number" or v == nil
 end
 
-local function assertInitialValue(width, height)
-	assert(type(width) == "number", "'width' must be a number.")
-	assert(type(height) == "number", "'height' must be a number.")
-end
-
 local d_getinfo = debug.getinfo
 
 local function getNumOfParams(f)
@@ -161,36 +156,58 @@ local function tableWriter(x, y, w, f, vFmt)
 	end
 end
 
-local msg1, msg2 =
-	"file(): Something wrong with your 'path' or/and 'mode'.",
-	"file(): Something wrong with your 'body'."
-
 local function file(path, mode, body)
 	local _, fh = pcall(io.open, path, mode)
-	assert(isFh(fh), msg1)
+	assert(isFh(fh), "file(): Something wrong with your 'path' or/and 'mode'.")
 
 	local ret, v = pcall(body, fh)
 	fh:close()
-	assert(ret == true, msg2)
+	assert(ret == true, v)
 end
 
-local function check(validators, target)
-	for i,v in ipairs(validators) do
-		assert(v(target[i]), i)
-	end
+local function gChecker(fmt, filter)
+	return isFun(filter) and
+		function (self, target)
+			for i,v in ipairs(self.validators) do
+				assert(
+					v(target[i]),
+					fmt:format(filter(i), d_getinfo(2, "n").name))
+			end
+		end or
+		function (self, target)
+			for i,v in ipairs(self.validators) do
+				assert(
+					v(target[i]),
+					fmt:format(i, d_getinfo(2, "n").name))
+			end
+		end
+end
+
+local function makeValidator(validators, checker)
+	local T = { validators = validators }
+
+	T.check = checker ~= nil
+		and checker
+		or function (self, target)
+			for i,v in ipairs(self.validators) do
+				assert(v(target[i]), i)
+			end
+		end
+
+	return T
 end
 
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
-local function wrapWithValidator(body, paramValidators, returnValidators, unpacker)
+local function wrapWithValidator(body, paramValidator, returnValidator, unpacker)
 	unpacker = unpacker ~= nil and unpacker or t_unpack
-	return setmetatable({ numOfParams = #paramValidators }, {
+	return setmetatable({}, {
 		__call = function (self, ...)
 			local arg = {...}
-			check(paramValidators, arg)
+			paramValidator:check(arg)
 
 			local ret = {body(...)}
-			check(returnValidators, ret)
+			returnValidator:check(ret)
 
 			return unpacker(ret)
 		end
@@ -225,7 +242,6 @@ return {
 	isBoolOrNil = isBoolOrNil,
 	isFhOrNil = isFhOrNil,
 	isNumOrNil = isNumOrNil,
-	assertInitialValue = assertInitialValue,
 	getNumOfParams = getNumOfParams,
 	getValueOrInit = getValueOrInit,
 	mustBeBool = mustBeBool,
@@ -233,6 +249,8 @@ return {
 	mustBeStr = mustBeStr,
 	tableWriter = tableWriter,
 	file = file,
+	gChecker = gChecker,
+	makeValidator = makeValidator,
 	wrapWithValidator = wrapWithValidator,
 	gUnpackerWithCounter = gUnpackerWithCounter
 }

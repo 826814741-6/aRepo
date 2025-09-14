@@ -27,16 +27,13 @@
 
 local H = require '_helper'
 
-local assertInitialValue, getValueOrInit, isBool =
-	H.assertInitialValue, H.getValueOrInit, H.isBool
+local getValueOrInit, isBool, mustBeNum = H.getValueOrInit, H.isBool, H.mustBeNum
 
 local t_unpack = table.unpack
 local m_abs = math.abs
 local m_floor = math.floor
 
 local function init(width, height)
-	assertInitialValue(width, height)
-
 	local T = {
 		w = width,
 		h = height,
@@ -217,6 +214,8 @@ local function wLine(bmp, x1, y1, x2, y2, color)
 end
 
 local function BMP(width, height)
+	mustBeNum(width) mustBeNum(height)
+
 	local T = init(width, height)
 
 	T.dot = dot

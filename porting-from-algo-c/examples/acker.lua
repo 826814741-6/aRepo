@@ -4,16 +4,17 @@
 --    int A(int, int)           to  ack
 --
 
-local ack = require 'something-recursive'.ack
-
 local H = require '_helper'
-local count, isNum, wrapWithValidator, gUnpackerWithCounter =
-	H.count, H.isNum, H.wrapWithValidator, H.gUnpackerWithCounter
+
+local ack = require 'something-recursive'.ack
+local count, isNum, makeValidator, wrapWithValidator, gUnpackerWithCounter =
+	H.count, H.isNum, H.makeValidator, H.wrapWithValidator, H.gUnpackerWithCounter
 
 local unpacker = gUnpackerWithCounter()
+local vP, vR = makeValidator({isNum, isNum}), makeValidator({isNum})
 
 local function fw(f)
-	return wrapWithValidator(f, {isNum, isNum}, {isNum}, unpacker)
+	return wrapWithValidator(f, vP, vR, unpacker)
 end
 
 do

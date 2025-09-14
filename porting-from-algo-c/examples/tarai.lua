@@ -12,16 +12,18 @@ local M = require 'something-recursive'
 local H = require '_helper'
 
 local tarai, taraiC, tak = M.tarai, M.taraiC, M.tak
-local count, isFun, isNum, wrapWithValidator, gUnpackerWithCounter =
-	H.count, H.isFun, H.isNum, H.wrapWithValidator, H.gUnpackerWithCounter
+local count, isFun, isNum, makeValidator, wrapWithValidator, gUnpackerWithCounter =
+	H.count, H.isFun, H.isNum, H.makeValidator, H.wrapWithValidator, H.gUnpackerWithCounter
 
 local unpacker, unpackerC = gUnpackerWithCounter(), gUnpackerWithCounter()
+local vN, vN3, vF3 =
+	makeValidator({isNum}), makeValidator({isNum, isNum, isNum}), makeValidator({isFum, isFum, isFum})
 
 local function fw(f)
-	return wrapWithValidator(f, {isNum, isNum, isNum}, {isNum}, unpacker)
+	return wrapWithValidator(f, vN3, vN, unpacker)
 end
 local function fwC(f)
-	return wrapWithValidator(f, {isFun, isFun, isFun}, {isNum}, unpackerC)
+	return wrapWithValidator(f, vF3, vN, unpackerC)
 end
 
 do

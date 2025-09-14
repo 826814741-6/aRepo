@@ -20,8 +20,6 @@ local isBool, isFh, isFun, isNum, isStr, isTbl =
 local isBoolOrNil, isFhOrNil, isNumOrNil =
 	H.isBoolOrNil, H.isFhOrNil, H.isNumOrNil
 local mustBeNum, mustBeStr = H.mustBeNum, H.mustBeStr
-local assertInitialValue = H.assertInitialValue
-local wrapWithValidator = H.wrapWithValidator
 
 local t_concat = table.concat
 local t_insert = table.insert
@@ -36,6 +34,8 @@ local isWrapWithValidator = false
 --   circle, ellipse, line, rect
 -- and the following method functions:
 --   writeA, writeB, writeC
+-- and the following constructor functions:
+--   svgPlot, svgPlotWholeBuffer, svgPlotWithBuffer
 -- are wrapped with several validators.
 --
 -- Note:
@@ -101,35 +101,20 @@ local function rect(x, y, w, h, rx, ry, style)
 ]]):format(x, y, w, h, rx, ry, style)
 end
 
-if isWrapWithValidator then
-	header = wrapWithValidator(header, {isNum, isNum}, {isStr})
-	footer = wrapWithValidator(footer, {}, {isStr})
-	pathStart = wrapWithValidator(pathStart, {}, {isStr})
-	pathEnd = wrapWithValidator(pathEnd, {isBool, isStr}, {isStr})
-	move = wrapWithValidator(move, {isNum, isNum, isNum}, {isStr})
-	moveRel = wrapWithValidator(moveRel, {isNum, isNum}, {isStr})
-	draw = wrapWithValidator(draw, {isNum, isNum, isNum}, {isStr})
-	drawRel = wrapWithValidator(drawRel, {isNum, isNum}, {isStr})
-	circle = wrapWithValidator(circle, {isNum, isNum, isNum, isStr}, {isStr})
-	ellipse = wrapWithValidator(ellipse, {isNum, isNum, isNum, isNum, isStr}, {isStr})
-	line = wrapWithValidator(line, {isNum, isNum, isNum, isNum, isStr}, {isStr})
-	rect = wrapWithValidator(rect, {isNum, isNum, isNum, isNum, isNum, isNum, isStr}, {isStr})
-end
-
 --
---	"A" for svgPlot, svgPlotWithBuffer
+--  ___A for svgPlot, svgPlotWithBuffer
 --
---	function ___A(self, ...)
---		self.o:write(fmt(...))
---		return self
---	end
+--    function ___A(self, ...)
+--        self.o:write(fmt(...))
+--        return self
+--    end
 --
---	"B" for svgPlotWholeBuffer
+--  ___B for svgPlotWholeBuffer
 --
---	function ___B(self, ...)
---		t_insert(self.o, fmt(...))
---		return self
---	end
+--    function ___B(self, ...)
+--        t_insert(self.o, fmt(...))
+--        return self
+--    end
 --
 
 local function pathStartA(self)
@@ -222,6 +207,12 @@ local function rectB(self, x, y, w, h, rx, ry, style)
 	return self
 end
 
+--
+--  writeA         for svgPlot
+--  writeB, resetB for svgPlotWholeBuffer
+--  writeC         for svgPlotWithBuffer
+--
+
 local function writeA(self, fh, body)
 	self.o = isFh(fh) and fh or io.stdout
 	self.o:write(header(self.w, self.h))
@@ -253,12 +244,6 @@ local function writeC(self, fh, body, limit)
 		:write(footer())
 		:endStep()
 	return self
-end
-
-if isWrapWithValidator then
-	writeA = wrapWithValidator(writeA, {isTbl, isFhOrNil, isFun}, {isTbl})
-	writeB = wrapWithValidator(writeB, {isTbl, isFhOrNil, isFun, isBoolOrNil}, {isTbl})
-	writeC = wrapWithValidator(writeC, {isTbl, isFhOrNil, isFun, isNumOrNil}, {isTbl})
 end
 
 local function resetB(self)
@@ -340,8 +325,6 @@ end
 
 local function gSvgPlot(initializer)
 	return function (width, height)
-		assertInitialValue(width, height)
-
 		local T = {
 			w = width,
 			h = height,
@@ -359,6 +342,52 @@ end
 
 local svgPlot, svgPlotWholeBuffer, svgPlotWithBuffer =
 	gSvgPlot(makeNil), gSvgPlot(makeTable), gSvgPlot(makeBuffer)
+
+--
+
+if isWrapWithValidator then
+	local makeValidator = H.makeValidator
+	local wrapWithValidator = H.wrapWithValidator
+
+	local fmtP = "Error occured in the arg %d of the function %s()"
+	local fmtR = "Error occured in the ret %d of the function %s()"
+
+	local checkerP, checkerPdec = H.gChecker(fmtP), H.gChecker(fmtP, H.decrement)
+	local checkerR = H.gChecker(fmtR)
+
+	local vEmpty = makeValidator({})
+	local vPN2 = makeValidator({isNum, isNum}, checkerP)
+	local vPN3 = makeValidator({isNum, isNum, isNum}, checkerP)
+	local vPN3S = makeValidator({isNum, isNum, isNum, isStr}, checkerP)
+	local vPN4S = makeValidator({isNum, isNum, isNum, isNum, isStr}, checkerP)
+	local vPN6S = makeValidator({isNum, isNum, isNum, isNum, isNum, isNum, isStr}, checkerP)
+	local vPBS = makeValidator({isBool, isStr}, checkerP)
+	local vPTFhnF = makeValidator({isTbl, isFhOrNil, isFun}, checkerPdec)
+	local vPTFhnFBn = makeValidator({isTbl, isFhOrNil, isFun, isBoolOrNil}, checkerPdec)
+	local vPTFhnFNn = makeValidator({isTbl, isFhOrNil, isFun, isNumOrNil}, checkerPdec)
+	local vRS, vRT = makeValidator({isStr}, checkerR), makeValidator({isTbl}, checkerR)
+
+	header = wrapWithValidator(header, vPN2, vRS)
+	footer = wrapWithValidator(footer, vEmpty, vRS)
+	pathStart = wrapWithValidator(pathStart, vEmpty, vRS)
+	pathEnd = wrapWithValidator(pathEnd, vPBS, vRS)
+	move = wrapWithValidator(move, vPN3, vRS)
+	moveRel = wrapWithValidator(moveRel, vPN2, vRS)
+	draw = wrapWithValidator(draw, vPN3, vRS)
+	drawRel = wrapWithValidator(drawRel, vPN2, vRS)
+	circle = wrapWithValidator(circle, vPN3S, vRS)
+	ellipse = wrapWithValidator(ellipse, vPN4S, vRS)
+	line = wrapWithValidator(line, vPN4S, vRS)
+	rect = wrapWithValidator(rect, vPN6S, vRS)
+
+	writeA = wrapWithValidator(writeA, vPTFhnF, vRT)
+	writeB = wrapWithValidator(writeB, vPTFhnFBn, vRT)
+	writeC = wrapWithValidator(writeC, vPTFhnFNn, vRT)
+
+	svgPlot = wrapWithValidator(svgPlot, vPN2, vRT)
+	svgPlotWholeBuffer = wrapWithValidator(svgPlotWholeBuffer, vPN2, vRT)
+	svgPlotWithBuffer = wrapWithValidator(svgPlotWithBuffer, vPN2, vRT)
+end
 
 --
 
