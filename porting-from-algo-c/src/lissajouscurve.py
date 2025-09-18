@@ -23,7 +23,7 @@ def _demo(path):
 
     with open(path, "w") as fh:
         size, offset = 300, 10
-        plotter = svgplot.svgPlot((size + offset) * 2, (size + offset) * 2)
+        plotter = svgplot.SvgPlot((size + offset) * 2, (size + offset) * 2)
         plotter.plotStart(fh)
         plotter.pathStart()
         lissajousCurve(plotter, size, offset)

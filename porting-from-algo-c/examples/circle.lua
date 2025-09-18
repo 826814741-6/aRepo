@@ -12,11 +12,8 @@ local BMP = require 'grBMP'.BMP
 local BLACK = require 'grBMP'.PRESET_COLORS.BLACK
 local makeColor = require 'grBMP'.makeColor
 
-local svgPlotA = require 'svgplot'.svgPlot
-local svgPlotB = require 'svgplot'.svgPlotWholeBuffer
-local svgPlotC = require 'svgplot'.svgPlotWithBuffer
-local styleMaker = require 'svgplot'.styleMaker
-local SV = require 'svgplot'.StyleValue
+local SvgPlot = require 'svgplot'.SvgPlot
+local SV = require 'svgplot'.SV
 
 local RAND = require 'rand'.RAND
 local file = require '_helper'.file
@@ -48,15 +45,9 @@ do
 		bmp:write(fh)
 	end)
 
-	local styleR, styleC =
-		styleMaker()
-			:fill(SV.Black)
-			:get(),
-		styleMaker()
-			:fill(SV.Transparent)
-			:stroke(SV.RawRGB)
-			:strokeWidth(1)
-			:get()
+	--
+
+	local styleR, styleC = SV.PRESET_FillBLACK, SV.PRESET_RawRGB
 	local fmtC = function (n) return styleC:format(toRGB(n)) end
 
 	function body(plotter)
@@ -64,13 +55,7 @@ do
 		loop(plotter, n, x, y, fmtC)
 	end
 
-	file("results/circle-A.svg", "w", function (fh)
-		svgPlotA(x, y):write(fh, body)
-	end)
-	file("results/circle-B.svg", "w", function (fh)
-		svgPlotB(x, y):write(fh, body):reset()
-	end)
-	file("results/circle-C.svg", "w", function (fh)
-		svgPlotC(x, y):write(fh, body)
+	file("results/circle.svg", "w", function (fh)
+		SvgPlot(x, y):write(fh, body)
 	end)
 end

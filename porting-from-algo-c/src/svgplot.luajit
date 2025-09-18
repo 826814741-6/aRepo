@@ -15,34 +15,12 @@
 
 local H = require '_helper'
 
-local isBool, isFh, isFun, isNum, isStr, isTbl, isUd =
-	H.isBool, H.isFh, H.isFun, H.isNum, H.isStr, H.isTbl, H.isUd
-local isBoolOrNil, isFhOrNil, isNumOrNil =
-	H.isBoolOrNil, H.isFhOrNil, H.isNumOrNil
-local mustBeNum, mustBeStr = H.mustBeNum, H.mustBeStr
+local isFh, isNum, isTbl, isUd = H.isFh, H.isNum, H.isTbl, H.isUd
+local mustBeFun, mustBeNum, mustBeStr = H.mustBeFun, H.mustBeNum, H.mustBeStr
 
 local t_concat = table.concat
 local t_insert = table.insert
 
---
-
-local isWrapWithValidator = false
---
--- When you toggle the value 'isWrapWithValidator' above, the following
--- format functions:
---   header, footer, pathStart, pathEnd, move, moveRel, draw, drawRel,
---   circle, ellipse, line, rect
--- and the following method functions:
---   writeA, writeB, writeC
--- and the following constructor functions:
---   svgPlot, svgPlotWholeBuffer, svgPlotWithBuffer
--- are wrapped with several validators.
---
--- Note:
--- The format functions are not called directly by the user. However, since
--- each plotter method is implemented as a thin wrapper around a format
--- function, these little safety bars might be a bit useful for prototyping
--- or debugging.
 --
 
 local function header(w, h)
@@ -102,14 +80,14 @@ local function rect(x, y, w, h, rx, ry, style)
 end
 
 --
---  ___A for svgPlot, svgPlotWithBuffer
+--  ___A for SvgPlot, SvgPlotWithBuffer
 --
 --    function ___A(self, ...)
 --        self.o:write(fmt(...))
 --        return self
 --    end
 --
---  ___B for svgPlotWholeBuffer
+--  ___B for SvgPlotWholeBuffer
 --
 --    function ___B(self, ...)
 --        self.o:put(fmt(...))
@@ -208,9 +186,9 @@ local function rectB(self, x, y, w, h, rx, ry, style)
 end
 
 --
---  writeA         for svgPlot
---  writeB, resetB for svgPlotWholeBuffer
---  writeC         for svgPlotWithBuffer
+--  writeA         for SvgPlot
+--  writeB, resetB for SvgPlotWholeBuffer
+--  writeC         for SvgPlotWithBuffer
 --
 
 local DefaultSize = 512
@@ -333,6 +311,8 @@ end
 
 local function gSvgPlot(initializer)
 	return function (width, height)
+		mustBeNum(width) mustBeNum(height)
+
 		local T = {
 			w = width,
 			h = height,
@@ -348,64 +328,21 @@ local function gSvgPlot(initializer)
 	end
 end
 
-local svgPlot, svgPlotWholeBuffer, svgPlotWithBuffer =
+local SvgPlot, SvgPlotWholeBuffer, SvgPlotWithBuffer =
 	gSvgPlot(makeNil), gSvgPlot(s_buffer_new), gSvgPlot(makeBuffer)
 
 --
 
-if isWrapWithValidator then
-	local makeValidator = H.makeValidator
-	local wrapWithValidator = H.wrapWithValidator
-
-	local fmtP = "Error occured in the arg %d of the function %s()"
-	local fmtR = "Error occured in the ret %d of the function %s()"
-
-	local checkerP, checkerPdec = H.gChecker(fmtP), H.gChecker(fmtP, H.decrement)
-	local checkerR = H.gChecker(fmtR)
-
-	local vEmpty = makeValidator({})
-	local vPN2 = makeValidator({isNum, isNum}, checkerP)
-	local vPN3 = makeValidator({isNum, isNum, isNum}, checkerP)
-	local vPN3S = makeValidator({isNum, isNum, isNum, isStr}, checkerP)
-	local vPN4S = makeValidator({isNum, isNum, isNum, isNum, isStr}, checkerP)
-	local vPN6S = makeValidator({isNum, isNum, isNum, isNum, isNum, isNum, isStr}, checkerP)
-	local vPBS = makeValidator({isBool, isStr}, checkerP)
-	local vPTFhnF = makeValidator({isTbl, isFhOrNil, isFun}, checkerPdec)
-	local vPTFhnFBn = makeValidator({isTbl, isFhOrNil, isFun, isBoolOrNil}, checkerPdec)
-	local vPTFhnFNn = makeValidator({isTbl, isFhOrNil, isFun, isNumOrNil}, checkerPdec)
-	local vRS, vRT = makeValidator({isStr}, checkerR), makeValidator({isTbl}, checkerR)
-
-	header = wrapWithValidator(header, vPN2, vRS)
-	footer = wrapWithValidator(footer, vEmpty, vRS)
-	pathStart = wrapWithValidator(pathStart, vEmpty, vRS)
-	pathEnd = wrapWithValidator(pathEnd, vPBS, vRS)
-	move = wrapWithValidator(move, vPN3, vRS)
-	moveRel = wrapWithValidator(moveRel, vPN2, vRS)
-	draw = wrapWithValidator(draw, vPN3, vRS)
-	drawRel = wrapWithValidator(drawRel, vPN2, vRS)
-	circle = wrapWithValidator(circle, vPN3S, vRS)
-	ellipse = wrapWithValidator(ellipse, vPN4S, vRS)
-	line = wrapWithValidator(line, vPN4S, vRS)
-	rect = wrapWithValidator(rect, vPN6S, vRS)
-
-	writeA = wrapWithValidator(writeA, vPTFhnF, vRT)
-	writeB = wrapWithValidator(writeB, vPTFhnFBn, vRT)
-	writeC = wrapWithValidator(writeC, vPTFhnFNn, vRT)
-
-	svgPlot = wrapWithValidator(svgPlot, vPN2, vRT)
-	svgPlotWholeBuffer = wrapWithValidator(svgPlotWholeBuffer, vPN2, vRT)
-	svgPlotWithBuffer = wrapWithValidator(svgPlotWithBuffer, vPN2, vRT)
-end
-
---
-
 local function gMakeStyleMethod(specifier, filter)
-	mustBeStr(specifier)
+	mustBeStr(specifier) mustBeFun(filter)
+
 	return function (s)
 		mustBeStr(s)
+
 		local fmt, errStr =
 			([[%s="%%%s"]]):format(s, specifier),
 			([[Attribute '%s' already exists.]]):format(s)
+
 		return function (self, v)
 			if self.attr[s] ~= true then
 				self.attr[s] = true
@@ -431,10 +368,10 @@ local stFill, stPaintOrder, stStroke, stStrokeWidth =
 
 local stGet = function (self) return t_concat(self.buf, " ") end
 
-local function styleMaker()
+local function Styler()
 	local T = { buf = {}; attr = {} }
 
-	T.get = stGet
+	setmetatable(T, { __call = stGet })
 
 	T.fill = stFill
 	T.paintOrder = stPaintOrder
@@ -448,28 +385,32 @@ end
 -- https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
 --
 
-local StyleValue = {}
+local SV = {}
 
-StyleValue.None = function () return "none" end
-StyleValue.Transparent = function () return "transparent" end
-StyleValue.Black = function () return "black" end
-StyleValue.White = function () return "white" end
-StyleValue.Raw = function (v) return function () return v end end
-StyleValue.RawRGB = function () return "rgb(%d %d %d)" end
+SV.None = function () return "none" end
+SV.Transparent = function () return "transparent" end
+SV.Black = function () return "black" end
+SV.White = function () return "white" end
+SV.Raw = function (v) return function () return v end end
+SV.RawRGB = function () return "rgb(%d %d %d)" end
 
 local m_floor, m_random = math.floor, math.random
 local b_band, b_rshift = bit.band, bit.rshift
 
-StyleValue.RandomRGB = function ()
+SV.RandomRGB = function ()
 	local n = m_floor(m_random() * 0xffffff)
 	return ("rgb(%d %d %d)")
 		:format(b_rshift(n, 16), b_band(b_rshift(n, 8), 0xff), b_band(n, 0xff))
 end
 
+SV.PRESET_PLAIN = Styler():fill(SV.None):stroke(SV.Black)()
+SV.PRESET_FillBLACK = Styler():fill(SV.Black)()
+SV.PRESET_RawRGB = Styler():fill(SV.Transparent):stroke(SV.RawRGB):strokeWidth(1)()
+
 return {
-	svgPlot = svgPlot,
-	svgPlotWholeBuffer = svgPlotWholeBuffer,
-	svgPlotWithBuffer = svgPlotWithBuffer,
-	styleMaker = styleMaker,
-	StyleValue = StyleValue
+	SvgPlot = SvgPlot,
+	SvgPlotWholeBuffer = SvgPlotWholeBuffer,
+	SvgPlotWithBuffer = SvgPlotWithBuffer,
+	Styler = Styler,
+	SV = SV
 }

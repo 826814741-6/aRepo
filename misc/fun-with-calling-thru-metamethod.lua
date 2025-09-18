@@ -1,7 +1,7 @@
 --
---  function-wrapper-with-validator.lua
+--  fun-with-calling-thru-metamethod.lua
 --
---  > lua[jit] function-wrapper-with-validator.lua
+--  > lua[jit] fun-with-calling-thru-metamethod.lua
 --
 
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
@@ -81,8 +81,8 @@ do
 	print("^-- ok / raise an error --v")
 
 	local ret, err = pcall(w1, 1, 2, {})
-	assert(ret, err) -- (see bottom)
-end
+	assert(ret, err)  -- Please comment out this line,
+end                       -- if you want to see the results of the latter half.
 
 --
 -- If you want to use a different checker instead of the function 'check'
@@ -245,4 +245,90 @@ do
 		3628800 == fac5(10)
 		and 22 == unpacker:get() -- 11: 10...0 x 2 (fw5A and fw5B)
 	)
+
+	print("--")
+
+	function count(f, ...)
+		local c = 0
+		debug.sethook(function() c = c + 1 end, "c")
+		f(...)
+		debug.sethook()
+		return c
+	end
+
+	function ack(x, y)
+		if x == 0 then return y + 1 end
+		if y == 0 then return ack(x - 1, 1) end
+		return ack(x - 1, ack(x, y - 1))
+	end
+	function ackW(x, y)
+		function rec(x, y)
+			if x == 0 then return y + 1 end
+			if y == 0 then return fw2(rec)(x - 1, 1) end
+			return fw2(rec)(x - 1, fw2(rec)(x, y - 1))
+		end
+		return fw2(rec)(x, y)
+	end
+
+	function tarai(x, y, z)
+		if x <= y then return y end
+		return tarai(tarai(x-1, y, z), tarai(y-1, z, x), tarai(z-1, x, y))
+	end
+	function taraiW(x, y, z)
+		function rec(x, y, z)
+			if x <= y then return y end
+			return fw3(rec)(
+				fw3(rec)(x-1, y, z),
+				fw3(rec)(y-1, z, x),
+				fw3(rec)(z-1, x, y)
+			)
+		end
+		return fw3(rec)(x, y, z)
+	end
+
+	local vPC = makeValidator({isFun, isFun, isFun})
+	function fwC(f) return wrapWithValidator(f, vPC, vR, unpacker) end
+
+	function taraiC(x, y, z)
+		function rec(x, y, z)
+			if x() <= y() then return y() end
+			return rec(
+				function () return rec(function() return x() - 1 end, y, z) end,
+				function () return rec(function() return y() - 1 end, z, x) end,
+				function () return rec(function() return z() - 1 end, x, y) end
+			)
+		end
+		return rec(
+			function () return x end,
+			function () return y end,
+			function () return z end
+		)
+	end
+	function taraiCW(x, y, z)
+		function rec(x, y, z)
+			if x() <= y() then return y() end
+			return fwC(rec)(
+				function() return fwC(rec)(function() return x()-1 end, y, z) end,
+				function() return fwC(rec)(function() return y()-1 end, z, x) end,
+				function() return fwC(rec)(function() return z()-1 end, x, y) end
+			)
+		end
+		return fwC(rec)(
+			function() return x end,
+			function() return y end,
+			function() return z end
+		)
+	end
+
+	unpacker:reset()
+	print("ack(3, 3):", ack(3, 3), ackW(3, 3))
+	print(count(ack, 3, 3), unpacker:get())
+
+	unpacker:reset()
+	print("tarai(10, 5, 0):", tarai(10, 5, 0), taraiW(10, 5, 0))
+	print(count(tarai, 10, 5, 0), unpacker:get())
+
+	unpacker:reset()
+	print("taraiC(100, 50, 0):", taraiC(100, 50, 0), taraiCW(100, 50, 0))
+	print(count(taraiC, 100, 50, 0), unpacker:get())
 end

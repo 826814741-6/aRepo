@@ -6,38 +6,32 @@
 
 local M = require 'svgplot'
 
-local svgPlot = M.svgPlot
-local svgPlotWholeBuffer = M.svgPlotWholeBuffer
-local svgPlotWithBuffer = M.svgPlotWithBuffer
-local styleMaker = M.styleMaker
-local SV = M.StyleValue
+local SvgPlotA = M.SvgPlot
+local SvgPlotB = M.SvgPlotWholeBuffer
+local SvgPlotC = M.SvgPlotWithBuffer
 local lissajousCurve = require 'lissajouscurve'.lissajousCurve
 local file = require '_helper'.file
 
-local n, offset = 300, 10
-local style = styleMaker()
-	:fill(SV.None)
-	:stroke(SV.Black)
-	:get()
-
 do
+	local n, offset = 300, 10
+
 	function body(plotter)
 		plotter:pathStart()
 		lissajousCurve(plotter, n, offset)
-		plotter:pathEnd(false, style)
+		plotter:pathEnd(false, M.SV.PRESET_PLAIN)
 	end
 
 	local m = (n + offset) * 2
 
 	file("results/lissajouscurve-A.svg", "w", function (fh)
-		svgPlot(m, m):write(fh, body)
+		SvgPlotA(m, m):write(fh, body)
 	end)
 
 	file("results/lissajouscurve-B.svg", "w", function (fh)
-		svgPlotWholeBuffer(m, m):write(fh, body):reset()
+		SvgPlotB(m, m):write(fh, body):reset()
 	end)
 
 	file("results/lissajouscurve-C.svg", "w", function (fh)
-		svgPlotWithBuffer(m, m):write(fh, body, 30)
+		SvgPlotC(m, m):write(fh, body, 30)
 	end)
 end

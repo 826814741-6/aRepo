@@ -15,16 +15,6 @@
 
 local function atLeastOne(n) return n>1 and n or 1 end
 
-local d_sethook = debug.sethook
-
-local function count(f, ...)
-	local c = 0
-	d_sethook(function() c = c + 1 end, "c")
-	f(...)
-	d_sethook()
-	return c
-end
-
 local function decrement(x) return x - 1 end
 
 local function id(x) return x end
@@ -55,32 +45,6 @@ local function isTbl(v)
 	return type(v) == "table"
 end
 
-local function isBoolOrNil(v)
-	return type(v) == "boolean" or v == nil
-end
-
-local function isFhOrNil(v)
-	return io.type(v) == "file" or v == nil
-end
-
-local function isNumOrNil(v)
-	return type(v) == "number" or v == nil
-end
-
-local d_getinfo = debug.getinfo
-
-local function getNumOfParams(f)
-	return d_getinfo(f).nparams
-end
-
-local function getValueOrNil(predicate, v)
-	if predicate(v) then
-		return v
-	else
-		return nil
-	end
-end
-
 local function getValueOrInit(predicate, v, initialValue)
 	if predicate(v) then
 		return v
@@ -91,6 +55,11 @@ end
 
 local function mustBeBool(v)
 	assert(type(v) == "boolean", "Must be a boolean.")
+	return v
+end
+
+local function mustBeFun(v)
+	assert(type(v) == "function", "Must be a function.")
 	return v
 end
 
@@ -111,51 +80,6 @@ end
 --      https://www.lua.org/pil/13.4.5.html
 --      (the last part of) https://www.lua.org/pil/13.3.html
 
---
---  tableWriter(x, y, w, f, vFmt)
---
---    x     =  { number, number, number[, "L"] }
---    y     =  { number, number, number }
---    w     =  { number, number }
---    f     =  { function, function, function }
---    vFmt  =  { string, string, string }
---
-local function tableWriter(x, y, w, f, vFmt)
-	function fmt(n, s, f)
-		local t = ("%%%d%s"):format(n, s)
-		return function (...) return t:format(f(...)) end
-	end
-
-	function count(l, r, step)
-		local t=0 for _=l,r,step do t=t+1 end return t
-	end
-
-	local padding = (" "):rep(w[1] + 2)
-	local border = ("-"):rep(w[2] * count(x[1],x[2],x[3]))
-
-	local th = fmt(w[1], vFmt[1].." |", f[1])
-	local tdH = fmt(w[2], vFmt[2], f[2])
-	local tdB = fmt(w[2], vFmt[3], f[3])
-
-	local isL = x[4] == "L"
-
-	return function (fh)
-		fh = isFh(fh) and fh or io.stdout
-
-		-- header
-		fh:write(padding)
-		for i=x[1],x[2],x[3] do fh:write(tdH(i)) end
-		fh:write("\n", padding, border, "\n")
-
-		-- body
-		for j=y[1],y[2],y[3] do
-			fh:write(th(j))
-			for i=x[1],isL and j or x[2],x[3] do fh:write(tdB(i, j)) end
-			fh:write("\n")
-		end
-	end
-end
-
 local function file(path, mode, body)
 	local _, fh = pcall(io.open, path, mode)
 	assert(isFh(fh), "file(): Something wrong with your 'path' or/and 'mode'.")
@@ -165,71 +89,8 @@ local function file(path, mode, body)
 	assert(ret == true, v)
 end
 
-local function gChecker(fmt, filter)
-	return isFun(filter) and
-		function (self, target)
-			for i,v in ipairs(self.validators) do
-				assert(
-					v(target[i]),
-					fmt:format(filter(i), d_getinfo(2, "n").name))
-			end
-		end or
-		function (self, target)
-			for i,v in ipairs(self.validators) do
-				assert(
-					v(target[i]),
-					fmt:format(i, d_getinfo(2, "n").name))
-			end
-		end
-end
-
-local function makeValidator(validators, checker)
-	local T = { validators = validators }
-
-	T.check = checker ~= nil
-		and checker
-		or function (self, target)
-			for i,v in ipairs(self.validators) do
-				assert(v(target[i]), i)
-			end
-		end
-
-	return T
-end
-
-local t_unpack = table.unpack ~= nil and table.unpack or unpack
-
-local function wrapWithValidator(body, paramValidator, returnValidator, unpacker)
-	unpacker = unpacker ~= nil and unpacker or t_unpack
-	return setmetatable({}, {
-		__call = function (self, ...)
-			local arg = {...}
-			paramValidator:check(arg)
-
-			local ret = {body(...)}
-			returnValidator:check(ret)
-
-			return unpacker(ret)
-		end
-	})
-end
-
-local function gUnpackerWithCounter(unpacker)
-	unpacker = unpacker ~= nil and unpacker or function (r) return r[1] end
-	local T = { c = 0 }
-	function T:get() return T.c end
-	function T:reset() T.c = 0 end
-	return setmetatable(T, {
-		__call = function (self, r)
-			self.c = self.c + 1
-			return unpacker(r)
-		end
-	})
-end
-
 return {
 	atLeastOne = atLeastOne,
-	count = count,
 	decrement = decrement,
 	id = id,
 	increment = increment,
@@ -239,18 +100,10 @@ return {
 	isNum = isNum,
 	isStr = isStr,
 	isTbl = isTbl,
-	isBoolOrNil = isBoolOrNil,
-	isFhOrNil = isFhOrNil,
-	isNumOrNil = isNumOrNil,
-	getNumOfParams = getNumOfParams,
 	getValueOrInit = getValueOrInit,
 	mustBeBool = mustBeBool,
+	mustBeFun = mustBeFun,
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
-	tableWriter = tableWriter,
-	file = file,
-	gChecker = gChecker,
-	makeValidator = makeValidator,
-	wrapWithValidator = wrapWithValidator,
-	gUnpackerWithCounter = gUnpackerWithCounter
+	file = file
 }

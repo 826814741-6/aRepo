@@ -24,16 +24,6 @@
 
 local function atLeastOne(n) return n>1 and n or 1 end
 
-local d_sethook = debug.sethook
-
-local function count(f, ...)
-	local c = 0
-	d_sethook(function() c = c + 1 end, "c")
-	f(...)
-	d_sethook()
-	return c
-end
-
 local function isBool(v)
 	return type(v) == "boolean"
 end
@@ -62,32 +52,6 @@ local function isUd(v)
 	return type(v) == "userdata"
 end
 
-local function isBoolOrNil(v)
-	return type(v) == "boolean" or v == nil
-end
-
-local function isFhOrNil(v)
-	return io.type(v) == "file" or v == nil
-end
-
-local function isNumOrNil(v)
-	return type(v) == "number" or v == nil
-end
-
-local d_getinfo = debug.getinfo
-
-local function getNumOfParams(f)
-	return d_getinfo(f).nparams
-end
-
-local function getValueOrNil(predicate, v)
-	if predicate(v) then
-		return v
-	else
-		return nil
-	end
-end
-
 local function getValueOrInit(predicate, v, initialValue)
 	if predicate(v) then
 		return v
@@ -98,6 +62,11 @@ end
 
 local function mustBeBool(v)
 	assert(type(v) == "boolean", "Must be a boolean.")
+	return v
+end
+
+local function mustBeFun(v)
+	assert(type(v) == "function", "Must be a function.")
 	return v
 end
 
@@ -127,58 +96,8 @@ local function file(path, mode, body)
 	assert(ret == true, v)
 end
 
-local function gChecker(fmt, filter)
-	return isFun(filter) and
-		function (self, target)
-			for i,v in ipairs(self.validators) do
-				assert(
-					v(target[i]),
-					fmt:format(filter(i), d_getinfo(2, "n").name))
-			end
-		end or
-		function (self, target)
-			for i,v in ipairs(self.validators) do
-				assert(
-					v(target[i]),
-					fmt:format(i, d_getinfo(2, "n").name))
-			end
-		end
-end
-
-local function makeValidator(validators, checker)
-	local T = { validators = validators }
-
-	T.check = checker ~= nil
-		and checker
-		or function (self, target)
-			for i,v in ipairs(self.validators) do
-				assert(v(target[i]), i)
-			end
-		end
-
-	return T
-end
-
-local t_unpack = table.unpack ~= nil and table.unpack or unpack
-
-local function wrapWithValidator(body, paramValidator, returnValidator, unpacker)
-	unpacker = unpacker ~= nil and unpacker or t_unpack
-	return setmetatable({}, {
-		__call = function (self, ...)
-			local arg = {...}
-			paramValidator:check(arg)
-
-			local ret = {body(...)}
-			returnValidator:check(ret)
-
-			return unpacker(ret)
-		end
-	})
-end
-
 return {
 	atLeastOne = atLeastOne,
-	count = count,
 	isBool = isBool,
 	isFh = isFh,
 	isFun = isFun,
@@ -186,15 +105,9 @@ return {
 	isStr = isStr,
 	isTbl = isTbl,
 	isUd = isUd,
-	isBoolOrNil = isBoolOrNil,
-	isFhOrNil = isFhOrNil,
-	isNumOrNil = isNumOrNil,
-	getNumOfParams = getNumOfParams,
 	mustBeBool = mustBeBool,
+	mustBeFun = mustBeFun,
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
-	file = file,
-	gChecker = gChecker,
-	makeValidator = makeValidator,
-	wrapWithValidator = wrapWithValidator
+	file = file
 }

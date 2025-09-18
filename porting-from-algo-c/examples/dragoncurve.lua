@@ -1,51 +1,34 @@
 --
---  from src/dragon2.c
+--  from src/dragon.c
 --
---    a part of main                         to  dragonCurve
+--    void dragon(int, double, double, int)  to  dragonCurveR
 --
 
 local M = require 'svgplot'
 
-local svgPlot = M.svgPlot
-local svgPlotWholeBuffer = M.svgPlotWholeBuffer
-local svgPlotWithBuffer = M.svgPlotWithBuffer
-local styleMaker = M.styleMaker
-local SV = M.StyleValue
 local dragonCurve = require 'dragoncurve'.dragonCurve
 local file = require '_helper'.file
 
-local function sampleWriter(pathPrefix, x, y, x0, y0, style)
-	return function (n)
-		function body(plotter)
-			plotter:pathStart()
-			dragonCurve(plotter, n, x0, y0)
-			plotter:pathEnd(false, style)
-		end
-
-		file(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			svgPlot(x, y):write(fh, body)
-		end)
-
-		file(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			svgPlotWholeBuffer(x, y):write(fh, body):reset()
-		end)
-
-		file(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			svgPlotWithBuffer(x, y):write(fh, body)
-		end)
+function gBody(n, dx, dy, sign, x0, y0)
+	return function (plotter)
+		plotter:pathStart()
+		dragonCurve(plotter, n, dx, dy, sign, x0, y0)
+		plotter:pathEnd(false, M.SV.PRESET_PLAIN)
 	end
 end
 
 do
-	local x, y, x0, y0 = 510, 350, 120, 120
-	local style = styleMaker()
-		:fill(SV.None)
-		:stroke(SV.Black)
-		:get()
+	local x, y, dx, dy = 400, 250, 200, 0
 
-	local writer = sampleWriter("results/dragoncurve", x, y, x0, y0, style)
+	local plt = M.SvgPlot(x, y)
 
-	for n=1,10 do
-		writer(n)
-	end
+	local pathPrefix = "results/dragoncurve"
+
+	file(("%s-A.svg"):format(pathPrefix), "w", function (fh)
+		plt:write(fh, gBody(10, dx, dy, 1, 100, 100))
+	end)
+
+	file(("%s-B.svg"):format(pathPrefix), "w", function (fh)
+		plt:write(fh, gBody(12, dx, dy, -1, 70, 160))
+	end)
 end

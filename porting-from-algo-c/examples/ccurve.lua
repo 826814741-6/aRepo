@@ -6,46 +6,42 @@
 
 local M = require 'svgplot'
 
-local svgPlot = M.svgPlot
-local svgPlotWholeBuffer = M.svgPlotWholeBuffer
-local svgPlotWithBuffer = M.svgPlotWithBuffer
-local styleMaker = M.styleMaker
-local SV = M.StyleValue
+local SvgPlotA = M.SvgPlot
+local SvgPlotB = M.SvgPlotWholeBuffer
+local SvgPlotC = M.SvgPlotWithBuffer
 local cCurve = require 'ccurve'.cCurve
 local file = require '_helper'.file
 
-local function sampleWriter(pathPrefix, style)
+local function sampleWriter(pathPrefix)
+	local pltA, pltB, pltC =
+		SvgPlotA(400, 250), SvgPlotB(400, 250), SvgPlotC(400, 250)
+
 	return function (n)
 		function body(plotter)
 			plotter:pathStart()
 			plotter:move(100, 200)
 			cCurve(plotter, n, 200, 0)
-			plotter:pathEnd(false, style)
+			plotter:pathEnd(false, M.SV.PRESET_PLAIN)
 		end
 
 		file(("%s-A-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			svgPlot(400, 250):write(fh, body)
+			pltA:write(fh, body)
 		end)
 
 		file(("%s-B-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			svgPlotWholeBuffer(400, 250):write(fh, body):reset()
+			pltB:write(fh, body):reset()
 		end)
 
 		file(("%s-C-%d.svg"):format(pathPrefix, n), "w", function (fh)
-			svgPlotWithBuffer(400, 250):write(fh, body)
+			pltC:write(fh, body)
 		end)
 	end
 end
 
 do
-	local style = styleMaker()
-		:fill(SV.None)
-		:stroke(SV.Black)
-		:get()
+	local writer = sampleWriter("results/ccurve")
 
-	local writer = sampleWriter("results/ccurve", style)
-
-	for n=1,10 do
+	for n=6,10,2 do
 		writer(n)
 	end
 end

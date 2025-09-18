@@ -63,41 +63,23 @@ run() {
 	done
 }
 
-run acker AWK LUA
 run binormal LUA
-run change AWK LUA
-run checkdigit LUA
-run chisqdist AWK LUA
-run ci LUA
-run combination AWK LUA
+run change AWK
+run combination AWK
 run complex LUA
 run crnd LUA LUAJIT
-run dayweek AWK LUA
+run dayweek AWK
 run e AWK DC LUA
 run egyptianfraction LUA PY
-run eulerian AWK LUA
 run factorize LUA PY
-run fdist LUA
-run fft LUA
-run fib AWK LUA
 run gcd AWK LUA
-run horner AWK LUA
 run hypot AWK LUA
-run komachi LUA
 run machineepsilon LUA PY
-run mccarthy AWK LUA
-run montecarlo LUA
-run moveblock AWK LUA
-run normal AWK LUA
+run moveblock AWK
 run nthroot AWK LUA LUAJIT
-run pi AWK DC LUA
+run pi AWK DC
 run rand DC LUA LUAJIT
 run randperm LUA
-run si LUA
-run stirling AWK LUA
-run sum AWK LUA
-run swap AWK LUA
-run tarai AWK LUA
-run tdist LUA
-run totient AWK LUA
-run whrnd LUA
+run stirling AWK
+run sum AWK
+run whrnd AWK

@@ -15,7 +15,7 @@ def _demo(path, n):
     import svgplot
 
     with open(path, "w") as fh:
-        plotter = svgplot.svgPlot(400, 250)
+        plotter = svgplot.SvgPlot(400, 250)
         plotter.plotStart(fh)
         plotter.pathStart()
         plotter.move(100, 200)

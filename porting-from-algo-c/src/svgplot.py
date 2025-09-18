@@ -1,12 +1,12 @@
 #
 #  from src/svgplot.c
 #
-#    void plot_start(int, int)      to  svgPlot; .plotStart, .pathStart
-#    void plot_end(int)             to  svgPlot; .plotEnd, .pathEnd
-#    void move(double, double)      to  svgPlot; .move
-#    void move_rel(double, double)  to  svgPlot; .moveRel
-#    void draw(double, double)      to  svgPlot; .draw
-#    void draw_rel(double, double)  to  svgPlot; .drawRel
+#    void plot_start(int, int)      to  SvgPlot; .plotStart, .pathStart
+#    void plot_end(int)             to  SvgPlot; .plotEnd, .pathEnd
+#    void move(double, double)      to  SvgPlot; .move
+#    void move_rel(double, double)  to  SvgPlot; .moveRel
+#    void draw(double, double)      to  SvgPlot; .draw
+#    void draw_rel(double, double)  to  SvgPlot; .drawRel
 #
 
 import sys
@@ -26,7 +26,7 @@ def _footer():
     return """</svg>
 """
 
-class svgPlot:
+class SvgPlot:
     def __init__(self, width, height):
         self.fh = None
         self.W = width
@@ -76,7 +76,7 @@ def _demo(path):
 
     with open(path, "w") as fh:
         size, offset = 300, 10
-        plotter = svgPlot(size, size)
+        plotter = SvgPlot(size, size)
         sample(plotter, fh, size, offset)
 
 if __name__ == "__main__":
