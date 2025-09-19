@@ -81,8 +81,12 @@ do
 	print("^-- ok / raise an error --v")
 
 	local ret, err = pcall(w1, 1, 2, {})
-	assert(ret, err)  -- Please comment out this line,
-end                       -- if you want to see the results of the latter half.
+	assert(ret, err)  -- (*)
+	--
+	-- If you want to see the results of the latter half,
+	-- please comment out above line (line number: 84).
+	--
+end
 
 --
 -- If you want to use a different checker instead of the function 'check'
@@ -146,11 +150,6 @@ function gUnpackerWithCounter(unpacker)
 end
 
 do
-	--
-	-- If you want to see the results below, please comment out the 'assert'
-	-- line above (line number: 84).
-	--
-
 	local checkP, checkR = gCheckVerbose("[param]"), gCheckVerbose("[return]")
 	local unpacker = gUnpackerWithCounter()
 

@@ -21,10 +21,6 @@ function abs(n) {
 
 function atLeastOne(n) { return n>1 ? n : 1 }
 
-function decrement(n) { return n - 1 }
-
-function increment(n) { return n + 1 }
-
 #
 #  (_length(): It appears this workaround is no longer necessary.)
 #

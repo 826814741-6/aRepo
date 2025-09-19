@@ -66,18 +66,17 @@ run() {
 
 run bifur LUA
 run binormalG LUA
-run ccurve AWK LUA PY
+run ccurve AWK PY
 run circle LUA LUAJIT
-run dragoncurve LUA
+run dragoncurve AWK
 run ellipse LUA LUAJIT
 run gasket LUA
 run grBMP LUA LUAJIT PY
-run hilbert LUA LUAJIT
-run julia LUA
-run koch LUA
+run hilbert LUA
+run koch AWK
 run line LUA LUAJIT
-run lissajouscurve AWK LUA PY
+run lissajouscurve AWK PY
 run lorenz LUA
 run sierpinski LUA
 run svgplot AWK LUA LUAJIT PY
-run treecurve AWK LUA PY
+run treecurve AWK PY

@@ -16,6 +16,11 @@
 -- > print(type(math.abs(-0)), type(math.abs(-0.0)))
 -- number  number
 --
+-- > print(("%d %f %g %a"):format(-0, -0, -0, -0))
+-- 0 -0.000000 -0 -0x0p+0
+-- > print(("%d %f %g %a"):format(-0.0, -0.0, -0.0, -0.0))
+-- 0 -0.000000 -0 -0x0p+0
+--
 -- > ffi = require "ffi"
 -- > ffi.cdef "long labs(long);"
 -- > = ffi.C.labs(-0LL)

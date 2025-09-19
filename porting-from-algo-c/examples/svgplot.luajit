@@ -43,7 +43,7 @@ end
 do
 	local size, offset = 300, 10
 
-	local function gBody(style)
+	function gBody(style)
 		return function (plotter)
 			plotter:pathStart()
 			sample(plotter, size, offset)
@@ -52,7 +52,7 @@ do
 	end
 
 	local bodyA, bodyB, bodyC =
-		gBody(M.SV.PRESET_PLAIN),
+		gBody(SV.PRESET_PLAIN),
 		gBody(Styler():fill(SV.None):stroke(SV.RandomRGB):strokeWidth(5)()),
 		gBody(Styler():fill(SV.RandomRGB):stroke(SV.RandomRGB):strokeWidth(10)())
 

@@ -12,6 +12,11 @@
 -- > print(math.type(math.abs(-0)), math.type(math.abs(-0.0)))
 -- integer float
 --
+-- > print(("%d %f %g %a"):format(-0, -0, -0, -0))
+-- 0 0.000000 0 0x0p+0
+-- > print(("%d %f %g %a"):format(-0.0, -0.0, -0.0, -0.0))
+-- 0 -0.000000 -0 -0x0p+0
+--
 
 local function atLeastOne(n) return n>1 and n or 1 end
 

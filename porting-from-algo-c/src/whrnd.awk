@@ -6,9 +6,14 @@
 #
 #  from src/monte.c
 #
-#    void monte1(int)  to  piA
-#    void monte2(int)  to  piB
-#    void monte3(int)  to  piC
+#    void monte1(int)              to  piA
+#    void monte2(int)              to  piB
+#    void monte3(int)              to  piC
+#
+#  src/randperm.c
+#
+#    void shuffle(int, int [])     to  shuffle
+#    void randperm(int, int [])    to  randPerm
 #
 
 BEGIN {
@@ -40,7 +45,7 @@ function rnd(	r) {
 
 #
 
-function piA(n,	hit, _, x, y, p) {
+function piA(n,	hit, _, x, y, t) {
 	hit = 0
 
 	for (_ = 0; _ < n; _++) {
@@ -48,9 +53,9 @@ function piA(n,	hit, _, x, y, p) {
 		if (x*x + y*y < 1) hit += 1
 	}
 
-	p = hit / n
+	t = hit / n
 
-	return sprintf(_FMT, 4 * p, 4 * sqrt(p * (1 - p) / (n - 1)))
+	return sprintf(_FMT, 4 * t, 4 * sqrt(t * (1 - t) / (n - 1)))
 }
 
 function piB(n,	sum, sumSq, _, x, y, t) {
@@ -67,7 +72,7 @@ function piB(n,	sum, sumSq, _, x, y, t) {
 	return sprintf(_FMT, 4 * t, 4 * sqrt((sumSq / n - t * t) / (n - 1)))
 }
 
-function piC(n,	a, x, sum, _) {
+function piC(n,	a, x, sum, _, t) {
 	a = (sqrt(5) - 1) / 2
 
 	x = 0; sum = 0
@@ -84,9 +89,39 @@ function piC(n,	a, x, sum, _) {
 
 #
 
-function pRnd(col, row) {
+#
+#  swap(a, i, j) from _helper.awk
+#
+
+function shuffle(a,	i, j) {
+	for (i = length(a) - 1; 0 < i; i--) {
+		j = int((i + 1) * rnd())
+		swap(a, i, j)
+	}
+}
+
+function randPerm(a, n,	i) {
+	for (i = 0; i < n; i++) {
+		a[i] = i + 1
+	}
+	shuffle(a)
+}
+
+#
+
+function pRnd(col, row,	i, j) {
 	for (i = 0; i < row; i++) {
 		for (j = 0; j < col; j++) printf "%10.7f", rnd()
+		print
+	}
+}
+
+function pRndPerm(col, row, fmt,	a, i, j) {
+	split("", a)
+	randPerm(a, col * row)
+	for (i = 0; i < row; i++) {
+		offset = i * col
+		for (j = 0; j < col; j++) printf fmt, a[j + offset]
 		print
 	}
 }
@@ -111,4 +146,8 @@ BEGIN {
 	print piA(1000), piB(1000), piC(1000)
 	print piA(10000), piB(10000), piC(10000)
 	print piA(100000), piB(100000), piC(100000)
+
+	print "-------- randPerm in whrnd: 12345, 23451, 13579"
+	init(12345, 23451, 13579)
+	pRndPerm(20, 20, "%4d")
 }

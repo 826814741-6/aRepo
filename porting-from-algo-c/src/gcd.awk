@@ -30,15 +30,15 @@ function ngcdL(a,	i, d) {
 	return d
 }
 
-function _rec(a, i, d) {
+function rec(a, i, d) {
 	if (i > length(a) || d == 1)
 		return d
 	else
-		return _rec(a, i+1, gcdR(a[i], d))
+		return rec(a, i+1, gcdR(a[i], d))
 }
 
 function ngcdR(a) {
-	return _rec(a, 1, a[1])
+	return rec(a, 1, a[1])
 }
 
 #

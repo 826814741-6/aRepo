@@ -6,20 +6,20 @@
 #
 
 #
-#  decrement(n), increment(n), swap(a, i, j) from _helper.awk
+#  swap(a, i, j) from _helper.awk
 #
 
 function reverse(a, i, j) {
 	while (i < j) {
 		swap(a, i, j)
-		i = increment(i)
-		j = decrement(j)
+		i += 1
+		j -= 1
 	}
 }
 
 function rotate(a, left, mid, right) {
 	reverse(a, left, mid)
-	reverse(a, increment(mid), right)
+	reverse(a, mid + 1, right)
 	reverse(a, left, right)
 }
 

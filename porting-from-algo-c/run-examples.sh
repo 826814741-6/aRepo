@@ -72,14 +72,13 @@ run dayweek AWK
 run e AWK DC LUA
 run egyptianfraction LUA PY
 run factorize LUA PY
-run gcd AWK LUA
+run gcd AWK
 run hypot AWK LUA
 run machineepsilon LUA PY
 run moveblock AWK
-run nthroot AWK LUA LUAJIT
+run nthroot AWK LUA
 run pi AWK DC
 run rand DC LUA LUAJIT
-run randperm LUA
 run stirling AWK
 run sum AWK
 run whrnd AWK
