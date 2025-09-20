@@ -203,7 +203,7 @@ local function BMP(width, height)
 	return T
 end
 
-local PRESET_COLORS = {
+local PRESET_COLOR = {
 	BLACK = 0x000000,
 	WHITE = 0xffffff,
 	RED   = 0xff0000,
@@ -213,5 +213,5 @@ local PRESET_COLORS = {
 
 return {
 	BMP = BMP,
-	PRESET_COLORS = PRESET_COLORS
+	PRESET_COLOR = PRESET_COLOR
 }

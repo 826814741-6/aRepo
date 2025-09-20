@@ -9,7 +9,7 @@
 
 local M = require 'grBMP'
 
-local BMP, PRESET_COLORS = M.BMP, M.PRESET_COLORS
+local BMP, PRESET_COLOR = M.BMP, M.PRESET_COLOR
 local file = require '_helper'.file
 
 local m_floor = math.floor
@@ -18,10 +18,10 @@ do
 	local x, y = 640, 400
 	local bmp = BMP(x, y)
 
-	bmp:rect(1, m_floor(x/2) + 1, 1, m_floor(y/2) + 1, PRESET_COLORS.GREEN)
-	bmp:rect(m_floor(x/2) + 1, x, 1, m_floor(y/2) + 1, PRESET_COLORS.BLUE)
-	bmp:rect(1, m_floor(x/2) + 1, m_floor(y/2) + 1, y, PRESET_COLORS.RED)
-	bmp:rect(m_floor(x/2) + 1, x, m_floor(y/2) + 1, y, PRESET_COLORS.WHITE)
+	bmp:rect(1, m_floor(x/2) + 1, 1, m_floor(y/2) + 1, PRESET_COLOR.GREEN)
+	bmp:rect(m_floor(x/2) + 1, x, 1, m_floor(y/2) + 1, PRESET_COLOR.BLUE)
+	bmp:rect(1, m_floor(x/2) + 1, m_floor(y/2) + 1, y, PRESET_COLOR.RED)
+	bmp:rect(m_floor(x/2) + 1, x, m_floor(y/2) + 1, y, PRESET_COLOR.WHITE)
 
 	file("results/grBMP-lj.bmp", "wb", function (fh)
 		bmp:write(fh)

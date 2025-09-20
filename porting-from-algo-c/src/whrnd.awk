@@ -116,7 +116,7 @@ function pRnd(col, row,	i, j) {
 	}
 }
 
-function pRndPerm(col, row, fmt,	a, i, j) {
+function pRndPerm(col, row, fmt,	a, i, j, offset) {
 	split("", a)
 	randPerm(a, col * row)
 	for (i = 0; i < row; i++) {

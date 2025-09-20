@@ -9,7 +9,7 @@
 --
 
 local BMP = require 'grBMP'.BMP
-local BLACK = require 'grBMP'.PRESET_COLORS.BLACK
+local BLACK = require 'grBMP'.PRESET_COLOR.BLACK
 local makeColor = require 'grBMP'.makeColor
 
 local SvgPlot = require 'svgplot'.SvgPlot

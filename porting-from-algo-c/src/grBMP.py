@@ -57,7 +57,7 @@ class BMP:
         _header(fh, self.X, self.Y)
         _body(fh, self.X, self.Y, self.data)
 
-PRESET_COLORS = {
+PRESET_COLOR = {
     "BLACK" : struct.pack("<I", 0x000000),
     "WHITE" : struct.pack("<I", 0xffffff),
     "RED"   : struct.pack("<I", 0xff0000),
@@ -69,10 +69,10 @@ def _demo(path):
     x, y = 640, 400
     bmp = BMP(x, y)
 
-    bmp.rect(0, x//2, 0, y//2, PRESET_COLORS["GREEN"])
-    bmp.rect(x//2, x, 0, y//2, PRESET_COLORS["BLUE"])
-    bmp.rect(0, x//2, y//2, y, PRESET_COLORS["RED"])
-    bmp.rect(x//2, x, y//2, y, PRESET_COLORS["WHITE"])
+    bmp.rect(0, x//2, 0, y//2, PRESET_COLOR["GREEN"])
+    bmp.rect(x//2, x, 0, y//2, PRESET_COLOR["BLUE"])
+    bmp.rect(0, x//2, y//2, y, PRESET_COLOR["RED"])
+    bmp.rect(x//2, x, y//2, y, PRESET_COLOR["WHITE"])
 
     with open(path, "wb") as fh:
         bmp.write(fh)

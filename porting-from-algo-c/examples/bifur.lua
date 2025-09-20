@@ -6,7 +6,7 @@
 
 local M = require 'grBMP'
 
-local BMP, BLACK, WHITE = M.BMP, M.PRESET_COLORS.BLACK, M.PRESET_COLORS.WHITE
+local BMP, BLACK, WHITE = M.BMP, M.PRESET_COLOR.BLACK, M.PRESET_COLOR.WHITE
 local bifur = require 'bifur'.bifur
 local file = require '_helper'.file
 

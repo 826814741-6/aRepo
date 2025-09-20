@@ -18,7 +18,7 @@
 -- 0 -0.000000 -0 -0x0p+0
 --
 
-local function atLeastOne(n) return n>1 and n or 1 end
+local function atLeastOne(n) return n > 1 and n or 1 end
 
 local function isBool(v)
 	return type(v) == "boolean"
@@ -42,6 +42,10 @@ end
 
 local function isTbl(v)
 	return type(v) == "table"
+end
+
+local function isUd(v)
+	return type(v) == "userdata"
 end
 
 local function getValueOrInit(predicate, v, initialValue)
@@ -96,6 +100,7 @@ return {
 	isNum = isNum,
 	isStr = isStr,
 	isTbl = isTbl,
+	isUd = isUd,
 	getValueOrInit = getValueOrInit,
 	mustBeBool = mustBeBool,
 	mustBeFun = mustBeFun,

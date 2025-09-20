@@ -238,7 +238,7 @@ local function makeColor(rgb)
 	return ("<I"):pack(rgb)
 end
 
-local PRESET_COLORS = {
+local PRESET_COLOR = {
 	BLACK = ("<I"):pack(0x000000),
 	WHITE = ("<I"):pack(0xffffff),
 	RED   = ("<I"):pack(0xff0000),
@@ -248,6 +248,6 @@ local PRESET_COLORS = {
 
 return {
 	BMP = BMP,
-	PRESET_COLORS = PRESET_COLORS,
+	PRESET_COLOR = PRESET_COLOR,
 	makeColor = makeColor
 }
