@@ -22,7 +22,7 @@ function efmt(fmt,	r, a, n, prev) {
 
 #
 
-BEGIN {
+function run(	t, r) {
 	print "# -- e()"
 
 	t = e()
@@ -37,27 +37,31 @@ BEGIN {
 
 	print "# -- efmt(\"%.21f,%d\")"
 
-	split(efmt("%.21f,%d"), _r, ",")
+	split(efmt("%.21f,%d"), r, ",")
 
-	printf "   %%e : %e (%d)\n", _r[1], _r[2]
-	printf "   %%f : %f\n", _r[1]
-	printf "   %%g : %g\n", _r[1]
-	printf "   %%a : %a\n", _r[1]  # see bottom
-	printf "%%.20e : %.20e\n", _r[1]
-	printf "%%.20f : %.20f\n", _r[1]
-	printf "%%.20g : %.20g\n", _r[1]
+	printf "   %%e : %e (%d)\n", r[1], r[2]
+	printf "   %%f : %f\n", r[1]
+	printf "   %%g : %g\n", r[1]
+	printf "   %%a : %a\n", r[1]  # see bottom
+	printf "%%.20e : %.20e\n", r[1]
+	printf "%%.20f : %.20f\n", r[1]
+	printf "%%.20g : %.20g\n", r[1]
 
 	print "# -- efmt(\"%f,%d\")"
 
-	split(efmt("%f,%d"), _r, ",")
+	split(efmt("%f,%d"), r, ",")
 
-	printf "   %%e : %e (%d)\n", _r[1], _r[2]
-	printf "   %%f : %f\n", _r[1]
-	printf "   %%g : %g\n", _r[1]
-	printf "   %%a : %a\n", _r[1]  # see bottom
-	printf "%%.20e : %.20e\n", _r[1]
-	printf "%%.20f : %.20f\n", _r[1]
-	printf "%%.20g : %.20g\n", _r[1]
+	printf "   %%e : %e (%d)\n", r[1], r[2]
+	printf "   %%f : %f\n", r[1]
+	printf "   %%g : %g\n", r[1]
+	printf "   %%a : %a\n", r[1]  # see bottom
+	printf "%%.20e : %.20e\n", r[1]
+	printf "%%.20f : %.20f\n", r[1]
+	printf "%%.20g : %.20g\n", r[1]
+}
+
+BEGIN {
+	run()
 }
 
 #

@@ -4,6 +4,11 @@
 #    int comb(int, int)                   to  combinationR
 #    unsigned long combination(int, int)  to  combination
 #
+#  from src/stirling.c
+#
+#    int Stirling1(int, int)              to  stirling1
+#    int Stirling2(int, int)              to  stirling2
+#
 
 function combinationR(n, k) {
 	if (k == 0 || k == n) return 1
@@ -32,20 +37,34 @@ function combination(n, k,	a, i, j) {
 
 #
 
+function stirling1(n, k) {
+	if (k < 1 || k > n) return 0
+	if (k == n) return 1
+	return (n - 1) * stirling1(n - 1, k) + stirling1(n - 1, k - 1)
+}
+
+function stirling2(n, k) {
+	if (k < 1 || k > n) return 0
+	if (k == 1 || k == n) return 1
+	return k * stirling2(n - 1, k) + stirling2(n - 1, k - 1)
+}
+
+#
+
 #
 #  rep(s,n) from _helper.awk
 #
-function pHeader(l, r, w0, w1,		padding, fmt, border, i) {
+
+function pHeader(l, r, w0, w1,		padding, border, fmt, i) {
 	padding = rep(" ", w0)
-	fmt = "%"w1"d"
+	border = rep(rep("-", w1), r - l + 1)
+	fmt = "%" w1 "d"
 
 	printf padding
 	for (i = l; i <= r; i++) {
 		printf fmt, i
-		border = border""rep("-",w1)
 	}
-	printf "\n%s", padding
-	print border
+	print "\n" padding border
 }
 
 BEGIN {
@@ -136,4 +155,24 @@ BEGIN {
 #  38 |    1448194831602515456    3413602103063072256    7886597962249166848
 #  39 |    1002596421878664448    2450791253481180160    5864393356544251904
 #
+
+	print "-------- Stirling numbers of the first kind:"
+	pHeader(0, 10, 5, 8)
+	for (n = 0; n <= 10; n++) {
+		printf "%3d |", n
+		for (k = 0; k <= n; k++) {
+			printf "%8d", stirling1(n, k)
+		}
+		print
+	}
+
+	print "-------- Stirling numbers of the second kind:"
+	pHeader(0, 10, 5, 8)
+	for (n = 0; n <= 10; n++) {
+		printf "%3d |", n
+		for (k = 0; k <= n; k++) {
+			printf "%8d", stirling2(n, k)
+		}
+		print
+	}
 }

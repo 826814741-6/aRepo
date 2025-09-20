@@ -19,7 +19,7 @@ local egyptianFractionCO = M.egyptianFractionCO
 
 local i_read, i_write = io.read, io.write
 
-local function demo_interactive()
+function demo_interactive()
 	i_write("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...\n")
 
 	i_write("2/5 = ")
@@ -42,44 +42,41 @@ local function demo_interactive()
 	end
 end
 
-local function demo()
-	function run(n, d)
-		i_write(("%s/%s = "):format(n, d))
-		egyptianFraction(n, d)
+function run(n, d)
+	i_write(("%s/%s = "):format(n, d))
+	egyptianFraction(n, d)
 
-		i_write(("%s/%s = "):format(n, d))
-		i_write(table.concat(egyptianFractionT(n, d), " + "), "\n")
+	i_write(("%s/%s = "):format(n, d))
+	i_write(table.concat(egyptianFractionT(n, d), " + "), "\n")
 
-		i_write(("%s/%s = "):format(n, d))
-		egyptianFractionCO(n, d)
+	i_write(("%s/%s = "):format(n, d))
+	egyptianFractionCO(n, d)
 
-		if egyptianFractionM ~= nil then
-			i_write(("%s/%s = "):format(n, d))
-			egyptianFractionM(n, d)
-		end
+	if egyptianFractionM ~= nil then
+		i_write(("%s/%s = "):format(n, d))
+		egyptianFractionM(n, d)
 	end
-
-	i_write("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...\n")
-	run(2, 5)
-	run(3, 5)
-	run(10, 122)
 end
 
 do
-	demo()
+	print("Egyptian fraction: n/d = 1/a + 1/b + 1/c + ...")
+
+	run(2, 5)
+	run(3, 5)
+	run(10, 122)
 
 --
---	Note:
---	In some(most?) cases,
---	egyptianFraction, egyptianFractionT and egyptianFractionCO are fragile.
+--  Note:
+--  In some(most?) cases,
+--  egyptianFraction, egyptianFractionT and egyptianFractionCO are fragile.
 --
---	> egyptianFraction(10, 122)
---	1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
---	> egyptianFractionT(10, 122)
---	1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
---	> egyptianFractionM(10, 122)
---	1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/34454310087467394631
---	> egyptianFractionCO(10, 122)
---	1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
+--  > egyptianFraction(10, 122)
+--  1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
+--  > egyptianFractionT(10, 122)
+--  1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
+--  > egyptianFractionM(10, 122)
+--  1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/34454310087467394631
+--  > egyptianFractionCO(10, 122)
+--  1/13 + 1/199 + 1/52603 + 1/4150560811 + 1/-2439178059951708601
 --
 end

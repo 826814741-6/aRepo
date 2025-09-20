@@ -29,7 +29,7 @@ function rotate(a, left, mid, right) {
 #  concat(a) from _helper.awk
 #
 
-BEGIN {
+function run(	s, a) {
 	s = "SUPERCALIFRAGILISTICEXPIALIDOCIOUS"
 
 	split(s, a, "")
@@ -47,4 +47,8 @@ BEGIN {
 		rotate(a, 1, 6, length(s))
 		print concat(a)
 	}
+}
+
+BEGIN {
+	run()
 }

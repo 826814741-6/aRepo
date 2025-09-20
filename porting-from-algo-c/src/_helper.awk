@@ -1,5 +1,5 @@
 #
-#  _helper.awk: some helper functions
+#  _helper.awk: some helper functions for toy scripts
 #
 
 function abs(n) {
@@ -19,7 +19,7 @@ function abs(n) {
 # ok
 #
 
-function atLeastOne(n) { return n>1 ? n : 1 }
+function atLeastOne(n) { return n > 1 ? n : 1 }
 
 #
 #  (_length(): It appears this workaround is no longer necessary.)

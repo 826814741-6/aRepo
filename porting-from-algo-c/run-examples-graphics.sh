@@ -72,11 +72,11 @@ run dragoncurve AWK
 run ellipse LUA LUAJIT
 run gasket LUA
 run grBMP LUA LUAJIT PY
-run hilbert LUA
+run hilbert AWK
 run koch AWK
 run line LUA LUAJIT
 run lissajouscurve AWK PY
-run lorenz LUA
-run sierpinski LUA
+run lorenz AWK
+run sierpinski AWK
 run svgplot AWK LUA LUAJIT PY
 run treecurve AWK PY

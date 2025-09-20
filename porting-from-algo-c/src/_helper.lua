@@ -1,5 +1,5 @@
 --
---  _helper.lua: some helper functions
+--  _helper.lua: some helper functions for toy scripts
 --
 
 --
@@ -19,12 +19,6 @@
 --
 
 local function atLeastOne(n) return n>1 and n or 1 end
-
-local function decrement(x) return x - 1 end
-
-local function id(x) return x end
-
-local function increment(x) return x + 1 end
 
 local function isBool(v)
 	return type(v) == "boolean"
@@ -96,9 +90,6 @@ end
 
 return {
 	atLeastOne = atLeastOne,
-	decrement = decrement,
-	id = id,
-	increment = increment,
 	isBool = isBool,
 	isFh = isFh,
 	isFun = isFun,

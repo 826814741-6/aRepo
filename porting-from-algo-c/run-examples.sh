@@ -79,6 +79,5 @@ run moveblock AWK
 run nthroot AWK LUA
 run pi AWK DC
 run rand DC LUA LUAJIT
-run stirling AWK
 run sum AWK
 run whrnd AWK
