@@ -14,7 +14,6 @@
 local M = require 'rand'
 
 local RAND, crnd = M.RAND, M.crnd
-local i_write = io.write
 
 -- see: https://www.freelists.org/post/luajit/cannot-resolve-symbol-printf-with-ffi-msvc-140,4
 function workaround(cdata)

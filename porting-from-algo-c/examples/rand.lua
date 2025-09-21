@@ -14,7 +14,6 @@
 local M = require 'rand'
 
 local RAND, crnd = M.RAND, M.crnd
-local i_write = io.write
 
 function p(col, row, fmt, v)
 	for _=1,row do

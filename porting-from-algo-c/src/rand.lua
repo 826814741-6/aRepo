@@ -34,7 +34,7 @@ local function R_srand(self, seed)
 end
 
 local function R_randRaw(self)
-	self:rnd()
+	self:rand()
 	return self.next
 end
 
