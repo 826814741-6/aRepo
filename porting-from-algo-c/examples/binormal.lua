@@ -4,7 +4,7 @@
 --    void binormal_rnd(double, double *, double *)  to  binormalRnd
 --
 
-local crnd = require 'crnd'.crnd
+local crnd = require 'rand'.crnd
 local binormalRnd = require 'binormal'.binormalRnd
 
 do

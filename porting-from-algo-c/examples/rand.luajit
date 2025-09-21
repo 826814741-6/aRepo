@@ -1,15 +1,19 @@
 --
 --  from src/rand.c
 --
---    int rand(void)        to  rand
---    void srand(unsigned)  to  srand
---    rand, srand           to  RAND; :rand, :srand
---                                    :randRaw
+--    int rand(void)                to  RAND; :rand, :randRaw
+--    void srand(unsigned)          to  RAND; :srand
+--
+--  from src/crnd.c
+--
+--    void init_rnd(unsigned long)  to  crnd; :init
+--    unsigned long irnd(void)      to  crnd; :irnd
+--    double rnd(void)              to  crnd; :rnd
 --
 
 local M = require 'rand'
 
-local rand, RAND = M.rand, M.RAND
+local RAND, crnd = M.RAND, M.crnd
 local i_write = io.write
 
 -- see: https://www.freelists.org/post/luajit/cannot-resolve-symbol-printf-with-ffi-msvc-140,4
@@ -17,27 +21,40 @@ function workaround(cdata)
 	return tostring(cdata):gsub("ULL",""):gsub("LL","")
 end
 
-do
-	print("-------- rand()")
-	for i=1,20 do
-		for j=1,8 do
-			i_write(("%8s"):format(workaround(rand())))
+function p(col, row, fmt, v)
+	for _=1,row do
+		for _=1,col do
+			io.write(fmt(v))
 		end
-		print()
+		io.write("\n")
 	end
+end
 
-	print("-------- r:rand()")
+do
+	function fmtR(v) return ("%8s"):format(workaround(v:rand())) end
+	function fmtC(v) return ("%10.7f"):format(v:rnd()) end
+
+	print("-------- RAND")
 	local r = RAND()
-	for i=1,20 do
-		for j=1,8 do
-			i_write(("%8s"):format(workaround(r:rand())))
-		end
-		print()
-	end
+	p(8, 20, fmtR, r)
 
 	assert(9899ULL == r:rand())
 	r:srand(1ULL)
 	assert(16838ULL == r:rand())
 	r:srand(1)
 	assert(16838ULL == r:rand())
+
+	print("-------- crnd")
+	local c = crnd(12345)
+	p(8, 20, fmtC, c)
+
+	assert(954228167081776094ULL == c:irnd())
+	c:init(1ULL)
+	assert(1566083942ULL == c:irnd())
+	c:init(12345ULL)
+	assert(19333306251646ULL == c:irnd())
+	c:init(1)
+	assert(1566083942ULL == c:irnd())
+	c:init(12345)
+	assert(19333306251646ULL == c:irnd())
 end

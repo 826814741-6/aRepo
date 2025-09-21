@@ -1,10 +1,14 @@
 --
 --  from src/rand.c
 --
---    int rand(void)        to  rand
---    void srand(unsigned)  to  srand
---    rand, srand           to  RAND; :rand, :srand
---                                    :randRaw
+--    int rand(void)                to  RAND; :rand, :randRaw
+--    void srand(unsigned)          to  RAND; :srand
+--
+--  from src/crnd.c
+--
+--    void init_rnd(unsigned long)  to  crnd; :init
+--    unsigned long irnd(void)      to  crnd; :irnd
+--    double rnd(void)              to  crnd; :rnd
 --
 
 local ffi_istype = require 'ffi'.istype
@@ -20,40 +24,73 @@ end
 
 --
 
-local next = 1ULL
+--
+-- > = bit.lshift(1ULL, 63), bit.lshift(1ULL, 64)
+-- 9223372036854775808ULL  1ULL
+-- > = bit.lshift(1ULL, 64) - 1, bit.lshift(1ULL, 64) - 2
+-- 0ULL    18446744073709551615ULL
+-- > = bit.lshift(1LL, 63), bit.lshift(1LL, 63) - 1
+-- -9223372036854775808LL  9223372036854775807LL
+--
+-- > = 0 - 1, 0 - 1LL, 0 - 1ULL
+-- -1      -1LL    18446744073709551615ULL
+-- > = 0LL - 1, 0LL - 1LL, 0LL - 1ULL
+-- -1LL    -1LL    18446744073709551615ULL
+-- > = 0ULL - 1, 0ULL - 1LL, 0ULL - 1ULL
+-- 18446744073709551615ULL 18446744073709551615ULL 18446744073709551615ULL
+--
 
-local function rand()
-	next = next * 1103515245LL + 12345
-	return (next / 65536LL) % 32768ULL
+local function R_rand(self)
+	self.next = self.next * 1103515245LL + 12345
+	return (self.next / 65536LL) % 32768ULL
 end
 
-local function srand(seed)
-	next = mustBeSeed(seed)
+local function R_srand(self, seed)
+	self.next = mustBeSeed(seed)
+end
+
+local function R_randRaw(self)
+	self:rnd()
+	return self.next
 end
 
 local function RAND(seed)
-	local T = { next = seed ~= nil and mustBeSeed(seed) or 1ULL }
+	local T = {
+		RAND_MAX = 32767ULL,
+		next = seed ~= nil and mustBeSeed(seed) or 1ULL
+	}
 
-	function T:rand()
-		T.next = T.next * 1103515245LL + 12345
-		return (T.next / 65536LL) % 32768ULL
-	end
+	T.rand, T.srand, T.randRaw = R_rand, R_srand, R_randRaw
 
-	function T:srand(seed)
-		T.next = mustBeSeed(seed)
-	end
+	return T
+end
 
-	function T:randRaw()
-		T:rand()
-		return T.next
-	end
+--
+
+local N = 18446744073709551616 -- ULONG_MAX (limits.h) + 1
+
+local function C_init(self, x)
+	self.n = mustBeSeed(x)
+end
+
+local function C_irnd(self)
+	self.n = self.n * 1566083941ULL + 1
+	return self.n
+end
+
+local function C_rnd(self)
+	return (1 / N) * tonumber(self:irnd())
+end
+
+local function crnd(x)
+	local T = { n = x ~= nil and mustBeSeed(x) or 1ULL }
+
+	T.init, T.irnd, T.rnd = C_init, C_irnd, C_rnd
 
 	return T
 end
 
 return {
-	RAND_MAX = 32767,
-	rand = rand,
-	srand = srand,
-	RAND = RAND
+	RAND = RAND,
+	crnd = crnd
 }

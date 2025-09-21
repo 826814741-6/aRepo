@@ -8,7 +8,7 @@ local M = require 'grBMP'
 
 local BMP, BLACK, WHITE = M.BMP, M.PRESET_COLOR.BLACK, M.PRESET_COLOR.WHITE
 local samplePlotter = require 'binormal'.samplePlotter
-local crnd = require 'crnd'.crnd
+local crnd = require 'rand'.crnd
 local file = require '_helper'.file
 
 do

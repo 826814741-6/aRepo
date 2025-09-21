@@ -67,7 +67,6 @@ run binormal LUA
 run change AWK
 run combination AWK
 run complex LUA
-run crnd LUA LUAJIT
 run dayweek AWK
 run e AWK DC LUA
 run egyptianfraction LUA PY
