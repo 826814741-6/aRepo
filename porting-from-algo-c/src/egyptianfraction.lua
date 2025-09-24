@@ -4,7 +4,8 @@
 --    a part of main    to  egyptianFraction
 --    egyptianFraction  to  egyptianFractionT
 --    egyptianFraction  to  egyptianFractionM (depends on lbc(*))
---    egyptianFraction  to  egyptianFractionCO
+--    egyptianFraction  to  egyptianFractionCo
+--    egyptianFraction  to  egyptianFractionCoM
 --
 --  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
@@ -42,10 +43,10 @@ local egyptianFractionM = hasBC and function (n0, d0)
 	local n, d = bc.new(n0), bc.new(d0)
 	while not isZero(d % n) do
 		local t = d / n + bn1
-		i_write(("1/%s + "):format(t)) -- %s and tostring; see below
+		i_write(("1/%s + "):format(t)) -- see below
 		n, d = n * t - d, d * t
 	end
-	i_write(("1/%s\n"):format(d / n))      -- %s and tostring; see below
+	i_write(("1/%s\n"):format(d / n)) -- see below
 end or nil
 
 --
@@ -69,33 +70,38 @@ local function bodyR(n, d)
 	return d // n
 end
 
--- local bodyM = hasBC and function (n0, d0)
--- 	local n, d = bc.new(n0), bc.new(d0)
--- 	while not isZero(d % n) do
--- 		local t = d / n + bn1
--- 		co_yield(t)
--- 		n, d = n * t - d, d * t
--- 	end
--- 	return d / n
--- end or nil
-
-local function egyptianFractionCO(n, d)
-	local co = co_create(bodyR)
-
-	local _, v = co_resume(co, n, d)
-	i_write(("1/%s"):format(v))
-
-	while co_status(co) == "suspended" do
-		_, v = co_resume(co)
-		i_write((" + 1/%s"):format(v))
+local bodyM = hasBC and function (n0, d0)
+	local n, d = bc.new(n0), bc.new(d0)
+	while not isZero(d % n) do
+		local t = d / n + bn1
+		co_yield(t)
+		n, d = n * t - d, d * t
 	end
+	return d / n
+end or nil
 
-	i_write("\n")
+local function gStep(body)
+	return function (n, d)
+		local co = co_create(body)
+
+		local _, v = co_resume(co, n, d)
+		i_write(("1/%s"):format(v))
+
+		while co_status(co) == "suspended" do
+			_, v = co_resume(co)
+			i_write((" + 1/%s"):format(v))
+		end
+
+		i_write("\n")
+	end
 end
+
+local egyptianFractionCo, egyptianFractionCoM = gStep(bodyR), gStep(bodyM)
 
 return {
 	egyptianFraction = egyptianFraction,
 	egyptianFractionT = egyptianFractionT,
 	egyptianFractionM = egyptianFractionM,
-	egyptianFractionCO = egyptianFractionCO
+	egyptianFractionCo = egyptianFractionCo,
+	egyptianFractionCoM = egyptianFractionCoM
 }

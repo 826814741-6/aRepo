@@ -9,7 +9,7 @@
 --  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local id = require '_helper'.id
+local function id(v) return v end
 
 local function chain1(init, ...)
 	local t = ({...})[1](init)
