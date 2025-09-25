@@ -13,13 +13,13 @@
 
 local isNum = require '_helper'.isNum
 
-local function mustBeSeed(v)
+local function mustBeSeed(seed)
 	assert(
-		isNum(v) and math.type(v) == "integer",
+		isNum(seed) and math.type(seed) == "integer",
 		[['seed' must be an integer(*).
 (ref: https://www.lua.org/manual/5.4/manual.html#pdf-math.type)]]
 	)
-	return v
+	return seed
 end
 
 --

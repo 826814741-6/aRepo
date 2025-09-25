@@ -53,8 +53,8 @@ do
 
 	local bodyA, bodyB, bodyC =
 		gBody(SV.PRESET_PLAIN),
-		gBody(Styler():fill(SV.None):stroke(SV.RandomRGB):strokeWidth(5)()),
-		gBody(Styler():fill(SV.RandomRGB):stroke(SV.RandomRGB):strokeWidth(10)())
+		gBody(Styler:fill(SV.None):stroke(SV.RandomRGB):strokeWidth(5)()),
+		gBody(Styler:fill(SV.RandomRGB):stroke(SV.RandomRGB):strokeWidth(10)())
 
 	local pltA, pltB, pltC =
 		SvgPlotA(size, size), SvgPlotB(size, size), SvgPlotC(size, size)

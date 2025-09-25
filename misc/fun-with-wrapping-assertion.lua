@@ -4,40 +4,31 @@
 --  > lua[jit] fun-with-wrapping-assertion.lua
 --
 
-function isNum(self)
-	assert(type(self.v) == "number")
-	return self
+function mustBeNum(v)
+	assert(type(v) == "number")
+	return v
 end
 
-function isStr(self)
-	assert(type(self.v) == "string")
-	return self
+function mustBeStr(v)
+	assert(type(v) == "string")
+	return v
 end
 
-function filter(self, f)
-	assert(f(self.v) == true)
-	return self
+function val(v, predicate)
+	assert(predicate(v) == true)
+	return v
 end
 
-function unwrap(self)
-	return self.v
-end
-
-function val(v)
-	local T = { v = v }
-
-	T.isNum, T.isStr, T.filter, T.unwrap = isNum, isStr, filter, unwrap
-
-	return T
-end
+function isNum(v) return type(v) == "number" end
+function isStr(v) return type(v) == "string" end
 
 --
 
 function getLimiter(l, r)
-	val(l):isNum()
-	val(r):isNum()
+	mustBeNum(l)
+	mustBeNum(r)
 	return function (v)
-		val(v):isNum()
+		mustBeNum(v)
 		return l <= v and v < r
 	end
 end
@@ -45,7 +36,7 @@ end
 function getMatcher(...)
 	local marker = string.char(31)
 	function fmt(s)
-		val(s):isStr()
+		mustBeStr(s)
 		return s:gsub("^%s+",""):gsub("%s+$",""):gsub("%s",marker)
 	end
 
@@ -66,11 +57,11 @@ function getMaker()
 
 	return function (name, age, sex, money, hometown)
 		return {
-			name = val(name):isStr():unwrap(),
-			age = val(age):isNum():filter(isAge):unwrap(),
-			sex = val(sex):isStr():filter(isSex):unwrap(),
-			money = val(money):isNum():filter(isMoney):unwrap(),
-			hometown = val(hometown):isStr():unwrap()
+			name = val(name, isStr),
+			age = val(age, isAge),
+			sex = val(sex, isSex),
+			money = val(money, isMoney),
+			hometown = val(hometown, isStr)
 		}
 	end
 end

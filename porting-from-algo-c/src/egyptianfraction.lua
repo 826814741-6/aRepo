@@ -5,7 +5,7 @@
 --    egyptianFraction  to  egyptianFractionT
 --    egyptianFraction  to  egyptianFractionM (depends on lbc(*))
 --    egyptianFraction  to  egyptianFractionCo
---    egyptianFraction  to  egyptianFractionCoM
+--    egyptianFraction  to  egyptianFractionCoM (depends on lbc(*))
 --
 --  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
 --  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
@@ -96,7 +96,8 @@ local function gStep(body)
 	end
 end
 
-local egyptianFractionCo, egyptianFractionCoM = gStep(bodyR), gStep(bodyM)
+local egyptianFractionCo, egyptianFractionCoM =
+	gStep(bodyR), hasBC and gStep(bodyM) or nil
 
 return {
 	egyptianFraction = egyptianFraction,

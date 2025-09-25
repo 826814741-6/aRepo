@@ -366,12 +366,16 @@ local stFill, stPaintOrder, stStroke, stStrokeWidth =
 	makeMethodSV("fill"), makeMethodSV("paint-order"), makeMethodSV("stroke"),
 	makeMethodN("stroke-width")
 
-local stGet = function (self) return t_concat(self.buf, " ") end
+local function stDone(self)
+	local r = t_concat(self.buf, " ")
+	self.buf, self.attr = {}, {}
+	return r
+end
 
-local function Styler()
+local Styler = (function ()
 	local T = { buf = {}; attr = {} }
 
-	setmetatable(T, { __call = stGet })
+	setmetatable(T, { __call = stDone })
 
 	T.fill = stFill
 	T.paintOrder = stPaintOrder
@@ -379,7 +383,7 @@ local function Styler()
 	T.strokeWidth = stStrokeWidth
 
 	return T
-end
+end)()
 --
 -- ref:
 -- https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
@@ -403,9 +407,9 @@ SV.RandomRGB = function ()
 		:format(b_rshift(n, 16), b_band(b_rshift(n, 8), 0xff), b_band(n, 0xff))
 end
 
-SV.PRESET_PLAIN = Styler():fill(SV.None):stroke(SV.Black)()
-SV.PRESET_FillBLACK = Styler():fill(SV.Black)()
-SV.PRESET_RawRGB = Styler():fill(SV.Transparent):stroke(SV.RawRGB):strokeWidth(1)()
+SV.PRESET_PLAIN = Styler:fill(SV.None):stroke(SV.Black)()
+SV.PRESET_FillBLACK = Styler:fill(SV.Black)()
+SV.PRESET_RawRGB = Styler:fill(SV.Transparent):stroke(SV.RawRGB):strokeWidth(1)()
 
 return {
 	SvgPlot = SvgPlot,
