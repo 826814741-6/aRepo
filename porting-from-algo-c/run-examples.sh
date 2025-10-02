@@ -64,8 +64,6 @@ run() {
 }
 
 run binormal LUA
-run change AWK
-run combination AWK
 run complex LUA
 run dayweek AWK
 run e AWK DC LUA
@@ -75,7 +73,7 @@ run gcd AWK
 run hypot AWK LUA
 run machineepsilon LUA PY
 run moveblock AWK
-run nthroot AWK LUA
+run nthroot LUA
 run pi AWK DC
 run rand DC LUA LUAJIT
 run sum AWK

@@ -9,13 +9,8 @@ function dayweek(y, m, d) {
 	return (y + int(y/4) - int(y/100) + int(y/400) + int((13*m+8)/5) + d) % 7
 }
 
-function initArray(a) {
+function initArray(a,	n) {
 	split("Sunday Monday Tuesday Wednesday Thursday Friday Saturday", a)
-	for (i = 1; i < 8; i++) {
-		a[i - 1] = a[i]
-	}
-	delete a[7]
-}
 
 #
 # split(s, a[, fs ])
@@ -27,6 +22,13 @@ function initArray(a) {
 #
 # -- POSIX Specification
 #
+
+	n = length(a)
+	for (i = 0; i < n; i++) {
+		a[i] = a[i + 1]
+	}
+	delete a[n]
+}
 
 #
 

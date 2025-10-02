@@ -9,8 +9,6 @@
 --  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
 --
 
-local function id(v) return v end
-
 local function chain1(init, ...)
 	local t = ({...})[1](init)
 	for _,v in ipairs({select(2, ...)}) do
@@ -29,24 +27,21 @@ local function gStep(div, isZero, initB, fnA, fnB)
 		end
 	end
 
-	function recB(n)
-		function rec(n, d)
-			local q = div(n, d)
-			if q >= d then
-				if isZero(n % d) then
-					fnB(d)
-					return rec(q, d)
-				else
-					return rec(n, d + 2)
-				end
+	function recB(n, d)
+		local q = div(n, d)
+		if q >= d then
+			if isZero(n % d) then
+				fnB(d)
+				return recB(q, d)
 			else
-				return n
+				return recB(n, d + 2)
 			end
+		else
+			return n
 		end
-		return rec(n, initB(3))
 	end
 
-	return recA, recB
+	return recA, function (n) return recB(n, initB(3)) end
 end
 
 local i_write = io.write
@@ -54,14 +49,15 @@ local i_write = io.write
 local function factorize(x)
 	function div(n, d) return n // d end
 	function isZero(v) return v == 0 end
+	function id(v) return v end
 
 	function fA(_) i_write("2 * ") end
 	function fB(n) i_write(("%d * "):format(n)) end
 	function fC(n) i_write(("%d\n"):format(n)) end
 
-	local a, b = gStep(div, isZero, id, fA, fB)
+	local stepA, stepB = gStep(div, isZero, id, fA, fB)
 
-	chain1(x, a, b, fC)
+	chain1(x, stepA, stepB, fC)
 end
 
 local hasBC, bc = pcall(require, 'bc')
@@ -73,9 +69,9 @@ local factorizeM = hasBC and function (x)
 	function fB(n) i_write(("%s * "):format(n)) end
 	function fC(n) i_write(("%s\n"):format(n)) end
 
-	local a, b = gStep(div, bc.iszero, bc.new, fA, fB)
+	local stepA, stepB = gStep(div, bc.iszero, bc.new, fA, fB)
 
-	chain1(x, bc.new, a, b, fC)
+	chain1(x, bc.new, stepA, stepB, fC)
 end or nil
 
 local t_insert = table.insert
@@ -88,9 +84,9 @@ local factorizeT = hasBC and function (x)
 	function fA(_) t_insert(r, "2") end
 	function fB(n) t_insert(r, tostring(n)) end
 
-	local a, b = gStep(div, bc.iszero, bc.new, fA, fB)
+	local stepA, stepB = gStep(div, bc.iszero, bc.new, fA, fB)
 
-	chain1(x, bc.new, a, b, fB)
+	chain1(x, bc.new, stepA, stepB, fB)
 
 	return r
 end or nil
@@ -104,9 +100,9 @@ local bodyM = hasBC and function (x)
 	function fA(_) co_yield(bn2) end
 	function fB(n) co_yield(n) end
 
-	local a, b = gStep(div, bc.iszero, bc.new, fA, fB)
+	local stepA, stepB = gStep(div, bc.iszero, bc.new, fA, fB)
 
-	return chain1(x, bc.new, a, b)
+	return chain1(x, bc.new, stepA, stepB)
 end or nil
 
 local co_create = coroutine.create

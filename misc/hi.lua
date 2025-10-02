@@ -15,37 +15,17 @@ local i_write = io.write
 local s_char = string.char
 local t_concat, t_insert = table.concat, table.insert
 
-function init(src)
-	local T = {
-		source = bc_new(src);
-		candidate = {}
-	}
+function P(src)
+	local t, n, edge = {}, bc_new(src), bc_new(255)
 
-	local n, edge = T.source, bc_new(255)
 	while n > edge do
 		local q, r = bc_quotrem(n, 256)
-		t_insert(T.candidate, 1, s_char(bc_tonumber(r)))
+		t_insert(t, 1, s_char(bc_tonumber(r)))
 		n = q
 	end
-	t_insert(T.candidate, 1, s_char(bc_tonumber(n)))
+	t_insert(t, 1, s_char(bc_tonumber(n)))
 
-	return T
-end
-
-function extends(T)
-	function T:P()
-		i_write(t_concat(T.candidate))
-	end
-
-	function T:n()
-		i_write(tostring(T.source))
-	end
-
-	function T:n10P()
-		i_write(tostring(T.source), "\n")
-	end
-
-	return T
+	i_write(t_concat(t))
 end
 
 -- and some utils
@@ -74,14 +54,6 @@ function str2src(s)
 	return tbl2src({ s:byte(1, -1) })
 end
 
---
-
-function demo(s)
-	local obj = extends(init(s))
-	obj:P()
-	obj:n10P()
-end
-
 do
 	local samples = {
 		"1468369091346906859060166438166794";
@@ -91,6 +63,7 @@ do
 	}
 
 	for _,v in ipairs(samples) do
-		demo(v)
+		P(v)
+		print(v)
 	end
 end

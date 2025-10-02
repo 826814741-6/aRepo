@@ -22,7 +22,6 @@ BEGIN {
 	_Z = 0
 
 	_PI = atan2(0, -1)
-	_FMT = "%6.5f (%6.5f)"
 }
 
 function init(x, y, z) {
@@ -45,7 +44,7 @@ function rnd(	r) {
 
 #
 
-function piA(n,	hit, _, x, y, t) {
+function piA(n, fmt,	hit, _, x, y, t) {
 	hit = 0
 
 	for (_ = 0; _ < n; _++) {
@@ -55,10 +54,10 @@ function piA(n,	hit, _, x, y, t) {
 
 	t = hit / n
 
-	return sprintf(_FMT, 4 * t, 4 * sqrt(t * (1 - t) / (n - 1)))
+	return sprintf(fmt, 4 * t, 4 * sqrt(t * (1 - t) / (n - 1)))
 }
 
-function piB(n,	sum, sumSq, _, x, y, t) {
+function piB(n, fmt,	sum, sumSq, _, x, y, t) {
 	sum = 0; sumSq = 0
 
 	for (_ = 0; _ < n; _++) {
@@ -69,10 +68,14 @@ function piB(n,	sum, sumSq, _, x, y, t) {
 
 	t = sum / n
 
-	return sprintf(_FMT, 4 * t, 4 * sqrt((sumSq / n - t * t) / (n - 1)))
+	return sprintf(fmt, 4 * t, 4 * sqrt((sumSq / n - t * t) / (n - 1)))
 }
 
-function piC(n,	a, x, sum, _, t) {
+#
+#  abs(n) from _helper.awk
+#
+
+function piC(n, fmt,	a, x, sum, _, t) {
 	a = (sqrt(5) - 1) / 2
 
 	x = 0; sum = 0
@@ -84,7 +87,7 @@ function piC(n,	a, x, sum, _, t) {
 
 	t = 4 * sum / n
 
-	return sprintf(_FMT, t, _PI - t)
+	return sprintf(fmt, t, abs(_PI - t))
 }
 
 #
@@ -116,6 +119,11 @@ function pRnd(col, row,	i, j) {
 	}
 }
 
+function pPi(n,	fmt) {
+	fmt = "%6.5f (%6.5f)"
+	print piA(n, fmt), piB(n, fmt), piC(n, fmt)
+}
+
 function pRndPerm(col, row, fmt,	a, i, j, offset) {
 	split("", a)
 	randPerm(a, col * row)
@@ -141,11 +149,11 @@ BEGIN {
 
 	print "-------- piA,piB,piC in whrnd: 12345, 23451, 13579"
 	init(12345, 23451, 13579)
-	print piA(10), piB(10), piC(10)
-	print piA(100), piB(100), piC(100)
-	print piA(1000), piB(1000), piC(1000)
-	print piA(10000), piB(10000), piC(10000)
-	print piA(100000), piB(100000), piC(100000)
+	pPi(10)
+	pPi(100)
+	pPi(1000)
+	pPi(10000)
+	pPi(100000)
 
 	print "-------- randPerm in whrnd: 12345, 23451, 13579"
 	init(12345, 23451, 13579)

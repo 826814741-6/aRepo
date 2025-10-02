@@ -19,8 +19,6 @@ function abs(n) {
 # ok
 #
 
-function atLeastOne(n) { return n > 1 ? n : 1 }
-
 #
 #  (_length(): It appears this workaround is no longer necessary.)
 #

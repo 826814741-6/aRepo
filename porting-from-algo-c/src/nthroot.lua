@@ -24,7 +24,7 @@
 
 local hasBC, bc = pcall(require, "bc")
 
-local atLeastOne = require '_helper'.atLeastOne
+local function atLeastOne(n) return n > 1 and n or 1 end
 
 local function gLoop(step)
 	return function (x)

@@ -18,8 +18,6 @@
 -- 0 -0.000000 -0 -0x0p+0
 --
 
-local function atLeastOne(n) return n > 1 and n or 1 end
-
 local function isBool(v)
 	return type(v) == "boolean"
 end
@@ -93,7 +91,6 @@ local function file(path, mode, body)
 end
 
 return {
-	atLeastOne = atLeastOne,
 	isBool = isBool,
 	isFh = isFh,
 	isFun = isFun,
