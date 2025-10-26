@@ -90,6 +90,28 @@ local function file(path, mode, body)
 	assert(ret == true, v)
 end
 
+local function template_forBasicShapes(loop)
+	local M1, M2 = require 'grBMP', require 'svgplot'
+
+	local fmt1 = M1.makeColor ~= nil and M1.makeColor or tonumber -- .lua or .luajit
+	function fmt2(n) return M2.SV.PRESET_RawRGB:format(M2.toRGB(n)) end
+
+	return function (prefix, n, x, y)
+		local bmp, svg = M1.BMP(x, y), M2.SvgPlot(x, y)
+
+		bmp:clear(M1.PRESET_COLOR.BLACK)
+		loop(bmp, n, x, y, fmt1)
+
+		function body(svg)
+			svg:rect(0, 0, x, y, 0, 0, M2.SV.PRESET_FillBLACK)
+			loop(svg, n, x, y, fmt2)
+		end
+
+		file(prefix .. ".bmp", "wb", function (fh) bmp:write(fh) end)
+		file(prefix .. ".svg", "w", function (fh) svg:write(fh, body) end)
+	end
+end
+
 return {
 	isBool = isBool,
 	isFh = isFh,
@@ -103,5 +125,6 @@ return {
 	mustBeFun = mustBeFun,
 	mustBeNum = mustBeNum,
 	mustBeStr = mustBeStr,
-	file = file
+	file = file,
+	template_forBasicShapes = template_forBasicShapes
 }

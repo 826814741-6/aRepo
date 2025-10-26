@@ -12,12 +12,12 @@
 #
 
 function sierpinski(order, size,	h, _) {
-	h = 1; size = int(size / 6)
+	h = 1
 
 	for (_ = 1; _ < order; _++)
 		h = 3 * h / (6 + h)
 
-	h = h * size
+	h = h * int(size / 6)
 
 	move(h + 1, 1)
 	urd(order, h)

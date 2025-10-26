@@ -8,20 +8,7 @@
 --    ... some extensions for basic shapes  are  :circle, :ellipse, :line, :rect
 --
 
-local BMP = require 'grBMP'.BMP
-local BLACK = require 'grBMP'.PRESET_COLOR.BLACK
-
-local SvgPlot = require 'svgplot'.SvgPlot
-local SV = require 'svgplot'.SV
-
 local RAND = require 'rand'.RAND
-local file = require '_helper'.file
-
-local b_band, b_rshift = bit.band, bit.rshift
-
-function toRGB(n)
-	return b_rshift(n, 16), b_band(b_rshift(n, 8), 0xff), b_band(n, 0xff)
-end
 
 function loop(instance, n, x, y, formatFunction)
 	local r = RAND()
@@ -36,27 +23,6 @@ function loop(instance, n, x, y, formatFunction)
 end
 
 do
-	local n, x, y = 100, 640, 400
-	local bmp = BMP(x, y)
-
-	bmp:clear(BLACK)
-	loop(bmp, n, x, y, tonumber)
-
-	file("results/circle-lj.bmp", "wb", function (fh)
-		bmp:write(fh)
-	end)
-
-	--
-
-	local styleR, styleC = SV.PRESET_FillBLACK, SV.PRESET_RawRGB
-	local fmtC = function (n) return styleC:format(toRGB(tonumber(n))) end
-
-	function body(plotter)
-		plotter:rect(0, 0, x, y, 0, 0, styleR)
-		loop(plotter, n, x, y, fmtC)
-	end
-
-	file("results/circle-lj.svg", "w", function (fh)
-		SvgPlot(x, y):write(fh, body)
-	end)
+	local run = require("_helper").template_forBasicShapes(loop)
+	run("results/circle-lj", 100, 640, 400)
 end

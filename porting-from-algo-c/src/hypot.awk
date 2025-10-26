@@ -22,11 +22,11 @@ function hypot1(x, y) {
 		abs(x) * sqrt(1 + (y/x) * (y/x))
 }
 
-function hypot2(x, y,	a, b, t, i) {
+function hypot2(x, y,	a, b, t, _) {
 	a = abs(x); b = abs(y)
 	if (a < b) { t = a; a = b; b = t }
 	if (b == 0) return a
-	for (i = 0; i < 3; i++) {
+	for (_ = 0; _ < 3; _++) {
 		t = (b/a)*(b/a) / (4 + (b/a)*(b/a))
 		a = a + 2 * a * t; b = b * t
 	}

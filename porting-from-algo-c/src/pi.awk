@@ -26,9 +26,9 @@ function machinLike(	p, k, t, prev) {
 	return p
 }
 
-function gaussLegendre(n,	a, b, t, u, prev, i) {
+function gaussLegendre(n,	a, b, t, u, prev, _) {
 	a = 1; b = 1 / sqrt(2); t = 1; u = 4
-	for (i = 0; i < n; i++) {
+	for (_ = 0; _ < n; _++) {
 		prev = a
 		a = (a + b) / 2; b = sqrt(prev * b)
 		t -= u * (a - prev) * (a - prev); u *= 2
@@ -36,9 +36,9 @@ function gaussLegendre(n,	a, b, t, u, prev, i) {
 	return (a + b) * (a + b) / t
 }
 
-function leibniz(n,	r, sign, x, i) {
+function leibniz(n,	r, sign, x, _) {
 	r = 0; sign = 1; x = 1
-	for (i = 0; i < n; i++) {
+	for (_ = 0; _ < n; _++) {
 		r += sign / x; sign *= -1; x += 2
 	}
 	return r * 4

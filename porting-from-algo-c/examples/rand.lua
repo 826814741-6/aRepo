@@ -13,8 +13,6 @@
 
 local M = require 'rand'
 
-local RAND, crnd = M.RAND, M.crnd
-
 function p(col, row, fmt, v)
 	for _=1,row do
 		for _=1,col do
@@ -24,12 +22,12 @@ function p(col, row, fmt, v)
 	end
 end
 
-do
-	function fmtR(v) return ("%8d"):format(v:rand()) end
-	function fmtC(v) return ("%10.7f"):format(v:rnd()) end
+function fmtR(v) return ("%8d"):format(v:rand()) end
+function fmtC(v) return ("%10.7f"):format(v:rnd()) end
 
+do
 	print("-------- RAND")
-	local r = RAND()
+	local r = M.RAND()
 	p(8, 20, fmtR, r)
 
 	assert(9899 == r:rand())
@@ -37,7 +35,7 @@ do
 	assert(16838 == r:rand())
 
 	print("-------- crnd")
-	local c = crnd(12345)
+	local c = M.crnd(12345)
 	p(8, 20, fmtC, c)
 
 	assert(954228167081776094 == c:irnd())

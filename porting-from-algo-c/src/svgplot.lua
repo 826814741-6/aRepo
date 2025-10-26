@@ -392,9 +392,12 @@ SV.RawRGB = function () return "rgb(%d %d %d)" end
 
 local m_floor, m_random = math.floor, math.random
 
+local function toRGB(n)
+	return n >> 16, (n >> 8) & 0xff, n & 0xff
+end
+
 SV.RandomRGB = function ()
-	local n = m_floor(m_random() * 0xffffff)
-	return ("rgb(%d %d %d)"):format(n >> 16, (n >> 8) & 0xff, n & 0xff)
+	return ("rgb(%d %d %d)"):format(toRGB(m_floor(m_random() * 0xffffff)))
 end
 
 SV.PRESET_PLAIN = Styler:fill(SV.None):stroke(SV.Black)()
@@ -406,5 +409,6 @@ return {
 	SvgPlotWholeBuffer = SvgPlotWholeBuffer,
 	SvgPlotWithBuffer = SvgPlotWithBuffer,
 	Styler = Styler,
-	SV = SV
+	SV = SV,
+	toRGB = toRGB
 }

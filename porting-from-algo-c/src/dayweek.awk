@@ -9,7 +9,7 @@ function dayweek(y, m, d) {
 	return (y + int(y/4) - int(y/100) + int(y/400) + int((13*m+8)/5) + d) % 7
 }
 
-function initArray(a,	n) {
+function initArray(a,	n, i) {
 	split("Sunday Monday Tuesday Wednesday Thursday Friday Saturday", a)
 
 #

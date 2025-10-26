@@ -13,13 +13,6 @@
 
 local M = require 'rand'
 
-local RAND, crnd = M.RAND, M.crnd
-
--- see: https://www.freelists.org/post/luajit/cannot-resolve-symbol-printf-with-ffi-msvc-140,4
-function workaround(cdata)
-	return tostring(cdata):gsub("ULL",""):gsub("LL","")
-end
-
 function p(col, row, fmt, v)
 	for _=1,row do
 		for _=1,col do
@@ -29,12 +22,12 @@ function p(col, row, fmt, v)
 	end
 end
 
-do
-	function fmtR(v) return ("%8s"):format(workaround(v:rand())) end
-	function fmtC(v) return ("%10.7f"):format(v:rnd()) end
+function fmtR(v) return ("%8d"):format(v:rand()) end
+function fmtC(v) return ("%10.7f"):format(v:rnd()) end
 
+do
 	print("-------- RAND")
-	local r = RAND()
+	local r = M.RAND()
 	p(8, 20, fmtR, r)
 
 	assert(9899ULL == r:rand())
@@ -44,7 +37,7 @@ do
 	assert(16838ULL == r:rand())
 
 	print("-------- crnd")
-	local c = crnd(12345)
+	local c = M.crnd(12345)
 	p(8, 20, fmtC, c)
 
 	assert(954228167081776094ULL == c:irnd())
