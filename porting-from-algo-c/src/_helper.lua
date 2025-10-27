@@ -94,7 +94,7 @@ local function template_forBasicShapes(loop)
 	local M1, M2 = require 'grBMP', require 'svgplot'
 
 	local fmt1 = M1.makeColor ~= nil and M1.makeColor or tonumber -- .lua or .luajit
-	function fmt2(n) return M2.SV.PRESET_RawRGB:format(M2.toRGB(n)) end
+	local fmt2 = M2.SV.PRESET_RawRGB
 
 	return function (prefix, n, x, y)
 		local bmp, svg = M1.BMP(x, y), M2.SvgPlot(x, y)

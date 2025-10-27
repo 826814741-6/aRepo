@@ -411,13 +411,13 @@ end
 
 SV.PRESET_PLAIN = Styler:fill(SV.None):stroke(SV.Black)()
 SV.PRESET_FillBLACK = Styler:fill(SV.Black)()
-SV.PRESET_RawRGB = Styler:fill(SV.Transparent):stroke(SV.RawRGB):strokeWidth(1)()
+local fmt_RawRGB = Styler:fill(SV.Transparent):stroke(SV.RawRGB):strokeWidth(1)()
+SV.PRESET_RawRGB = function (n) return fmt_RawRGB:format(toRGB(n)) end
 
 return {
 	SvgPlot = SvgPlot,
 	SvgPlotWholeBuffer = SvgPlotWholeBuffer,
 	SvgPlotWithBuffer = SvgPlotWithBuffer,
 	Styler = Styler,
-	SV = SV,
-	toRGB = toRGB
+	SV = SV
 }
