@@ -10,7 +10,6 @@
 local M = require 'grBMP'
 
 local BMP, PRESET_COLOR = M.BMP, M.PRESET_COLOR
-local file = require '_helper'.file
 
 do
 	local x, y = 640, 400
@@ -21,7 +20,5 @@ do
 	bmp:rect(1, x//2 + 1, y//2 + 1, y, PRESET_COLOR.RED)
 	bmp:rect(x//2 + 1, x, y//2 + 1, y, PRESET_COLOR.WHITE)
 
-	file("results/grBMP.bmp", "wb", function (fh)
-		bmp:write(fh)
-	end)
+	bmp:file("results/grBMP.bmp")
 end

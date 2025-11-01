@@ -107,8 +107,8 @@ local function template_forBasicShapes(loop)
 			loop(svg, n, x, y, fmt2)
 		end
 
-		file(prefix .. ".bmp", "wb", function (fh) bmp:write(fh) end)
-		file(prefix .. ".svg", "w", function (fh) svg:write(fh, body) end)
+		bmp:file(prefix .. ".bmp")
+		svg:file(prefix .. ".svg", body)
 	end
 end
 

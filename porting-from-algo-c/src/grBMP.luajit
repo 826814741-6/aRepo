@@ -19,7 +19,8 @@
 --    void gr_line(int, int, int, int, long)     to  BMP; :line
 --
 
-local mustBeNum = require '_helper'.mustBeNum
+local H = require '_helper'
+local isFh, mustBeNum = H.isFh, H.mustBeNum
 
 local b_band, b_lshift, b_rshift = bit.band, bit.lshift, bit.rshift
 local s_char = string.char
@@ -186,6 +187,17 @@ local function line(bmp, x1, y1, x2, y2, color)
 	end
 end
 
+local function file(self, path)
+	local _, fh = pcall(io.open, path, "w")
+	assert(isFh(fh), "file(): Something wrong with your 'path'.")
+
+	local ret, v = pcall(self.write, self, fh)
+	fh:close()
+	assert(ret == true, v)
+
+	return self
+end
+
 local function BMP(width, height)
 	mustBeNum(width) mustBeNum(height)
 
@@ -199,6 +211,7 @@ local function BMP(width, height)
 	T.line = line
 
 	T.write = write
+	T.file = file
 
 	return T
 end

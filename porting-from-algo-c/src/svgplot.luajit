@@ -186,10 +186,21 @@ local function rectB(self, x, y, w, h, rx, ry, style)
 end
 
 --
---  writeA         for SvgPlot
---  writeB, resetB for SvgPlotWholeBuffer
---  writeC         for SvgPlotWithBuffer
+--  file, writeA         for SvgPlot
+--  file, writeB, resetB for SvgPlotWholeBuffer
+--  file, writeC         for SvgPlotWithBuffer
 --
+
+local function file(self, path, body, ...)
+	local _, fh = pcall(io.open, path, "w")
+	assert(isFh(fh), "file(): Something wrong with your 'path'.")
+
+	local ret, v = pcall(self.write, self, fh, body, ...)
+	fh:close()
+	assert(ret == true, v)
+
+	return self
+end
 
 local DefaultSize = 512
 
@@ -244,15 +255,15 @@ local function makeMethod(v)
 	if isA(v) then
 		return pathStartA, pathEndA, moveA, moveRelA, drawA, drawRelA,
 			circleA, ellipseA, lineA, rectA,
-			writeA
+			file, writeA
 	elseif isB(v) then
 		return pathStartB, pathEndB, moveB, moveRelB, drawB, drawRelB,
 			circleB, ellipseB, lineB, rectB,
-			writeB, resetB
+			file, writeB, resetB
 	elseif isC(v) then
 		return pathStartA, pathEndA, moveA, moveRelA, drawA, drawRelA,
 			circleA, ellipseA, lineA, rectA,
-			writeC
+			file, writeC
 	else
 		error("'v' must be a value above.")
 		-- Please see the arguments for the function 'gSvgPlot' below.
@@ -322,7 +333,7 @@ local function gSvgPlot(initializer)
 
 		T.pathStart, T.pathEnd, T.move, T.moveRel, T.draw, T.drawRel,
 		T.circle, T.ellipse, T.line, T.rect,
-		T.write, T.reset = makeMethod(T.o)
+		T.file, T.write, T.reset = makeMethod(T.o)
 
 		return T
 	end

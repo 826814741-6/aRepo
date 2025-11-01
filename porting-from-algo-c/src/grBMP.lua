@@ -27,7 +27,8 @@
 
 local H = require '_helper'
 
-local getValueOrInit, isBool, mustBeNum = H.getValueOrInit, H.isBool, H.mustBeNum
+local getValueOrInit, isBool, isFh, mustBeNum =
+	H.getValueOrInit, H.isBool, H.isFh, H.mustBeNum
 
 local t_unpack = table.unpack
 local m_abs = math.abs
@@ -213,6 +214,17 @@ local function wLine(bmp, x1, y1, x2, y2, color)
 	)
 end
 
+local function file(self, path)
+	local _, fh = pcall(io.open, path, "w")
+	assert(isFh(fh), "file(): Something wrong with your 'path'.")
+
+	local ret, v = pcall(self.write, self, fh)
+	fh:close()
+	assert(ret == true, v)
+
+	return self
+end
+
 local function BMP(width, height)
 	mustBeNum(width) mustBeNum(height)
 
@@ -230,6 +242,7 @@ local function BMP(width, height)
 	T.wLine = wLine
 
 	T.write = write
+	T.file = file
 
 	return T
 end
