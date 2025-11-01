@@ -4,7 +4,7 @@
 --    void putbytes(FILE *, int, unsigned long)            to  (string.pack)
 --    void gr_dot(int, int, long)                          to  BMP; :dot
 --    void gr_clear(long)                                  to  BMP; :clear
---    void gr_BMP(char *)                                  to  BMP; :write
+--    void gr_BMP(char *)                                  to  BMP; :file(, :write)
 --
 
 local M = require 'grBMP'

@@ -4,7 +4,7 @@
 --    void putbytes(FILE *, int, unsigned long)            to  (string.pack)
 --    void gr_dot(int, int, long)                          to  BMP; :dot
 --    void gr_clear(long)                                  to  BMP; :clear
---    void gr_BMP(char *)                                  to  BMP; :write
+--    void gr_BMP(char *)                                  to  BMP; :file(, :write)
 --
 --  from src/circle.c
 --
@@ -215,7 +215,7 @@ local function wLine(bmp, x1, y1, x2, y2, color)
 end
 
 local function file(self, path)
-	local _, fh = pcall(io.open, path, "w")
+	local _, fh = pcall(io.open, path, "wb")
 	assert(isFh(fh), "file(): Something wrong with your 'path'.")
 
 	local ret, v = pcall(self.write, self, fh)

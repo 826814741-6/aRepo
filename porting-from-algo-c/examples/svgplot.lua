@@ -8,7 +8,7 @@
 --    void draw(double, double)             to   :draw
 --    void draw_rel(double, double)         to   :drawRel
 --
---                                               :write(, :reset)
+--                                               :file, :write(, :reset)
 --
 --    and some extensions for basic shapes  are  :circle, :ellipse, :line, :rect
 --
