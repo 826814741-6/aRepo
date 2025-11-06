@@ -18,8 +18,8 @@ local H = require '_helper'
 local isFh, isNum, isTbl = H.isFh, H.isNum, H.isTbl
 local mustBeFun, mustBeNum, mustBeStr = H.mustBeFun, H.mustBeNum, H.mustBeStr
 
-local t_concat = table.concat
-local t_insert = table.insert
+local m_floor, m_random = math.floor, math.random
+local t_concat, t_insert = table.concat, table.insert
 
 --
 
@@ -202,6 +202,8 @@ local function file(self, path, body, ...)
 	return self
 end
 
+local DefaultLimit = 50
+
 local function writeA(self, fh, body)
 	self.o = isFh(fh) and fh or io.stdout
 	self.o:write(header(self.w, self.h))
@@ -214,7 +216,7 @@ local function writeB(self, fh, body, isOneByOne)
 	body(self)
 	fh = isFh(fh) and fh or io.stdout
 	fh:write(header(self.w, self.h))
-	if isOneByOne then
+	if isOneByOne == true then
 		for _,v in ipairs(self.o) do
 			fh:write(v)
 		end
@@ -225,6 +227,8 @@ local function writeB(self, fh, body, isOneByOne)
 	return self
 end
 local function writeC(self, fh, body, limit)
+	fh = isFh(fh) and fh or io.stdout
+	limit = isNum(limit) and limit or DefaultLimit
 	self.o
 		:startStep(fh, limit)
 		:write(header(self.w, self.h))
@@ -270,12 +274,8 @@ end
 local function makeNil() return nil end
 local function makeTable() return {} end
 
-local DefaultLimit = 50
-
 local function bufStart(self, fh, limit)
-	self.buf, self.cnt = {}, 0
-	self.fh = isFh(fh) and fh or io.stdout
-	self.limit = isNum(limit) and limit or DefaultLimit
+	self.buf, self.cnt, self.fh, self.limit = {}, 0, fh, limit
 	return self
 end
 
@@ -293,7 +293,7 @@ local function bufEnd(self)
 	if self.cnt > 0 then
 		self.fh:write(t_concat(self.buf))
 	end
-	self.buf, self.cnt, self.fh = {}, 0, nil
+	self.buf, self.cnt, self.fh, self.limit = {}, 0, nil, DefaultLimit
 	return self
 end
 
@@ -400,8 +400,6 @@ SV.Black = function () return "black" end
 SV.White = function () return "white" end
 SV.Raw = function (v) return function () return v end end
 SV.RawRGB = function () return "rgb(%d %d %d)" end
-
-local m_floor, m_random = math.floor, math.random
 
 local function toRGB(n)
 	return n >> 16, (n >> 8) & 0xff, n & 0xff

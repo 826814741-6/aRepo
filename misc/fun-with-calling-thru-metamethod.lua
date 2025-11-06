@@ -285,8 +285,11 @@ do
 		return fw3(rec)(x, y, z)
 	end
 
-	local vPC = makeValidator({isFun, isFun, isFun})
-	function fwC(f) return wrapWithValidator(f, vPC, vR, unpacker) end
+	local vPC1 = makeValidator({isFun, isFun, isFun})
+	local vPC2 = makeValidator({isTbl, isTbl, isTbl})
+	function fwC1(f) return wrapWithValidator(f, vPC1, vR, unpacker) end
+	function fwC2A(f) return wrapWithValidator(f, vPC2, vR, unpacker) end
+	function fwC2B(f) return wrapWithValidator(f, vEmpty, vR, unpacker) end
 
 	function taraiC(x, y, z)
 		function rec(x, y, z)
@@ -303,19 +306,34 @@ do
 			function () return z end
 		)
 	end
-	function taraiCW(x, y, z)
+	function taraiCW1(x, y, z)
 		function rec(x, y, z)
 			if x() <= y() then return y() end
-			return fwC(rec)(
-				function() return fwC(rec)(function() return x()-1 end, y, z) end,
-				function() return fwC(rec)(function() return y()-1 end, z, x) end,
-				function() return fwC(rec)(function() return z()-1 end, x, y) end
+			return fwC1(rec)(
+				function() return fwC1(rec)(function() return x()-1 end, y, z) end,
+				function() return fwC1(rec)(function() return y()-1 end, z, x) end,
+				function() return fwC1(rec)(function() return z()-1 end, x, y) end
 			)
 		end
-		return fwC(rec)(
+		return fwC1(rec)(
 			function() return x end,
 			function() return y end,
 			function() return z end
+		)
+	end
+	function taraiCW2(x, y, z)
+		function rec(x, y, z)
+			if x() <= y() then return y() end
+			return fwC2A(rec)(
+				fwC2B(function() return fwC2A(rec)(fwC2B(function() return x()-1 end), y, z) end),
+				fwC2B(function() return fwC2A(rec)(fwC2B(function() return y()-1 end), z, x) end),
+				fwC2B(function() return fwC2A(rec)(fwC2B(function() return z()-1 end), x, y) end)
+			)
+		end
+		return fwC2A(rec)(
+			fwC2B(function() return x end),
+			fwC2B(function() return y end),
+			fwC2B(function() return z end)
 		)
 	end
 
@@ -328,6 +346,10 @@ do
 	print(count(tarai, 10, 5, 0), unpacker:get())
 
 	unpacker:reset()
-	print("taraiC(100, 50, 0):", taraiC(100, 50, 0), taraiCW(100, 50, 0))
+	print("taraiC(100, 50, 0):", taraiC(100, 50, 0), taraiCW1(100, 50, 0))
+	print(count(taraiC, 100, 50, 0), unpacker:get())
+
+	unpacker:reset()
+	print("taraiC(100, 50, 0):", taraiC(100, 50, 0), taraiCW2(100, 50, 0))
 	print(count(taraiC, 100, 50, 0), unpacker:get())
 end
