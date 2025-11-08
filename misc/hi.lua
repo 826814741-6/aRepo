@@ -5,7 +5,7 @@
 --  $ dc -e "1468369091346906859060166438166794P"
 --  (see https://github.com/826814741-6/aRepo/blob/main/misc/hi.sh)
 --
---  depends on lbc-101; https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc
+--  depends on lbc-102; https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc
 --
 
 local bc = require 'bc'

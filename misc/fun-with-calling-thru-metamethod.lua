@@ -74,7 +74,7 @@ do
 	print(w3(io.stdout))
 	print("t_unpack:", w4A())
 	print("user unpacker:", w4B())
-	print(w5(-1), w5(-0.1), w5(0), w5(0.1), w5(1))
+	print(w5(-1), w5(-0.1), w5(-0.0), w5(-0), w5(0), w5(0.0), w5(0.1), w5(1))
 	print(w6(0))
 	print(w7(1, 2))
 
@@ -285,8 +285,8 @@ do
 		return fw3(rec)(x, y, z)
 	end
 
-	local vPC1 = makeValidator({isFun, isFun, isFun})
-	local vPC2 = makeValidator({isTbl, isTbl, isTbl})
+	local vPC1 = makeValidator({isFun, isFun, isFun}, checkP)
+	local vPC2 = makeValidator({isTbl, isTbl, isTbl}, checkP)
 	function fwC1(f) return wrapWithValidator(f, vPC1, vR, unpacker) end
 	function fwC2A(f) return wrapWithValidator(f, vPC2, vR, unpacker) end
 	function fwC2B(f) return wrapWithValidator(f, vEmpty, vR, unpacker) end

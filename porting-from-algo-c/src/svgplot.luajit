@@ -218,7 +218,7 @@ local function writeB(self, fh, body, isOneByOne)
 	body(self)
 	fh = isFh(fh) and fh or io.stdout
 	fh:write(header(self.w, self.h))
-	if isOneByOne then
+	if isOneByOne == true then
 		local n = m_floor(#self.o / DefaultSize)
 		for _=1,n do
 			fh:write(self.o:get(DefaultSize))

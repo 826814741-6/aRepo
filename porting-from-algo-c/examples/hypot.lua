@@ -9,8 +9,7 @@
 local M = require 'hypot'
 local hasBC, bc = pcall(require, "bc") -- (*)
 --
---  *) bc library for Lua 5.4 / Jul 2018 / based on GNU bc-1.07
---  (lbc-101; see https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc)
+--  *) lbc-102; https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc
 --
 
 local hypot0, hypot1, hypot2 = M.hypot0, M.hypot1, M.hypot2
