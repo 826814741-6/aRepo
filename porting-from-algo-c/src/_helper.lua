@@ -7,14 +7,14 @@
 -- >> Returns the maximum value between x and -x. (integer/float)
 -- >> -- https://www.lua.org/manual/5.4/manual.html#pdf-math.abs
 --
--- > print(math.abs(0), math.abs(-0), math.abs(0.0), math.abs(-0.0))
+-- > = math.abs(0), math.abs(-0), math.abs(0.0), math.abs(-0.0)
 -- 0       0       0.0     0.0
--- > print(math.type(math.abs(-0)), math.type(math.abs(-0.0)))
+-- > = math.type(math.abs(-0)), math.type(math.abs(-0.0))
 -- integer float
 --
--- > print(("%d %f %g %a"):format(-0, -0, -0, -0))
+-- > = ("%d %f %g %a"):format(-0, -0, -0, -0)
 -- 0 0.000000 0 0x0p+0
--- > print(("%d %f %g %a"):format(-0.0, -0.0, -0.0, -0.0))
+-- > = ("%d %f %g %a"):format(-0.0, -0.0, -0.0, -0.0)
 -- 0 -0.000000 -0 -0x0p+0
 --
 

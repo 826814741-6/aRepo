@@ -42,6 +42,21 @@ function isStr(v) return type(v) == "string" end
 function isTbl(v) return type(v) == "table" end
 function isNumOrNil(v) return isNum(v) or v == nil end
 function isNumAndNonNeg(v) return isNum(v) and v >= 0 end
+--
+-- > v1, v2 = -0, -0.0
+-- > = v1 == -v1 and v1 == v2 and v1 == -v2 and -v1 == v2 and -v1 == -v2 and v2 == -v2
+-- true
+--
+-- > = v1+v1, v1-v1, v1+v2, v1-v2, -v1+v2, -v1-v2, v2+v2, v2-v2
+-- 0       0       0.0     0.0     0.0     0.0     -0.0    0.0  -- v5.3+ (v5.4.8)
+-- -0      0       -0      0       0       0       -0      0    --       (v2.1.1762617240)
+--
+-- >> The main difference between Lua 5.2 and Lua 5.3 is the introduction of
+-- >> an integer subtype for numbers. ...
+-- >>
+-- >> 8.1 - Changes in the Language (Lua 5.3 Reference Manual)
+-- >> (ref: https://www.lua.org/manual/5.3/manual.html#8.1)
+--
 
 do
 	function f1(n, s, t) return n end
@@ -65,7 +80,8 @@ do
 		{isNumOrNil, isNumOrNil, isNumOrNil},
 		function (r) return r[1], r[2], r[3] end
 	)
-	local w5 = wrapWithValidator(f5, {isNum}, {isNumAndNonNeg})
+	local w5A = wrapWithValidator(f5, {isNum}, {isNumAndNonNeg})
+	local w5B = wrapWithValidator(math.abs, {isNum}, {isNumAndNonNeg})
 	local w6 = wrapWithValidator(f6, {isNum}, {isFun})
 	local w7 = wrapWithValidator(w6(0), {isNum, isNum}, {isStr})
 
@@ -74,7 +90,8 @@ do
 	print(w3(io.stdout))
 	print("t_unpack:", w4A())
 	print("user unpacker:", w4B())
-	print(w5(-1), w5(-0.1), w5(-0.0), w5(-0), w5(0), w5(0.0), w5(0.1), w5(1))
+	print("fall through:", w5A(-1), w5A(-0.1), w5A(-0.0), w5A(-0), w5A(0), w5A(0.0), w5A(0.1), w5A(1))
+	print("math.abs:", w5B(-1), w5B(-0.1), w5B(-0.0), w5B(-0), w5B(0), w5B(0.0), w5B(0.1), w5B(1))
 	print(w6(0))
 	print(w7(1, 2))
 

@@ -19,7 +19,7 @@ local function mustBeSeed(seed)
 		ffi_istype(0ULL, seed) or isNum(seed),
 		"'seed' must be a cdata of ctype<uint64_t> (or a number)."
 	)
-	return isNum(seed) and seed * 1ULL or seed
+	return isNum(seed) and seed + 0ULL or seed
 end
 
 --
