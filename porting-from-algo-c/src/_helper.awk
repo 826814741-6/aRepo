@@ -48,8 +48,6 @@ function concat(a,	r, i) {
 	return r
 }
 
-function _p(b) { return b ? "T" : "F" }
-
 function rep(s, n,	i, r) {
 	r = ""
 	for (i = 0; i < n; i++) r = r s

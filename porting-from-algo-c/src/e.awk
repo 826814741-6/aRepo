@@ -65,7 +65,7 @@ BEGIN {
 }
 
 #
-# In mawk, you will probably get the following error:
+# In mawk, you will probably get the following error caused by "%a":
 #
 # > mawk: run time error: improper conversion(number 2) in printf("   %%a : %a
 # > ...

@@ -46,26 +46,27 @@ function leibniz(n,	r, sign, x, _) {
 
 #
 
-function _p1(n) { printf "%.14f %.20f\n", n, n }
-function _p2(m, n) { printf "%.14f %.20f (%d)\n", n, n, m }
+function p1(n) { printf "%.14f %.20f\n", n, n }
+function p2(m, n) { printf "%.14f %.20f (%d)\n", n, n, m }
 
 BEGIN {
 	print "-------- machinLike:"
-	_p1(machinLike())
+	p1(machinLike())
 
 	print "-------- gaussLegendre n:"
-	_p2(1, gaussLegendre(1))
-	_p2(2, gaussLegendre(2))
-	_p2(3, gaussLegendre(3))
+	p2(1, gaussLegendre(1))
+	p2(2, gaussLegendre(2))
+	p2(3, gaussLegendre(3))
 
 	print "-------- atan2(1, 1) * 4:"
-	_p1(atan2(1, 1) * 4)
+	p1(atan2(1, 1) * 4)
 
-	print "-------- atan2(0, -0):"
-	_p1(atan2(0, -0))
+	print "-------- atan2(0, -X):"
+	p2(0, atan2(0, -0))
+	p2(1, atan2(0, -1))
 
 	print "-------- leibniz n:"
-	_p2(10000, leibniz(10000))
-	_p2(100000, leibniz(100000))
-	_p2(1000000, leibniz(1000000))
+	p2(10000, leibniz(10000))
+	p2(100000, leibniz(100000))
+	p2(1000000, leibniz(1000000))
 }
