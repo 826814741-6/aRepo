@@ -39,6 +39,9 @@ function run(n,	i, a, r1, r2) {
 }
 
 BEGIN {
+	run(0)
+	run(1)
+#
 	run(10)
 	run(100)
 	run(1000)

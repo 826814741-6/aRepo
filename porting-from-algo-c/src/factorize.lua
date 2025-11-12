@@ -8,12 +8,13 @@
 --  *) lbc-102; https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbc
 --
 
-local function chain1(init, ...)
-	local t = ({...})[1](init)
-	for _,v in ipairs({select(2, ...)}) do
-		t = v(t)
+local function chain1(v, f, ...)
+	local rest = ...
+	if rest ~= nil then
+		return chain1(f(v), ...)
+	else
+		return f(v)
 	end
-	return t
 end
 
 local function gStep(div, isZero, initB, fnA, fnB)

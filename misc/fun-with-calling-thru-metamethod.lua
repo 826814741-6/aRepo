@@ -101,7 +101,7 @@ do
 	assert(ret, err)  -- (*)
 	--
 	-- If you want to see the results of the latter half,
-	-- please comment out above line (line number: 84).
+	-- please comment out above line (line number: 101).
 	--
 end
 
