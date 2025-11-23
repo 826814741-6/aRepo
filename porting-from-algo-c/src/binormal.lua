@@ -27,7 +27,7 @@ local function samplePlotter(x, y, m, fgColor, bgColor)
 		bmp:clear(bgColor)
 		for _=1,n do
 			local a, b = binormalRnd(r, crnd)
-			bmp:dot(m_floor(x//2 + a*m), m_floor(y//2 + b*m), fgColor)
+			bmp:dot(m_floor(x/2 + a*m), m_floor(y/2 + b*m), fgColor)
 		end
 	end
 end

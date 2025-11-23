@@ -24,9 +24,6 @@ BEGIN {
 # > nawk 'BEGIN{ v = -0; printf "%f, %g, ", v, v; print v }'
 # 0.000000, 0, 0
 #
-# Note:
-# In NAWK, the value -0 seems to be treated as 0, so "atan2(0,-0)", which is
-# one of the idioms to get PI, returns 0.
 # (see: setfval() in https://github.com/onetrueawk/awk/blob/master/tran.c)
 #
 # > gawk 'BEGIN{ print atan2(0,-0), atan2(0.0,-0.0), atan2(0,-1) }'

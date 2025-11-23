@@ -1,7 +1,7 @@
 #
 #  from src/e.c
 #
-#    long double ee(void)  to  e, efmt
+#    long double ee(void)  to  e, rec, efmt
 #
 
 function e(	r, a, n, prev) {
@@ -9,6 +9,13 @@ function e(	r, a, n, prev) {
 	do {
 		prev = r; r += a; a /= n; n++
 	} while (r != prev)
+	return r
+}
+
+function rec(r, a, n, prev) {
+	if (r != prev) {
+		return rec(r + a, a / n, n + 1, r)
+	}
 	return r
 }
 
@@ -22,18 +29,24 @@ function efmt(fmt,	r, a, n, prev) {
 
 #
 
-function run(	t, r) {
+function run(	e1, e2, r) {
 	print "# -- e()"
 
-	t = e()
+	e1 = e()
+	e2 = rec(0, 1, 1, 1)
 
-	printf "   %%e : %e\n", t
-	printf "   %%f : %f\n", t
-	printf "   %%g : %g\n", t
-	printf "   %%a : %a\n", t  # see bottom
-	printf "%%.20e : %.20e\n", t
-	printf "%%.20f : %.20f\n", t
-	printf "%%.20g : %.20g\n", t
+	if (e1 != e2) {
+		printf "Error: e() != rec()\n"
+		return
+	}
+
+	printf "   %%e : %e\n", e1
+	printf "   %%f : %f\n", e1
+	printf "   %%g : %g\n", e1
+	printf "   %%a : %a\n", e1  # see bottom
+	printf "%%.20e : %.20e\n", e1
+	printf "%%.20f : %.20f\n", e1
+	printf "%%.20g : %.20g\n", e1
 
 	print "# -- efmt(\"%.21f,%d\")"
 
@@ -65,10 +78,5 @@ BEGIN {
 }
 
 #
-# In mawk, you will probably get the following error caused by "%a":
-#
-# > mawk: run time error: improper conversion(number 2) in printf("   %%a : %a
-# > ...
-#
-# so if you want to run this script in mawk, please comment out the above line.
+# In certain AWK, the "a" specifier of printf may be unsupported.
 #

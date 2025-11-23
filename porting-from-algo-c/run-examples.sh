@@ -66,11 +66,10 @@ run() {
 run binormal LUA
 run complex LUA
 run dayweek AWK
-run e AWK DC LUA
+run e AWK DC
 run egyptianfraction LUA PY
 run factorize LUA PY
 run gcd AWK
-run hypot AWK LUA
 run machineepsilon LUA PY
 run moveblock AWK
 run nthroot LUA

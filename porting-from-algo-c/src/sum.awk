@@ -50,11 +50,5 @@ BEGIN {
 }
 
 #
-# In mawk, you will probably get the following error caused by "%a":
-#
-# > mawk: run time error: improper conversion(number 3) in printf("[%6d] 1 == sum1(): %s (%a)
-# > ...
-#
-# so if you want to run this script in mawk, please replace "%a" with
-# something appropriate to your preference.
+# In certain AWK, the "a" specifier of printf may be unsupported.
 #
