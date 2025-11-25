@@ -64,7 +64,6 @@ run() {
 }
 
 run binormal LUA
-run complex LUA
 run dayweek AWK
 run e AWK DC
 run egyptianfraction LUA PY

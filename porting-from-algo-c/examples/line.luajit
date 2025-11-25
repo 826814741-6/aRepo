@@ -5,7 +5,7 @@
 --
 --  from src/svgplot.c
 --
---    ... some extensions for basic shapes    are  :circle, :ellipse, :line, :rect
+--    ... some extensions for basic shapes    are  :line
 --
 
 local RAND = require 'rand'.RAND
