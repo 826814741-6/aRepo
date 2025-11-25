@@ -75,12 +75,22 @@ local function filterCO(self, n, f, g)
 	return self, r
 end
 
+local function peelCL(self)
+	return self.c
+end
+local function peelCO(self)
+	return function ()
+		local _, v = co_resume(self.c)
+		return v
+	end
+end
+
 local function makeMethod(v)
 	local ty = type(v)
 	if ty == "function" then
-		return dropCL, takeCL, filterCL
+		return dropCL, takeCL, filterCL, peelCL
 	elseif ty == "thread" then
-		return dropCO, takeCO, filterCO
+		return dropCO, takeCO, filterCO, peelCO
 	else
 		error("'v' must be a function or a thread.")
 	end
@@ -89,7 +99,7 @@ end
 local function beGen(v, ...)
 	local T = { c = v(...) }
 
-	T.drop, T.take, T.filter = makeMethod(T.c)
+	T.drop, T.take, T.filter, T.peel = makeMethod(T.c)
 
 	return T
 end
@@ -300,4 +310,19 @@ do
 	dropGens(7, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3)
 	monthsOfTheYear:drop(1) remaindersDividedBy3:drop(1)
 	p(takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3))
+
+	print("--")
+
+	function p(g, n)
+		local t = 1
+		for v in g:peel() do
+			if t > n then break end
+			io.write(v, " ")
+			t = t + 1
+		end
+		io.write("\n")
+	end
+
+	p(daysOfTheWeek, 10)
+	p(monthsOfTheYear, 15)
 end
