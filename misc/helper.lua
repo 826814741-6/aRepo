@@ -14,6 +14,26 @@ local function alwaysFalse(_) return false end
 local function alwaysNil(_) return nil end
 local function alwaysTrue(_) return true end
 
+local function lenT(v)
+	local r = 0
+	for _ in pairs(v) do
+		r = r + 1
+	end
+	return r
+end
+
+local function equalA(a, b, ...)
+	assert(type(a) == "table" and type(b) == "table")
+	assert(lenT(a) == lenT(b))
+	for i,v in ipairs(a) do
+		assert(v == b[i])
+	end
+	local rest = ...
+	if rest ~= nil then
+		equalA(b, ...)
+	end
+end
+
 local function beCircular(...)
 	local t = {}
 	for i,v in ipairs({...}) do
@@ -68,12 +88,13 @@ local function id(v) return v end
 
 local function bufInsert(self, v) t_insert(self.buf, v) end
 local function bufGet(self) return self.buf end
+local function bufLength(self) return lenT(self.buf) end
 local function bufReset(self) self.buf = {} end
 
 local function makeBuffer()
 	local T = { buf = {} }
 
-	T.insert, T.get, T.reset = bufInsert, bufGet, bufReset
+	T.insert, T.get, T.len, T.reset = bufInsert, bufGet, bufLength, bufReset
 
 	return T
 end
@@ -91,6 +112,7 @@ return {
 	alwaysFalse = alwaysFalse,
 	alwaysNil = alwaysNil,
 	alwaysTrue = alwaysTrue,
+	equalA = equalA,
 	beCircular = beCircular,
 	bePrintablePair = bePrintablePair,
 	flattenOnce = flattenOnce,

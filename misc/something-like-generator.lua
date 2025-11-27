@@ -211,71 +211,78 @@ do
 		end)
 	end
 
-	--
-
 	local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
+	function a(_, r) return function (v) H.equalA(r, v) end end
 	function p(l, r) print(t_unpack(r ~= nil and r or H.flattenOnce(l))) end
 
-	p(beGen(iotaCL):take(10))
-	p(beGen(iotaCL, 50, -1):drop(50):take(10))
-	p(beGen(iotaCL):take(10, function (v) return v * v * v end))
-	p(beGen(iotaCL):filter(10, function (_, v) return v % 2 == 0 end))
+	--
 
-	p(beGen(iotaCO):take(10))
-	p(beGen(iotaCO, 50, -1):drop(50):take(10))
-	p(beGen(iotaCO):take(10, function (v) return v * v * v end))
-	p(beGen(iotaCO):filter(10, function (_, v) return v % 2 == 0 end))
+	function demoA(v)
+		a(beGen(v):take(10))({
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+		})
+		a(beGen(v, 50, -1):drop(50):take(10))({
+			0, -1, -2, -3, -4, -5, -6, -7, -8, -9
+		})
+		a(beGen(v):take(10, function (v) return v * v * v end))({
+			0, 1, 8, 27, 64, 125, 216, 343, 512, 729
+		})
+		a(beGen(v):filter(10, function (_, v) return v % 2 == 0 end))({
+			0, 2, 4, 6, 8, 10, 12, 14, 16, 18
+		})
+	end
 
-	print("--")
+	demoA(iotaCL)
+	demoA(iotaCO)
+
+	--
 
 	local buf = H.makeBuffer()
 
 	function bwA(v) buf:insert(v) end
 	function bwB(v) buf:insert(v) return v end
 
-	p(beGen(iotaCL):take(3))      -- 0, 1, 2
-	p(beGen(iotaCL):take(3, bwA)) -- (nothing printed)
-	p(beGen(iotaCL):take(3, bwB)) -- 0, 1, 2
+	function demoB(v)
+		a(beGen(v):take(3, bwA))({})
+		a(beGen(v):take(3, bwB))({0, 1, 2})
+	end
 
-	p(beGen(iotaCO):take(3))      -- 0, 1, 2
-	p(beGen(iotaCO):take(3, bwA)) -- (nothing printed)
-	p(beGen(iotaCO):take(3, bwB)) -- 0, 1, 2
+	demoB(iotaCL)
+	demoB(iotaCO)
 
-	p(buf:get()) -- 0, 1, 2, 0, 1, 2 x 2
+	H.equalA(buf:get(), {
+		0, 1, 2, 0, 1, 2,
+		0, 1, 2, 0, 1, 2
+	})
 	buf:reset()
 
-	beGen(iotaCL)
-		:drop(5) -- 0, 1, 2, 3, 4
-		:filter(
-			5,
-			function (_, v) return v % 2 == 0 end,
-			bwA
-		)        -- 6, 8, 10, 12, 14
-		:drop(3) -- 15, 16, 17
-		:filter(
-			5,
-			function (_, v) return v % 3 == 0 end,
-			bwA
-		)        -- 18, 21, 24, 27, 30
-	beGen(iotaCO)
-		:drop(5) -- 0, 1, 2, 3, 4
-		:filter(
-			5,
-			function (_, v) return v % 2 == 0 end,
-			bwA
-		)        -- 6, 8, 10, 12, 14
-		:drop(3) -- 15, 16, 17
-		:filter(
-			5,
-			function (_, v) return v % 3 == 0 end,
-			bwA
-		)        -- 18, 21, 24, 27, 30
+	function demoC(v)
+		beGen(v)
+			:drop(5) -- 0, 1, 2, 3, 4
+			:filter(
+				5,
+				function (_, v) return v % 2 == 0 end,
+				bwA
+			)        -- 6, 8, 10, 12, 14
+			:drop(3) -- 15, 16, 17
+			:filter(
+				5,
+				function (_, v) return v % 3 == 0 end,
+				bwA
+			)        -- 18, 21, 24, 27, 30
+	end
 
-	p(buf:get()) -- 6, 8, 10, 12, 14, 18, 21, 24, 27, 30 x 2
+	demoC(iotaCL)
+	demoC(iotaCO)
+
+	H.equalA(buf:get(), {
+		6, 8, 10, 12, 14, 18, 21, 24, 27, 30,
+		6, 8, 10, 12, 14, 18, 21, 24, 27, 30
+	})
 	buf:reset()
 
-	print("--")
+	--
 
 	local hasBC, bc = pcall(require, 'bc')
 	local fibPairCL, fibCO = gFibCL(bePrintablePair), gFibCO()
@@ -285,19 +292,33 @@ do
 	local g3 = beGen(facCL, hasBC and bc.new(1) or 1)
 	local g4 = beGen(facCO)
 
-	p(takeGens(10, g1, g2))
-	p(g1:take(5))
-	p(g2:take(5))
-	dropGens(164, g2, g1)
-	p(takeGens(4, g1, g2))
+	H.equalA(H.flattenOnce(takeGens(6, g1, g2)), hasBC and {
+		0, 1, bc.new(0), 1, 1, bc.new(1), 1, 2, bc.new(1)
+	} or {
+		0, 1, 0, 1, 1, 1, 1, 2, 1
+	})
+	dropGens(10, g1, g2)
+	H.equalA(H.flattenOnce(takeGens(6, g2, g1)), hasBC and {
+		bc.new(21), 21, 34, bc.new(34), 34, 55, bc.new(55), 55, 89
+	} or {
+		21, 21, 34, 34, 34, 55, 55, 55, 89
+	})
+	dropGens(160, g1, g2)
+	p(g1:take(3))
+	p(g2:take(3))
 
-	dropGens(8, g4, g3)
-	p(takeGens(10, g3, g4))
-	dropGens(20, g3, g4)
-	p(g3:take(3))
-	p(g4:take(3))
+	dropGens(14, g3, g4)
+	H.equalA(takeGens(6, g3, g4), hasBC and {
+		bc.new(40320), 40320, bc.new(362880), 362880, bc.new(3628800), 3628800
+	} or {
+		40320, 40320, 362880, 362880, 3628800, 3628800
+	})
+	dropGens(10, g4, g3)
+	p(takeGens(6, g3, g4))
+	dropGens(2, g3, g4)
+	p(takeGens(6, g3, g4))
 
-	print("--")
+	--
 
 	local daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3 =
 		beGen(gCircularCL, "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"),
@@ -306,23 +327,46 @@ do
 		beGen(gCircularCL, 0, 1, 2)
 
 	dropGens(84 * 3, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3)
-	p(takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3))
+	H.equalA(
+		takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3),
+		{ "Sun", "Jan", 0, "Mon", "Feb", 1, "Tue", "Mar", 2 }
+	)
 	dropGens(7, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3)
 	monthsOfTheYear:drop(1) remaindersDividedBy3:drop(1)
-	p(takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3))
+	H.equalA(
+		takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3),
+		{ "Sat", "Jul", 0, "Sun", "Aug", 1, "Mon", "Sep", 2 }
+	)
 
-	print("--")
-
-	function p(g, n)
+	function demoD(g, m, n)
 		local t = 1
 		for v in g:peel() do
-			if t > n then break end
 			io.write(v, " ")
 			t = t + 1
+			if t > m then break end
+			g:drop(n)
 		end
 		io.write("\n")
 	end
 
-	p(daysOfTheWeek, 10)
-	p(monthsOfTheYear, 15)
+	demoD(daysOfTheWeek, 10)
+	demoD(monthsOfTheYear, 15)
+	a(daysOfTheWeek:take(8))({
+		"Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
+	})
+	a(monthsOfTheYear:take(13))({
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"
+	})
+
+	function pred() return unpackerR(remaindersDividedBy3:take(1)) == 0 end
+
+	demoD(daysOfTheWeek, 5, 2)
+	demoD(monthsOfTheYear, 5, 2)
+	a(daysOfTheWeek:filter(10, pred))({   -- 0 1 2 0 1 2 ... 1 2 0
+		"Fri", "Mon", "Thu", "Sun", "Wed", "Sat", "Tue", "Fri", "Mon", "Thu"
+	})
+	a(monthsOfTheYear:filter(10, pred))({ -- 1 2 0 1 2 0 ... 1 2 0
+		"May", "Aug", "Nov", "Feb", "May", "Aug", "Nov", "Feb", "May", "Aug"
+	})
 end

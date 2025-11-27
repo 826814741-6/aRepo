@@ -11,11 +11,19 @@ local DBL_EPSILON = 2.2204460492503131e-16  -- from src/float.ie3
 
 do
 	local iterator = machineEpsilon()
+	local it = (function ()
+		local e = 2
+		return function ()
+			e = e / 2
+			return e
+		end
+	end)()
 
 	print(" e              1 + e          (1 + e) - 1    e (%q)")
 	print("-------------- -------------- -------------- ---------")
 
 	function pfmt(e)
+		assert(e == it())
 		print(
 			("% -14g % -14g % -14g  %q")
 				:format(
