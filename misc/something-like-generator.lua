@@ -18,14 +18,14 @@ local function dropCL(self, n)
 	for _=1,n do
 		self.c()
 	end
-	return self, {}
+	return self
 end
 local function dropCO(self, n)
 	n = n ~= nil and n or 0
 	for _=1,n do
 		co_resume(self.c)
 	end
-	return self, {}
+	return self
 end
 
 local function takeCL(self, n, f)
@@ -173,25 +173,6 @@ do
 		end
 	end
 
-	function facCL(one)
-		one = one ~= nil and one or 1
-		local n, acc = one, one
-		return function ()
-			n, acc = n + one, acc * n
-			return acc
-		end
-	end
-	function facCO(one)
-		one = one ~= nil and one or 1
-		return co_create(function ()
-			local n, acc = one, one
-			while true do
-				n, acc = n + one, acc * n
-				co_yield(acc)
-			end
-		end)
-	end
-
 	function gCircularCL(...)
 		local t = beCircular(...)
 		local i = #t
@@ -211,12 +192,9 @@ do
 		end)
 	end
 
-	local t_unpack = table.unpack ~= nil and table.unpack or unpack
-
-	function a(_, r) return function (v) H.equalA(r, v) end end
-	function p(l, r) print(t_unpack(r ~= nil and r or H.flattenOnce(l))) end
-
 	--
+
+	function a(_, r) return function (v) H.assertA(r, v) end end
 
 	function demoA(v)
 		a(beGen(v):take(10))({
@@ -251,7 +229,7 @@ do
 	demoB(iotaCL)
 	demoB(iotaCO)
 
-	H.equalA(buf:get(), {
+	H.assertA(buf:get(), {
 		0, 1, 2, 0, 1, 2,
 		0, 1, 2, 0, 1, 2
 	})
@@ -276,7 +254,7 @@ do
 	demoC(iotaCL)
 	demoC(iotaCO)
 
-	H.equalA(buf:get(), {
+	H.assertA(buf:get(), {
 		6, 8, 10, 12, 14, 18, 21, 24, 27, 30,
 		6, 8, 10, 12, 14, 18, 21, 24, 27, 30
 	})
@@ -289,34 +267,25 @@ do
 
 	local g1 = beGen(fibPairCL)
 	local g2 = hasBC and beGen(fibCO, bc.new(0), bc.new(1)) or beGen(fibCO)
-	local g3 = beGen(facCL, hasBC and bc.new(1) or 1)
-	local g4 = beGen(facCO)
 
-	H.equalA(H.flattenOnce(takeGens(6, g1, g2)), hasBC and {
-		0, 1, bc.new(0), 1, 1, bc.new(1), 1, 2, bc.new(1)
+	H.assertA(takeGens(6, g1, g2), hasBC and {
+		{0, 1}, bc.new(0), {1, 1}, bc.new(1), {1, 2}, bc.new(1)
 	} or {
-		0, 1, 0, 1, 1, 1, 1, 2, 1
+		{0, 1}, 0, {1, 1}, 1, {1, 2}, 1
 	})
 	dropGens(10, g1, g2)
-	H.equalA(H.flattenOnce(takeGens(6, g2, g1)), hasBC and {
-		bc.new(21), 21, 34, bc.new(34), 34, 55, bc.new(55), 55, 89
+	H.assertA(takeGens(6, g2, g1), hasBC and {
+		bc.new(21), {21, 34}, bc.new(34), {34, 55}, bc.new(55), {55, 89}
 	} or {
-		21, 21, 34, 34, 34, 55, 55, 55, 89
+		21, {21, 34}, 34, {34, 55}, 55, {55, 89}
 	})
-	dropGens(160, g1, g2)
-	p(g1:take(3))
-	p(g2:take(3))
 
-	dropGens(14, g3, g4)
-	H.equalA(takeGens(6, g3, g4), hasBC and {
-		bc.new(40320), 40320, bc.new(362880), 362880, bc.new(3628800), 3628800
-	} or {
-		40320, 40320, 362880, 362880, 3628800, 3628800
-	})
-	dropGens(10, g4, g3)
-	p(takeGens(6, g3, g4))
-	dropGens(2, g3, g4)
-	p(takeGens(6, g3, g4))
+	dropGens(112, g1, g2)
+	print(unpackerR(g1:take(3)))
+	print(unpackerR(g2:take(3)))
+	dropGens(42, g1, g2)
+	print(unpackerR(g1:take(3)))
+	print(unpackerR(g2:take(3)))
 
 	--
 
@@ -327,13 +296,13 @@ do
 		beGen(gCircularCL, 0, 1, 2)
 
 	dropGens(84 * 3, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3)
-	H.equalA(
+	H.assertA(
 		takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3),
 		{ "Sun", "Jan", 0, "Mon", "Feb", 1, "Tue", "Mar", 2 }
 	)
 	dropGens(7, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3)
 	monthsOfTheYear:drop(1) remaindersDividedBy3:drop(1)
-	H.equalA(
+	H.assertA(
 		takeGens(9, daysOfTheWeek, monthsOfTheYear, remaindersDividedBy3),
 		{ "Sat", "Jul", 0, "Sun", "Aug", 1, "Mon", "Sep", 2 }
 	)
