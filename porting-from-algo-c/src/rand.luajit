@@ -39,6 +39,8 @@ end
 -- > = 0ULL - 1, 0ULL - 1LL, 0ULL - 1ULL
 -- 18446744073709551615ULL 18446744073709551615ULL 18446744073709551615ULL
 --
+-- ref: https://github.com/LuaJIT/LuaJIT/issues/1411 (must-read)
+--
 
 local function R_rand(self)
 	self.next = self.next * 1103515245LL + 12345
