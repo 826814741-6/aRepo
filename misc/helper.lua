@@ -2,7 +2,7 @@
 --  helper.lua: some helper functions for toy scripts
 --
 
-local t_insert = table.insert
+local t_insert, t_remove = table.insert, table.remove
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
 local function aintNil(v, defaultValue)
@@ -38,6 +38,15 @@ local function beCircular(...)
 	local t = {}
 	for i,v in ipairs({...}) do
 		t[i] = { v = v, next = i + 1 }
+	end
+	t[#t].next = 1
+	return t
+end
+
+local function beCircularG(...)
+	local t = {}
+	for i,v in ipairs({...}) do
+		t[i] = { v = v:peel(), next = i + 1 }
 	end
 	t[#t].next = 1
 	return t
@@ -97,18 +106,35 @@ end
 -- https://www.lua.org/manual/5.4/manual.html#3.4.7
 -- https://www.lua.org/manual/5.1/manual.html#2.5.5
 
-local function bufInsert(self, v) t_insert(self.buf, v) end
-local function bufGet(self) return self.buf end
-local function bufLength(self) return lenT(self.buf) end
-local function bufReset(self) self.buf = {} end
+local function B_get(self) return self.buf end
+local function B_len(self) return lenT(self.buf) end
+local function B_lenViaOp(self) return #self.buf end
+local function B_pop(self) return t_remove(self.buf) end
+local function B_push(self, v) return t_insert(self.buf, v) end
+local function B_reset(self) self.buf = {} end
 
 local function makeBuffer()
 	local T = { buf = {} }
 
-	T.insert, T.get, T.len, T.reset = bufInsert, bufGet, bufLength, bufReset
+	setmetatable(T, { __len = B_lenViaOp }) -- +v5.2/+LUA52COMPAT
+
+	T.get, T.len, T.lenViaOp, T.pop, T.push, T.reset =
+		B_get, B_len, B_lenViaOp, B_pop, B_push, B_reset
 
 	return T
 end
+--
+-- >> A program can modify the behavior of the length operator for
+-- >> any value but strings through the __len metamethod (see 2.4).
+-- >> -- https://www.lua.org/manual/5.2/manual.html#3.4.6
+--
+-- the "len" part in the "Metatables" sec of v5.2/v5.1 manual:
+--   https://www.lua.org/manual/5.2/manual.html#2.4
+--   https://www.lua.org/manual/5.1/manual.html#2.8
+-- and "LUAJIT_ENABLE_LUA52COMPAT" in:
+--   https://luajit.org/extensions.html
+--   (cf. LJ_52,lj_meta_len (in src/{lj_arch.h,...,lj_meta.c,...}))
+--
 
 local function mustBeNonNil(v)
 	assert(v ~= nil)
@@ -125,6 +151,7 @@ return {
 	alwaysTrue = alwaysTrue,
 	assertA = assertA,
 	beCircular = beCircular,
+	beCircularG = beCircularG,
 	bePrintablePair = bePrintablePair,
 	flattenOnce = flattenOnce,
 	id = id,

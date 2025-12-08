@@ -6,8 +6,8 @@
 
 local H = require 'helper'
 
-local alwaysTrue, beCircular, bePrintablePair, id, unpackerR =
-	H.alwaysTrue, H.beCircular, H.bePrintablePair, H.id, H.unpackerR
+local alwaysTrue, beCircularG, bePrintablePair, id =
+	H.alwaysTrue, H.beCircularG, H.bePrintablePair, H.id
 
 local co_create = coroutine.create
 local co_resume = coroutine.resume
@@ -75,22 +75,26 @@ local function filterCO(self, n, f, g)
 	return self, r
 end
 
-local function peelCL(self)
-	return self.c
-end
-local function peelCO(self)
+local function gResume(co)
 	return function ()
-		local _, v = co_resume(self.c)
+		local _, v = co_resume(co)
 		return v
 	end
 end
 
-local function makeMethod(v)
+local function peelCL(self)
+	return self.c
+end
+local function peelCO(self)
+	return self.aResume
+end
+
+local function init(v)
 	local ty = type(v)
 	if ty == "function" then
 		return dropCL, takeCL, filterCL, peelCL
 	elseif ty == "thread" then
-		return dropCO, takeCO, filterCO, peelCO
+		return dropCO, takeCO, filterCO, peelCO, gResume(v)
 	else
 		error("'v' must be a function or a thread.")
 	end
@@ -99,27 +103,27 @@ end
 local function beGen(v, ...)
 	local T = { c = v(...) }
 
-	T.drop, T.take, T.filter, T.peel = makeMethod(T.c)
+	T.drop, T.take, T.filter, T.peel, T.aResume = init(T.c)
 
 	return T
 end
 
 local function dropGens(n, ...)
-	local t = beCircular(...)
+	local t = beCircularG(...)
 
-	local i, j = 1, 1
-	while i <= n do
-		t[j].v:drop(1)
-		i, j = i + 1, t[j].next
+	local i = 1
+	for _=1,n do
+		t[i].v()
+		i = t[i].next
 	end
 end
 
 local function takeGens(n, ...)
-	local t = beCircular(...)
+	local t = beCircularG(...)
 
-	local r, i, j = {}, 1, 1
-	while i <= n do
-		r[i], i, j = unpackerR(t[j].v:take(1)), i + 1, t[j].next
+	local r, i = {}, 1
+	for j=1,n do
+		r[j], i = t[i].v(), t[i].next
 	end
 	return r
 end
@@ -174,7 +178,7 @@ do
 	end
 
 	function gCircularCL(...)
-		local t = beCircular(...)
+		local t = H.beCircular(...)
 		local i = #t
 		return function ()
 			i = t[i].next
@@ -182,7 +186,7 @@ do
 		end
 	end
 	function gCircularCO(...)
-		local t = beCircular(...)
+		local t = H.beCircular(...)
 		local i = 1
 		return co_create(function ()
 			while true do
@@ -218,8 +222,8 @@ do
 
 	local buf = H.makeBuffer()
 
-	function bwA(v) buf:insert(v) end
-	function bwB(v) buf:insert(v) return v end
+	function bwA(v) buf:push(v) end
+	function bwB(v) buf:push(v) return v end
 
 	function demoB(v)
 		a(beGen(v):take(3, bwA))({})
@@ -281,11 +285,11 @@ do
 	})
 
 	dropGens(112, g1, g2)
-	print(unpackerR(g1:take(3)))
-	print(unpackerR(g2:take(3)))
+	print(H.unpackerR(g1:take(3)))
+	print(H.unpackerR(g2:take(3)))
 	dropGens(42, g1, g2)
-	print(unpackerR(g1:take(3)))
-	print(unpackerR(g2:take(3)))
+	print(H.unpackerR(g1:take(3)))
+	print(H.unpackerR(g2:take(3)))
 
 	--
 
@@ -308,34 +312,43 @@ do
 	)
 
 	function demoD(g, m, n)
-		local t = 1
+		local t, buf = 1, H.makeBuffer()
+
 		for v in g:peel() do
 			io.write(v, " ")
 			t = t + 1
+			buf:push(g:peel())
 			if t > m then break end
 			g:drop(n)
 		end
 		io.write("\n")
+
+		for i=1,buf:len() do
+			g:drop(n)
+			io.write(buf:pop()(), " ")
+		end
+		io.write("\n")
 	end
 
-	demoD(daysOfTheWeek, 10)
-	demoD(monthsOfTheYear, 15)
+	demoD(daysOfTheWeek, 10)   -- ... Sun
+	demoD(monthsOfTheYear, 15) -- ... Mar
 	a(daysOfTheWeek:take(8))({
-		"Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
+		"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon"
 	})
 	a(monthsOfTheYear:take(13))({
-		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"
+		"Apr", "May", "Jun", "Jul", "Aug", "Sep",
+		"Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"
 	})
 
-	function pred() return unpackerR(remaindersDividedBy3:take(1)) == 0 end
+	function predA() return H.unpackerR(remaindersDividedBy3:take(1)) == 0 end
+	function predB() return remaindersDividedBy3:peel()() == 0 end
 
-	demoD(daysOfTheWeek, 5, 2)
-	demoD(monthsOfTheYear, 5, 2)
-	a(daysOfTheWeek:filter(10, pred))({   -- 0 1 2 0 1 2 ... 1 2 0
-		"Fri", "Mon", "Thu", "Sun", "Wed", "Sat", "Tue", "Fri", "Mon", "Thu"
+	demoD(daysOfTheWeek, 5, 2)   -- ... Mon
+	demoD(monthsOfTheYear, 5, 2) -- ... Aug
+	a(daysOfTheWeek:filter(10, predA))({   -- 0 1 2 0 1 2 ... 1 2 0
+		"Tue", "Fri", "Mon", "Thu", "Sun", "Wed", "Sat", "Tue", "Fri", "Mon"
 	})
-	a(monthsOfTheYear:filter(10, pred))({ -- 1 2 0 1 2 0 ... 1 2 0
-		"May", "Aug", "Nov", "Feb", "May", "Aug", "Nov", "Feb", "May", "Aug"
+	a(monthsOfTheYear:filter(10, predB))({ -- 1 2 0 1 2 0 ... 1 2 0
+		"Nov", "Feb", "May", "Aug", "Nov", "Feb", "May", "Aug", "Nov", "Feb"
 	})
 end
