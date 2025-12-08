@@ -34,19 +34,10 @@ local function assertA(a, b, ...)
 	end
 end
 
-local function beCircular(...)
+local function beCircular(f, ...)
 	local t = {}
 	for i,v in ipairs({...}) do
-		t[i] = { v = v, next = i + 1 }
-	end
-	t[#t].next = 1
-	return t
-end
-
-local function beCircularG(...)
-	local t = {}
-	for i,v in ipairs({...}) do
-		t[i] = { v = v:peel(), next = i + 1 }
+		t[i] = { v = f(v), next = i + 1 }
 	end
 	t[#t].next = 1
 	return t
@@ -116,7 +107,7 @@ local function B_reset(self) self.buf = {} end
 local function makeBuffer()
 	local T = { buf = {} }
 
-	setmetatable(T, { __len = B_lenViaOp }) -- +v5.2/+LUA52COMPAT
+	setmetatable(T, { __len = B_lenViaOp }) -- v5.2+/+LUA52COMPAT
 
 	T.get, T.len, T.lenViaOp, T.pop, T.push, T.reset =
 		B_get, B_len, B_lenViaOp, B_pop, B_push, B_reset
@@ -151,7 +142,6 @@ return {
 	alwaysTrue = alwaysTrue,
 	assertA = assertA,
 	beCircular = beCircular,
-	beCircularG = beCircularG,
 	bePrintablePair = bePrintablePair,
 	flattenOnce = flattenOnce,
 	id = id,

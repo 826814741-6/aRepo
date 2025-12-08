@@ -6,8 +6,8 @@
 
 local H = require 'helper'
 
-local alwaysTrue, beCircularG, bePrintablePair, id =
-	H.alwaysTrue, H.beCircularG, H.bePrintablePair, H.id
+local alwaysTrue, beCircular, bePrintablePair, id =
+	H.alwaysTrue, H.beCircular, H.bePrintablePair, H.id
 
 local co_create = coroutine.create
 local co_resume = coroutine.resume
@@ -108,8 +108,10 @@ local function beGen(v, ...)
 	return T
 end
 
+local function hookG(v) return v:peel() end
+
 local function dropGens(n, ...)
-	local t = beCircularG(...)
+	local t = beCircular(hookG, ...)
 
 	local i = 1
 	for _=1,n do
@@ -119,7 +121,7 @@ local function dropGens(n, ...)
 end
 
 local function takeGens(n, ...)
-	local t = beCircularG(...)
+	local t = beCircular(hookG, ...)
 
 	local r, i = {}, 1
 	for j=1,n do
@@ -178,7 +180,7 @@ do
 	end
 
 	function gCircularCL(...)
-		local t = H.beCircular(...)
+		local t = beCircular(id, ...)
 		local i = #t
 		return function ()
 			i = t[i].next
@@ -186,7 +188,7 @@ do
 		end
 	end
 	function gCircularCO(...)
-		local t = H.beCircular(...)
+		local t = beCircular(id, ...)
 		local i = 1
 		return co_create(function ()
 			while true do
