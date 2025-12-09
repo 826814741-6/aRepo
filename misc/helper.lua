@@ -104,13 +104,22 @@ local function B_pop(self) return t_remove(self.buf) end
 local function B_push(self, v) return t_insert(self.buf, v) end
 local function B_reset(self) self.buf = {} end
 
+local function B_iter(self)
+	local i = 1
+	return function ()
+		local r = self.buf[i]
+		i = i + 1
+		return r
+	end
+end
+
 local function makeBuffer()
 	local T = { buf = {} }
 
 	setmetatable(T, { __len = B_lenViaOp }) -- v5.2+/+LUA52COMPAT
 
-	T.get, T.len, T.lenViaOp, T.pop, T.push, T.reset =
-		B_get, B_len, B_lenViaOp, B_pop, B_push, B_reset
+	T.get, T.iter, T.len, T.lenViaOp, T.pop, T.push, T.reset =
+		B_get, B_iter, B_len, B_lenViaOp, B_pop, B_push, B_reset
 
 	return T
 end

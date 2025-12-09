@@ -325,32 +325,37 @@ do
 		end
 		io.write("\n")
 
-		for i=1,buf:len() do
+		for v in buf:iter() do
+			g:drop(n)
+			io.write(v(), " ")
+		end
+		io.write("\n")
+
+		for _=1,buf:len() do
 			g:drop(n)
 			io.write(buf:pop()(), " ")
 		end
 		io.write("\n")
 	end
 
-	demoD(daysOfTheWeek, 10)   -- ... Sun
-	demoD(monthsOfTheYear, 15) -- ... Mar
+	demoD(daysOfTheWeek, 10)   -- ... Wed
+	demoD(monthsOfTheYear, 15) -- ... Jun
 	a(daysOfTheWeek:take(8))({
-		"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon"
+		"Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"
 	})
 	a(monthsOfTheYear:take(13))({
-		"Apr", "May", "Jun", "Jul", "Aug", "Sep",
-		"Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"
 	})
 
-	function predA() return H.unpackerR(remaindersDividedBy3:take(1)) == 0 end
-	function predB() return remaindersDividedBy3:peel()() == 0 end
+	function pred() return remaindersDividedBy3:peel()() == 0 end
 
-	demoD(daysOfTheWeek, 5, 2)   -- ... Mon
-	demoD(monthsOfTheYear, 5, 2) -- ... Aug
-	a(daysOfTheWeek:filter(10, predA))({   -- 0 1 2 0 1 2 ... 1 2 0
-		"Tue", "Fri", "Mon", "Thu", "Sun", "Wed", "Sat", "Tue", "Fri", "Mon"
+	demoD(daysOfTheWeek, 5, 2)   -- ... Fri
+	demoD(monthsOfTheYear, 5, 2) -- ... Feb
+	a(daysOfTheWeek:filter(10, pred))({   -- 0 1 2 0 1 2 ... 1 2 0
+		"Sat", "Tue", "Fri", "Mon", "Thu", "Sun", "Wed", "Sat", "Tue", "Fri"
 	})
-	a(monthsOfTheYear:filter(10, predB))({ -- 1 2 0 1 2 0 ... 1 2 0
-		"Nov", "Feb", "May", "Aug", "Nov", "Feb", "May", "Aug", "Nov", "Feb"
+	a(monthsOfTheYear:filter(10, pred))({ -- 1 2 0 1 2 0 ... 1 2 0
+		"May", "Aug", "Nov", "Feb", "May", "Aug", "Nov", "Feb", "May", "Aug"
 	})
 end
