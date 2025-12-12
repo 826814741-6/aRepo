@@ -22,7 +22,7 @@ end
 local function init(v)
 	local ty = type(v)
 	if ty == "function" then
-		return id(v)
+		return v
 	elseif ty == "thread" then
 		return gResume(v)
 	else
@@ -96,7 +96,7 @@ local function filter(g, n, pred, f)
 	while i <= n do
 		local v = g()
 		if pred(i, v) then
-			r[i], i = v, i + 1
+			r[i], i = f(v), i + 1
 		end
 	end
 	return r
@@ -409,7 +409,7 @@ do
 			_r( g2:filter(5, pred) ), -- 1 2 0 1 2 0 ... 1 2 0
 			{"Dec", "Mar", "Jun", "Sep", "Dec"}
 		)
-		dropGens(4, g3, g3, g3, g3, g3, g3, g3) -- 1 2 0 1
+		dropGens(4, g3, g3, g3, g3, g3, g3) -- 1 2 0 1
 		H.assertA(
 			_r( g2:filter(5, pred) ), -- 2 0 1 2 0 1 ... 1 2 0
 			{"Feb", "May", "Aug", "Nov", "Feb"}

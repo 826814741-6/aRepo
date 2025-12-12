@@ -101,9 +101,9 @@ local function B_get(self) return self.buf end
 local function B_len(self) return lenT(self.buf) end
 local function B_lenViaOp(self) return #self.buf end
 local function B_pop(self) return t_remove(self.buf) end
-local function B_popHead(self) return t_remove(self.buf, 1) end
+local function B_popLeft(self) return t_remove(self.buf, 1) end
 local function B_push(self, v) return t_insert(self.buf, v) end
-local function B_pushHead(self, v) return t_insert(self.buf, v, 1) end
+local function B_pushLeft(self, v) return t_insert(self.buf, v, 1) end
 local function B_reset(self) self.buf = {} end
 --
 -- table.insert/table.remove and position shifting up/down:
@@ -127,8 +127,8 @@ local function makeBuffer()
 
 	setmetatable(T, { __len = B_lenViaOp }) -- v5.2+/+LUA52COMPAT
 
-	T.get, T.iter, T.len, T.lenViaOp, T.pop, T.popHead, T.push, T.pushHead, T.reset =
-		B_get, B_iter, B_len, B_lenViaOp, B_pop, B_popHead, B_push, B_pushHead, B_reset
+	T.get, T.iter, T.len, T.lenViaOp, T.pop, T.popLeft, T.push, T.pushLeft, T.reset =
+		B_get, B_iter, B_len, B_lenViaOp, B_pop, B_popLeft, B_push, B_pushLeft, B_reset
 
 	return T
 end

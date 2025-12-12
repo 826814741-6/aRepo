@@ -3,9 +3,8 @@
 #
 #  Please set the path of excutable, before you run this script.
 #
-#    e.g.
-#    LUA=/path/to/lua or LUA=lua or
-#    PY='micropython -X heapsize=2wM -X emit=native' (*)
+#    AWK=/path/to/awk or LUA=lua or
+#    PY='micropython -X heapsize=2wM -X emit=native' (*) or ...
 #
 #  *) Quick reference for the UNIX and Windows ports
 #  https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
@@ -66,7 +65,7 @@ run() {
 
 run bifur LUA
 run binormalG LUA
-run ccurve AWK PY
+run ccurve AWK
 run circle LUA LUAJIT
 run dragoncurve AWK
 run ellipse LUA LUAJIT
@@ -75,8 +74,8 @@ run grBMP LUA LUAJIT PY
 run hilbert AWK
 run koch AWK
 run line LUA LUAJIT
-run lissajouscurve AWK PY
+run lissajouscurve AWK
 run lorenz AWK
 run sierpinski AWK
-run svgplot AWK LUA LUAJIT PY
-run treecurve AWK PY
+run svgplot AWK LUA LUAJIT
+run treecurve AWK

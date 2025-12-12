@@ -3,19 +3,13 @@
 #
 #  Please set the path of excutable, before you run this script.
 #
-#    e.g.
-#    LUA=/path/to/lua or LUA=lua or
-#    PY='micropython -X heapsize=2wM -X emit=native' (*)
-#
-#  *) Quick reference for the UNIX and Windows ports
-#  https://github.com/micropython/micropython/blob/master/docs/unix/quickref.rst
+#    AWK=/path/to/awk or LUA=lua or ...
 #
 
 AWK=
 DC=
 LUA=
 LUAJIT=
-PY=
 
 #
 
@@ -28,7 +22,6 @@ error() {
 [ "$(command -v $DC)" = "" ] && error "DC"
 [ "$(command -v $LUA)" = "" ] && error "LUA"
 [ "$(command -v $LUAJIT)" = "" ] && error "LUAJIT"
-[ "$(command -v $PY)" = "" ] && error "PY"
 
 #
 
@@ -48,10 +41,6 @@ runLUAJIT() {
 	LUA_PATH='src/?.luajit' $LUAJIT examples/${1}.luajit
 }
 
-runPY() {
-	MICROPYPATH='src' PYTHONPATH='src' $PY src/${1}.py
-}
-
 #
 
 run() {
@@ -66,10 +55,10 @@ run() {
 run binormal LUA
 run dayweek AWK
 run e AWK DC
-run egyptianfraction LUA PY
-run factorize LUA PY
+run egyptianfraction LUA
+run factorize LUA
 run gcd AWK
-run machineepsilon LUA PY
+run machineepsilon LUA
 run moveblock AWK
 run nthroot LUA
 run pi AWK DC
