@@ -33,9 +33,6 @@ end
 local function peel(self) return self.v end
 local function hookG(v) return v:peel() end
 
-local function drop(g, n)
-	for _=1,n do g() end
-end
 local function G_drop(self, n)
 	for _=1,n do self.v() end
 	return self
@@ -48,22 +45,7 @@ local function GS_drop(self, n)
 	end
 	return self
 end
-local function dropGens(n, ...)
-	local t = beCircular(hookG, ...)
 
-	local i = 1
-	for _=1,n do
-		t[i].v()
-		i = t[i].next
-	end
-end
-
-local function take(g, n, f)
-	f = f ~= nil and f or id
-	local r = {}
-	for i=1,n do r[i] = f(g()) end
-	return r
-end
 local function G_take(self, n, f)
 	f = f ~= nil and f or id
 	local r = {}
@@ -80,27 +62,7 @@ local function GS_take(self, n, f)
 	end
 	return self, r
 end
-local function takeGens(n, ...)
-	local t = beCircular(hookG, ...)
 
-	local r, i = {}, 1
-	for j=1,n do
-		r[j], i = t[i].v(), t[i].next
-	end
-	return r
-end
-
-local function filter(g, n, pred, f)
-	f = f ~= nil and f or id
-	local r, i = {}, 1
-	while i <= n do
-		local v = g()
-		if pred(i, v) then
-			r[i], i = f(v), i + 1
-		end
-	end
-	return r
-end
 local function G_filter(self, n, pred, f)
 	f = f ~= nil and f or id
 	local r, i = {}, 1
@@ -124,19 +86,6 @@ local function GS_filter(self, n, pred, f)
 	end
 	return self, r
 end
-local function filterGens(n, pred, ...)
-	local t = beCircular(hookG, ...)
-
-	local r, i, j = {}, 1, 1
-	while j <= n do
-		local v = t[i].v()
-		i = t[i].next
-		if pred(j, v) then
-			r[j], j = v, j + 1
-		end
-	end
-	return r
-end
 
 local function Gen(v, ...)
 	local T = { v = init(v(...)) }
@@ -153,6 +102,16 @@ local function Gens(...)
 
 	return T
 end
+
+local function _r(_, r) return r end
+
+local function drop(g, n) G_drop(g, n) end
+local function take(g, n, f) return _r(G_take(g, n, f)) end
+local function filter(g, n, pred, f) return _r(G_filter(g, n, pred, f)) end
+
+local function dropGens(n, ...) Gens(...):drop(n) end
+local function takeGens(n, ...) return _r(Gens(...):take(n)) end
+local function filterGens(n, pred, ...) return _r(Gens(...):filter(n, pred)) end
 
 --
 
@@ -224,8 +183,6 @@ local function gCircularCO(...)
 end
 
 do
-	function _r(_, r) return r end
-
 	function demoA(v)
 		function hook(v) return v * v * v end
 		function pred(_, v) return v % 2 == 0 end
@@ -247,7 +204,7 @@ do
 			{0, 1, 8, 27, 64, 125, 216, 343, 512, 729}
 		)
 		H.assertA(
-			take(Gen(v):peel(), 10, hook),
+			take(Gen(v), 10, hook),
 			{0, 1, 8, 27, 64, 125, 216, 343, 512, 729}
 		)
 		H.assertA(
@@ -259,7 +216,7 @@ do
 			{0, 2, 4, 6, 8, 10, 12, 14, 16, 18}
 		)
 		H.assertA(
-			filter(Gen(v):peel(), 10, pred),
+			filter(Gen(v), 10, pred),
 			{0, 2, 4, 6, 8, 10, 12, 14, 16, 18}
 		)
 		H.assertA(
@@ -392,7 +349,7 @@ do
 			_r( gs1:take(9) ),
 			{"Sun", "Jan", 0, "Mon", "Feb", 1, "Tue", "Mar", 2}
 		)
-		gs1:drop(7) g2:drop(1) drop(g3:peel(), 1)
+		gs1:drop(7) g2:drop(1) drop(g3, 1)
 		H.assertA(
 			_r( gs1:take(9) ),
 			{"Sat", "Jul", 0, "Sun", "Aug", 1, "Mon", "Sep", 2}
