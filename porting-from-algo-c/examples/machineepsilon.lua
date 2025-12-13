@@ -19,13 +19,13 @@ do
 		end
 	end)()
 
-	print(" e              1 + e          (1 + e) - 1    e (%q)")
+	print(" e              1 + e          (1 + e) - 1    e (%a)")
 	print("-------------- -------------- -------------- ---------")
 
 	function pfmt(e)
 		assert(e == it())
 		print(
-			("% -14g % -14g % -14g  %q")
+			("% -14g % -14g % -14g  %a")
 				:format(
 					e,
 					1 + e,
@@ -47,4 +47,27 @@ do
 	for e in iterator do
 		pfmt(e)
 	end
+end
+
+print("-- cf.")
+
+do
+	local it = machineEpsilon()
+
+	it() it()
+
+	for n=1,7 do
+		local fmt, e = ("%%-9.%df %%a %%q"):format(n), it()
+		print(fmt:format(e, e, e))
+	end
+
+--
+-- >> Enforce round-to-even semantics. #1363
+-- >> -- https://github.com/LuaJIT/LuaJIT/commit/7152e15489d2077cd299ee23e3d51a4c599ab14f
+--
+-- > LUA_PATH='src/?.lua' luajit-2.1.1765228720 examples/machineepsilon.lua
+-- ...
+-- > LUA_PATH='src/?.lua' luajit-previous-one examples/machineepsilon.lua
+-- ...
+--
 end
