@@ -6,33 +6,26 @@
 
 local t_unpack = table.unpack ~= nil and table.unpack or unpack
 
-function check(validators, target)
-	for i,v in ipairs(validators) do
+function check(preds, target)
+	for i,v in ipairs(preds) do
 		assert(v(target[i]), i)
 	end
 end
 
-function wrapWithValidator(body, paramValidators, returnValidators, unpacker)
+function wrapWithPreds(body, forArg, forRet, unpacker)
 	unpacker = unpacker ~= nil and unpacker or t_unpack
 	return setmetatable({}, {
 		__call = function (self, ...)
 			local arg = {...}
-			check(paramValidators, arg)
+			check(forArg, arg)
 
 			local ret = {body(...)}
-			check(returnValidators, ret)
+			check(forRet, ret)
 
 			return unpacker(ret)
 		end
 	})
 end
---
--- Note:
--- If the return value contains nil, 't_unpack' may not be able to retrieve
--- the result properly depending on your build of Lua/LuaJIT. In this case,
--- please pass your own 'unpacker' as an argument.
--- (see w4A and w4B below)
---
 
 function isBool(v) return type(v) == "boolean" end
 function isFh(v) return io.type(v) == "file" end
@@ -53,9 +46,8 @@ function isNumAndNonNeg(v) return isNum(v) and v >= 0 end
 --
 -- >> The main difference between Lua 5.2 and Lua 5.3 is the introduction of
 -- >> an integer subtype for numbers. ...
--- >>
--- >> 8.1 - Changes in the Language (Lua 5.3 Reference Manual)
--- >> (ref: https://www.lua.org/manual/5.3/manual.html#8.1)
+-- >> -- 8.1 - Changes in the Language (Lua 5.3 Reference Manual)
+-- >> -- https://www.lua.org/manual/5.3/manual.html#8.1
 --
 
 do
@@ -66,31 +58,31 @@ do
 	function f5(n) return n < 0 and -n or n end
 	function f6(n) return function (x, y) return "valid?" end end
 
-	local w1 = wrapWithValidator(f1, {isNum, isStr, isTbl}, {isNum})
-	local w2 = wrapWithValidator(f2, {}, {isBool, isBool})
-	local w3 = wrapWithValidator(f3, {isFh}, {})
-	local w4A = wrapWithValidator(
+	local w1 = wrapWithPreds(f1, {isNum, isStr, isTbl}, {isNum})
+	local w2 = wrapWithPreds(f2, {}, {isBool, isBool})
+	local w3 = wrapWithPreds(f3, {isFh}, {})
+	local w4A = wrapWithPreds(
 		f4,
 		{isNumOrNil},
 		{isNumOrNil, isNumOrNil, isNumOrNil}
 	)
-	local w4B = wrapWithValidator(
+	local w4B = wrapWithPreds(
 		f4,
 		{isNumOrNil},
 		{isNumOrNil, isNumOrNil, isNumOrNil},
 		function (r) return r[1], r[2], r[3] end
 	)
-	local w5A = wrapWithValidator(f5, {isNum}, {isNumAndNonNeg})
-	local w5B = wrapWithValidator(math.abs, {isNum}, {isNumAndNonNeg})
-	local w6 = wrapWithValidator(f6, {isNum}, {isFun})
-	local w7 = wrapWithValidator(w6(0), {isNum, isNum}, {isStr})
+	local w5A = wrapWithPreds(f5, {isNum}, {isNumAndNonNeg})
+	local w5B = wrapWithPreds(math.abs, {isNum}, {isNumAndNonNeg})
+	local w6 = wrapWithPreds(f6, {isNum}, {isFun})
+	local w7 = wrapWithPreds(w6(0), {isNum, isNum}, {isStr})
 
 	print(w1(os.clock(), "1", {2}))
 	print(w2())
 	print(w3(io.stdout))
 	print("t_unpack:", w4A())
 	print("user unpacker:", w4B())
-	print("fall through:", w5A(-1), w5A(-0.1), w5A(-0.0), w5A(-0), w5A(0), w5A(0.0), w5A(0.1), w5A(1))
+	print("bogus one:", w5A(-1), w5A(-0.1), w5A(-0.0), w5A(-0), w5A(0), w5A(0.0), w5A(0.1), w5A(1))
 	print("math.abs:", w5B(-1), w5B(-0.1), w5B(-0.0), w5B(-0), w5B(0), w5B(0.0), w5B(0.1), w5B(1))
 	print(w6(0))
 	print(w7(1, 2))
@@ -101,23 +93,19 @@ do
 	assert(ret, err)  -- (*)
 	--
 	-- If you want to see the results of the latter half,
-	-- please comment out above line (line number: 101).
+	-- please comment out above line (line number: 93).
 	--
 end
 
 --
--- If you want to use a different checker instead of the function 'check'
--- above, or if you want to use a different checker for each validator in
--- param and return, the following approach might suit you:
---
 
-function makeValidator(validators, checker)
-	local T = { validators = validators }
+function makePreds(preds, checker)
+	local T = { preds = preds }
 
 	T.check = checker ~= nil
 		and checker
 		or function (self, target)
-			for i,v in ipairs(self.validators) do
+			for i,v in ipairs(self.preds) do
 				assert(v(target[i]), i)
 			end
 		end
@@ -125,31 +113,29 @@ function makeValidator(validators, checker)
 	return T
 end
 
-function wrapWithValidator(body, paramValidator, returnValidator, unpacker)
+function wrapWithPreds(body, forArg, forRet, unpacker)
 	unpacker = unpacker ~= nil and unpacker or t_unpack
 	return setmetatable({}, {
 		__call = function (self, ...)
 			local arg = {...}
-			paramValidator:check(arg)
+			forArg:check(arg)
 
 			local ret = {body(...)}
-			returnValidator:check(ret)
+			forRet:check(ret)
 
 			return unpacker(ret)
 		end
 	})
 end
 
-local i_write = io.write
-
 function gCheckVerbose(header)
 	return function (self, target)
-		i_write(header, "(", os.clock(), ") ")
-		for i,v in ipairs(self.validators) do
-			i_write(" ", i, ":", tostring(target[i]))
+		io.write(header, "(", os.clock(), ") ")
+		for i,v in ipairs(self.preds) do
+			io.write(" ", i, ":", tostring(target[i]))
 			assert(v(target[i]), i)
 		end
-		i_write("\n")
+		io.write("\n")
 	end
 end
 
@@ -167,23 +153,23 @@ function gUnpackerWithCounter(unpacker)
 end
 
 do
-	local checkP, checkR = gCheckVerbose("[param]"), gCheckVerbose("[return]")
+	local checkA, checkR = gCheckVerbose("[arg]"), gCheckVerbose("[return]")
 	local unpacker = gUnpackerWithCounter()
 
-	local vP1 = makeValidator({isNum}, checkP)
-	local vP2 = makeValidator({isNum, isNum}, checkP)
-	local vP3 = makeValidator({isNum, isNum, isNum}, checkP)
-	local vP4 = makeValidator({isNum, isFun}, checkP)
-	local vP5 = makeValidator({isNum, isTbl}, checkP)
-	local vR = makeValidator({isNum}, checkR)
-	local vEmpty = makeValidator({})
+	local pA1 = makePreds({isNum}, checkA)
+	local pA2 = makePreds({isNum, isNum}, checkA)
+	local pA3 = makePreds({isNum, isNum, isNum}, checkA)
+	local pA4 = makePreds({isNum, isFun}, checkA)
+	local pA5 = makePreds({isNum, isTbl}, checkA)
+	local pR = makePreds({isNum}, checkR)
+	local pEmpty = makePreds({})
 
-	function fw1(f) return wrapWithValidator(f, vP1, vR, unpacker) end
-	function fw2(f) return wrapWithValidator(f, vP2, vR, unpacker) end
-	function fw3(f) return wrapWithValidator(f, vP3, vR, unpacker) end
-	function fw4(f) return wrapWithValidator(f, vP4, vEmpty, unpacker) end
-	function fw5A(f) return wrapWithValidator(f, vP5, vEmpty, unpacker) end
-	function fw5B(f) return wrapWithValidator(f, vP1, vEmpty, unpacker) end
+	function fw1(f) return wrapWithPreds(f, pA1, pR, unpacker) end
+	function fw2(f) return wrapWithPreds(f, pA2, pR, unpacker) end
+	function fw3(f) return wrapWithPreds(f, pA3, pR, unpacker) end
+	function fw4(f) return wrapWithPreds(f, pA4, pEmpty, unpacker) end
+	function fw5A(f) return wrapWithPreds(f, pA5, pEmpty, unpacker) end
+	function fw5B(f) return wrapWithPreds(f, pA1, pEmpty, unpacker) end
 
 	function fac1(n)
 		if n > 0 then
@@ -302,11 +288,11 @@ do
 		return fw3(rec)(x, y, z)
 	end
 
-	local vPC1 = makeValidator({isFun, isFun, isFun}, checkP)
-	local vPC2 = makeValidator({isTbl, isTbl, isTbl}, checkP)
-	function fwC1(f) return wrapWithValidator(f, vPC1, vR, unpacker) end
-	function fwC2A(f) return wrapWithValidator(f, vPC2, vR, unpacker) end
-	function fwC2B(f) return wrapWithValidator(f, vEmpty, vR, unpacker) end
+	local pAC1 = makePreds({isFun, isFun, isFun}, checkA)
+	local pAC2 = makePreds({isTbl, isTbl, isTbl}, checkA)
+	function fwC1(f) return wrapWithPreds(f, pAC1, pR, unpacker) end
+	function fwC2A(f) return wrapWithPreds(f, pAC2, pR, unpacker) end
+	function fwC2B(f) return wrapWithPreds(f, pEmpty, pR, unpacker) end
 
 	function taraiC(x, y, z)
 		function rec(x, y, z)

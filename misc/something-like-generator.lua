@@ -254,8 +254,16 @@ do
 	function bwB(v) buf:push(v) return v end
 
 	function demoB(v)
-		H.assertA(_r( Gen(v):take(3, bwA) ), {})
-		H.assertA(_r( Gen(v):take(3, bwB) ), {0, 1, 2})
+		H.assertA(
+			_r( Gen(v):take(3, bwA) ),
+			take(Gen(v), 3, bwA),
+			{}
+		)
+		H.assertA(
+			_r( Gen(v):take(3, bwB) ),
+			take(Gen(v), 3, bwB),
+			{0, 1, 2}
+		)
 	end
 
 	demoB(iotaCL)
@@ -263,25 +271,30 @@ do
 
 	H.assertA(
 		buf:get(),
-		{0, 1, 2, 0, 1, 2,
-		 0, 1, 2, 0, 1, 2}
+		{0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2,
+		 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2}
 	)
 	buf:reset()
 
 	function demoC(v)
-		Gen(v)
-			:drop(5) -- 0, 1, 2, 3, 4
-			:filter(
-				5,
-				function (_, v) return v % 2 == 0 end,
-				bwA
-			)        -- 6, 8, 10, 12, 14
-			:drop(3) -- 15, 16, 17
-			:filter(
-				5,
-				function (_, v) return v % 3 == 0 end,
-				bwA
-			)        -- 18, 21, 24, 27, 30
+		function predA(_, v) return v % 2 == 0 end
+		function predB(_, v) return v % 3 == 0 end
+
+		local g = Gen(v)
+
+		drop(g, 5) -- 0, 1, 2, 3, 4
+		H.assertA(filter(g, 5, predA, bwB), {6, 8, 10, 12, 14})
+		drop(g, 3) -- 15, 16, 17
+
+		H.assertA(
+			filter(g, 5, predB),
+			_r( Gen(v)
+				:drop(5)
+				:filter(5, predA, bwA)
+				:drop(3)
+				:filter(5, predB) ),
+			{18, 21, 24, 27, 30}
+		)
 	end
 
 	demoC(iotaCL)
@@ -289,8 +302,8 @@ do
 
 	H.assertA(
 		buf:get(),
-		{6, 8, 10, 12, 14, 18, 21, 24, 27, 30,
-		 6, 8, 10, 12, 14, 18, 21, 24, 27, 30}
+		{6, 8, 10, 12, 14, 6, 8, 10, 12, 14,
+		 6, 8, 10, 12, 14, 6, 8, 10, 12, 14}
 	)
 	buf:reset()
 

@@ -376,7 +376,7 @@ local function stDone(self)
 end
 
 local Styler = (function ()
-	local T = { buf = {}; attr = {} }
+	local T = { buf = {}, attr = {} }
 
 	setmetatable(T, { __call = stDone })
 
