@@ -16,7 +16,7 @@ local function alwaysTrue(_) return true end
 
 local function recA(a, b)
 	for k,v in pairs(a) do
-		if type(v) == "table" then
+		if type(v) == "table" and type(b[k]) == "table" then
 			recA(v, b[k])
 		else
 			assert(v == b[k])
@@ -114,11 +114,10 @@ local function B_reset(self) self.buf = {} end
 --
 
 local function B_iter(self)
-	local i = 1
+	local i = 0
 	return function ()
-		local r = self.buf[i]
 		i = i + 1
-		return r
+		return self.buf[i]
 	end
 end
 
