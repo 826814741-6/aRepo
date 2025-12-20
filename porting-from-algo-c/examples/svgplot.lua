@@ -16,8 +16,7 @@
 local M = require 'svgplot'
 
 local SvgPlotA = M.SvgPlot
-local SvgPlotB = M.SvgPlotWholeBuffer
-local SvgPlotC = M.SvgPlotWithBuffer
+local SvgPlotB = M.SvgPlotWithBuffer
 local Styler = M.Styler
 local SV = M.SV
 
@@ -53,18 +52,13 @@ do
 		gBody(Styler:fill(SV.None):stroke(SV.RandomRGB):strokeWidth(5)()),
 		gBody(Styler:fill(SV.RandomRGB):stroke(SV.RandomRGB):strokeWidth(10)())
 
-	local pltA, pltB, pltC =
-		SvgPlotA(size, size), SvgPlotB(size, size), SvgPlotC(size, size)
+	local pltA, pltB = SvgPlotA(size, size), SvgPlotB(size, size)
 
 	pltA:file("results/svgplot-A-A.svg", bodyA)
 	pltA:file("results/svgplot-A-B.svg", bodyB)
 	pltA:file("results/svgplot-A-C.svg", bodyC)
 
-	pltB:file("results/svgplot-B-A.svg", bodyA):reset()
-	pltB:file("results/svgplot-B-B.svg", bodyB):reset()
-	pltB:file("results/svgplot-B-C.svg", bodyC):reset()
-
-	pltC:file("results/svgplot-C-A.svg", bodyA, 2)
-	pltC:file("results/svgplot-C-B.svg", bodyB, 2)
-	pltC:file("results/svgplot-C-C.svg", bodyC, 2)
+	pltB:file("results/svgplot-B-A.svg", bodyA, 2)
+	pltB:file("results/svgplot-B-B.svg", bodyB, 2)
+	pltB:file("results/svgplot-B-C.svg", bodyC, 2)
 end

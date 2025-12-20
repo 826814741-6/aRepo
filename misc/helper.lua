@@ -97,14 +97,14 @@ end
 -- https://www.lua.org/manual/5.4/manual.html#3.4.7
 -- https://www.lua.org/manual/5.1/manual.html#2.5.5
 
-local function B_get(self) return self.buf end
-local function B_len(self) return lenT(self.buf) end
-local function B_lenViaOp(self) return #self.buf end
-local function B_pop(self) return t_remove(self.buf) end
-local function B_popLeft(self) return t_remove(self.buf, 1) end
-local function B_push(self, v) return t_insert(self.buf, v) end
-local function B_pushLeft(self, v) return t_insert(self.buf, v, 1) end
-local function B_reset(self) self.buf = {} end
+local function B_get(self) return self.v end
+local function B_len(self) return lenT(self.v) end
+local function B_lenViaOp(self) return #self.v end
+local function B_pop(self) return t_remove(self.v) end
+local function B_popLeft(self) return t_remove(self.v, 1) end
+local function B_push(self, v) return t_insert(self.v, v) end
+local function B_pushLeft(self, v) return t_insert(self.v, v, 1) end
+local function B_reset(self) self.v = {} end
 --
 -- table.insert/table.remove and position shifting up/down:
 -- https://www.lua.org/manual/5.4/manual.html#pdf-table.insert
@@ -117,12 +117,12 @@ local function B_iter(self)
 	local i = 0
 	return function ()
 		i = i + 1
-		return self.buf[i]
+		return self.v[i]
 	end
 end
 
 local function makeBuffer()
-	local T = { buf = {} }
+	local T = { v = {} }
 
 	setmetatable(T, { __len = B_lenViaOp }) -- v5.2+/+LUA52COMPAT
 

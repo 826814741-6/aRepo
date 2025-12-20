@@ -1,0 +1,57 @@
+--
+--  svgplot_helper.luajit: some helper functions for svgplot.luajit
+--
+
+local b_band, b_rshift = bit.band, bit.rshift
+local s_buffer_new = require 'string.buffer'.new
+
+local function B_startStep(self, fh, limit)
+	self.v:reset()
+	self.n, self.fh, self.limit = 0, fh, limit
+	return self
+end
+
+local function B_write(self, s)
+	self.v:put(s)
+	self.n = self.n + 1
+	if self.n >= self.limit then
+		self.fh:write(self.v:get())
+		self.v:reset()
+		self.n = 0
+	end
+	return self
+end
+
+local function B_endStep(self)
+	if self.n > 0 then
+		self.fh:write(self.v:get())
+	end
+	self.v:reset()
+	self.n, self.fh, self.limit = 0, nil, self.DEFAULT_LIMIT
+	return self
+end
+
+local function gMakeBuffer(defaultLimit)
+	return function ()
+		local T = {
+			v = s_buffer_new(),
+			n = 0,
+			fh = nil,
+			limit = defaultLimit,
+			DEFAULT_LIMIT = defaultLimit
+		}
+
+		T.startStep, T.write, T.endStep = B_startStep, B_write, B_endStep
+
+		return T
+	end
+end
+
+local function toRGB(n)
+	return b_rshift(n, 16), b_band(b_rshift(n, 8), 0xff), b_band(n, 0xff)
+end
+
+return {
+	gMakeBuffer = gMakeBuffer,
+	toRGB = toRGB
+}
