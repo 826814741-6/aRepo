@@ -206,9 +206,6 @@ local function GSL_filterM(self, n, pred, f)
 end
 
 local function GSL_reset(self)
-	while self.HEAD ~= self.v do
-		self.v = self.v.next
-	end
 	self.v = self.HEAD
 	return self
 end
