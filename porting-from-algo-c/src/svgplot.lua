@@ -102,8 +102,8 @@ local function file(self, path, body, ...)
 end
 
 --
---  writeA for gSvgPlot(makeNil)
---  writeB for gSvgPlot(makeBuffer)
+--  writeA for SvgPlot           ; gSvgPlot(makeNil)
+--  writeB for SvgPlotWithBuffer ; gSvgPlot(makeBuffer)
 --
 
 local function writeA(self, fh, body)

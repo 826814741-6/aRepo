@@ -43,6 +43,32 @@ local function beCircular(f, ...)
 	return t
 end
 
+local function node(f, v, l, r)
+	return { v = f(v), prev = l, next = r }
+end
+
+local function recL(f, t, v, ...)
+	local rest = ...
+	if rest ~= nil then
+		t.next = node(f, v, t)
+		return recL(f, t.next, ...)
+	else
+		t.next = node(f, v, t)
+		return t.next
+	end
+end
+
+local function beCircularL(f, v, ...)
+	local h, rest = node(f, v), ...
+	if rest == nil then
+		h.prev, h.next = h, h
+	else
+		local t = recL(f, h, ...)
+		h.prev, t.next = t, h
+	end
+	return h
+end
+
 local function bePrintablePair(l, r)
 	return setmetatable({l, r}, {
 		__tostring = function (t)
@@ -159,6 +185,7 @@ return {
 	alwaysTrue = alwaysTrue,
 	assertA = assertA,
 	beCircular = beCircular,
+	beCircularL = beCircularL,
 	bePrintablePair = bePrintablePair,
 	flattenOnce = flattenOnce,
 	id = id,
