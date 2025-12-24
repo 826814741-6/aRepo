@@ -60,11 +60,11 @@ end
 
 local function beCircularL(f, v, ...)
 	local h, rest = node(f, v), ...
-	if rest == nil then
-		h.prev, h.next = h, h
-	else
+	if rest ~= nil then
 		local t = recL(f, h, ...)
 		h.prev, t.next = t, h
+	else
+		h.prev, h.next = h, h
 	end
 	return h
 end

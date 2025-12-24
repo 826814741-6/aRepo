@@ -586,14 +586,17 @@ do
 		)
 	end
 
-	demoE(gCircularCL, gCircularCO, Gens)
-	demoE(gCircularCO, gCircularCL, Gens)
-	demoE(gCircularCL, gCircularCO, GensL)
-	demoE(gCircularCO, gCircularCL, GensL)
-	demoE(gCircularLCL, gCircularLCO, Gens)
-	demoE(gCircularLCO, gCircularLCL, Gens)
-	demoE(gCircularLCL, gCircularLCO, GensL)
-	demoE(gCircularLCO, gCircularLCL, GensL)
+	function wDemoE(v1, v2)
+		demoE(v1, v2, Gens)
+		demoE(v2, v1, Gens)
+		demoE(v1, v2, GensL)
+		demoE(v2, v1, GensL)
+	end
+
+	wDemoE(gCircularCL, gCircularCO)
+	wDemoE(gCircularCL, gCircularLCO)
+	wDemoE(gCircularLCL, gCircularCO)
+	wDemoE(gCircularLCL, gCircularLCO)
 
 	--
 
