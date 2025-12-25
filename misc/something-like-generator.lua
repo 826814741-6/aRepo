@@ -532,7 +532,7 @@ do
 	demoD(gFibCO, gFibCL, GensL)
 
 	local g1 = Gen(gFibCL(H.bePrintablePair))
-	local g2 = hasBC and Gen(gFibCO(), bc.new(0), bc.new(1)) or Gen(fibCO())
+	local g2 = hasBC and Gen(gFibCO(), bc.new(0), bc.new(1)) or Gen(gFibCO())
 	local gs = Gens(g1, g2)
 
 	gs:drop(134)
