@@ -9,8 +9,7 @@
 --
 
 local function chain1(v, f, ...)
-	local rest = ...
-	if rest ~= nil then
+	if ... ~= nil then
 		return chain1(f(v), ...)
 	else
 		return f(v)

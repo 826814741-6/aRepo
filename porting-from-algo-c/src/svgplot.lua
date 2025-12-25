@@ -102,7 +102,7 @@ local function file(self, path, body, ...)
 end
 
 --
---  writeA for SvgPlot           ; gSvgPlot(makeNil)
+--  writeA for SvgPlot           ; gSvgPlot()
 --  writeB for SvgPlotWithBuffer ; gSvgPlot(makeBuffer)
 --
 
@@ -152,9 +152,7 @@ local function gSvgPlot(initializer)
 	end
 end
 
-local function makeNil() return nil end
-
-local SvgPlot, SvgPlotWithBuffer = gSvgPlot(makeNil), gSvgPlot(makeBuffer)
+local SvgPlot, SvgPlotWithBuffer = gSvgPlot(), gSvgPlot(makeBuffer)
 
 --
 

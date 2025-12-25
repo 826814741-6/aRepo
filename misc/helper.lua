@@ -28,8 +28,7 @@ local function assertA(a, b, ...)
 	assert(type(a) == "table" and type(b) == "table")
 	recA(a, b)
 	recA(b, a)
-	local rest = ...
-	if rest ~= nil then
+	if ... ~= nil then
 		assertA(b, ...)
 	end
 end
@@ -48,19 +47,17 @@ local function node(f, v, l, r)
 end
 
 local function recL(f, t, v, ...)
-	local rest = ...
-	if rest ~= nil then
-		t.next = node(f, v, t)
+	t.next = node(f, v, t)
+	if ... ~= nil then
 		return recL(f, t.next, ...)
 	else
-		t.next = node(f, v, t)
 		return t.next
 	end
 end
 
 local function beCircularL(f, v, ...)
-	local h, rest = node(f, v), ...
-	if rest ~= nil then
+	local h = node(f, v)
+	if ... ~= nil then
 		local t = recL(f, h, ...)
 		h.prev, t.next = t, h
 	else
