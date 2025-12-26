@@ -13,14 +13,14 @@ function initArray(a,	n, i) {
 	split("Sunday Monday Tuesday Wednesday Thursday Friday Saturday", a)
 
 #
-# split(s, a[, fs ])
-#
-# Split the string s into array elements a[1], a[2], ..., a[n], and return n.
-# All elements of the array shall be deleted before the split is performed.
-# The separation shall be done with the ERE fs or with the field separator FS
-# if fs is not given. ...
-#
-# -- POSIX Specification
+# > split(s, a[, fs ])
+# >
+# > Split the string s into array elements a[1], a[2], ..., a[n], and return n.
+# > All elements of the array shall be deleted before the split is performed.
+# > The separation shall be done with the ERE fs or with the field separator FS
+# > if fs is not given. ...
+# >
+# > -- https://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html
 #
 
 	n = length(a)

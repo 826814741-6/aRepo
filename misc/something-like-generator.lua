@@ -205,6 +205,21 @@ local function GSL_filterM(self, n, pred, f)
 	end
 end
 
+local function GS_iter(self)
+	local i = #self.v
+	return function ()
+		i = self.v[i].next
+		return self.v[i].v
+	end
+end
+local function GSL_iter(self)
+	local t = self.HEAD.prev
+	return function ()
+		t = t.next
+		return t.v
+	end
+end
+
 local function GSL_reset(self)
 	self.v = self.HEAD
 	return self
@@ -221,7 +236,7 @@ end
 local function Gens(...)
 	local T = { v = beCircular(hookG, ...) }
 
-	T.drop, T.take, T.filter = GS_drop, GS_take, GS_filter
+	T.drop, T.take, T.filter, T.iter = GS_drop, GS_take, GS_filter, GS_iter
 
 	return T
 end
@@ -231,7 +246,7 @@ local function GensL(...)
 
 	T.drop, T.take, T.filter = GSL_drop, GSL_take, GSL_filter
 	T.dropM, T.takeM, T.filterM = GSL_dropM, GSL_takeM, GSL_filterM
-	T.HEAD, T.reset = T.v, GSL_reset
+	T.HEAD, T.iter, T.reset = T.v, GSL_iter, GSL_reset
 
 	return T
 end
@@ -645,4 +660,21 @@ do
 
 	demoF(iotaCL, iotaCO)
 	demoF(iotaCO, iotaCL)
+
+	--
+
+	function demoG(v1, v2)
+		local start, step, n = 100, 3, 100
+
+		local g1, g2 = Gen(v1, -start, step), Gen(v2, start, step)
+		local it1, it2 = Gens(g1, g2):iter(), GensL(g1, g2):iter()
+
+		for _=1,n do
+			assert(it1() == it2() and it1() == it2())
+			assert(it1()() + step == it2()() and it1()() + step == it2()())
+		end
+	end
+
+	demoG(iotaCL, iotaCO)
+	demoG(iotaCO, iotaCL)
 end

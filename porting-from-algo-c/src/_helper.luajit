@@ -6,7 +6,7 @@
 -- >> LuaJIT is fully upwards-compatible with Lua 5.1. It supports all
 -- >> standard Lua library functions and the full set of Lua/C API functions.
 -- >> -- https://luajit.org/extensions.html
--- >>
+--
 -- >> math.abs (x)
 -- >> Returns the absolute value of x.
 -- >> -- https://www.lua.org/manual/5.1/manual.html#pdf-math.abs

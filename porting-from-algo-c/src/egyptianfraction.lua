@@ -49,10 +49,9 @@ local egyptianFractionM = hasBC and function (n0, d0)
 end or nil
 
 --
---  > The specifier 's' expects a string; if its argument is not a string,
---  > it is converted to one following the same rules of 'tostring'.
---
---  -- Lua 5.4 Reference manual > string.format
+-- > The specifier 's' expects a string; if its argument is not a string,
+-- > it is converted to one following the same rules of 'tostring'. ...
+-- > -- https://www.lua.org/manual/5.5/manual.html#pdf-string.format
 --
 
 local co_create = coroutine.create

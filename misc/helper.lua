@@ -82,7 +82,7 @@ local function flattenOnce(aTable)
 	local r = {}
 	for _,v1 in ipairs(aTable) do
 		if type(v1) == "table" then
-			-- {...}
+			-- {...(like aTable above)...}
 			for _,v2 in ipairs(v1) do
 				t_insert(r, v2)
 			end
@@ -117,7 +117,7 @@ local function lenT(v)
 	return r
 end
 -- cf. The Length Operator
--- https://www.lua.org/manual/5.4/manual.html#3.4.7
+-- https://www.lua.org/manual/5.5/manual.html#3.4.7
 -- https://www.lua.org/manual/5.1/manual.html#2.5.5
 
 local function B_get(self) return self.v end
@@ -130,8 +130,8 @@ local function B_pushLeft(self, v) return t_insert(self.v, v, 1) end
 local function B_reset(self) self.v = {} end
 --
 -- table.insert/table.remove and position shifting up/down:
--- https://www.lua.org/manual/5.4/manual.html#pdf-table.insert
--- https://www.lua.org/manual/5.4/manual.html#pdf-table.remove
+-- https://www.lua.org/manual/5.5/manual.html#pdf-table.insert
+-- https://www.lua.org/manual/5.5/manual.html#pdf-table.remove
 -- https://www.lua.org/manual/5.1/manual.html#pdf-table.insert
 -- https://www.lua.org/manual/5.1/manual.html#pdf-table.remove
 --

@@ -5,17 +5,24 @@
 --
 -- >> math.abs (x)
 -- >> Returns the maximum value between x and -x. (integer/float)
--- >> -- https://www.lua.org/manual/5.4/manual.html#pdf-math.abs
+-- >> -- https://www.lua.org/manual/5.5/manual.html#pdf-math.abs
 --
--- > = math.abs(0), math.abs(-0), math.abs(0.0), math.abs(-0.0)
+-- > math.abs(0), math.abs(-0), math.abs(0.0), math.abs(-0.0)
 -- 0       0       0.0     0.0
--- > = math.type(math.abs(-0)), math.type(math.abs(-0.0))
+-- > math.type(math.abs(-0)), math.type(math.abs(-0.0))
 -- integer float
 --
--- > = ("%d %f %g %a"):format(-0, -0, -0, -0)
+-- > ("%d %f %g %a"):format(-0, -0, -0, -0)
 -- 0 0.000000 0 0x0p+0
--- > = ("%d %f %g %a"):format(-0.0, -0.0, -0.0, -0.0)
+-- > ("%d %f %g %a"):format(-0.0, -0.0, -0.0, -0.0)
 -- 0 -0.000000 -0 -0x0p+0
+--
+-- >> Lua has explicit rules about when each subtype is used, but it
+-- >> also converts between them automatically as needed (see 3.4.3).
+-- >> -- https://www.lua.org/manual/5.5/manual.html#2.1
+--
+-- >> 3.4.3 - Coercions and Conversions
+-- >> -- https://www.lua.org/manual/5.5/manual.html#3.4.3
 --
 
 local function isBool(v)
@@ -73,13 +80,6 @@ local function mustBeStr(v)
 	assert(type(v) == "string", "Must be a string.")
 	return v
 end
-
--- local function readOnlyTable(t)
---   ...
--- end
--- see: http://lua-users.org/wiki/ReadOnlyTables
---      https://www.lua.org/pil/13.4.5.html
---      (the last part of) https://www.lua.org/pil/13.3.html
 
 local function file(path, mode, body)
 	local _, fh = pcall(io.open, path, mode)
