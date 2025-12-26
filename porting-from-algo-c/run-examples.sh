@@ -60,7 +60,6 @@ run factorize LUA
 run gcd AWK
 run machineepsilon LUA
 run moveblock AWK
-run nthroot LUA
 run pi AWK DC
 run rand DC LUA LUAJIT
 run sum AWK
