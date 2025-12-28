@@ -669,6 +669,9 @@ do
 		local g1, g2 = Gen(v1, -start, step), Gen(v2, start, step)
 		local it1, it2 = Gens(g1, g2):iter(), GensL(g1, g2):iter()
 
+		assert(it1() == g1:peel() and it2() == g1:peel())
+		assert(it1() == g2:peel() and it2() == g2:peel())
+
 		for _=1,n do
 			assert(it1() == it2() and it1() == it2())
 			assert(it1()() + step == it2()() and it1()() + step == it2()())

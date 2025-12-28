@@ -66,21 +66,21 @@ local N = 18446744073709551616 -- ULONG_MAX (limits.h) + 1
 -- >> In case of overflows in integer arithmetic, all operations wrap around.
 -- >> -- https://www.lua.org/manual/5.5/manual.html#3.4.1
 --
--- > assert(math.mininteger == math.maxinteger + 1)
+-- > math.mininteger == math.maxinteger + 1
 -- true
--- > assert(math.mininteger - 1 == math.maxinteger)
+-- > math.mininteger - 1 == math.maxinteger
 -- true
--- > assert(math.ult(math.maxinteger, math.maxinteger + 1) == true)
+-- > math.ult(math.maxinteger, math.maxinteger + 1) == true
 -- true
 --
--- > assert(math.maxinteger == 9223372036854775807)
+-- > math.maxinteger == 9223372036854775807
 -- true
--- > assert(math.mininteger == -9223372036854775808)
+-- > math.mininteger == -9223372036854775808
 -- true
 -- > ("%u %u %u"):format(math.maxinteger, math.mininteger, -1)
 -- 9223372036854775807 9223372036854775808 18446744073709551615
 --
--- > assert(math.type(N) == 'float')
+-- > math.type(N) == 'float'
 -- true
 -- > ("%f, %q"):format(N, N)
 -- 18446744073709551616.000000, 0x1p+64
