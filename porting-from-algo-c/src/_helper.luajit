@@ -17,9 +17,12 @@
 -- number  number
 --
 -- > = ("%d %f %g %a"):format(-0, -0, -0, -0)
--- 0 -0.000000 -0 -0x0p+0
+-- 0 -0.000000 -0 -0x0p+0  -- v2.1.1767980792
 -- > = ("%d %f %g %a"):format(-0.0, -0.0, -0.0, -0.0)
--- 0 -0.000000 -0 -0x0p+0
+-- 0 -0.000000 -0 -0x0p+0  -- v2.1.1767980792
+--
+-- cf. in the case of v2.1.1767976677- and LJ_DUALNUM == 1 (lj_arch.h)
+-- (see: https://github.com/LuaJIT/LuaJIT/commit/707c12bf00dafdfd3899b1a6c36435dbbf6c7022)
 --
 -- > = -0LL, -1LL, -0ULL, -1ULL
 -- 0LL     -1LL    0ULL    18446744073709551615ULL

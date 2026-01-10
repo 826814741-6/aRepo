@@ -42,12 +42,15 @@ function isNumAndNonNeg(v) return isNum(v) and v >= 0 end
 --
 -- > = v1+v1, v1-v1, v1+v2, v1-v2, -v1+v2, -v1-v2, v2+v2, v2-v2
 -- 0       0       0.0     0.0     0.0     0.0     -0.0    0.0  -- v5.3+ (v5.4.8)
--- -0      0       -0      0       0       0       -0      0    --       (v2.1.1762617240)
+-- -0      0       -0      0       0       0       -0      0    --       (v2.1.1767980792)
 --
 -- >> The main difference between Lua 5.2 and Lua 5.3 is the introduction of
 -- >> an integer subtype for numbers. ...
 -- >> -- 8.1 - Changes in the Language (Lua 5.3 Reference Manual)
 -- >> -- https://www.lua.org/manual/5.3/manual.html#8.1
+--
+-- cf. in the case of v2.1.1767976677- and LJ_DUALNUM == 1 (lj_arch.h)
+-- (see: https://github.com/LuaJIT/LuaJIT/commit/707c12bf00dafdfd3899b1a6c36435dbbf6c7022)
 --
 
 do
