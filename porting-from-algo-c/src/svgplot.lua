@@ -91,7 +91,7 @@ local function rect(self, x, y, w, h, rx, ry, style)
 end
 
 local function file(self, path, body, ...)
-	local _, fh = pcall(io.open, path, "w")
+	local _, fh = pcall(io.open, path, "wb")
 	assert(isFh(fh), "file(): Something wrong with your 'path'.")
 
 	local ret, v = pcall(self.write, self, fh, body, ...)
