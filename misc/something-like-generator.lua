@@ -205,6 +205,15 @@ local function GSL_filterM(self, n, pred, f)
 	end
 end
 
+local function GSL_dial(self, n)
+	if n < 0 then
+		for _=1,-n do self.v = self.v.prev end
+	else
+		for _=1,n do self.v = self.v.next end
+	end
+	return self
+end
+
 local function GS_iter(self)
 	local i = #self.v
 	return function ()
@@ -213,7 +222,7 @@ local function GS_iter(self)
 	end
 end
 local function GSL_iter(self)
-	local t = self.HEAD.prev
+	local t = self.v.prev
 	return function ()
 		t = t.next
 		return t.v
@@ -246,7 +255,7 @@ local function GensL(...)
 
 	T.drop, T.take, T.filter = GSL_drop, GSL_take, GSL_filter
 	T.dropM, T.takeM, T.filterM = GSL_dropM, GSL_takeM, GSL_filterM
-	T.HEAD, T.iter, T.reset = T.v, GSL_iter, GSL_reset
+	T.HEAD, T.dial, T.iter, T.reset = T.v, GSL_dial, GSL_iter, GSL_reset
 
 	return T
 end
@@ -671,11 +680,18 @@ do
 
 		assert(it1() == g1:peel() and it2() == g1:peel())
 		assert(it1() == g2:peel() and it2() == g2:peel())
+		assert(it1()() + step == g1:peel()() and it2()() + step == g1:peel()())
+		assert(it1()() + step == g2:peel()() and it2()() + step == g2:peel()())
 
 		for _=1,n do
 			assert(it1() == it2() and it1() == it2())
 			assert(it1()() + step == it2()() and it1()() + step == it2()())
 		end
+
+		assert(GensL(g1, g1, g1, g1, g2):dial(4):iter()() == g2:peel())
+		assert(GensL(g1, g2, g2, g2, g2):dial(-5):iter()() == g1:peel())
+		assert(GensL(g1, g2, g2):dial(4):dial(-1):iter()() == g1:peel())
+		assert(GensL(g1, g1, g2):dial(-5):dial(1):iter()() == g2:peel())
 	end
 
 	demoG(iotaCL, iotaCO)
